@@ -1,5 +1,7 @@
-$background_color: #223843;
-$font-color: #F9F4F5;
+$background_color: #121420;
+$font-color: #F4F4F9;
+
+@import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
 
 body {
   margin: 0;
@@ -7,4 +9,5 @@ body {
   height: 600px;
   color: $font-color;
   background-color: $background_color;
+  font-family: 'Aldrich', sans-serif;
 }
