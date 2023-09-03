@@ -3,13 +3,26 @@ import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import MainRoute from './pages/MainRoute';
+import CreatePassword from './pages/account/CreatePassword';
+import Login from './pages/account/Login';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <MemoryRouter>
+      <Routes>
+          <Route path="/" element={<App />}>
+          </Route>
+          <Route path="account">
+            <Route path="login" element={<Login />} />
+            <Route path="create-password" element={<CreatePassword />} />
+          </Route>
+        </Routes>
+    </MemoryRouter>
   </React.StrictMode>
 );
 

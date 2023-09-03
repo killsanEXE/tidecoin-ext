@@ -1,24 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
+import ReactLoading from 'react-loading';
 import './App.scss';
-import Layout from './pages/Layout';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import Login from './pages/account/Login';
-import CreatePassword from './pages/account/CreatePassword';
+import MainRoute from './pages/MainRoute';
+import { appStore } from './stores/appStore';
 
 
 function App() {
+
+  const appState = appStore();
+
+  if(!appState.isReady){
+    
+  }
+
   return (
-    <MemoryRouter>
-      <Routes>
-          <Route path="/" element={<Layout />}>
-          </Route>
-          <Route path="account">
-            <Route path="login" element={<Login />} />
-            <Route path="create-password" element={<CreatePassword />} />
-          </Route>
-        </Routes>
-    </MemoryRouter>
+    <div>
+      {appState.isReady ? <MainRoute/> : <ReactLoading type="spin" color="#fff" />}
+    </div>
   );
 }
 
