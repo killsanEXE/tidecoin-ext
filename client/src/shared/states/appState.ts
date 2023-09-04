@@ -1,22 +1,9 @@
 import { create } from 'zustand'
 import { browserStorageLocalGet, browserStorageLocalSet } from '../../helpers/browser'
 import Account from 'shared/interfaces/AccountInterface';
+import App from 'shared/interfaces/AppInterface';
 
 const passworder = require("browser-passworder")
-
-export interface App {
-    isReady: boolean;
-    isUnlocked: boolean;
-    exportedAccounts: Account[];
-    vaultAccounts: string[];
-    password: string | undefined;
-    updateVaultAccount: (account: Partial<Record<keyof Account, any>>) => void;
-    updateAppState: (app: Partial<Record<keyof App, any>>) => void;
-    setVaultAccounts: (val: string[] | undefined) => void;
-    checkVault: () => void;
-    saveAppState: () => void;
-    createNewAccount: () => void;
-}
 
 export const useAppState = create<App>()((set, get) => ({
     isReady: false,
@@ -31,7 +18,7 @@ export const useAppState = create<App>()((set, get) => ({
             let index = accounts.indexOf(foundAccount);
             Object.assign(foundAccount, account as Account);
             accounts[index] = foundAccount;
-            set({exportedAccounts: accounts})
+            set({ exportedAccounts: accounts })
             await get().saveAppState();
         }
     },
@@ -40,14 +27,11 @@ export const useAppState = create<App>()((set, get) => ({
         Object.assign(appState, app as App);
         set(appState);
     },
-    setVaultAccounts: async (val: string[] | undefined) => {
-        if (val === undefined) set({ vaultAccounts: [] });
-        else set({ vaultAccounts: val });
-    },
     checkVault: async () => {
         let accounts = JSON.parse(localStorage.getItem("vaultAccounts") ?? "{}") === "{}" ? undefined : JSON.parse(localStorage.getItem("vaultAccounts") ?? "{}")
-        await get().setVaultAccounts(accounts);
-        set({isReady: true})
+        if (accounts === undefined) set({ vaultAccounts: [] })
+        else set({ vaultAccounts: accounts })
+        set({ isReady: true })
     },
     saveAppState: async () => {
         if (get().password) {
@@ -66,7 +50,7 @@ export const useAppState = create<App>()((set, get) => ({
             address: "string",
             key: "string",
         }
-        set({exportedAccounts: [...get().exportedAccounts, account]});
+        set({ exportedAccounts: [...get().exportedAccounts, account] });
         await get().saveAppState();
     }
 }))

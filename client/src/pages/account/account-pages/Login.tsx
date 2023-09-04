@@ -17,7 +17,7 @@ export default function Login({}: Props) {
       for(let acc of appState.vaultAccounts){
         exportedAccounts.push(await passworder.decrypt(password, acc));
       }
-
+      appState
     }catch(e){
       console.log(e);
     }
