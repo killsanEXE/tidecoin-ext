@@ -1,7 +1,7 @@
 import ReactLoading from 'react-loading';
 import './App.scss';
 import MainRoute from './pages/MainRoute';
-import { appStore } from './stores/appStore';
+import { appStore, checkVault } from './stores/appStore';
 
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
   const appState = appStore();
 
   if(!appState.isReady){
-    
+    checkVault();
   }
 
   return (
