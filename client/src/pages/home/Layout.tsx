@@ -1,25 +1,15 @@
 import Nav from "../../components/Nav";
-import { Account } from "../../stores/accountStore";
-import { appStore } from "../../stores/appStore";
+import { useAppState } from "shared/states/appState";
 
 
 
 export default function Layout() {
 
-  const appState = appStore();
-
-  const createAccount = () => {
-    let account: Account = {
-      type: "string",
-      pubkey: "string",
-      address: "string",
-      key: "string",
-    }
-  }
+  const appState = useAppState();
 
   return (
     <div>
-      <button onClick={createAccount}>CreateAccount</button>
+      <button onClick={() => {appState.createNewAccount()}}>CreateAccount</button>
       <Nav />
     </div>
   );

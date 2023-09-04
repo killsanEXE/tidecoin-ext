@@ -1,6 +1,6 @@
 import React from 'react'
 import './Account.scss'
-import { appStore } from '../../stores/appStore';
+import { useAppState } from 'shared/states/appState';
 import CreatePassword from './account-pages/CreatePassword';
 import Login from './account-pages/Login';
 
@@ -8,7 +8,7 @@ type Props = {}
 
 export default function Account({ }: Props) {
 
-    const appState = appStore();
+    const appState = useAppState();
 
     return (
         <div>

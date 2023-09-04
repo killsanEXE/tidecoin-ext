@@ -1,24 +1,23 @@
 import { useState } from 'react';
 import './Login.scss'
-import { appStore } from '../../../stores/appStore';
-import { Account } from '../../../stores/accountStore';
+import { useAppState } from 'shared/states/appState';
 const passworder = require("browser-passworder");
 
 type Props = {}
 
 export default function Login({}: Props) {
 
-  const appState = appStore();
+  const appState = useAppState();
 
   const [password, setPassword] = useState("");
 
   const login = async () => {
     try{
+      let exportedAccounts = [];
       for(let acc of appState.vaultAccounts){
-        let account: Account = await passworder.decrypt(password, acc);
-        console.log(account);
-        appState.exportedAccounts.push(account)
+        exportedAccounts.push(await passworder.decrypt(password, acc));
       }
+
     }catch(e){
       console.log(e);
     }
@@ -28,6 +27,7 @@ export default function Login({}: Props) {
     <form>
       <input type="text" onChange={(e) => {setPassword(e.target.value)}}/>
       <button onClick={login}>Create password</button>
+      {/* <button onClick={() => {appState.createNewAccount()}}>Create ACC</button> */}
     </form>
   )
 }

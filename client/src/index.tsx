@@ -5,8 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import MainRoute from './pages/MainRoute';
-import CreatePassword from './pages/account/CreatePassword';
-import Login from './pages/account/Login';
+import CreatePassword from './pages/account/account-pages/CreatePassword';
+import Login from './pages/account/account-pages/Login';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

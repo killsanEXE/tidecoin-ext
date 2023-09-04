@@ -1,21 +1,25 @@
 import ReactLoading from 'react-loading';
 import './App.scss';
 import MainRoute from './pages/MainRoute';
-import { appStore, checkVault } from './stores/appStore';
+import { useEffect } from 'react';
+import { useAppState } from 'shared/states/appState';
 
 
 function App() {
 
-  const appState = appStore();
+  const {checkVault, isReady} = useAppState((v) => ({checkVault: v.checkVault, isReady: v.isReady}));
 
-  if(!appState.isReady){
-    checkVault();
-  }
+  useEffect(() => {
+    if (!isReady) {
+      checkVault();
+    }
+  }, [isReady, checkVault])
 
   return (
-    <div>
-      {appState.isReady ? <MainRoute/> : <ReactLoading type="spin" color="#fff" />}
-    </div>
+    // <div>
+    //   {appState.isReady ? <MainRoute /> : <ReactLoading type="spin" color="#fff" />}
+    // </div>
+    <MainRoute/>
   );
 }
 

@@ -1,20 +1,20 @@
 import React, { useState } from 'react'
 import './CreatePassword.scss'
-import { appStore } from '../../../stores/appStore';
+import { useAppState } from 'shared/states/appState';
 
 type Props = {}
 
 export default function CreatePassword({}: Props) {
 
-  const appState = appStore();
+  const appState = useAppState();
 
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
-  const createPassword = () => {
+  const createPassword = async () => {
     if(password === passwordConfirm){
-      appState.password = password;
-      appState.isUnlocked = true;
+      await appState.updateAppState({password: password, isUnlocked: true});
+      await appState.createNewAccount();
     }
   }
 
