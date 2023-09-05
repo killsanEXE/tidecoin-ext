@@ -15,7 +15,7 @@ function App() {
   }, [isReady]);
 
   return (
-    <div>
+    <div className='app'>
       {isReady ? <MainRoute /> : <ReactLoading type="spin" color="#fff" />}
     </div>
   );

@@ -25,10 +25,20 @@ export default function CreatePassword({}: Props) {
   }
 
   return (
-    <form onSubmit={(e) => e.preventDefault()}>
-      <input type="text" onChange={(e) => {setPassword(e.target.value)}}/>
-      <input type="text" onChange={(e) => {setPasswordConfirm(e.target.value)}}/>
-      <button onClick={createPassword}>Create password</button>
+    <form className='form' onSubmit={(e) => e.preventDefault()}>
+      <p className='form-title'>Create new password</p>
+      <input
+       type="password" 
+       className='input' 
+       onChange={(e) => {setPassword(e.target.value)}}
+       />
+      <input
+       type="password" 
+       className='input' 
+       onChange={(e) => {setPasswordConfirm(e.target.value)}}
+       />
+
+      <button className='btn primary' onClick={createPassword}>Create password</button>
     </form>
   )
 }

@@ -34,9 +34,8 @@ export default function MainRoute() {
   }
 
   return (
-    <div>
+    <div className='main-route'>
       {components[Component]}
-      <p>{isUnlocked ? "SHIT IS UNLOCKED" : "SHIT IS TILL LOCKED"}</p>
     </div>
   )
 }

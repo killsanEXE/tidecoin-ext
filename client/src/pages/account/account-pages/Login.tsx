@@ -34,14 +34,16 @@ export default function Login() {
   };
 
   return (
-    <form onSubmit={(e) => e.preventDefault()}>
+    <form className="form" onSubmit={(e) => e.preventDefault()}>
+      <p className="form-title">Enter your password</p>
       <input
-        type="text"
+        type="password"
+        className="input"
         onChange={(e) => {
           setPassword(e.target.value);
         }}
       />
-      <button onClick={login}>LOGIn</button>
+      <button className="btn primary" onClick={login}>Login</button>
     </form>
   );
 }
