@@ -15,16 +15,17 @@ export default function CreatePassword({}: Props) {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
+  const shit = useAppState();
+
   const createPassword = async () => {
     if(password === passwordConfirm){
       await updateAppState({password: password, isUnlocked: true});
       await createNewAccount();
-      await saveAppState();
     }
   }
 
   return (
-    <form>
+    <form onSubmit={(e) => e.preventDefault()}>
       <input type="text" onChange={(e) => {setPassword(e.target.value)}}/>
       <input type="text" onChange={(e) => {setPasswordConfirm(e.target.value)}}/>
       <button onClick={createPassword}>Create password</button>

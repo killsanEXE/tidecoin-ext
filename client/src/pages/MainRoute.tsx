@@ -24,7 +24,6 @@ export default function MainRoute() {
 
   useEffect(() => {
     setComponent(get_correct_component(vaultAccounts, isUnlocked))
-    console.log(get_correct_component(vaultAccounts, isUnlocked))
   }, [vaultAccounts, isUnlocked])
 
   const components: { [key: string]: React.ReactNode } = {

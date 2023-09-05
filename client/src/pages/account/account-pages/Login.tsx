@@ -7,15 +7,15 @@ import { log } from "console";
 const passworder = require("browser-passworder");
 
 export default function Login() {
-  const { vaultAccounts, updateAppState, exportedAccounts } = useAppState(
+  const { vaultAccounts, updateAppState, exportedAccounts, createNewAccount} = useAppState(
     (v) => ({
       vaultAccounts: v.vaultAccounts,
       updateAppState: v.updateAppState,
       exportedAccounts: v.exportedAccounts,
+      createNewAccount: v.createNewAccount
     })
   );
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   const login = async () => {
     try {
@@ -28,8 +28,6 @@ export default function Login() {
         isUnlocked: true,
         password: password,
       });
-      navigate("/account/create-password")
-      navigate("/")
     } catch (e) {
       console.log(e);
     }
@@ -43,7 +41,7 @@ export default function Login() {
           setPassword(e.target.value);
         }}
       />
-      <button onClick={login} type="submit">LOGIn</button>
+      <button onClick={login}>LOGIn</button>
     </form>
   );
 }

@@ -11,10 +11,8 @@ export const useAppState = create<App>()((set, get) => ({
     exportedAccounts: [],
     vaultAccounts: [],
     password: undefined,
-    updateAppState: async (app: Partial<Record<keyof App, any>>) => {
-        let appState = get();
-        Object.assign(appState, app as App);
-        set(appState);
+    updateAppState: async (app: Partial<App>) => {
+        set(app);
     },
     checkVault: async () => {
         if(get().vaultAccounts.length > 0) return;
