@@ -11,17 +11,6 @@ export const useAppState = create<App>()((set, get) => ({
     exportedAccounts: [],
     vaultAccounts: [],
     password: undefined,
-    updateVaultAccount: async (account: Partial<Record<keyof Account, any>>) => {
-        let accounts = get().exportedAccounts;
-        let foundAccount = accounts.find(f => f.address === account.address);
-        if (foundAccount) {
-            let index = accounts.indexOf(foundAccount);
-            Object.assign(foundAccount, account as Account);
-            accounts[index] = foundAccount;
-            set({ exportedAccounts: accounts })
-            await get().saveAppState();
-        }
-    },
     updateAppState: async (app: Partial<Record<keyof App, any>>) => {
         let appState = get();
         Object.assign(appState, app as App);

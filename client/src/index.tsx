@@ -7,6 +7,7 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import MainRoute from './pages/MainRoute';
 import CreatePassword from './pages/account/account-pages/CreatePassword';
 import Login from './pages/account/account-pages/Login';
+import Account from 'pages/account/Account';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -17,9 +18,9 @@ root.render(
       <Routes>
           <Route path="/" element={<App />}>
           </Route>
-          <Route path="account">
-            <Route path="login" element={<Login />} />
-            <Route path="create-password" element={<CreatePassword />} />
+          <Route path="/account" element={<Account />}>
+            <Route path="/account/login" element={<Login />} />
+            <Route path="/account/create-password" element={<CreatePassword />} />
           </Route>
         </Routes>
     </MemoryRouter>
