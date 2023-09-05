@@ -1,15 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import MainRoute from './pages/MainRoute';
+import CreatePassword from './pages/account/account-pages/CreatePassword';
+import Login from './pages/account/account-pages/Login';
+import Account from 'pages/account/Account';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <MemoryRouter>
+      <Routes>
+          <Route path="/" element={<App />}>
+          </Route>
+          <Route path="/account">
+            <Route path="/account/insert-password" element={<Login />} />
+            <Route path="/account/create-password" element={<CreatePassword />} />
+          </Route>
+        </Routes>
+    </MemoryRouter>
   </React.StrictMode>
 );
 
