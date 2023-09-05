@@ -9,18 +9,14 @@ import { useNavigate } from 'react-router-dom';
 function App() {
 
   const {checkVault, isReady} = useAppState((v) => ({checkVault: v.checkVault, isReady: v.isReady}));
-  const [checked, setChecked] = useState(false);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isReady && !checked) checkVault();
-    setChecked(true);
+    if (!isReady) checkVault();
   }, [isReady, checkVault])
 
   return (
     <div>
-      {checked ? <MainRoute /> : <ReactLoading type="spin" color="#fff" />}
+      {isReady ? <MainRoute /> : <ReactLoading type="spin" color="#fff" />}
     </div>
   );
 }

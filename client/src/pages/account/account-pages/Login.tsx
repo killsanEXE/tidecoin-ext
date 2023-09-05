@@ -7,17 +7,16 @@ type Props = {}
 
 export default function Login({}: Props) {
 
-  const appState = useAppState();
-
+  const { vaultAccounts, updateAppState } = useAppState((v) => ({vaultAccounts: v.vaultAccounts, updateAppState: v.updateAppState}));
   const [password, setPassword] = useState("");
 
   const login = async () => {
     try{
       let exportedAccounts = [];
-      for(let acc of appState.vaultAccounts){
+      for(let acc of vaultAccounts){
         exportedAccounts.push(await passworder.decrypt(password, acc));
       }
-      await appState.updateAppState({exportedAccounts, isUnlocked: true})
+      await updateAppState({exportedAccounts, isUnlocked: true})
     }catch(e){
       console.log(e);
     }
@@ -26,7 +25,7 @@ export default function Login({}: Props) {
   return (
     <form>
       <input type="text" onChange={(e) => {setPassword(e.target.value)}}/>
-      <button onClick={login}>Create password</button>
+      <button onClick={login}>LOGIn</button>
       {/* <button onClick={() => {appState.createNewAccount()}}>Create ACC</button> */}
     </form>
   )

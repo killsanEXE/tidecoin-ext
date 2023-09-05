@@ -17,7 +17,8 @@ export const useAppState = create<App>()((set, get) => ({
         set(appState);
     },
     checkVault: async () => {
-        let accounts = JSON.parse(localStorage.getItem("vaultAccounts") ?? "{}") === "{}" ? undefined : JSON.parse(localStorage.getItem("vaultAccounts") ?? "{}")
+        let result = localStorage.getItem("vaultAccounts");
+        let accounts = result === null ? undefined : JSON.parse(result);
         if (accounts === undefined) set({ vaultAccounts: [] })
         else set({ vaultAccounts: accounts })
         set({ isReady: true })

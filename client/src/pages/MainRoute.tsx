@@ -4,24 +4,33 @@ import Layout from './home/Layout';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactLoading from 'react-loading';
+import Login from './account/account-pages/Login';
+import CreatePassword from './account/account-pages/CreatePassword';
 
 type Props = {
 }
 
+function Component(props: {vaultAccounts: string[], isUnlocked: boolean}){
+  console.log("COMPONENT")
+  console.log(`VAULT ACCOUNTS LENGTH: ${JSON.stringify(props.vaultAccounts)}`)
+  console.log(`PROPS IS UNLOCKED ${props.isUnlocked}`)
+  if(props.vaultAccounts.length > 0 && !props.isUnlocked) return <Login />
+  else if(props.vaultAccounts.length <= 0 && !props.isUnlocked) return <CreatePassword />
+  else if(props.isUnlocked) return <Layout />
+  else return null;
+}
+
 export default function MainRoute({}: Props) {
 
-  const navigate = useNavigate();
   const { vaultAccounts, isUnlocked } = useAppState((v) => ({vaultAccounts: v.vaultAccounts, isUnlocked: v.isUnlocked}));
-  const [ checked, setChecked ] = useState(false);
 
   useEffect(() => {
-    if(!isUnlocked && !checked) navigate("/account");
-    setChecked(true);
-  }, [vaultAccounts, isUnlocked, checked])
+    console.log(`VAULT ACCOUNTS IN EFFECT: ${JSON.stringify(vaultAccounts)}`)
+  }, [vaultAccounts, isUnlocked])
 
   return (
     <div>
-      {checked ? <Layout/> : <ReactLoading type="spin" color="#fff" />}
+      <Component vaultAccounts={vaultAccounts} isUnlocked={isUnlocked}/>
     </div>
   )
 }
