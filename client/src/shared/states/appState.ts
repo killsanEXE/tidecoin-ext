@@ -6,7 +6,7 @@ import App from 'shared/interfaces/AppInterface';
 const passworder = require("browser-passworder")
 
 export const useAppState = create<App>()((set, get) => ({
-    isReady: true,
+    isReady: false,
     isUnlocked: false,
     exportedAccounts: [],
     vaultAccounts: [],
