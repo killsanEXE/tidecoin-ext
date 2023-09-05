@@ -19,7 +19,7 @@ root.render(
           <Route path="/" element={<App />}>
           </Route>
           <Route path="/account">
-            <Route path="/account/login" element={<Login />} />
+            <Route path="/account/insert-password" element={<Login />} />
             <Route path="/account/create-password" element={<CreatePassword />} />
           </Route>
         </Routes>

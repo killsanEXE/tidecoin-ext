@@ -6,7 +6,7 @@ import App from 'shared/interfaces/AppInterface';
 const passworder = require("browser-passworder")
 
 export const useAppState = create<App>()((set, get) => ({
-    isReady: false,
+    isReady: true,
     isUnlocked: false,
     exportedAccounts: [],
     vaultAccounts: [],
@@ -14,10 +14,10 @@ export const useAppState = create<App>()((set, get) => ({
     updateAppState: async (app: Partial<Record<keyof App, any>>) => {
         let appState = get();
         Object.assign(appState, app as App);
-        console.log(JSON.stringify(appState))
         set(appState);
     },
     checkVault: async () => {
+        if(get().vaultAccounts.length > 0) return;
         let result = localStorage.getItem("vaultAccounts");
         let accounts = result === null ? undefined : JSON.parse(result);
         if (accounts === undefined) set({ vaultAccounts: [] })

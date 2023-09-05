@@ -10,9 +10,13 @@ function App() {
 
   const {checkVault, isReady} = useAppState((v) => ({checkVault: v.checkVault, isReady: v.isReady}));
 
+  const app = useAppState();
   useEffect(() => {
-    if (!isReady) checkVault();
-  }, [isReady, checkVault])
+    if(!isReady) checkVault();
+    else {
+      alert(JSON.stringify(app))
+    }
+  }, [isReady]);
 
   return (
     <div>

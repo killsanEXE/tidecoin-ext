@@ -6,15 +6,20 @@ type Props = {}
 
 export default function CreatePassword({}: Props) {
 
-  const appState = useAppState();
+  const { updateAppState, createNewAccount, saveAppState } = useAppState((v) => ({
+    updateAppState: v.updateAppState,
+    createNewAccount: v.createNewAccount,
+    saveAppState: v.saveAppState
+  }));
 
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
   const createPassword = async () => {
     if(password === passwordConfirm){
-      await appState.updateAppState({password: password, isUnlocked: true});
-      await appState.createNewAccount();
+      await updateAppState({password: password, isUnlocked: true});
+      await createNewAccount();
+      await saveAppState();
     }
   }
 

@@ -1,22 +1,26 @@
 import { useState } from 'react';
 import './Login.scss'
 import { useAppState } from 'shared/states/appState';
+import { useNavigate } from 'react-router-dom';
+import Account from 'shared/interfaces/AccountInterface';
 const passworder = require("browser-passworder");
 
-type Props = {}
+export default function Login() {
 
-export default function Login({}: Props) {
-
-  const { vaultAccounts, updateAppState } = useAppState((v) => ({vaultAccounts: v.vaultAccounts, updateAppState: v.updateAppState}));
+  const { vaultAccounts, updateAppState, exportedAccounts } = useAppState((v) => ({
+    vaultAccounts: v.vaultAccounts,
+    updateAppState: v.updateAppState,
+    exportedAccounts: v.exportedAccounts
+  }));
   const [password, setPassword] = useState("");
 
   const login = async () => {
     try{
-      let exportedAccounts = [];
+      let accounts: Account[] = [];
       for(let acc of vaultAccounts){
-        exportedAccounts.push(await passworder.decrypt(password, acc));
+        accounts.push(await passworder.decrypt(password, acc));
       }
-      await updateAppState({exportedAccounts, isUnlocked: true})
+      await updateAppState({exportedAccounts: [...exportedAccounts, accounts], isUnlocked: true, password: password});
     }catch(e){
       console.log(e);
     }
@@ -24,7 +28,7 @@ export default function Login({}: Props) {
 
   return (
     <form>
-      <input type="text" onChange={(e) => {setPassword(e.target.value)}}/>
+      <input type="text" onChange={(e) => { setPassword(e.target.value) }} />
       <button onClick={login}>LOGIn</button>
       {/* <button onClick={() => {appState.createNewAccount()}}>Create ACC</button> */}
     </form>
