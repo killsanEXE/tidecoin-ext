@@ -10,22 +10,35 @@ import CreatePassword from './account/account-pages/CreatePassword';
 type Props = {
 }
 
-function Component(props: {vaultAccounts: string[], isUnlocked: boolean}){
-  if(props.vaultAccounts.length > 0 && !props.isUnlocked) return <Login />
-  else if(props.vaultAccounts.length <= 0 && !props.isUnlocked) return <CreatePassword />
-  else if(props.isUnlocked) return <Layout />
-  else return null;
+function get_correct_component(vaultAccounts: string[], isUnlocked: boolean) {
+  if (vaultAccounts.length > 0 && !isUnlocked) return "Login";
+  else if (vaultAccounts.length <= 0 && !isUnlocked) return "CreatePassword";
+  else if (isUnlocked) return "Layout";
+  else return "div";
 }
 
-export default function MainRoute({}: Props) {
+export default function MainRoute() {
 
-  const { vaultAccounts, isUnlocked } = useAppState((v) => ({vaultAccounts: v.vaultAccounts, isUnlocked: v.isUnlocked}));
+  const { vaultAccounts, isUnlocked } = useAppState((v) => ({ vaultAccounts: v.vaultAccounts, isUnlocked: v.isUnlocked }));
+  const [Component, setComponent] = useState<string>("div");
+
+  useEffect(() => {
+    setComponent(get_correct_component(vaultAccounts, isUnlocked))
+    console.log(get_correct_component(vaultAccounts, isUnlocked))
+  }, [vaultAccounts, isUnlocked])
+
+  const components: { [key: string]: React.ReactNode } = {
+    Login: <Login />,
+    CreatePassword: <CreatePassword />,
+    Layout: <Layout />,
+    div: <div></div>
+  }
 
   return (
     <div>
-      <Component vaultAccounts={vaultAccounts} isUnlocked={isUnlocked}/>
+      {components[Component]}
+      <p>{isUnlocked ? "SHIT IS UNLOCKED" : "SHIT IS TILL LOCKED"}</p>
     </div>
   )
 }
-
 //tsrfc

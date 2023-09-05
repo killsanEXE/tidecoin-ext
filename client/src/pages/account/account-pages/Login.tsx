@@ -3,6 +3,7 @@ import "./Login.scss";
 import { useAppState } from "shared/states/appState";
 import { useNavigate } from "react-router-dom";
 import Account from "shared/interfaces/AccountInterface";
+import { log } from "console";
 const passworder = require("browser-passworder");
 
 export default function Login() {
@@ -14,6 +15,7 @@ export default function Login() {
     })
   );
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const login = async () => {
     try {
@@ -26,6 +28,8 @@ export default function Login() {
         isUnlocked: true,
         password: password,
       });
+      navigate("/account/create-password")
+      navigate("/")
     } catch (e) {
       console.log(e);
     }
@@ -39,8 +43,7 @@ export default function Login() {
           setPassword(e.target.value);
         }}
       />
-      <button onClick={login}>LOGIn</button>
-      {/* <button onClick={() => {appState.createNewAccount()}}>Create ACC</button> */}
+      <button onClick={login} type="submit">LOGIn</button>
     </form>
   );
 }
