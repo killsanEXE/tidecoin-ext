@@ -11,9 +11,6 @@ type Props = {
 }
 
 function Component(props: {vaultAccounts: string[], isUnlocked: boolean}){
-  console.log("COMPONENT")
-  console.log(`VAULT ACCOUNTS LENGTH: ${JSON.stringify(props.vaultAccounts)}`)
-  console.log(`PROPS IS UNLOCKED ${props.isUnlocked}`)
   if(props.vaultAccounts.length > 0 && !props.isUnlocked) return <Login />
   else if(props.vaultAccounts.length <= 0 && !props.isUnlocked) return <CreatePassword />
   else if(props.isUnlocked) return <Layout />
@@ -23,10 +20,6 @@ function Component(props: {vaultAccounts: string[], isUnlocked: boolean}){
 export default function MainRoute({}: Props) {
 
   const { vaultAccounts, isUnlocked } = useAppState((v) => ({vaultAccounts: v.vaultAccounts, isUnlocked: v.isUnlocked}));
-
-  useEffect(() => {
-    console.log(`VAULT ACCOUNTS IN EFFECT: ${JSON.stringify(vaultAccounts)}`)
-  }, [vaultAccounts, isUnlocked])
 
   return (
     <div>

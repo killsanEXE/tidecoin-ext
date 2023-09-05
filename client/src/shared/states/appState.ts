@@ -14,6 +14,7 @@ export const useAppState = create<App>()((set, get) => ({
     updateAppState: async (app: Partial<Record<keyof App, any>>) => {
         let appState = get();
         Object.assign(appState, app as App);
+        console.log(JSON.stringify(appState))
         set(appState);
     },
     checkVault: async () => {
