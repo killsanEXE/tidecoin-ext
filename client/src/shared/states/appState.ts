@@ -1,17 +1,17 @@
 import { create } from 'zustand'
 import { browserStorageLocalGet, browserStorageLocalSet } from '../../helpers/browser'
-import Account from 'shared/interfaces/AccountInterface';
-import App from 'shared/interfaces/AppInterface';
+import IApp from 'shared/interfaces/IApp';
+import IAccount from 'shared/interfaces/IAccount';
 
 const passworder = require("browser-passworder")
 
-export const useAppState = create<App>()((set, get) => ({
+export const useAppState = create<IApp>()((set, get) => ({
     isReady: false,
     isUnlocked: false,
     exportedAccounts: [],
     vaultAccounts: [],
     password: undefined,
-    updateAppState: async (app: Partial<App>) => {
+    updateAppState: async (app: Partial<IApp>) => {
         set(app);
     },
     checkVault: async () => {
@@ -33,7 +33,7 @@ export const useAppState = create<App>()((set, get) => ({
         }
     },
     createNewAccount: async () => {
-        let account: Account = {
+        let account: IAccount = {
             type: "string",
             pubkey: "string",
             address: "string",

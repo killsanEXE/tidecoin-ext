@@ -1,9 +1,7 @@
 import { useState } from "react";
 import "./Login.scss";
 import { useAppState } from "shared/states/appState";
-import { useNavigate } from "react-router-dom";
-import Account from "shared/interfaces/AccountInterface";
-import { log } from "console";
+import IAccount from "shared/interfaces/IAccount";
 const passworder = require("browser-passworder");
 
 export default function Login() {
@@ -19,12 +17,12 @@ export default function Login() {
 
   const login = async () => {
     try {
-      let accounts: Account[] = [];
+      let accounts: IAccount[] = [];
       for (let acc of vaultAccounts) {
         accounts.push(await passworder.decrypt(password, acc));
       }
       await updateAppState({
-        exportedAccounts: [...exportedAccounts, accounts],
+        exportedAccounts: [...exportedAccounts, accounts as any],
         isUnlocked: true,
         password: password,
       });

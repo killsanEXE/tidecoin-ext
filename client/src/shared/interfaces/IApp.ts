@@ -1,12 +1,12 @@
-import Account from "./AccountInterface";
+import IAccount from "./IAccount";
 
-export default interface App {
+export default interface IApp {
     isReady: boolean;
     isUnlocked: boolean;
-    exportedAccounts: Account[];
+    exportedAccounts: IAccount[];
     vaultAccounts: string[];
     password: string | undefined;
-    updateAppState: (app: Partial<Record<keyof App, any>>) => void;
+    updateAppState: (app: Partial<IApp>) => void;
     checkVault: () => void;
     saveAppState: () => void;
     createNewAccount: () => void;

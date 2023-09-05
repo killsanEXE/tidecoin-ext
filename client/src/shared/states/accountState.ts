@@ -1,4 +1,4 @@
-import Account from 'shared/interfaces/AccountInterface'
+import Account from 'shared/interfaces/IAccount'
 import { create } from 'zustand'
 
 type useAccountState = {
