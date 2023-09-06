@@ -15,7 +15,7 @@ export const useAppState = create<IApp>()((set, get) => ({
         set(app);
     },
     checkVault: async () => {
-        if(get().vaultAccounts.length > 0) return;
+        if (get().vaultAccounts.length > 0) return;
         let result = localStorage.getItem("vaultAccounts");
         let accounts = result === null ? undefined : JSON.parse(result);
         if (accounts === undefined) set({ vaultAccounts: [] })

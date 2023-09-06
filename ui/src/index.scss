@@ -7,7 +7,7 @@ $panel_background: #977390;
 
 @import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
 
-*:focus{
+*:focus {
   outline: none;
 }
 
@@ -20,33 +20,39 @@ body {
   font-family: 'Aldrich', sans-serif;
 }
 
-.form{
+.form {
   width: 80%;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  .form-title{
-      padding: 0;
-      margin: 0 auto;
-      font-size: 1.3rem
+
+  .form-title {
+    padding: 0;
+    margin: 0 auto;
+    font-size: 1.3rem
   }
 }
 
-.btn{
+.btn {
   border: 0;
   padding: .5rem;
   font-size: 1.1rem;
   border-radius: .6rem;
 }
 
-.btn:hover{
+.btn:hover {
   cursor: pointer;
 }
 
-.primary{ background-color: $button_primary_background;}
-.secondary{ background-color: $button_secondary_background;}
+.primary {
+  background-color: $button_primary_background;
+}
 
-.input{
+.secondary {
+  background-color: $button_secondary_background;
+}
+
+.input {
   border: 0;
   font-size: 1.2rem;
   border-radius: .6rem;
