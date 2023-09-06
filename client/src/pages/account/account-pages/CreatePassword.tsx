@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import './CreatePassword.scss'
 import { useAppState } from 'shared/states/appState';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {}
 
 export default function CreatePassword({}: Props) {
-  console.log('rendered')
-
   const { updateAppState, createNewAccount, saveAppState } = useAppState((v) => ({
     updateAppState: v.updateAppState,
     createNewAccount: v.createNewAccount,
@@ -15,13 +14,14 @@ export default function CreatePassword({}: Props) {
 
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-
-  const shit = useAppState();
+  const navigate = useNavigate();
 
   const createPassword = async () => {
     if(password === passwordConfirm){
       await updateAppState({password: password, isUnlocked: true});
       await createNewAccount();
+      await saveAppState();
+      navigate("/home");
     }
   }
 

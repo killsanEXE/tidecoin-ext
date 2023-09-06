@@ -1,10 +1,8 @@
 import ReactLoading from 'react-loading';
 import './App.scss';
-import MainRoute from './pages/MainRoute';
 import { useEffect, useState } from 'react';
 import { useAppState } from 'shared/states/appState';
 import { useNavigate } from 'react-router-dom';
-import WalletIcon from 'components/icons/WalletIcon';
 
 
 function App(props: any) {
@@ -14,6 +12,7 @@ function App(props: any) {
   const navigate = useNavigate();
   useEffect(() => {
     if(!isReady) checkVault();
+    else navigate("/home")
   }, [isReady, checkVault]);
 
   return (

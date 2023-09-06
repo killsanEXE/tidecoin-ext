@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./Login.scss";
 import { useAppState } from "shared/states/appState";
 import IAccount from "shared/interfaces/IAccount";
+import { useNavigate } from "react-router-dom";
 const passworder = require("browser-passworder");
 
 export default function Login() {
@@ -14,6 +15,7 @@ export default function Login() {
     })
   );
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const login = async () => {
     try {
@@ -26,6 +28,7 @@ export default function Login() {
         isUnlocked: true,
         password: password,
       });
+      navigate("/home");
     } catch (e) {
       console.log(e);
     }

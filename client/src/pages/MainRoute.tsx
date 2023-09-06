@@ -7,33 +7,28 @@ import ReactLoading from 'react-loading';
 import Login from './account/account-pages/Login';
 import CreatePassword from './account/account-pages/CreatePassword';
 
-function get_correct_component(vaultAccounts: string[], isUnlocked: boolean) {
-  if (vaultAccounts.length > 0 && !isUnlocked) return "Login";
-  else if (vaultAccounts.length <= 0 && !isUnlocked) return "CreatePassword";
-  else if (isUnlocked) return "Layout";
-  else return "div";
+function get_correct_route(vaultAccounts: string[], isUnlocked: boolean) {
+  if (vaultAccounts.length > 0 && !isUnlocked) return "/account/insert-password";
+  else if (vaultAccounts.length <= 0 && !isUnlocked) return "/account/create-password";
+  else if (isUnlocked) return "/home/wallet";
+  else return "/";
 }
 
 export default function MainRoute(props: any) {
 
   const { vaultAccounts, isUnlocked } = useAppState((v) => ({ vaultAccounts: v.vaultAccounts, isUnlocked: v.isUnlocked }));
-  const [Component, setComponent] = useState<string>("div");
+  const navigate = useNavigate();
 
   useEffect(() => {
+    alert(`NAVIGATING TO ${get_correct_route(vaultAccounts, isUnlocked)}`)
+    navigate(get_correct_route(vaultAccounts, isUnlocked));
     console.log(props)
-    // setComponent(get_correct_component(vaultAccounts, isUnlocked))
   }, [vaultAccounts, isUnlocked])
-
-  const components: { [key: string]: React.ReactNode } = {
-    Login: <Login />,
-    CreatePassword: <CreatePassword />,
-    Layout: <Layout children={props.children} />,
-    div: <div></div>
-  }
 
   return (
     <div className='main-route'>
       {props.children}
+      <p>HELLLO MOTHERFUCKER </p>
     </div>
   )
 }
