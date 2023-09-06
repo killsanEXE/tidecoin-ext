@@ -4,6 +4,7 @@ import MainRoute from './pages/MainRoute';
 import { useEffect, useState } from 'react';
 import { useAppState } from 'shared/states/appState';
 import { useNavigate } from 'react-router-dom';
+import WalletIcon from 'components/icons/WalletIcon';
 
 
 function App() {

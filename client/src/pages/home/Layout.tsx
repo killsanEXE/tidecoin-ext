@@ -1,5 +1,6 @@
 import Nav from "../../components/Nav";
 import { useAppState } from "shared/states/appState";
+import "./Layout.scss";
 
 
 
@@ -8,8 +9,8 @@ export default function Layout() {
   const appState = useAppState();
 
   return (
-    <div>
-      <button onClick={() => {appState.createNewAccount()}}>CreateAccount</button>
+    <div className="layout">
+
       <Nav />
     </div>
   );
