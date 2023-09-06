@@ -31,7 +31,7 @@ export default function Login() {
         isUnlocked: true,
         password: password,
       });
-      navigate("/home");
+      navigate("/home/wallet");
     } catch (e) {
       console.log(e);
     }

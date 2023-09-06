@@ -2,21 +2,21 @@ import { useEffect } from "react";
 import Nav from "../../components/Nav";
 import "./Layout.scss";
 import { useAppState } from "shared/states/appState";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
+import Wallet from "./wallet/Wallet";
 
 
 
-export default function Layout(props: any) {
+export default function Layout() {
 
   const { isUnlocked } = useAppState((v) => ({ isUnlocked: v.isUnlocked }))
 
   useEffect(() => {
-    console.log(props)
   }, [])
 
   return (
     <div className="layout">
-      {isUnlocked ? props.children : <Navigate to="/account/insert-password" />}
+      {isUnlocked ? <Outlet /> : <Navigate to="/account/insert-password" />}
       <Nav />
     </div>
   );

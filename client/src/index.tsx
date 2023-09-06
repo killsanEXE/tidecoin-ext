@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Routes, Route, HashRouter } from 'react-router-dom';
-import MainRoute from './pages/MainRoute';
+import { Routes, Route, HashRouter, createHashRouter, RouterProvider } from 'react-router-dom';
 import Login from './pages/account/Login';
 import Wallet from 'pages/home/wallet/Wallet';
 import Settings from 'pages/home/settings/Settings';
@@ -14,24 +13,33 @@ import CreatePassword from 'pages/account/CreatePassword';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+const router = createHashRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "account",
+        children: [
+          { path: "insert-password", element: <Login /> },
+          { path: "create-password", element: <CreatePassword /> }
+        ]
+      },
+      {
+        path: "home",
+        element: <Layout />,
+        children: [
+          { path: "wallet", element: <Wallet /> },
+          { path: "settings", element: <Settings /> }
+        ]
+      },
+    ]
+  },
+]);
+
 root.render(
-  <React.StrictMode>
-    <HashRouter>
-      <App>
-        <Routes>
-          <Route path="/account">
-            <Route path="insert-password" element={<Login />} />
-            <Route path="create-password" element={<CreatePassword />} />
-          </Route>
-          <Route path="/home" element={<Layout />}>
-            <Route path="wallet" element={<Wallet />} />
-            <Route path="settings" element={<Settings />} />
-          </Route>
-          <Route path="/" element={<MainRoute />}></Route>
-        </Routes>
-      </App>
-    </HashRouter>
-  </React.StrictMode>
+  <RouterProvider router={router} />
 );
 
 reportWebVitals();
