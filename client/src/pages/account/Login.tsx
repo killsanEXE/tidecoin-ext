@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Login.scss";
 import { useAppState } from "shared/states/appState";
 import IAccount from "shared/interfaces/IAccount";
@@ -6,16 +6,19 @@ import { useNavigate } from "react-router-dom";
 const passworder = require("browser-passworder");
 
 export default function Login() {
-  const { vaultAccounts, updateAppState, exportedAccounts, createNewAccount} = useAppState(
+  const { vaultAccounts, updateAppState, exportedAccounts } = useAppState(
     (v) => ({
       vaultAccounts: v.vaultAccounts,
       updateAppState: v.updateAppState,
       exportedAccounts: v.exportedAccounts,
-      createNewAccount: v.createNewAccount
     })
   );
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (vaultAccounts.length <= 0) navigate("/account/create-password")
+  }, [vaultAccounts])
 
   const login = async () => {
     try {
