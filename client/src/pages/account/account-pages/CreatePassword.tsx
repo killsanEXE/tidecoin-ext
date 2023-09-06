@@ -5,6 +5,7 @@ import { useAppState } from 'shared/states/appState';
 type Props = {}
 
 export default function CreatePassword({}: Props) {
+  console.log('rendered')
 
   const { updateAppState, createNewAccount, saveAppState } = useAppState((v) => ({
     updateAppState: v.updateAppState,

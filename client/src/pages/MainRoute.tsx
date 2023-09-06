@@ -7,9 +7,6 @@ import ReactLoading from 'react-loading';
 import Login from './account/account-pages/Login';
 import CreatePassword from './account/account-pages/CreatePassword';
 
-type Props = {
-}
-
 function get_correct_component(vaultAccounts: string[], isUnlocked: boolean) {
   if (vaultAccounts.length > 0 && !isUnlocked) return "Login";
   else if (vaultAccounts.length <= 0 && !isUnlocked) return "CreatePassword";
@@ -17,25 +14,26 @@ function get_correct_component(vaultAccounts: string[], isUnlocked: boolean) {
   else return "div";
 }
 
-export default function MainRoute() {
+export default function MainRoute(props: any) {
 
   const { vaultAccounts, isUnlocked } = useAppState((v) => ({ vaultAccounts: v.vaultAccounts, isUnlocked: v.isUnlocked }));
   const [Component, setComponent] = useState<string>("div");
 
   useEffect(() => {
-    setComponent(get_correct_component(vaultAccounts, isUnlocked))
+    console.log(props)
+    // setComponent(get_correct_component(vaultAccounts, isUnlocked))
   }, [vaultAccounts, isUnlocked])
 
   const components: { [key: string]: React.ReactNode } = {
     Login: <Login />,
     CreatePassword: <CreatePassword />,
-    Layout: <Layout />,
+    Layout: <Layout children={props.children} />,
     div: <div></div>
   }
 
   return (
     <div className='main-route'>
-      {components[Component]}
+      {props.children}
     </div>
   )
 }
