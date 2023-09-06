@@ -13,14 +13,12 @@ function App(props: any) {
 
   const navigate = useNavigate();
   useEffect(() => {
-    navigate("/account/create-password")
     if(!isReady) checkVault();
   }, [isReady, checkVault]);
 
   return (
     <div className='app'>
-      {/* {isReady ? <MainRoute children={props.children} /> : <ReactLoading type="spin" color="#fff" />} */}
-      {props.children}
+      {isReady ? props.children : <ReactLoading type="spin" color="#fff" />}
     </div>
   );
 }
