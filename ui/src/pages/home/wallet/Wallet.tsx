@@ -6,7 +6,9 @@ export default function Wallet(props: any) {
 
   return (
     <div className='wallet-div'>
-      <AccountSelector />
+      <div className="account-selector-wrapper">
+        <AccountSelector />
+      </div>
     </div>
   )
 }

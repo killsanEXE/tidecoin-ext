@@ -16,7 +16,7 @@ export default function AccountSelector() {
         <div className="select-div">
             <Listbox value={selected} onChange={setSelected}>
                 <Listbox.Button className="select-button">{selected.brandName ?? `Account ${exportedAccounts.indexOf(selected) + 1}`}</Listbox.Button>
-                <Listbox.Options className="selector-options">
+                <Listbox.Options className="select-options">
                     {exportedAccounts.map((account, i) => (
                         <Listbox.Option
                             key={i}

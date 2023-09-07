@@ -3,20 +3,31 @@ $input_background: #766C7F;
 $font_color: #F4F4F9;
 
 .select-div {
-    position: fixed;
-    max-width: 350px;
-    width: 100%;
-    display: flex;
+    // max-width: 350px;
+    // width: 100%;
+    // display: flex;
     // justify-content: space-evenly;
-    flex-direction: column;
-    align-items: center;
+    // flex-direction: column;
+    // align-items: center;
+    // justify-content: center;
 
     .select-button {
         border: 0;
+        // position: fixed;
+        // max-width: 300px;
+        // width: 80%;
         background-color: $input_background;
-        width: 80%;
         height: 5vh;
         color: $font_color;
         border-radius: 2rem;
+    }
+
+    .select-button:hover {
+        cursor: pointer;
+    }
+
+    .select-options {
+        color: white;
+        background-color: pink;
     }
 }
