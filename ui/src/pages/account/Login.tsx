@@ -24,10 +24,10 @@ export default function Login() {
     try {
       let accounts: IAccount[] = [];
       for (let acc of vaultAccounts) {
-        accounts.push(await passworder.decrypt(password, acc));
+        accounts.push(JSON.parse(await passworder.decrypt(password, acc)) as IAccount);
       }
       await updateAppState({
-        exportedAccounts: [...exportedAccounts, accounts as any],
+        exportedAccounts: [...exportedAccounts, ...accounts],
         isUnlocked: true,
         password: password,
       });
