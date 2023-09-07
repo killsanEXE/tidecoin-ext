@@ -1,5 +1,10 @@
 .wallet-div {
-    background-color: pink;
     display: flex;
+    max-width: 350px;
     flex-direction: column;
+    width: 350px;
+    height: 90vh;
+    padding: 1.5rem;
+    align-items: center;
+    justify-content: center;
 }

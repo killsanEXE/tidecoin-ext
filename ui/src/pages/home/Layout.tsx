@@ -16,8 +16,10 @@ export default function Layout() {
 
   return (
     <div className="layout">
-      {isUnlocked ? <Outlet /> : <Navigate to="/account/insert-password" />}
-      <Nav />
+      <div className="outlet-wrapper">
+        {isUnlocked ? <Outlet /> : <Navigate to="/account/insert-password" />}
+      </div>
+      <div className="nav-wrapper"><Nav /></div>
     </div>
   );
 }

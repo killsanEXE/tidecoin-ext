@@ -4,12 +4,17 @@ $font_color: #F4F4F9;
 
 .select-div {
     position: fixed;
+    max-width: 350px;
     width: 100%;
+    display: flex;
+    // justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
 
     .select-button {
         border: 0;
         background-color: $input_background;
-        width: 100%;
+        width: 80%;
         height: 5vh;
         color: $font_color;
         border-radius: 2rem;
