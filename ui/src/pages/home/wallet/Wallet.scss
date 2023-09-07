@@ -1,15 +1,4 @@
 .wallet-div {
-    display: flex;
-    max-width: 350px;
-    flex-direction: column;
-    width: 350px;
     height: 90vh;
-    padding: 1.5rem;
-    align-items: center;
-    justify-content: center;
-
-    .account-selector-wrapper {
-        position: absolute;
-        top: 0;
-    }
+    width: 100%;
 }

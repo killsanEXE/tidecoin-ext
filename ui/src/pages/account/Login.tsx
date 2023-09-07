@@ -3,34 +3,40 @@ import "./Login.scss";
 import { useAppState } from "shared/states/appState";
 import IAccount from "shared/interfaces/IAccount";
 import { useNavigate } from "react-router-dom";
+import { useWalletState } from "shared/states/walletState";
+import IWallet from "shared/interfaces/IWallet";
 const passworder = require("browser-passworder");
 
 export default function Login() {
-  const { vaultAccounts, updateAppState, exportedAccounts } = useAppState(
-    (v) => ({
-      vaultAccounts: v.vaultAccounts,
-      updateAppState: v.updateAppState,
-      exportedAccounts: v.exportedAccounts,
-    })
-  );
+  const { vault, updateAppState } = useAppState((v) => ({
+    vault: v.vault,
+    updateAppState: v.updateAppState,
+  }));
+
+  const { updateWallets, wallets } = useWalletState((v) => ({
+    updateWallets: v.updateWallets,
+    wallets: v.wallets
+  }))
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (vaultAccounts.length <= 0) navigate("/account/create-password")
-  }, [vaultAccounts])
+    if (vault.length <= 0) navigate("/account/create-password")
+  }, [vault])
 
   const login = async () => {
     try {
-      let accounts: IAccount[] = [];
-      for (let acc of vaultAccounts) {
-        accounts.push(JSON.parse(await passworder.decrypt(password, acc)) as IAccount);
+      let exportedWallets: IWallet[] = [];
+      for (let wallet of vault) {
+        exportedWallets.push(JSON.parse(await passworder.decrypt("1", wallet)) as IWallet);
       }
-      await updateAppState({
-        exportedAccounts: [...exportedAccounts, ...accounts],
-        isUnlocked: true,
-        password: password,
+      updateWallets({
+        wallets: [...wallets, ...exportedWallets],
       });
+      updateAppState({
+        isUnlocked: true,
+        password: password
+      })
       navigate("/home/wallet");
     } catch (e) {
       console.log(e);

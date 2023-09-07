@@ -3,28 +3,60 @@ import './App.scss';
 import { ReactNode, useEffect, useState } from 'react';
 import { useAppState } from 'shared/states/appState';
 import { Outlet, useNavigate } from 'react-router-dom';
+import IAccount from 'shared/interfaces/IAccount';
+import IWallet from 'shared/interfaces/IWallet';
+import { useWalletState } from 'shared/states/walletState';
+const passworder = require("browser-passworder");
 
-function get_correct_route(vaultAccounts: string[], isUnlocked: boolean) {
-  if (vaultAccounts.length > 0 && !isUnlocked) return "/account/insert-password";
-  else if (vaultAccounts.length <= 0 && !isUnlocked) return "/account/create-password";
+function get_correct_route(vault: string[], isUnlocked: boolean) {
+  if (vault.length > 0 && !isUnlocked) return "/account/insert-password";
+  else if (vault.length <= 0 && !isUnlocked) return "/account/create-password";
   else if (isUnlocked) return "/home/wallet";
   else return "/";
 }
 
 export default function App() {
 
-  const { checkVault, isReady, vaultAccounts, isUnlocked } = useAppState((v) => ({
+  const { checkVault, isReady, vault, isUnlocked, updateAppState } = useAppState((v) => ({
     checkVault: v.checkVault,
     isReady: v.isReady,
-    vaultAccounts: v.vaultAccounts,
-    isUnlocked: v.isUnlocked
+    vault: v.vault,
+    isUnlocked: v.isUnlocked,
+    updateAppState: v.updateAppState,
   }));
+
+  const { updateWallets, wallets } = useWalletState((v) => ({
+    updateWallets: v.updateWallets,
+    wallets: v.wallets
+  }))
+
   const navigate = useNavigate();
+
+  const LOGIN_FOR_TESTS = async () => {
+    try {
+      let exportedWallets: IWallet[] = [];
+      for (let wallet of vault) {
+        exportedWallets.push(JSON.parse(await passworder.decrypt("1", wallet)) as IWallet);
+      }
+      updateWallets({
+        wallets: [...wallets, ...exportedWallets],
+      });
+      updateAppState({
+        isUnlocked: true,
+        password: "1"
+      })
+      navigate(get_correct_route(vault, isUnlocked));
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
     if (!isReady) checkVault();
-    else navigate(get_correct_route(vaultAccounts, isUnlocked));
-  }, [isReady, checkVault, vaultAccounts, isUnlocked]);
+    else {
+      navigate(get_correct_route(vault, isUnlocked));
+    }
+  }, [isReady, checkVault, wallets, isUnlocked]);
 
   return (
     <div className='app'>

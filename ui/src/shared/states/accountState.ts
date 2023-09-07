@@ -1,10 +1,10 @@
-import Account from 'shared/interfaces/IAccount'
+import IAccount from 'shared/interfaces/IAccount'
 import { create } from 'zustand'
 
 type useAccountState = {
-  account?: Account,
+  account?: IAccount,
 }
 
-export const useAccountState = create<useAccountState>()((set) => ({
+export const useAccountState = create<useAccountState>()((set, get) => ({
   account: undefined,
 }))

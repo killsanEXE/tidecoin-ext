@@ -2,14 +2,20 @@ import React, { useState } from 'react'
 import './CreatePassword.scss'
 import { useAppState } from 'shared/states/appState';
 import { useNavigate } from 'react-router-dom';
+import { useWalletState } from 'shared/states/walletState';
 
 type Props = {}
 
 export default function CreatePassword({ }: Props) {
-  const { updateAppState, createNewAccount, saveAppState } = useAppState((v) => ({
+  const { updateAppState, saveAppState } = useAppState((v) => ({
     updateAppState: v.updateAppState,
-    createNewAccount: v.createNewAccount,
     saveAppState: v.saveAppState
+  }));
+
+  const { createNewWallet, createNewAccount, wallets } = useWalletState((v) => ({
+    createNewWallet: v.createNewWallet,
+    createNewAccount: v.createNewAccount,
+    wallets: v.wallets
   }));
 
   const [password, setPassword] = useState("");
@@ -19,8 +25,9 @@ export default function CreatePassword({ }: Props) {
   const createPassword = async () => {
     if (password === passwordConfirm) {
       await updateAppState({ password: password, isUnlocked: true });
+      await createNewWallet();
       await createNewAccount();
-      await saveAppState();
+      await saveAppState(wallets);
       navigate("/home/wallet");
     }
   }

@@ -2,44 +2,34 @@ import { create } from 'zustand'
 import { browserStorageLocalGet, browserStorageLocalSet } from '../../helpers/browser'
 import IApp from 'shared/interfaces/IApp';
 import IAccount from 'shared/interfaces/IAccount';
+import IWallet from 'shared/interfaces/IWallet';
 
 const passworder = require("browser-passworder")
 
 export const useAppState = create<IApp>()((set, get) => ({
     isReady: false,
     isUnlocked: false,
-    exportedAccounts: [],
-    vaultAccounts: [],
+    vault: [],
     password: undefined,
     updateAppState: async (app: Partial<IApp>) => {
         set(app);
     },
     checkVault: async () => {
-        if (get().vaultAccounts.length > 0) return;
-        let result = localStorage.getItem("vaultAccounts");
+        if (get().vault.length > 0) return;
+        let result = localStorage.getItem("vault");
         let accounts = result === null ? undefined : JSON.parse(result);
-        if (accounts === undefined) set({ vaultAccounts: [] })
-        else set({ vaultAccounts: accounts })
+        if (accounts === undefined) set({ vault: [] })
+        else set({ vault: accounts })
         set({ isReady: true })
     },
-    saveAppState: async () => {
+    saveAppState: async (wallets: IWallet[]) => {
         if (get().password) {
-            let vaultAccounts = [];
-            for (let acc of get().exportedAccounts) {
-                vaultAccounts.push(await passworder.encrypt(get().password, JSON.stringify(acc)));
+            let vaultWallets = [];
+            for (let acc of wallets) {
+                vaultWallets.push(await passworder.encrypt(get().password, JSON.stringify(acc)));
             }
             // await browserStorageLocalSet(vaultAccounts);
-            localStorage.setItem("vaultAccounts", JSON.stringify(vaultAccounts));
+            localStorage.setItem("vault", JSON.stringify(vaultWallets));
         }
-    },
-    createNewAccount: async () => {
-        let account: IAccount = {
-            type: "string",
-            pubkey: "string",
-            address: "string",
-            key: "string",
-        }
-        set({ exportedAccounts: [...get().exportedAccounts, account] });
-        await get().saveAppState();
     }
 }))

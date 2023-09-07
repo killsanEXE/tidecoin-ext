@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import './Wallet.scss'
-import AccountSelector from 'components/selectors/AccountSelector'
 
-export default function Wallet(props: any) {
+export default function Wallet() {
+
+
 
   return (
     <div className='wallet-div'>
-      <div className="account-selector-wrapper">
-        <AccountSelector />
+      <div className='change-acc-div'>
+        <button className='change-acc-btn'></button>
       </div>
     </div>
   )
