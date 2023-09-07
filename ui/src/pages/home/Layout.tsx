@@ -15,7 +15,7 @@ export default function Layout() {
 
   return (
     <div className="layout">
-      {isUnlocked ? <Outlet /> : <Navigate to="/account/insert-password" />}
+      {isUnlocked ? <Outlet /> : <Navigate to="/account/login" />}
       <Nav />
     </div>
   );

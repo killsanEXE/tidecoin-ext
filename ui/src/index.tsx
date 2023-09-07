@@ -22,7 +22,7 @@ const router = createHashRouter([
       {
         path: "account",
         children: [
-          { path: "insert-password", element: <Login /> },
+          { path: "login", element: <Login /> },
           { path: "create-password", element: <CreatePassword /> }
         ]
       },

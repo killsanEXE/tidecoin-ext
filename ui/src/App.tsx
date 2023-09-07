@@ -9,7 +9,7 @@ import { useWalletState } from 'shared/states/walletState';
 const passworder = require("browser-passworder");
 
 function get_correct_route(vault: string[], isUnlocked: boolean) {
-  if (vault.length > 0 && !isUnlocked) return "/account/insert-password";
+  if (vault.length > 0 && !isUnlocked) return "/account/login";
   else if (vault.length <= 0 && !isUnlocked) return "/account/create-password";
   else if (isUnlocked) return "/home/wallet";
   else return "/";
