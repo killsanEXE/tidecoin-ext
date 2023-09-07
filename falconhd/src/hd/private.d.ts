@@ -1,0 +1,62 @@
+/// <reference types="node" />
+import { NetType } from "../protocol/types";
+import HDPublicKey from "./public";
+import { PrivateKeyOptions, Base58String } from "./types";
+import Mnemonic from "./mnemonic";
+import { BufferReader, StaticWriter } from "@jil/bufio";
+import { Buffer } from "buffer";
+declare class HDPrivateKey {
+    depth: number;
+    parentFingerPrint: number;
+    childIndex: number;
+    chainCode: Buffer;
+    privateKey: Buffer;
+    publicKey: Buffer;
+    fingerPrint: number;
+    _hdPublicKey?: any;
+    constructor(options?: PrivateKeyOptions);
+    fromOptions(options: PrivateKeyOptions): this;
+    static fromOptions(options: PrivateKeyOptions): HDPrivateKey;
+    toPublic(): HDPublicKey;
+    xprivkey(network?: NetType): Base58String;
+    xpubkey(network?: NetType): Base58String;
+    destroy(pub: boolean): void;
+    derive(index: number): HDPrivateKey;
+    getID(index: number): string;
+    deriveAccount(purpose: number, type: number, account: number): HDPrivateKey;
+    isMaster(): boolean;
+    isAccount(account?: number): boolean;
+    static isBase58(data: string, network?: NetType): boolean;
+    static isRaw(data: Buffer, network?: NetType): boolean;
+    static isValidPath(path: string): boolean;
+    derivePath(path: string): HDPrivateKey;
+    equals(obj: PrivateKeyOptions): boolean;
+    compare(key: PrivateKeyOptions): number | undefined;
+    fromSeed(seed: Buffer): this;
+    static fromSeed(seed: Buffer): HDPrivateKey;
+    fromMnemonic(mnemonic: Mnemonic, passphrase?: string): HDPrivateKey;
+    static fromMnemonic(mnemonic: Mnemonic, passphrase?: string): HDPrivateKey;
+    fromPhrase(phrase: string): HDPrivateKey;
+    static fromPhrase(phrase: string): HDPrivateKey;
+    fromKey(key: Buffer, entropy: Buffer): HDPrivateKey;
+    static fromKey(key: Buffer, entropy: Buffer): HDPrivateKey;
+    static generate(): HDPrivateKey;
+    fromBase58(xkey: Base58String, network?: NetType): HDPrivateKey;
+    fromReader(br: BufferReader, network?: NetType): HDPrivateKey;
+    fromRaw(data: Buffer, network?: NetType): HDPrivateKey;
+    toBase58(network?: NetType): Base58String;
+    getSize(): number;
+    toWriter(bw: StaticWriter, network?: NetType): StaticWriter;
+    toRaw(network?: NetType): Buffer;
+    static fromBase58(xkey: Base58String, network?: NetType): HDPrivateKey;
+    static fromReader(br: BufferReader, network?: NetType): HDPrivateKey;
+    static fromRaw(data: Buffer, network?: NetType): HDPrivateKey;
+    toJSON(network?: NetType): {
+        xprivkey: string;
+    };
+    fromJSON(json: {
+        xprivkey: string;
+    }, network?: NetType): this;
+    static fromJSON(json: any, network?: NetType): HDPrivateKey;
+}
+export default HDPrivateKey;

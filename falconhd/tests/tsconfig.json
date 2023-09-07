@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "outDir": "../",
+    "declaration": false,
+    "rootDir": "../",
+    "rootDirs": ["../src", "../types"],
+    "types": ["node", "mocha"],
+    "allowJs": false,
+    "resolveJsonModule": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "baseUrl": "."
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["../ts_src/**/*.ts"]
+}
