@@ -6,9 +6,7 @@ import { generate } from 'test-test-test-hd-wallet'
 export const useWalletState = create<IWallet>()((set, get) => ({
     wallets: [],
     createNewWallet: () => {
-        // const privateWallet = generate();
-        // console.log(privateWallet.publicKey);
-        // console.log(privateWallet.privateKey);
+        const privateWallet = generate();
     },
     createNewAccount: async () => { },
     updateWallets: (wallet: Partial<IWallet>) => { set(wallet) }
