@@ -1,0 +1,21 @@
+$background: #3b4167;
+
+.main-nav {
+    height: 10vh;
+    background-color: $background;
+    position: absolute;
+    display: flex;
+    bottom: 0;
+    width: 350px;
+    justify-content: space-evenly;
+
+    .nav-btn {
+        width: 50%;
+        background-color: transparent;
+        border: 0;
+    }
+
+    .nav-btn:hover {
+        cursor: pointer;
+    }
+}
