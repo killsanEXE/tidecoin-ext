@@ -1,11 +1,10 @@
 import ReactLoading from 'react-loading';
 import './App.scss';
-import { ReactNode, useEffect, useState } from 'react';
 import { useAppState } from 'shared/states/appState';
 import { Outlet, useNavigate } from 'react-router-dom';
-import IAccount from 'shared/interfaces/IAccount';
-import IWallet from 'shared/interfaces/IWallet';
 import { useWalletState } from 'shared/states/walletState';
+import { IWallet } from 'shared/interfaces/IWallet';
+import { useEffect } from 'react';
 const passworder = require("browser-passworder");
 
 function get_correct_route(vault: string[], isUnlocked: boolean) {
@@ -25,8 +24,8 @@ export default function App() {
     updateAppState: v.updateAppState,
   }));
 
-  const { updateWallets, wallets } = useWalletState((v) => ({
-    updateWallets: v.updateWallets,
+  const { updateWalletState, wallets } = useWalletState((v) => ({
+    updateWalletState: v.updateWalletState,
     wallets: v.wallets
   }))
 
@@ -38,7 +37,7 @@ export default function App() {
       for (let wallet of vault) {
         exportedWallets.push(JSON.parse(await passworder.decrypt("1", wallet)) as IWallet);
       }
-      updateWallets({
+      updateWalletState({
         wallets: [...wallets, ...exportedWallets],
       });
       updateAppState({

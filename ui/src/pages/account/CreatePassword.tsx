@@ -12,10 +12,9 @@ export default function CreatePassword({ }: Props) {
     saveAppState: v.saveAppState
   }));
 
-  const { createNewWallet, createNewAccount, wallets } = useWalletState((v) => ({
+  const { createNewWallet, createNewAccount } = useWalletState((v) => ({
     createNewWallet: v.createNewWallet,
     createNewAccount: v.createNewAccount,
-    wallets: v.wallets
   }));
 
   const [password, setPassword] = useState("");
@@ -25,10 +24,12 @@ export default function CreatePassword({ }: Props) {
   const createPassword = async () => {
     if (password === passwordConfirm) {
       await updateAppState({ password: password, isUnlocked: true });
-      await createNewWallet();
-      await createNewAccount();
-      await saveAppState(wallets);
-      navigate("/home/wallet");
+      createNewWallet();
+      const wallets = createNewAccount();
+      if (wallets.length > 0) {
+        await saveAppState(wallets);
+        navigate("/home/wallet");
+      }
     }
   }
 

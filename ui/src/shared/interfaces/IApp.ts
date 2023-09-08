@@ -1,5 +1,5 @@
 import IAccount from "./IAccount";
-import IWallet from "./IWallet";
+import { IWallet } from "./IWallet";
 
 export default interface IApp {
     isReady: boolean;
