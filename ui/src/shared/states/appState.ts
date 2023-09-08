@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { browserStorageLocalGet, browserStorageLocalSet } from '../../helpers/browser'
 import IApp from 'shared/interfaces/IApp';
 import IAccount from 'shared/interfaces/IAccount';
-import IWallet from 'shared/interfaces/IWallet';
+import { IWallet } from 'shared/interfaces/IWallet';
 
 const passworder = require("browser-passworder")
 

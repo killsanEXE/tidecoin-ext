@@ -1,10 +1,18 @@
 import IAccount from "./IAccount";
 
-export default interface IWallet {
+export interface IWallet {
+    publicKey: string;
+    privateKey: string;
+    name: string;
+    phrase: string;
+    accounts: IAccount[];
+}
+
+export interface IWalletState {
     wallets: IWallet[];
     currentWallet?: IWallet;
-    phraseHash?: string;
-    createNewAccount: () => void;
-    createNewWallet: () => void;
-    updateWallets: (wallet: Partial<IWallet>) => void;
+    createNewWallet: (name?: string) => void;
+    updateCurrentWalletName: (name: string) => void;
+    updateWalletState: (state: Partial<IWalletState>) => void;
+    createNewAccount: () => IWallet[];
 }

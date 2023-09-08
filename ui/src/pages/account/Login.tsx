@@ -4,7 +4,7 @@ import { useAppState } from "shared/states/appState";
 import IAccount from "shared/interfaces/IAccount";
 import { useNavigate } from "react-router-dom";
 import { useWalletState } from "shared/states/walletState";
-import IWallet from "shared/interfaces/IWallet";
+import { IWallet } from "shared/interfaces/IWallet";
 const passworder = require("browser-passworder");
 
 export default function Login() {
@@ -13,8 +13,8 @@ export default function Login() {
     updateAppState: v.updateAppState,
   }));
 
-  const { updateWallets, wallets } = useWalletState((v) => ({
-    updateWallets: v.updateWallets,
+  const { updateWalletState, wallets } = useWalletState((v) => ({
+    updateWalletState: v.updateWalletState,
     wallets: v.wallets
   }))
   const [password, setPassword] = useState("");
@@ -30,7 +30,7 @@ export default function Login() {
       for (let wallet of vault) {
         exportedWallets.push(JSON.parse(await passworder.decrypt("1", wallet)) as IWallet);
       }
-      updateWallets({
+      updateWalletState({
         wallets: [...wallets, ...exportedWallets],
       });
       updateAppState({
