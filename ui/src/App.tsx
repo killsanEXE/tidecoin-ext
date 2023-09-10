@@ -39,6 +39,7 @@ export default function App() {
       }
       updateWalletState({
         wallets: [...wallets, ...exportedWallets],
+        currentWallet: exportedWallets[0],
       });
       updateAppState({
         isUnlocked: true,

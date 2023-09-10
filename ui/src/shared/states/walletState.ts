@@ -11,7 +11,7 @@ function createNewAccount() {
         type: "string",
         pubkey: "string",
         address: "string",
-        brandName: "string",
+        brandName: "ACCOUNT 1",
         alianName: "string",
         displayBrandName: "string",
         index: 0,

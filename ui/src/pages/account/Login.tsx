@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Login.scss";
 import { useAppState } from "shared/states/appState";
-import IAccount from "shared/interfaces/IAccount";
 import { useNavigate } from "react-router-dom";
 import { useWalletState } from "shared/states/walletState";
 import { IWallet } from "shared/interfaces/IWallet";
