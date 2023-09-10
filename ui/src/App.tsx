@@ -53,7 +53,8 @@ export default function App() {
   useEffect(() => {
     if (!isReady) checkVault();
     else {
-      navigate(get_correct_route(vault, isUnlocked));
+      // navigate(get_correct_route(vault, isUnlocked));
+      LOGIN_FOR_TESTS()
     }
   }, [isReady, checkVault, wallets, isUnlocked]);
 

@@ -24,8 +24,7 @@ export default function CreatePassword({ }: Props) {
   const createPassword = async () => {
     if (password === passwordConfirm) {
       await updateAppState({ password: password, isUnlocked: true });
-      createNewWallet();
-      const wallets = createNewAccount();
+      const wallets = createNewWallet();
       if (wallets.length > 0) {
         await saveAppState(wallets);
         navigate("/home/wallet");

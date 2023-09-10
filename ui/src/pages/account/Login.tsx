@@ -32,6 +32,7 @@ export default function Login() {
       }
       updateWalletState({
         wallets: [...wallets, ...exportedWallets],
+        currentWallet: exportedWallets[0],
       });
       updateAppState({
         isUnlocked: true,
