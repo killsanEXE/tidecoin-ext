@@ -24,9 +24,10 @@ export default function App() {
     updateAppState: v.updateAppState,
   }));
 
-  const { updateWalletState, wallets } = useWalletState((v) => ({
+  const { updateWalletState, wallets, createNewAccount } = useWalletState((v) => ({
     updateWalletState: v.updateWalletState,
-    wallets: v.wallets
+    wallets: v.wallets,
+    createNewAccount: v.createNewAccount
   }))
 
   const navigate = useNavigate();
@@ -45,7 +46,11 @@ export default function App() {
         isUnlocked: true,
         password: "1"
       })
-      navigate(get_correct_route(vault, isUnlocked));
+      for (let i = 0; i <= 20; i++) {
+        createNewAccount();
+      }
+      // navigate(get_correct_route(vault, isUnlocked));
+      navigate("/switch-account/", { state: { fallbackUrl: "/home/wallet" } });
     } catch (e) {
       console.log(e);
     }

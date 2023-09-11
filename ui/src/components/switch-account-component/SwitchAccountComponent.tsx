@@ -1,32 +1,43 @@
 import { useWalletState } from "shared/states/walletState"
 import "./SwitchAccountComponent.scss"
 import CheckIcon from "components/icons/Checkicon"
-import { useNavigate, useParams } from "react-router-dom";
+import { useFetcher, useLocation, useNavigate, useParams } from "react-router-dom";
 import ArrowLeft from "components/icons/ArrowLeft";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import PlusInCircleIcon from "components/icons/PlusInCirlceIcon";
+import SmallMenuicon from "components/icons/SmallMenuIcon";
 
 export default function SwitchAccountComponent() {
 
     const navigate = useNavigate();
-    const { fallbackUrl } = useParams();
+    const fallbackUrl = useLocation().state.fallbackUrl;
     const { currentWallet } = useWalletState((v) => ({ currentWallet: v.currentWallet }))
-
-    useEffect(() => {
-        console.log(fallbackUrl);
-    }, [fallbackUrl])
 
     return (
         <div className="switch-acc-div">
             <div className="control-div">
-                <button onClick={() => { navigate(fallbackUrl ?? "/") }}><ArrowLeft /> Back</button>
-                <p>Select account</p>
+                <p className="control-elem back" onClick={() => { navigate(fallbackUrl !== undefined ? fallbackUrl : "/home/wallet") }}><ArrowLeft /> Back</p>
+                <p className="control-elem">Switch account</p>
+                <p className="control-elem add-new"><PlusInCircleIcon /></p>
             </div>
-            {currentWallet?.accounts.map((acc, i) =>
-                <div className="acc" key={i}>
-                    {currentWallet.currentAccount.address === acc.address ? <CheckIcon /> : undefined}
-                    {acc.brandName}
-                </div>
-            )}
+            <div className="accounts">
+                {currentWallet?.accounts.map((acc, i) =>
+                    <div className="account" key={i}>
+                        <div className="acc-info">
+                            <div className="name">
+                                {currentWallet.currentAccount.address === acc.address ? <CheckIcon /> : undefined}
+                                {acc.brandName}
+                            </div>
+                            <div className="address">
+                                {acc.address}
+                            </div>
+                        </div>
+                        <div className="acc-control">
+                            <button className="manage-acc-button"><SmallMenuicon /></button>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

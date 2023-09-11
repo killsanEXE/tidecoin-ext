@@ -4,7 +4,7 @@ import Mnemonic from 'test-test-test-hd-wallet/src/hd/mnemonic';
 import { IWalletState, IWallet } from 'shared/interfaces/IWallet';
 import { toHex } from 'shared/utils';
 import IAccount from 'shared/interfaces/IAccount';
-import { couldStartTrivia } from 'typescript';
+import { couldStartTrivia, createBuilderStatusReporter } from 'typescript';
 
 function createNewAccount() {
     return {

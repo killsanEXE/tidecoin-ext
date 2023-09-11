@@ -33,9 +33,9 @@ const router = createHashRouter([
         children: [
           { path: "wallet", element: <Wallet /> },
           { path: "settings", element: <Settings /> },
-          { path: "switch-account/:fallbackUrl", element: <SwitchAccountComponent /> }
         ]
       },
+      { path: "switch-account", element: <SwitchAccountComponent /> }
     ]
   },
 ]);

@@ -15,8 +15,12 @@ export default function Wallet() {
       <div className='change-wallet-acc-div'>
         <button className='change btn primary'>{currentWallet?.name}</button>
         <button
-          onClick={() => { navigate("/home/switch-account/home") }}
-          className='change btn secondary'>
+          onClick={() => {
+            navigate("/switch-account/", {
+              state: { fallbackUrl: "/home/wallet" }
+            })
+          }}
+          className='change btn'>
           {currentWallet?.currentAccount.brandName}
         </button>
       </div>

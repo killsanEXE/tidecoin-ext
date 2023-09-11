@@ -9,19 +9,18 @@ $font_color: #F4F4F9;
     justify-content: flex-start;
 
     .change-wallet-acc-div {
-        // width: 100%;
         display: flex;
         justify-content: space-evenly;
         height: 10vh;
 
         .change {
             width: 100%;
+            background-color: transparent;
+            color: $font_color;
             margin: .5rem;
-            font-size: .9rem;
-        }
-
-        .primary {
-            width: 50%;
+            font-size: 1rem;
+            border-radius: 0;
+            border-bottom: 1px solid white;
         }
     }
 
