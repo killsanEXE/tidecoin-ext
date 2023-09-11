@@ -10,6 +10,7 @@ import Settings from 'pages/home/settings/Settings';
 import Layout from 'pages/home/Layout';
 import CreatePassword from 'pages/account/CreatePassword';
 import SwitchAccountComponent from 'components/switch-account-component/SwitchAccountComponent';
+import CreateNewAccount from 'components/create-new-account-component/CreateNewAccount';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -35,7 +36,8 @@ const router = createHashRouter([
           { path: "settings", element: <Settings /> },
         ]
       },
-      { path: "switch-account", element: <SwitchAccountComponent /> }
+      { path: "switch-account", element: <SwitchAccountComponent /> },
+      { path: "create-new-account", element: <CreateNewAccount /> },
     ]
   },
 ]);

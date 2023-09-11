@@ -50,7 +50,7 @@ export default function App() {
         createNewAccount();
       }
       // navigate(get_correct_route(vault, isUnlocked));
-      navigate("/switch-account/", { state: { fallbackUrl: "/home/wallet" } });
+      navigate("/switch-account/");
     } catch (e) {
       console.log(e);
     }

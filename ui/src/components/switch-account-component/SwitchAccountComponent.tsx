@@ -10,15 +10,16 @@ import SmallMenuicon from "components/icons/SmallMenuIcon";
 export default function SwitchAccountComponent() {
 
     const navigate = useNavigate();
-    const fallbackUrl = useLocation().state.fallbackUrl;
     const { currentWallet } = useWalletState((v) => ({ currentWallet: v.currentWallet }))
 
     return (
         <div className="switch-acc-div">
             <div className="control-div">
-                <p className="control-elem back" onClick={() => { navigate(fallbackUrl !== undefined ? fallbackUrl : "/home/wallet") }}><ArrowLeft /> Back</p>
+                <p className="control-elem back" onClick={() => { navigate(-1) }}><ArrowLeft /> Back</p>
                 <p className="control-elem">Switch account</p>
-                <p className="control-elem add-new"><PlusInCircleIcon /></p>
+                <p className="control-elem add-new" onClick={() => {
+                    navigate("/create-new-account")
+                }}><PlusInCircleIcon /></p>
             </div>
             <div className="accounts">
                 {currentWallet?.accounts.map((acc, i) =>
