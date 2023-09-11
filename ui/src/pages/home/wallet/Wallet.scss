@@ -1,17 +1,80 @@
+$btn_background: #3b4167;
+$font_color: #F4F4F9;
+
 .wallet-div {
     height: 90vh;
     width: 100%;
-    padding-top: .5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 
     .change-wallet-acc-div {
-        width: 100%;
+        // width: 100%;
         display: flex;
         justify-content: space-evenly;
+        height: 10vh;
 
         .change {
             width: 100%;
             margin: .5rem;
+            font-size: .9rem;
         }
 
+        .primary {
+            width: 50%;
+        }
     }
+
+    .acc-panel {
+        height: 30vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 2rem;
+        gap: 1rem;
+
+        * {
+            margin: 0;
+        }
+
+        .balance {
+            font-size: 2rem;
+            width: 100%;
+        }
+
+        .acc-pub-address {
+            width: 100%;
+            gap: .5rem;
+
+            .icon {
+                width: 1.5rem;
+            }
+        }
+
+        .acc-pub-address:hover {
+            cursor: pointer;
+        }
+
+        .receive-send-btns {
+            width: 100%;
+            gap: 1rem;
+
+            .btn {
+                background-color: $btn_background;
+                color: $font_color;
+                gap: 1rem;
+            }
+        }
+    }
+
+    .transactions-div {
+        height: 50vh;
+    }
+}
+
+.flex-center-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
