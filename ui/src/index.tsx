@@ -9,6 +9,7 @@ import Wallet from 'pages/home/wallet/Wallet';
 import Settings from 'pages/home/settings/Settings';
 import Layout from 'pages/home/Layout';
 import CreatePassword from 'pages/account/CreatePassword';
+import SwitchAccountComponent from 'components/switch-account-component/SwitchAccountComponent';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -31,7 +32,8 @@ const router = createHashRouter([
         element: <Layout />,
         children: [
           { path: "wallet", element: <Wallet /> },
-          { path: "settings", element: <Settings /> }
+          { path: "settings", element: <Settings /> },
+          { path: "switch-account/:fallbackUrl", element: <SwitchAccountComponent /> }
         ]
       },
     ]

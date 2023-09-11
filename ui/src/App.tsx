@@ -57,7 +57,7 @@ export default function App() {
       // navigate(get_correct_route(vault, isUnlocked));
       LOGIN_FOR_TESTS()
     }
-  }, [isReady, checkVault, wallets, isUnlocked]);
+  }, [isReady, checkVault, isUnlocked]);
 
   return (
     <div className='app'>

@@ -3,16 +3,22 @@ import './Wallet.scss'
 import { useWalletState } from 'shared/states/walletState'
 import SendIcon from 'components/icons/SendIcon'
 import CopyIcon from 'components/icons/CopyIcon'
+import { useNavigate } from 'react-router-dom'
 
 export default function Wallet() {
 
   const { currentWallet } = useWalletState((v) => ({ currentWallet: v.currentWallet }))
+  const navigate = useNavigate();
 
   return (
     <div className='wallet-div'>
       <div className='change-wallet-acc-div'>
         <button className='change btn primary'>{currentWallet?.name}</button>
-        <button className='change btn secondary'>{currentWallet?.currentAccount.brandName}</button>
+        <button
+          onClick={() => { navigate("/home/switch-account/home") }}
+          className='change btn secondary'>
+          {currentWallet?.currentAccount.brandName}
+        </button>
       </div>
 
       <div className="acc-panel flex-center-center">
