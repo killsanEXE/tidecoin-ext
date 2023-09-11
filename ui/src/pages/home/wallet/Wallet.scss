@@ -59,11 +59,18 @@ $font_color: #F4F4F9;
         .receive-send-btns {
             width: 100%;
             gap: 1rem;
+            padding-top: 1rem;
 
             .btn {
                 background-color: $btn_background;
                 color: $font_color;
                 gap: 1rem;
+                font-size: 1rem;
+                padding-right: 1rem;
+
+                .icon {
+                    width: 1.5rem;
+                }
             }
         }
     }
