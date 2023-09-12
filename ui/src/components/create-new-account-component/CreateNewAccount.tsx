@@ -23,6 +23,7 @@ export default function CreateNewAccount() {
         <form className='form' onSubmit={(e) => e.preventDefault()}>
             <div className="back-wrapper">
                 <p className="back" onClick={() => { navigate(-1) }}><ArrowLeft /> Back</p>
+                <p>Create new account</p>
             </div>
             <p className="form-title">Enter the name:</p>
             <input

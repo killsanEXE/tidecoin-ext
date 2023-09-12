@@ -15,10 +15,10 @@ body {
   margin: 0 auto;
   width: 350px;
   height: 600px;
-  color: $font-color;
+  color: $font_color;
   background-color: $background;
   font-family: 'Aldrich', sans-serif;
-  color: $font-color;
+  color: $font_color;
 }
 
 .form {
@@ -47,7 +47,8 @@ body {
 }
 
 .primary {
-  background-color: $button_primary_background;
+  // background-color: $button_primary_background;
+  background-color: $font_color;
 }
 
 .secondary {

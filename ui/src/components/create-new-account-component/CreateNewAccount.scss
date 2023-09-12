@@ -4,11 +4,15 @@
         height: 10vh;
         max-width: 350px;
 
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
         .back {
-            width: 23%;
-            position: absolute;
-            top: 0;
-            left: 0;
+            width: 25%;
             display: flex;
             align-items: center;
             justify-content: space-between;
