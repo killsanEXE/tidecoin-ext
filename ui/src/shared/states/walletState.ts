@@ -4,14 +4,13 @@ import Mnemonic from 'test-test-test-hd-wallet/src/hd/mnemonic';
 import { IWalletState, IWallet } from 'shared/interfaces/IWallet';
 import { toHex } from 'shared/utils';
 import IAccount from 'shared/interfaces/IAccount';
-import { couldStartTrivia, createBuilderStatusReporter } from 'typescript';
 
-function createNewAccount() {
+function getNewAccount() {
     return {
         type: "string",
         pubkey: "string",
         address: "string",
-        brandName: "ACCOUNT 1",
+        brandName: "ACCOUNT #1",
         alianName: "string",
         displayBrandName: "string",
         index: 0,
@@ -25,10 +24,10 @@ export const useWalletState = create<IWalletState>()((set, get) => ({
     createNewWallet: (name?: string): IWallet[] => {
         const mnemonic = new Mnemonic()
         const privateWallet = fromMnemonic(mnemonic);
-        const account = createNewAccount();
+        const account = getNewAccount();
         set({
             currentWallet: {
-                name: name === undefined ? `Wallet №${get().wallets.length + 1}` : name,
+                name: name === undefined ? `Wallet #${get().wallets.length + 1}` : name,
                 phrase: mnemonic.getPhrase(),
                 privateKey: toHex(privateWallet.privateKey),
                 publicKey: toHex(privateWallet.publicKey),
@@ -39,12 +38,14 @@ export const useWalletState = create<IWalletState>()((set, get) => ({
         set({ wallets: [...get().wallets, get().currentWallet!] })
         return get().wallets;
     },
-    createNewAccount: (): IWallet[] => {
+    createNewAccount: (name?: string): IWallet[] => {
+        if (!name || name.length <= 0) name = `Account #${get().currentWallet?.accounts.length! + 1}`
         const currentWallet = get().currentWallet;
         if (!currentWallet) return [];
-        const account: IAccount = createNewAccount();
+        const account: IAccount = getNewAccount();
+        account.brandName = name;
 
-        set({ currentWallet: { ...currentWallet, accounts: [...currentWallet?.accounts!, account] } })
+        set({ currentWallet: { ...currentWallet, accounts: [...currentWallet?.accounts!, account], currentAccount: account } })
         return get().wallets;
     },
     updateWalletState: (state: Partial<IWalletState>) => { set(state) },

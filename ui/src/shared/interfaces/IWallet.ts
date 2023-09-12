@@ -15,5 +15,5 @@ export interface IWalletState {
     createNewWallet: (name?: string) => IWallet[];
     updateCurrentWalletName: (name: string) => void;
     updateWalletState: (state: Partial<IWalletState>) => void;
-    createNewAccount: () => IWallet[];
+    createNewAccount: (name?: string) => IWallet[];
 }

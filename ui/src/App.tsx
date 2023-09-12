@@ -5,6 +5,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useWalletState } from 'shared/states/walletState';
 import { IWallet } from 'shared/interfaces/IWallet';
 import { useEffect } from 'react';
+import { Toaster } from "react-hot-toast";
 const passworder = require("browser-passworder");
 
 function get_correct_route(vault: string[], isUnlocked: boolean) {
@@ -67,6 +68,9 @@ export default function App() {
   return (
     <div className='app'>
       {isReady ? <Outlet /> : <ReactLoading type="spin" color="#fff" />}
+      <Toaster position="bottom-center" toastOptions={{
+        className: "toast"
+      }} />
     </div>
   );
 }
