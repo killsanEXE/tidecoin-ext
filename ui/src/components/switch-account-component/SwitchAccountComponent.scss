@@ -43,48 +43,90 @@ $secondary_background_hover: #545873;
         width: 95%;
         padding-bottom: 1rem;
 
-        .account {
-            display: flex;
-            padding: .5rem;
+        .main-acc {
+            position: relative;
             background: $secondary_background;
             border-radius: .5rem;
-            justify-content: space-between;
+            overflow: hidden;
 
-            .acc-info {
+            .account {
                 display: flex;
-                flex-direction: column;
-                gap: .5rem;
+                padding: .5rem;
+                justify-content: space-between;
 
-                .name {
+                .acc-info {
                     display: flex;
-                    align-items: center;
+                    flex-direction: column;
                     gap: .5rem;
 
-                    .icon {
-                        width: 1.5rem;
+                    .name {
+                        display: flex;
+                        align-items: center;
+                        gap: .5rem;
+
+                        .icon {
+                            width: 1.5rem;
+                        }
+                    }
+
+                    .address {
+                        font-size: .8rem;
                     }
                 }
 
-                .address {
-                    font-size: .8rem;
+                .acc-control {
+                    .manage-acc-button {
+                        background-color: transparent;
+                        border: 0;
+                        border-radius: 50%;
+                        padding: .5rem;
+
+                    }
+
+                    .manage-acc-button:hover {
+                        background-color: $secondary_background_hover;
+                        cursor: pointer;
+                        transition: all ease-in-out .2s;
+                    }
                 }
             }
 
-            .acc-control {
-                .manage-acc-button {
-                    background-color: transparent;
-                    border: 0;
-                    border-radius: 50%;
-                    padding: .5rem;
+            .acc-settings {
+                display: flex;
+                justify-content: center;
+                gap: 1.8rem;
+                align-items: center;
+                position: absolute;
+                z-index: 2;
+                top: 0;
+                left: 100%;
+                bottom: 0;
+                transition: all .3s ease-in-out;
+                width: 100%;
+                background-color: $hover_background;
 
+                .devider {
+                    background-color: $font_color;
+                    height: 80%;
+                    width: 1px;
                 }
 
-                .manage-acc-button:hover {
-                    background-color: $secondary_background_hover;
-                    cursor: pointer;
-                    transition: all ease-in-out .2s;
+                .acc-setting {
+                    .icon {
+                        width: 1.8rem;
+                    }
+
+                    .icon:hover {
+                        scale: 1.1;
+                        cursor: pointer;
+                    }
                 }
+            }
+
+            .active {
+                left: 0;
             }
         }
+
     }
 }

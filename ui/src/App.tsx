@@ -60,8 +60,8 @@ export default function App() {
   useEffect(() => {
     if (!isReady) checkVault();
     else {
-      navigate(get_correct_route(vault, isUnlocked));
-      // LOGIN_FOR_TESTS()
+      // navigate(get_correct_route(vault, isUnlocked));
+      LOGIN_FOR_TESTS()
     }
   }, [isReady, checkVault, isUnlocked]);
 

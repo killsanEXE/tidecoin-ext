@@ -6,8 +6,13 @@ import ArrowLeft from "components/icons/ArrowLeft";
 import { useEffect, useState } from "react";
 import PlusInCircleIcon from "components/icons/PlusInCirlceIcon";
 import SmallMenuicon from "components/icons/SmallMenuIcon";
+import CopyIcon from "components/icons/CopyIcon";
+import KeyIcon from "components/icons/KeyIcon";
+import TagIcon from "components/icons/TagIcon";
+import XMarkIcon from "components/icons/XMarkIcon";
 
 export default function SwitchAccountComponent() {
+    const [selected, setSelected] = useState<number>()
 
     const navigate = useNavigate();
     const { currentWallet } = useWalletState((v) => ({ currentWallet: v.currentWallet }))
@@ -23,22 +28,33 @@ export default function SwitchAccountComponent() {
             </div>
             <div className="accounts">
                 {currentWallet?.accounts.map((acc, i) =>
-                    <div className="account" key={i}>
-                        <div className="acc-info">
-                            <div className="name">
-                                {currentWallet.currentAccount.address === acc.address ? <CheckIcon /> : undefined}
-                                {acc.brandName}
+                    <div className="main-acc" key={i}>
+                        <div className="account">
+                            <div className="acc-info">
+                                <div className="name">
+                                    {currentWallet.currentAccount.address === acc.address ? <CheckIcon /> : undefined}
+                                    {acc.brandName}
+                                </div>
+                                <div className="address">
+                                    {acc.address}
+                                </div>
                             </div>
-                            <div className="address">
-                                {acc.address}
+                            <div className="acc-control">
+                                <button className="manage-acc-button" onClick={() => { setSelected(i) }}><SmallMenuicon /></button>
                             </div>
                         </div>
-                        <div className="acc-control">
-                            <button className="manage-acc-button"><SmallMenuicon /></button>
+                        <div className={`acc-settings hidden ${selected === i ? 'active' : ''}`}>
+                            <div className="acc-setting copy"><CopyIcon /></div>
+                            <div className="devider"></div>
+                            <div className="acc-setting rename"><TagIcon /></div>
+                            <div className="devider"></div>
+                            <div className="acc-setting"><KeyIcon /></div>
+                            <div className="devider"></div>
+                            <div className="acc-setting" onClick={() => { setSelected(undefined) }}><XMarkIcon /></div>
                         </div>
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     )
 }
