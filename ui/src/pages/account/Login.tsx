@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Login.scss";
 import { useAppState } from "shared/states/appState";
-import IAccount from "shared/interfaces/IAccount";
 import { useNavigate } from "react-router-dom";
 import { useWalletState } from "shared/states/walletState";
 import { IWallet } from "shared/interfaces/IWallet";
@@ -32,6 +31,7 @@ export default function Login() {
       }
       updateWalletState({
         wallets: [...wallets, ...exportedWallets],
+        currentWallet: exportedWallets[0],
       });
       updateAppState({
         isUnlocked: true,

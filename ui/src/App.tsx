@@ -5,6 +5,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useWalletState } from 'shared/states/walletState';
 import { IWallet } from 'shared/interfaces/IWallet';
 import { useEffect } from 'react';
+import { Toaster } from "react-hot-toast";
 const passworder = require("browser-passworder");
 
 function get_correct_route(vault: string[], isUnlocked: boolean) {
@@ -24,9 +25,10 @@ export default function App() {
     updateAppState: v.updateAppState,
   }));
 
-  const { updateWalletState, wallets } = useWalletState((v) => ({
+  const { updateWalletState, wallets, createNewAccount } = useWalletState((v) => ({
     updateWalletState: v.updateWalletState,
-    wallets: v.wallets
+    wallets: v.wallets,
+    createNewAccount: v.createNewAccount
   }))
 
   const navigate = useNavigate();
@@ -39,12 +41,17 @@ export default function App() {
       }
       updateWalletState({
         wallets: [...wallets, ...exportedWallets],
+        currentWallet: exportedWallets[0],
       });
       updateAppState({
         isUnlocked: true,
         password: "1"
       })
-      navigate(get_correct_route(vault, isUnlocked));
+      for (let i = 0; i <= 20; i++) {
+        createNewAccount();
+      }
+      // navigate(get_correct_route(vault, isUnlocked));
+      navigate("/switch-account/");
     } catch (e) {
       console.log(e);
     }
@@ -53,13 +60,17 @@ export default function App() {
   useEffect(() => {
     if (!isReady) checkVault();
     else {
-      navigate(get_correct_route(vault, isUnlocked));
+      // navigate(get_correct_route(vault, isUnlocked));
+      LOGIN_FOR_TESTS()
     }
-  }, [isReady, checkVault, wallets, isUnlocked]);
+  }, [isReady, checkVault, isUnlocked]);
 
   return (
     <div className='app'>
       {isReady ? <Outlet /> : <ReactLoading type="spin" color="#fff" />}
+      <Toaster position="bottom-center" toastOptions={{
+        className: "toast"
+      }} />
     </div>
   );
 }

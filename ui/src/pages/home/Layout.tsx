@@ -10,9 +10,6 @@ export default function Layout() {
 
   const { isUnlocked } = useAppState((v) => ({ isUnlocked: v.isUnlocked }))
 
-  useEffect(() => {
-  }, [])
-
   return (
     <div className="layout">
       {isUnlocked ? <Outlet /> : <Navigate to="/account/login" />}
