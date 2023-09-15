@@ -11,44 +11,31 @@ import CreatePassword from './pages/account/CreatePassword';
 import Layout from './pages/home/Layout';
 import Settings from './pages/home/settings/Settings';
 import Wallet from './pages/home/wallet/Wallet';
+import eventBus from 'shared/eventBus';
+import PortMessage from 'shared/utils/message/portMessage';
+import { EVENTS } from 'shared/constant';
 
-// const root = ReactDOM.createRoot(
-//   document.getElementById('root') as HTMLElement
-// );
+export const initUi = () => {
 
-// const router = createHashRouter([
-//   {
-//     path: "/",
-//     element: <App />,
-//     children: [
-//       {
-//         path: "account",
-//         children: [
-//           { path: "login", element: <Login /> },
-//           { path: "create-password", element: <CreatePassword /> }
-//         ]
-//       },
-//       {
-//         path: "home",
-//         element: <Layout />,
-//         children: [
-//           { path: "wallet", element: <Wallet /> },
-//           { path: "settings", element: <Settings /> },
-//         ]
-//       },
-//       { path: "switch-account", element: <SwitchAccountComponent /> },
-//       { path: "create-new-account", element: <CreateNewAccount /> },
-//     ]
-//   },
-// ]);
+  const portMessageChannel = new PortMessage();
+  portMessageChannel.connect('popup');
 
-// root.render(
-//   <RouterProvider router={router} />
-// );
+  portMessageChannel.listen((data) => {
+    if (data.type === 'broadcast') {
+      eventBus.emit(data.method, data.params);
+    }
+  });
 
-// reportWebVitals();
+  eventBus.addEventListener(EVENTS.broadcastToBackground, (data) => {
+    portMessageChannel.request({
+      type: 'broadcast',
+      method: data.method,
+      params: data.data
+    });
+  });
 
-export const run = () => {
+
+
   const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
   );
