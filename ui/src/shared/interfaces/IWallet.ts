@@ -1,10 +1,8 @@
 import IAccount from "./IAccount";
 
 export interface IWallet {
-    publicKey: string;
-    privateKey: string;
     name: string;
-    phrase: string;
+    phraseHash: string;
     accounts: IAccount[];
     currentAccount: IAccount;
 }

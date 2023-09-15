@@ -6,6 +6,10 @@ import { useWalletState } from 'shared/states/walletState';
 import { IWallet } from 'shared/interfaces/IWallet';
 import { useEffect } from 'react';
 import { Toaster } from "react-hot-toast";
+import { payments } from 'tidecoinjs-lib';
+import { fromMnemonic } from 'test-test-test-hd-wallet';
+import Mnemonic from 'test-test-test-hd-wallet/src/hd/mnemonic';
+import { toHex } from 'shared/utils';
 const passworder = require("browser-passworder");
 
 function get_correct_route(vault: string[], isUnlocked: boolean) {
@@ -39,10 +43,13 @@ export default function App() {
       for (let wallet of vault) {
         exportedWallets.push(JSON.parse(await passworder.decrypt("1", wallet)) as IWallet);
       }
+      // console.log(payments.p2wpkh({ pubkey: Buffer.from(exportedWallets[0].publicKey) }).address)
+
       updateWalletState({
         wallets: [...wallets, ...exportedWallets],
         currentWallet: exportedWallets[0],
       });
+
       updateAppState({
         isUnlocked: true,
         password: "1"
