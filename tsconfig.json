@@ -6,12 +6,7 @@
       "dom.iterable",
       "esnext"
     ],
-    "baseUrl": "./",
-    "paths": {
-      "/*": [
-        "./src/*"
-      ]
-    },
+    "baseUrl": "./src",
     "noImplicitAny": false,
     "downlevelIteration": true,
     "types": [

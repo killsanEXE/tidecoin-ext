@@ -56,8 +56,8 @@ export default function App() {
       for (let i = 0; i <= 20; i++) {
         createNewAccount();
       }
-      // navigate(get_correct_route(vault, isUnlocked));
-      navigate("/switch-account/");
+      navigate(get_correct_route(vault, isUnlocked));
+      // navigate("/switch-account/");
     } catch (e) {
       console.log(e);
     }

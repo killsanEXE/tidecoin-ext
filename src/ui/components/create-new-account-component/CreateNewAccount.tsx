@@ -3,7 +3,7 @@ import "./CreateNewAccount.scss";
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import ArrowLeft from '../icons/ArrowLeft';
-import { useWalletState } from '/ui/shared/states/walletState';
+import { useWalletState } from 'ui/shared/states/walletState';
 
 export default function CreateNewAccount() {
 

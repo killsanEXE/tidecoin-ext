@@ -46,7 +46,7 @@ import Wallet from './pages/home/wallet/Wallet';
 //   <RouterProvider router={router} />
 // );
 
-reportWebVitals();
+// reportWebVitals();
 
 export const run = () => {
   const root = ReactDOM.createRoot(
@@ -82,4 +82,6 @@ export const run = () => {
   root.render(
     <RouterProvider router={router} />
   );
+
+  reportWebVitals();
 }

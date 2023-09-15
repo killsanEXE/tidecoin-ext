@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
-import CopyIcon from '/ui/components/icons/CopyIcon';
-import ReceiveIcon from '/ui/components/icons/ReceiveIcon';
-import SendIcon from '/ui/components/icons/SendIcon';
-import { useWalletState } from '/ui/shared/states/walletState';
+import CopyIcon from 'ui/components/icons/CopyIcon';
+import ReceiveIcon from 'ui/components/icons/ReceiveIcon';
+import SendIcon from 'ui/components/icons/SendIcon';
+import { useWalletState } from 'ui/shared/states/walletState';
 
 export default function Wallet() {
 

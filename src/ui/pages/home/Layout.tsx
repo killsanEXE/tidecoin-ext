@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Nav from "../../components/Nav";
 import "./Layout.scss";
 import { Navigate, Outlet } from "react-router-dom";
-import { useAppState } from "/ui/shared/states/appState";
+import { useAppState } from "ui/shared/states/appState";
 
 
 
