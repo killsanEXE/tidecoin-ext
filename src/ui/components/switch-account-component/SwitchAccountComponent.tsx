@@ -9,6 +9,7 @@ import SmallMenuicon from "../icons/SmallMenuIcon";
 import TagIcon from "../icons/TagIcon";
 import XMarkIcon from "../icons/XMarkIcon";
 import { useWalletState } from "ui/shared/states/walletState";
+import "./SwitchAccountComponent.scss";
 
 export default function SwitchAccountComponent() {
     const [selected, setSelected] = useState<number>()

@@ -3,6 +3,7 @@ import CopyIcon from 'ui/components/icons/CopyIcon';
 import ReceiveIcon from 'ui/components/icons/ReceiveIcon';
 import SendIcon from 'ui/components/icons/SendIcon';
 import { useWalletState } from 'ui/shared/states/walletState';
+import "./Wallet.scss";
 
 export default function Wallet() {
 
