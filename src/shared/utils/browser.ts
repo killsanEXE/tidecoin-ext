@@ -68,3 +68,5 @@ export function browserRuntimeConnect(connectInfo?: any) {
   return browser.runtime.connect(browser.runtime.id, connectInfo);
 
 }
+
+export default browser;

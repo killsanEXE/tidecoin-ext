@@ -11,12 +11,11 @@ import CreatePassword from './pages/account/CreatePassword';
 import Layout from './pages/home/Layout';
 import Settings from './pages/home/settings/Settings';
 import Wallet from './pages/home/wallet/Wallet';
-import eventBus from 'shared/eventBus';
-import PortMessage from 'shared/utils/message/portMessage';
-import { EVENTS } from 'shared/constant';
-import { Message } from 'shared/utils';
+import eventBus from '@/shared/eventBus';
+import { EVENTS } from '@/shared/constant';
+import { Message } from '@/shared/utils';
 
-export const initUi = () => {
+export default function initUI() {
 
   const { PortMessage } = Message;
   const portMessageChannel = new PortMessage();

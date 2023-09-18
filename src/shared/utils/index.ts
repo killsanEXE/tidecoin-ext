@@ -1,4 +1,4 @@
-import { CHAINS } from "shared/constant";
+import { CHAINS } from "@/shared/constant";
 import browser from "./browser";
 import BroadcastChannelMessage from "./message/broadcastChannelMessage";
 import PortMessage from "./message/portMessage";

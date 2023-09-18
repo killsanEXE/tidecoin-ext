@@ -1,11 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-
-import browser, {
-  browserTabsCreate,
-  browserTabsGetCurrent,
-  browserTabsQuery,
-  browserTabsUpdate
-} from "background/webapi/browser";
+import browser, { browserTabsCreate, browserTabsGetCurrent, browserTabsUpdate, browserTabsQuery } from '@/shared/utils/browser';
 
 export const openExtensionInTab = async () => {
   const url = browser.runtime.getURL('index.html');

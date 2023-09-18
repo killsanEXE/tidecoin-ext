@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import './CreatePassword.scss'
 import { useNavigate } from 'react-router-dom';
-import { useWalletState } from 'ui/shared/states/walletState';
-import { useAppState } from 'ui/shared/states/appState';
+import { useWalletState } from '@/ui/shared/states/walletState';
+import { useAppState } from '@/ui/shared/states/appState';
 
 type Props = {}
 
