@@ -11,20 +11,15 @@ const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
 const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
-const sassModuleRegex = /\.module\.(scss|sass)$/;
-const lessRegex = /\.less$/;
-const lessModuleRegex = /\.module\.less$/;
-const stylusRegex = /\.styl$/;
-const stylusModuleRegex = /\.module\.styl$/;
+const sassModuleRegex = /\.module\.scss$/;
 const WasmModuleWebpackPlugin = require('wasm-module-webpack-plugin');
 const { getBrowserPaths } = require('./paths');
 
 const config = (env) => {
-    const version = env.version;
-    const paths = getBrowserPaths(env.browser);
+    const version = "1";
+    const paths = getBrowserPaths("chrome");
     const manifest = env.manifest;
     const channel = env.channel;
-    // Check if Tailwind config exists
 
     const shouldUseSourceMap = false;
     const imageInlineSizeLimit = parseInt(process.env.IMAGE_INLINE_SIZE_LIMIT || '10000');
@@ -44,14 +39,11 @@ const config = (env) => {
         }
     })();
 
-    // common function to get style loaders
     const getStyleLoaders = (cssOptions, preProcessor) => {
         const loaders = [
             isEnvDevelopment && require.resolve('style-loader'),
             isEnvProduction && {
                 loader: MiniCssExtractPlugin.loader,
-                // css is located in `static/css`, use '../../' to locate index.html folder
-                // in production `paths.publicUrlOrPath` can be a relative path
                 options: paths.publicUrlOrPath.startsWith('.') ? { publicPath: '../../' } : {}
             },
             {
@@ -82,77 +74,13 @@ const config = (env) => {
                 }
             }
         ].filter(Boolean);
-        if (preProcessor) {
-            let preProcessorOptions = {
-                sourceMap: true
-            };
-            if (preProcessor === 'less-loader') {
-                preProcessorOptions = {
-                    sourceMap: true,
-                    // 自定义主题
-                    lessOptions: {
-                        modifyVars: {
-                            'primary-color': 'rgb(234,202,68)',
-                            'primary-color-active': '#383535',
-                            'input-icon-hover-color': '#FFFFFF',
-                            'component-background': '#1C1919',
-                            'select-dropdown-bg': '#2A2626',
-                            'select-item-selected-bg': '#332F2F',
-                            'select-item-active-bg': '#332F2F',
-                            'input-border-color': 'rgba(255,255,255,0.2)',
-                            borderColor: 'rgba(255,255,255,0.2)',
-                            'input-hover-border-color': 'rgba(255,255,255,0.4)',
-                            hoverBorderColor: 'rgba(255,255,255,0.4)',
-                            'border-color-base': 'rgba(255,255,255,0.2)',
-                            'border-width-base': '0',
-                            'animation-duration-slow': '0.08s',
-                            'animation-duration-base': '0.08s',
-                            // "checkbox-border-width": "1px",
-                            'layout-header-background': '#2A2626',
-                            'layout-header-padding': '0 1.875rem',
-                            'layout-header-height': '5.625rem',
-                            'layout-footer-padding': 'unset',
-                            'border-radius-base': '0.3rem',
-                            'checkbox-border-radius': '0.125rem',
-                            // 'checkbox-color': '#2A2626',
-                            // 'checkbox-check-color': '#D7721F',
-                            'heading-color': '#ffffff',
-                            'font-size-base': '1.125rem',
-                            'line-height-base': '1.375rem',
-                            'text-color': '#ffffff',
-                            'text-color-secondary': '#AAAAAA',
-                            'height-lg': '3.875rem',
-                            'checkbox-size': '1.5rem',
-                            'btn-text-hover-bg': '#383535',
-                            'input-disabled-color': 'rgba(255,255,255,0.6)'
-                        },
-                        javascriptEnabled: true
-                    }
-                };
-            }
-            loaders.push(
-                {
-                    loader: require.resolve('resolve-url-loader'),
-                    options: {
-                        sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-                        root: paths.appSrc
-                    }
-                },
-                {
-                    loader: require.resolve(preProcessor),
-                    // options: {
-                    //   sourceMap: true,
-                    // },
-                    options: preProcessorOptions
-                }
-            );
-        }
         return loaders;
     };
 
+
     const config = {
         entry: {
-            background: paths.rootResolve('src/background/index.ts'),
+            backgSround: paths.rootResolve('src/background/index.ts'),
             'content-script': paths.rootResolve('src/content-script/index.ts'),
             pageProvider: paths.rootResolve('src/content-script/pageProvider/index.ts'),
             ui: paths.rootResolve('src/ui/index.tsx')
@@ -352,63 +280,6 @@ const config = (env) => {
                                 'sass-loader'
                             )
                         },
-                        {
-                            test: lessRegex,
-                            exclude: lessModuleRegex,
-                            use: getStyleLoaders(
-                                {
-                                    importLoaders: 3,
-                                    sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-                                    modules: { mode: 'icss' }
-                                },
-                                'less-loader'
-                            ),
-                            sideEffects: true
-                        },
-                        {
-                            test: lessModuleRegex,
-                            use: getStyleLoaders(
-                                {
-                                    importLoaders: 3,
-                                    sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-                                    modules: {
-                                        mode: 'local',
-                                        getLocalIdent: getCSSModuleLocalIdent
-                                    }
-                                },
-                                'less-loader'
-                            )
-                        },
-                        // 支持 stylus
-                        {
-                            test: stylusRegex,
-                            exclude: stylusModuleRegex,
-                            use: getStyleLoaders(
-                                {
-                                    importLoaders: 3,
-                                    sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-                                    modules: {
-                                        mode: 'icss'
-                                    }
-                                },
-                                'stylus-loader'
-                            ),
-                            sideEffects: true
-                        },
-                        {
-                            test: stylusModuleRegex,
-                            use: getStyleLoaders(
-                                {
-                                    importLoaders: 3,
-                                    sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-                                    modules: {
-                                        mode: 'local',
-                                        getLocalIdent: getCSSModuleLocalIdent
-                                    }
-                                },
-                                'stylus-loader'
-                            )
-                        },
                         // "file" loader makes sure those assets get served by WebpackDevServer.
                         // When you `import` an asset, you get its (virtual) filename.
                         // In production, they would get copied to the `build` folder.
@@ -485,28 +356,12 @@ const config = (env) => {
                 'process.env.channel': JSON.stringify(channel)
             }),
             new MiniCssExtractPlugin({
-                // Options similar to the same options in webpackOptions.output
-                // both options are optional
-                // filename: 'static/css/[name].[contenthash:8].css',
-                // chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
                 filename: 'static/css/[name].css',
                 chunkFilename: 'static/css/[name].chunk.css'
             }),
             new WasmModuleWebpackPlugin.WebpackPlugin()
         ],
         stats: 'minimal',
-        // optimization: {
-        //   splitChunks: {
-        //     cacheGroups: {
-        //       'webextension-polyfill': {
-        //         minSize: 0,
-        //         test: /[\\/]node_modules[\\/]webextension-polyfill/,
-        //         name: 'webextension-polyfill',
-        //         chunks: 'all',
-        //       },
-        //     },
-        //   },
-        // },
         experiments: {
             asyncWebAssembly: true
         }

@@ -5,7 +5,7 @@ const configs = {
 };
 
 const config = (env) => {
-    return webpackMerge.merge(commonConfig(env), "development");
+    let stuff = webpackMerge.merge(commonConfig(env), "development");
+    return stuff;
 };
-
 module.exports = config;
