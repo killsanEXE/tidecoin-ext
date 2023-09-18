@@ -1,9 +1,4 @@
-
-function getBrowser() {
-    return chrome;
-}
-
-const browser = getBrowser();
+const browser = chrome;
 
 export async function browserWindowsGetCurrent(params?: any) {
     return await browser.windows.getCurrent(params);
@@ -62,12 +57,7 @@ export function browserTabsOnRemoved(listener) {
 }
 
 export function browserRuntimeOnConnect(listener) {
-    console.log(listener)
-    try {
-        browser.runtime.onConnect.addListener(listener);
-    } catch (e) {
-        console.log(e);
-    }
+    browser.runtime.onConnect.addListener(listener);
 }
 
 export function browserRuntimeOnInstalled(listener) {
@@ -75,7 +65,5 @@ export function browserRuntimeOnInstalled(listener) {
 }
 
 export function browserRuntimeConnect(connectInfo?: any) {
-    return browser.runtime.connect(chrome.runtime.id, connectInfo);
+    return browser.runtime.connect(browser.runtime.id, connectInfo);
 }
-
-export default browser;

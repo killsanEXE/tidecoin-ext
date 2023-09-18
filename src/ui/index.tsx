@@ -14,9 +14,11 @@ import Wallet from './pages/home/wallet/Wallet';
 import eventBus from 'shared/eventBus';
 import PortMessage from 'shared/utils/message/portMessage';
 import { EVENTS } from 'shared/constant';
+import { Message } from 'shared/utils';
 
 export const initUi = () => {
 
+  const { PortMessage } = Message;
   const portMessageChannel = new PortMessage();
   portMessageChannel.connect('popup');
 

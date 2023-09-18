@@ -10,7 +10,6 @@ export default function initBackground() {
 
     // for page provider
     browserRuntimeOnConnect((port) => {
-        console.log(port);
         if (port.name === 'popup' || port.name === 'notification' || port.name === 'tab') {
             const pm = new PortMessage(port as any);
             pm.listen((data) => {
@@ -61,7 +60,6 @@ export default function initBackground() {
 
         const pm = new PortMessage(port);
         pm.listen(async (data) => {
-            console.log(data);
             const sessionId = port.sender?.tab?.id;
             const session = sessionService.getOrCreateSession(sessionId);
 

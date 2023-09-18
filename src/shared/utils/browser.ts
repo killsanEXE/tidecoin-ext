@@ -65,8 +65,6 @@ export function browserRuntimeOnInstalled(listener: any) {
 }
 
 export function browserRuntimeConnect(connectInfo?: any) {
-  return browser.runtime.connect(chrome.runtime.id, connectInfo);
+  return browser.runtime.connect(browser.runtime.id, connectInfo);
 
 }
-
-export default browser;
