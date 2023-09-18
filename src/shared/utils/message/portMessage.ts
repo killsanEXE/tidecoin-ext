@@ -14,7 +14,7 @@ class PortMessage extends Message {
     }
 
     connect = (name?: string) => {
-        this.port = browserRuntimeConnect("undefined", name ? { name } : undefined);
+        this.port = browserRuntimeConnect(name ? { name } : undefined);
         this.port.onMessage.addListener(({ _type_, data }) => {
             if (_type_ === `${this._EVENT_PRE}message`) {
                 this.emit('message', data);

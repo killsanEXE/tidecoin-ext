@@ -1,10 +1,6 @@
 
 function getBrowser() {
-    if (typeof globalThis.browser === 'undefined') {
-        return chrome;
-    } else {
-        return globalThis.browser;
-    }
+    return chrome;
 }
 
 const browser = getBrowser();
@@ -66,15 +62,20 @@ export function browserTabsOnRemoved(listener) {
 }
 
 export function browserRuntimeOnConnect(listener) {
-    browser.runtime.onConnect.addListener(listener);
+    console.log(listener)
+    try {
+        browser.runtime.onConnect.addListener(listener);
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 export function browserRuntimeOnInstalled(listener) {
     browser.runtime.onInstalled.addListener(listener);
 }
 
-export function browserRuntimeConnect(extensionId?: string, connectInfo?: any) {
-    return browser.runtime.connect(extensionId, connectInfo);
+export function browserRuntimeConnect(connectInfo?: any) {
+    return browser.runtime.connect(chrome.runtime.id, connectInfo);
 }
 
 export default browser;

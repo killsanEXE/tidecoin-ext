@@ -64,8 +64,8 @@ export function browserRuntimeOnInstalled(listener: any) {
   browser.runtime.onInstalled.addListener(listener);
 }
 
-export function browserRuntimeConnect(extensionId: string, connectInfo?: any) {
-  return browser.runtime.connect(extensionId, connectInfo);
+export function browserRuntimeConnect(connectInfo?: any) {
+  return browser.runtime.connect(chrome.runtime.id, connectInfo);
 
 }
 
