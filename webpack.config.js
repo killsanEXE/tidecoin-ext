@@ -4,8 +4,10 @@ const configs = {
     dev: require('./configs/webpack.dev.config'),
 };
 
-const config = (env) => {
-    let stuff = webpackMerge.merge(commonConfig(env), "development");
+const config = () => {
+    process.env.BABEL_ENV = 'development'
+    process.env.NODE_ENV = 'development'
+    let stuff = webpackMerge.merge(commonConfig(), configs["dev"]);
     return stuff;
 };
 module.exports = config;

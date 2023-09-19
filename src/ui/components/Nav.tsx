@@ -1,8 +1,8 @@
 import React from 'react'
 import './Nav.scss';
-import WalletIcon from './icons/WalletIcon';
-import SettingsIcon from './icons/SettingsIcon';
 import { useNavigate } from 'react-router-dom';
+import WalletIcon from '@/ui/components/icons/WalletIcon';
+import SettingsIcon from '@/ui/components/icons/SettingsIcon';
 
 type Props = {}
 

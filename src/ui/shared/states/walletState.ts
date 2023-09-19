@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import { fromMnemonic } from 'test-test-test-hd-wallet';
-import Mnemonic from 'test-test-test-hd-wallet/src/hd/mnemonic';
 import IAccount from '../interfaces/IAccount';
 import { IWalletState, IWallet } from '../interfaces/IWallet';
 import { toHex } from '../utils';
+import Mnemonic from 'test-test-test-hd-wallet/src/hd/mnemonic';
 
 function getNewAccount() {
     return {

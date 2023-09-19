@@ -1,8 +1,7 @@
-const extension = require('extensionizer')
 import { nanoid } from 'nanoid';
-
 import { Message } from '@/shared/utils';
 
+const extension = require('extensionizer')
 const channelName = nanoid();
 
 /**
@@ -106,7 +105,7 @@ function blockedDomainCheck() {
 }
 
 function iframeCheck() {
-    const isInIframe = self != top;
+    const isInIframe = window.self != window.top;
     if (isInIframe) {
         return true;
     } else {

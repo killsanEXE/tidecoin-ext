@@ -5,10 +5,9 @@ import { useEffect } from 'react';
 import { Toaster } from "react-hot-toast";
 import { payments } from 'tidecoinjs-lib';
 import { fromMnemonic } from 'test-test-test-hd-wallet';
-import Mnemonic from 'test-test-test-hd-wallet/src/hd/mnemonic';
-import { IWallet } from './@/shared/interfaces/IWallet';
-import { useAppState } from './@/shared/states/appState';
-import { useWalletState } from './@/shared/states/walletState';
+import { IWallet } from '@/ui/shared/interfaces/IWallet';
+import { useAppState } from '@/ui/shared/states/appState';
+import { useWalletState } from '@/ui/shared/states/walletState';
 const passworder = require("browser-passworder");
 
 function get_correct_route(vault: string[], isUnlocked: boolean) {

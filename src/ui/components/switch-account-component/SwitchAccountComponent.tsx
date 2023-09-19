@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ArrowLeft from "../icons/ArrowLeft";
-import CheckIcon from "../icons/Checkicon";
-import CopyIcon from "../icons/CopyIcon";
-import KeyIcon from "../icons/KeyIcon";
-import PlusInCircleIcon from "../icons/PlusInCirlceIcon";
-import SmallMenuicon from "../icons/SmallMenuIcon";
-import TagIcon from "../icons/TagIcon";
-import XMarkIcon from "../icons/XMarkIcon";
+import ArrowLeft from "@/ui/components/icons/ArrowLeft";
+import CheckIcon from "@/ui/components/icons/Checkicon";
+import CopyIcon from "@/ui/components/icons/CopyIcon";
+import KeyIcon from "@/ui/components/icons/KeyIcon";
+import PlusInCircleIcon from "@/ui/components/icons/PlusInCirlceIcon";
+import SmallMenuicon from "@/ui/components/icons/SmallMenuIcon";
+import TagIcon from "@/ui/components/icons/TagIcon";
+import XMarkIcon from "@/ui/components/icons/XMarkIcon";
 import { useWalletState } from "@/ui/shared/states/walletState";
 import "./SwitchAccountComponent.scss";
 
