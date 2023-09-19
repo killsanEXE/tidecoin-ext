@@ -12,7 +12,7 @@ const sassModuleRegex = /\.module\.scss$/;
 const WasmModuleWebpackPlugin = require('wasm-module-webpack-plugin');
 const { getBrowserPaths } = require('./paths');
 
-const config = (env) => {
+const config = () => {
     const paths = getBrowserPaths("chrome");
     const shouldUseSourceMap = false;
     const isEnvDevelopment = true;
@@ -34,7 +34,8 @@ const config = (env) => {
     const getStyleLoaders = (cssOptions, preProcessor) => {
         const loaders = [
             isEnvDevelopment && require.resolve('style-loader'),
-            isEnvProduction && {
+            isEnvProduction &&
+            {
                 loader: MiniCssExtractPlugin.loader,
                 options: paths.publicUrlOrPath.startsWith('.') ? { publicPath: '../../' } : {}
             },
@@ -55,6 +56,12 @@ const config = (env) => {
                         ]
                     },
                     sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment
+                }
+            },
+            {
+                loader: require.resolve('sass-loader'),
+                options: {
+                    sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
                 }
             }
         ].filter(Boolean);
@@ -156,6 +163,15 @@ const config = (env) => {
                             test: sassRegex,
                             exclude: sassModuleRegex,
                             use: getStyleLoaders(
+                                { importLoaders: 3, sourceMap: isEnvProduction },
+                                'sass-loader'
+                            ),
+                            sideEffects: true,
+                        },
+                        {
+                            test: sassRegex,
+                            exclude: sassModuleRegex,
+                            use: getStyleLoaders(
                                 {
                                     importLoaders: 3,
                                     sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
@@ -166,20 +182,6 @@ const config = (env) => {
                                 'sass-loader'
                             ),
                             sideEffects: true
-                        },
-                        {
-                            test: sassModuleRegex,
-                            use: getStyleLoaders(
-                                {
-                                    importLoaders: 3,
-                                    sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-                                    modules: {
-                                        mode: 'local',
-                                        getLocalIdent: getCSSModuleLocalIdent
-                                    }
-                                },
-                                'sass-loader'
-                            )
                         },
                         {
                             exclude: [/^$/, /\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
