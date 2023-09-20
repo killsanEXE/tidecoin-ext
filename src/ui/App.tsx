@@ -39,7 +39,7 @@ export default function App() {
   useEffect(() => {
     const setupApp = async () => {
       const walletController = setupWalletProxy();
-      const vault = await walletController.getVaultWallets!();
+      const vault = await walletController.getVaultWallets();
       updateWalletState({ controller: walletController, vaultWallets: vault });
       updateAppState({ isReady: true })
     }

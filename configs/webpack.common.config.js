@@ -250,6 +250,7 @@ const config = () => {
         }
         return rule;
     });
+
     return config;
 };
 
