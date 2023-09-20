@@ -14,6 +14,8 @@ const config = () => {
     const distChromePath = path.resolve(__dirname, "dist", "chrome");
     if (!fs.existsSync(distPath)) {
         fs.mkdirSync(distPath);
+        fs.mkdirSync(distChromePath);
+    } else {
         if (!fs.existsSync(distChromePath)) {
             fs.mkdirSync(distChromePath);
         }
