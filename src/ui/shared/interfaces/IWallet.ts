@@ -1,4 +1,5 @@
 import IAccount from "./IAccount";
+import { IWalletController } from "./IWalletController";
 
 export interface IWallet {
     name: string;
@@ -11,8 +12,6 @@ export interface IWalletState {
     wallets: IWallet[];
     vaultWallets: string[];
     currentWallet?: IWallet;
-    createNewWallet: (name?: string) => IWallet[];
-    updateCurrentWalletName: (name: string) => void;
+    controller: IWalletController;
     updateWalletState: (state: Partial<IWalletState>) => void;
-    createNewAccount: (name?: string) => IWallet[];
 }

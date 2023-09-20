@@ -63,5 +63,5 @@ export function setupWalletProxy() {
             }
         }
     );
-    return wallet;
+    return wallet as IWalletController;
 }

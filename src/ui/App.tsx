@@ -27,33 +27,25 @@ export default function App() {
     updateAppState: v.updateAppState,
   }));
 
-  const { updateWalletState, wallets, createNewAccount, vaultWallets } = useWalletState((v) => ({
+  const { updateWalletState, vaultWallets } = useWalletState((v) => ({
     updateWalletState: v.updateWalletState,
-    wallets: v.wallets,
-    createNewAccount: v.createNewAccount,
-    vaultWallets: v.vaultWallets
+    vaultWallets: v.vaultWallets,
+    walletController: v.controller
   }))
 
 
   const navigate = useNavigate();
 
   useEffect(() => {
-
-    const async_shit = async () => {
-      const wallet = setupWalletProxy();
-      const accounts = await wallet.getVaultWallets();
-      console.log(`accounts from background: ${JSON.stringify(accounts)}`);
-      console.log(`ACCOUNTS STRAIGHT FROM THE CHROEM: ${JSON.stringify(await chrome.storage.local.get(undefined))}`)
-      return accounts;
+    const setupApp = async () => {
+      const walletController = setupWalletProxy();
+      const vault = await walletController.getVaultWallets!();
+      updateWalletState({ controller: walletController, vaultWallets: vault });
+      updateAppState({ isReady: true })
     }
 
-    if (!isReady) {
-      async_shit();
-    }
-    else {
-      navigate(get_correct_route(vaultWallets, isUnlocked));
-      // LOGIN_FOR_TESTS()
-    }
+    if (!isReady) setupApp();
+    else navigate(get_correct_route(vaultWallets, isUnlocked));
   }, [isReady, isUnlocked]);
 
   return (
