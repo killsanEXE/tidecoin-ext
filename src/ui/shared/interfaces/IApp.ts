@@ -7,6 +7,4 @@ export default interface IApp {
     vault: string[];
     password: string | undefined;
     updateAppState: (app: Partial<IApp>) => void;
-    setupApp: () => void;
-    saveAppState: (wallets: IWallet[]) => void;
 }

@@ -17,7 +17,6 @@ browserRuntimeOnConnect((port) => {
             if (data?.type) {
                 switch (data.type) {
                     case 'broadcast':
-                        console.log("BROADCAST EVENT pm listen")
                         eventBus.emit(data.method, data.params);
                         break;
                     case 'openapi':
@@ -43,7 +42,7 @@ browserRuntimeOnConnect((port) => {
         };
 
         if (port.name === 'popup') {
-            console.log("PORT NAME IS POPUP")
+            // console.log("PORT NAME IS POPUP")
         }
 
         eventBus.addEventListener(EVENTS.broadcastToUI, boardcastCallback);
@@ -56,7 +55,6 @@ browserRuntimeOnConnect((port) => {
 
     const pm = new PortMessage(port);
     pm.listen(async (data) => {
-        console.log(`DATA FROM THE BACKGROUND: ${JSON.stringify(data)}`);
         const sessionId = port.sender?.tab?.id;
         const session = sessionService.getOrCreateSession(sessionId);
 

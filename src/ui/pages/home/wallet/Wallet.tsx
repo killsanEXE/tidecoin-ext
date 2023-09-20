@@ -25,7 +25,7 @@ export default function Wallet() {
 
       <div className="acc-panel flex-center-center">
         <p className='balance flex-center-center'>{currentWallet?.currentAccount.balance} TDC</p>
-        <p className='acc-pub-address flex-center-center'><CopyIcon /> {currentWallet?.currentAccount.address}</p>
+        <p className='acc-pub-address flex-center-center'><CopyIcon /> {currentWallet?.currentAccount.name}</p>
 
         <div className="receive-send-btns flex-center-center">
           <button className="btn flex-center-center"><ReceiveIcon /> Receive</button>

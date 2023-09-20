@@ -9,7 +9,6 @@ export function setupPm() {
     portMessageChannel.connect('popup');
 
     portMessageChannel.listen((data) => {
-        console.log(`DATA FROM THE BACKGROUND: ${JSON.stringify(data)}`)
         if (data.type === 'broadcast') {
             eventBus.emit(data.method, data.params);
         }

@@ -3,45 +3,37 @@ import "./Login.scss";
 import { useNavigate } from "react-router-dom";
 import { useAppState } from "@/ui/shared/states/appState";
 import { useWalletState } from "@/ui/shared/states/walletState";
-import { IWallet } from "@/ui/shared/interfaces/IWallet";
-const passworder = require("browser-passworder");
 
 export default function Login() {
-  const { vault, updateAppState } = useAppState((v) => ({
-    vault: v.vault,
+  const { updateAppState } = useAppState((v) => ({
     updateAppState: v.updateAppState,
   }));
 
-  const { updateWalletState, wallets } = useWalletState((v) => ({
+  const { updateWalletState, wallets, vaultWallets, walletController } = useWalletState((v) => ({
     updateWalletState: v.updateWalletState,
-    wallets: v.wallets
+    wallets: v.wallets,
+    vaultWallets: v.vaultWallets,
+    walletController: v.controller
   }))
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (vault.length <= 0) navigate("/account/create-password")
-  }, [vault])
+    if (vaultWallets.length <= 0) navigate("/account/create-password")
+  }, [vaultWallets])
 
   const login = async () => {
-    try {
-      let exportedWallets: IWallet[] = [];
-      for (let wallet of vault) {
-        exportedWallets.push(JSON.parse(await passworder.decrypt("1", wallet)) as IWallet);
-      }
-      updateWalletState({
-        wallets: [...wallets, ...exportedWallets],
-        currentWallet: exportedWallets[0],
-      });
-      updateAppState({
-        isUnlocked: true,
-        password: password
-      })
-      navigate("/home/wallet");
-    } catch (e) {
-      console.log(e);
-    }
-  };
+    const exportedWallets = await walletController.imoprtWallets(password, vaultWallets);
+    updateWalletState({
+      wallets: [...wallets, ...exportedWallets],
+      currentWallet: { ...exportedWallets[0], currentAccount: exportedWallets[0].accounts[0] }
+    });
+    updateAppState({
+      isUnlocked: true,
+      password: password
+    })
+    navigate("/home/wallet");
+  }
 
   return (
     <form className="form" onSubmit={(e) => e.preventDefault()}>

@@ -26,13 +26,7 @@ const config = () => {
         fs.copyFile(
             path.resolve(__dirname, "configs", "_raw", file),
             path.resolve(__dirname, "dist", "chrome", file),
-            (err) => {
-                if (err) {
-                    console.error('There was an error:', err);
-                } else {
-                    console.log(`${file} has been copied successfully`);
-                }
-            });
+            (err) => { });
     }
 
     let stuff = webpackMerge.merge(commonConfig(), configs["dev"]);

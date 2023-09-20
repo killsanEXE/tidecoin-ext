@@ -1,15 +1,12 @@
-import React, { useState } from 'react'
 import './CreatePassword.scss'
 import { useNavigate } from 'react-router-dom';
 import { useAppState } from '@/ui/shared/states/appState';
 import { useWalletState } from '@/ui/shared/states/walletState';
+import { useState } from 'react';
 
-type Props = {}
-
-export default function CreatePassword({ }: Props) {
-  const { updateAppState, saveAppState } = useAppState((v) => ({
+export default function CreatePassword() {
+  const { updateAppState } = useAppState((v) => ({
     updateAppState: v.updateAppState,
-    saveAppState: v.saveAppState
   }));
 
   const { walletController, updateWalletState } = useWalletState((v) => ({
@@ -23,8 +20,8 @@ export default function CreatePassword({ }: Props) {
 
   const createPassword = async () => {
     if (password === passwordConfirm) {
-      const wallet = await walletController.createNewWallet!();
-      await walletController.saveWallets!([wallet])
+      const wallet = await walletController.createNewWallet();
+      await walletController.saveWallets(password, [wallet])
       await updateAppState({ password: password, isUnlocked: true });
       updateWalletState({ currentWallet: wallet })
       navigate("/home/wallet");

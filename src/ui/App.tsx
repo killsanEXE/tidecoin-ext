@@ -3,20 +3,15 @@ import './App.scss';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Toaster } from "react-hot-toast";
-import { payments } from 'tidecoinjs-lib';
-import { fromMnemonic } from 'test-test-test-hd-wallet';
-import { IWallet } from '@/ui/shared/interfaces/IWallet';
 import { useAppState } from '@/ui/shared/states/appState';
 import { useWalletState } from '@/ui/shared/states/walletState';
-import { setupPm, setupWalletProxy } from './utils/setup';
-import { IWalletController } from './shared/interfaces/IWalletController';
-const passworder = require("browser-passworder");
+import { setupWalletProxy } from '@/ui/utils/setup';
 
 function get_correct_route(vault: string[], isUnlocked: boolean) {
-  if (vault.length > 0 && !isUnlocked) return "/account/login";
-  else if (vault.length <= 0 && !isUnlocked) return "/account/create-password";
-  else if (isUnlocked) return "/home/wallet";
-  else return "/";
+  if (vault.length > 0) {
+    if (!isUnlocked) return "/account/login";
+    else return "/home/wallet";
+  } else return "/account/create-password";
 }
 
 export default function App() {
@@ -46,7 +41,7 @@ export default function App() {
 
     if (!isReady) setupApp();
     else navigate(get_correct_route(vaultWallets, isUnlocked));
-  }, [isReady, isUnlocked]);
+  }, [isReady, isUnlocked, setupWalletProxy, updateWalletState, updateAppState, vaultWallets]);
 
   return (
     <div className='app'>

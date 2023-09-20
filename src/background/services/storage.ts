@@ -5,7 +5,6 @@ const passworder = require("browser-passworder");
 class StorageService {
     loadVaultWallets = async () => {
         const vault = (await browserStorageLocalGet(undefined))["vault"];
-        console.log(vault);
         if (vault === undefined) return [];
         return vault;
     }
@@ -24,6 +23,14 @@ class StorageService {
         }
 
         await browserStorageLocalSet({ "vault": encryptedWallets });
+    }
+
+    imoprtWallets = async (password: string, wallets: string[]): Promise<IWallet[]> => {
+        const decryptedWallets: IWallet[] = [];
+        for (let wallet of wallets) {
+            decryptedWallets.push(await passworder.decrypt(password, wallet));
+        }
+        return decryptedWallets;
     }
 }
 

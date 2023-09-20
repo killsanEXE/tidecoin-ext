@@ -2,10 +2,11 @@ import StorageService from "@/background/services/storage"
 import { toHex } from "@/shared/utils";
 import IAccount from "@/ui/shared/interfaces/IAccount";
 import { IWallet } from "@/ui/shared/interfaces/IWallet";
+import { IWalletController } from "@/ui/shared/interfaces/IWalletController";
 import { fromMnemonic } from "test-test-test-hd-wallet";
 import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
 
-export class WalletController {
+export class WalletController implements IWalletController {
 
     getVaultWallets = async (): Promise<string[]> => {
         return await StorageService.loadVaultWallets();
@@ -23,8 +24,12 @@ export class WalletController {
         }
     }
 
-    saveWallets = async (wallets: IWallet[]) => {
-        await StorageService.saveWallets(wallets);
+    saveWallets = async (password: string, wallets: IWallet[]) => {
+        await StorageService.saveWallets(password, wallets);
+    }
+
+    imoprtWallets = async (password: string, wallets: string[]): Promise<IWallet[]> => {
+        return await StorageService.imoprtWallets(password, wallets);
     }
 }
 
