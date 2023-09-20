@@ -1,7 +1,8 @@
 import { create } from 'zustand'
-import { browserStorageLocalGet, browserStorageLocalSet } from '../../../@/shared/utils/browser'
 import IApp from '../interfaces/IApp';
 import { IWallet } from '../interfaces/IWallet';
+import { setupPm } from '@/ui/utils/setup';
+import { EVENTS } from '@/shared/constant';
 const passworder = require("browser-passworder");
 
 export const useAppState = create<IApp>()((set, get) => ({
@@ -12,13 +13,14 @@ export const useAppState = create<IApp>()((set, get) => ({
     updateAppState: async (app: Partial<IApp>) => {
         set(app);
     },
-    checkVault: async () => {
-        if (get().vault.length > 0) return;
-        let result = localStorage.getItem("vault");
-        let accounts = result === null ? undefined : JSON.parse(result);
-        if (accounts === undefined) set({ vault: [] })
-        else set({ vault: accounts })
-        set({ isReady: true })
+    setupApp: async () => {
+        console.log("setupapp")
+        const portMessageChannel = setupPm();
+        await portMessageChannel.request({
+            type: "openapi",
+            method: "get some_shit",
+            params: "params"
+        })
     },
     saveAppState: async (wallets: IWallet[]) => {
         if (get().password) {

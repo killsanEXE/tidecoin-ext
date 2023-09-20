@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import "./Login.scss";
 import { useNavigate } from "react-router-dom";
-import { IWallet } from "@/ui/interfaces/IWallet";
 import { useAppState } from "@/ui/shared/states/appState";
 import { useWalletState } from "@/ui/shared/states/walletState";
+import { IWallet } from "@/ui/shared/interfaces/IWallet";
 const passworder = require("browser-passworder");
 
 export default function Login() {

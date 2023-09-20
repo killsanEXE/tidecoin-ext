@@ -1,11 +1,6 @@
 export default interface IAccount {
-  type: string;
-  pubkey: string;
-  address: string;
-  brandName?: string;
-  alianName?: string;
-  displayBrandName?: string;
-  index?: number;
+  privateKey?: string;
+  publicKey?: string;
   balance?: number;
-  key: string;
+  name?: string;
 }

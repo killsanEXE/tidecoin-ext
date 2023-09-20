@@ -33,7 +33,7 @@ export default function SwitchAccountComponent() {
                             <div className="acc-info">
                                 <div className="name">
                                     {currentWallet.currentAccount.address === acc.address ? <CheckIcon /> : undefined}
-                                    {acc.brandName}
+                                    {acc.name}
                                 </div>
                                 <div className="address">
                                     {acc.address}

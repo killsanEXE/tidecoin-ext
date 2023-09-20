@@ -4,6 +4,8 @@ import { Message } from "@/shared/utils";
 import { sessionService } from "@/background/services";
 import { openExtensionInTab } from "@/shared/features/tabs";
 import { browserRuntimeOnConnect, browserRuntimeOnInstalled } from "@/shared/utils/browser";
+import walletController from "./controllers/walletController";
+
 
 const { PortMessage } = Message;
 
@@ -15,19 +17,18 @@ browserRuntimeOnConnect((port) => {
             if (data?.type) {
                 switch (data.type) {
                     case 'broadcast':
+                        console.log("BROADCAST EVENT pm listen")
                         eventBus.emit(data.method, data.params);
                         break;
                     case 'openapi':
                         // if (walletController.openapi[data.method]) {
                         //     return walletController.openapi[data.method].apply(null, data.params);
                         // }
-                        console.log("openapi")
                         break;
                     case 'controller':
                     default:
                         if (data.method) {
-                            // return walletController[data.method].apply(null, data.params);
-                            console.log(data.method);
+                            return walletController[data.method].apply(null, data.params);
                         }
                 }
             }
@@ -41,13 +42,9 @@ browserRuntimeOnConnect((port) => {
             });
         };
 
-        // if (port.name === 'popup') {
-        //     preferenceService.setPopupOpen(true);
-
-        //     port.onDisconnect.addListener(() => {
-        //         preferenceService.setPopupOpen(false);
-        //     });
-        // }
+        if (port.name === 'popup') {
+            console.log("PORT NAME IS POPUP")
+        }
 
         eventBus.addEventListener(EVENTS.broadcastToUI, boardcastCallback);
         port.onDisconnect.addListener(() => {
@@ -59,6 +56,7 @@ browserRuntimeOnConnect((port) => {
 
     const pm = new PortMessage(port);
     pm.listen(async (data) => {
+        console.log(`DATA FROM THE BACKGROUND: ${JSON.stringify(data)}`);
         const sessionId = port.sender?.tab?.id;
         const session = sessionService.getOrCreateSession(sessionId);
 

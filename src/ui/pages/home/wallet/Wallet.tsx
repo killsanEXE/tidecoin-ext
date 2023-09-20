@@ -19,7 +19,7 @@ export default function Wallet() {
             navigate("/switch-account")
           }}
           className='change btn'>
-          {currentWallet?.currentAccount.brandName}
+          {currentWallet?.currentAccount.name}
         </button>
       </div>
 

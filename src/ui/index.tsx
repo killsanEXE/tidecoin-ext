@@ -15,26 +15,6 @@ import eventBus from '@/shared/eventBus';
 import { EVENTS } from '@/shared/constant';
 import { Message } from '@/shared/utils';
 
-const { PortMessage } = Message;
-const portMessageChannel = new PortMessage();
-portMessageChannel.connect('popup');
-
-portMessageChannel.listen((data) => {
-  if (data.type === 'broadcast') {
-    eventBus.emit(data.method, data.params);
-  }
-});
-
-eventBus.addEventListener(EVENTS.broadcastToBackground, (data) => {
-  portMessageChannel.request({
-    type: 'broadcast',
-    method: data.method,
-    params: data.data
-  });
-});
-
-
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

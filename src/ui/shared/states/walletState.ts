@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { fromMnemonic } from 'test-test-test-hd-wallet';
 import IAccount from '../interfaces/IAccount';
 import { IWalletState, IWallet } from '../interfaces/IWallet';
-import { toHex } from '../utils';
+import { toHex } from '../uiUtils';
 import Mnemonic from 'test-test-test-hd-wallet/src/hd/mnemonic';
 
 function getNewAccount() {
@@ -21,6 +21,7 @@ function getNewAccount() {
 
 export const useWalletState = create<IWalletState>()((set, get) => ({
     wallets: [],
+    vaultWallets: [],
     createNewWallet: (name?: string): IWallet[] => {
         const mnemonic = new Mnemonic()
         const privateWallet = fromMnemonic(mnemonic);
@@ -41,7 +42,7 @@ export const useWalletState = create<IWalletState>()((set, get) => ({
         const currentWallet = get().currentWallet;
         if (!currentWallet) return [];
         const account: IAccount = getNewAccount();
-        account.brandName = name;
+        account.name = name;
 
         set({ currentWallet: { ...currentWallet, accounts: [...currentWallet?.accounts!, account], currentAccount: account } })
         return get().wallets;
@@ -50,5 +51,5 @@ export const useWalletState = create<IWalletState>()((set, get) => ({
     updateCurrentWalletName: (name: string) => {
         const currentWallet = get().currentWallet;
         if (currentWallet) set({ currentWallet: { ...currentWallet, name } })
-    }
+    },
 }))

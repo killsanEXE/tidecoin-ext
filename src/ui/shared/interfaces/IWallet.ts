@@ -9,6 +9,7 @@ export interface IWallet {
 
 export interface IWalletState {
     wallets: IWallet[];
+    vaultWallets: string[];
     currentWallet?: IWallet;
     createNewWallet: (name?: string) => IWallet[];
     updateCurrentWalletName: (name: string) => void;

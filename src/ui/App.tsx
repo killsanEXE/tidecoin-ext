@@ -8,6 +8,8 @@ import { fromMnemonic } from 'test-test-test-hd-wallet';
 import { IWallet } from '@/ui/shared/interfaces/IWallet';
 import { useAppState } from '@/ui/shared/states/appState';
 import { useWalletState } from '@/ui/shared/states/walletState';
+import { setupPm, setupWalletProxy } from './utils/setup';
+import { IWalletController } from './shared/interfaces/IWalletController';
 const passworder = require("browser-passworder");
 
 function get_correct_route(vault: string[], isUnlocked: boolean) {
@@ -19,56 +21,40 @@ function get_correct_route(vault: string[], isUnlocked: boolean) {
 
 export default function App() {
 
-  const { checkVault, isReady, vault, isUnlocked, updateAppState } = useAppState((v) => ({
-    checkVault: v.checkVault,
+  const { isReady, isUnlocked, updateAppState } = useAppState((v) => ({
     isReady: v.isReady,
-    vault: v.vault,
     isUnlocked: v.isUnlocked,
     updateAppState: v.updateAppState,
   }));
 
-  const { updateWalletState, wallets, createNewAccount } = useWalletState((v) => ({
+  const { updateWalletState, wallets, createNewAccount, vaultWallets } = useWalletState((v) => ({
     updateWalletState: v.updateWalletState,
     wallets: v.wallets,
-    createNewAccount: v.createNewAccount
+    createNewAccount: v.createNewAccount,
+    vaultWallets: v.vaultWallets
   }))
+
 
   const navigate = useNavigate();
 
-  const LOGIN_FOR_TESTS = async () => {
-    try {
-      let exportedWallets: IWallet[] = [];
-      for (let wallet of vault) {
-        exportedWallets.push(JSON.parse(await passworder.decrypt("1", wallet)) as IWallet);
-      }
-      // console.log(payments.p2wpkh({ pubkey: Buffer.from(exportedWallets[0].publicKey) }).address)
-
-      updateWalletState({
-        wallets: [...wallets, ...exportedWallets],
-        currentWallet: exportedWallets[0],
-      });
-
-      updateAppState({
-        isUnlocked: true,
-        password: "1"
-      })
-      for (let i = 0; i <= 20; i++) {
-        createNewAccount();
-      }
-      navigate(get_correct_route(vault, isUnlocked));
-      // navigate("/switch-account/");
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   useEffect(() => {
-    if (!isReady) checkVault();
-    else {
-      // navigate(get_correct_route(vault, isUnlocked));
-      LOGIN_FOR_TESTS()
+
+    const async_shit = async () => {
+      const wallet = setupWalletProxy();
+      const accounts = await wallet.getVaultWallets();
+      console.log(`accounts from background: ${JSON.stringify(accounts)}`);
+      console.log(`ACCOUNTS STRAIGHT FROM THE CHROEM: ${JSON.stringify(await chrome.storage.local.get(undefined))}`)
+      return accounts;
     }
-  }, [isReady, checkVault, isUnlocked]);
+
+    if (!isReady) {
+      async_shit();
+    }
+    else {
+      navigate(get_correct_route(vaultWallets, isUnlocked));
+      // LOGIN_FOR_TESTS()
+    }
+  }, [isReady, isUnlocked]);
 
   return (
     <div className='app'>
