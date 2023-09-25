@@ -1,0 +1,7 @@
+.mainNav {
+  @apply h-[10vh] bg-bg absolute flex bottom-0 w-[350px] justify-evenly;
+
+  .navBtn {
+    @apply w-1/2 bg-transparent border-0 hover:cursor-pointer flex justify-center items-center;
+  }
+}

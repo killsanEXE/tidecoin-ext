@@ -162,6 +162,7 @@ export interface ToSignInput {
   publicKey: string;
   sighashTypes?: number[];
 }
+
 export type WalletKeyring = {
   key: string;
   index: number;
@@ -212,6 +213,7 @@ export enum TokenInscriptionType {
   INSCRIBE_TRANSFER,
   INSCRIBE_MINT
 }
+
 export interface TokenTransfer {
   ticker: string;
   amount: string;

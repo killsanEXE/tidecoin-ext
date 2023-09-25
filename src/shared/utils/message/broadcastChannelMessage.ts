@@ -1,50 +1,50 @@
 import Message from ".";
 
 export default class BroadcastChannelMessage extends Message {
-    private _channel: BroadcastChannel;
+  private _channel: BroadcastChannel;
 
-    constructor(name?: string) {
-        super();
-        if (!name) {
-            throw new Error('the broadcastChannel name is missing');
-        }
-
-        this._channel = new BroadcastChannel(name);
+  constructor(name?: string) {
+    super();
+    if (!name) {
+      throw new Error('the broadcastChannel name is missing');
     }
 
-    connect = () => {
-        this._channel.onmessage = ({ data: { type, data } }) => {
-            if (type === 'message') {
-                this.emit('message', data);
-            } else if (type === 'response') {
-                this.onResponse(data);
-            }
-        };
+    this._channel = new BroadcastChannel(name);
+  }
 
-        return this;
+  connect = () => {
+    this._channel.onmessage = ({ data: { type, data } }) => {
+      if (type === 'message') {
+        this.emit('message', data);
+      } else if (type === 'response') {
+        this.onResponse(data);
+      }
     };
 
-    listen = (listenCallback) => {
-        this.listenCallback = listenCallback;
+    return this;
+  };
 
-        this._channel.onmessage = ({ data: { type, data } }) => {
-            if (type === 'request') {
-                this.onRequest(data);
-            }
-        };
+  listen = (listenCallback: CallableFunction) => {
+    this.listenCallback = listenCallback;
 
-        return this;
+    this._channel.onmessage = ({ data: { type, data } }) => {
+      if (type === 'request') {
+        this.onRequest(data);
+      }
     };
 
-    send = (type, data) => {
-        this._channel.postMessage({
-            type,
-            data
-        });
-    };
+    return this;
+  };
 
-    dispose = () => {
-        this._dispose();
-        this._channel.close();
-    };
+  send = (type: string, data: any) => {
+    this._channel.postMessage({
+      type,
+      data
+    });
+  };
+
+  dispose = () => {
+    this._dispose();
+    this._channel.close();
+  };
 }

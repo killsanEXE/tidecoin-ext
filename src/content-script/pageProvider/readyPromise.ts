@@ -6,7 +6,7 @@ class ReadyPromise {
   }[] = [];
 
   constructor(count) {
-    this._allCheck = [...Array(count)];
+    this._allCheck = [ ...Array(count) ];
   }
 
   check = (index) => {

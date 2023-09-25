@@ -18,6 +18,9 @@ const config = () => {
     const isEnvDevelopment = true;
     const isEnvProduction = false;
     const shouldUseReactRefresh = false;
+
+    const useTailwind = fs.existsSync(path.join(paths.appPath, 'tailwind.config.js'));
+
     const hasJsxRuntime = (() => {
         if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
             return false;
@@ -50,9 +53,9 @@ const config = () => {
                         ident: 'postcss',
                         config: false,
                         plugins: [
+                            'tailwindcss',
                             'postcss-flexbugs-fixes',
-                            ['postcss-preset-env', { autoprefixer: { flexbox: 'no-2009' }, stage: 3 }],
-                            'postcss-normalize'
+                            ['postcss-preset-env', { autoprefixer: { flexbox: 'no-2009' }, stage: 3 }]
                         ]
                     },
                     sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment
@@ -163,18 +166,9 @@ const config = () => {
                             test: sassRegex,
                             exclude: sassModuleRegex,
                             use: getStyleLoaders(
-                                { importLoaders: 3, sourceMap: isEnvProduction },
-                                'sass-loader'
-                            ),
-                            sideEffects: true,
-                        },
-                        {
-                            test: sassRegex,
-                            exclude: sassModuleRegex,
-                            use: getStyleLoaders(
                                 {
                                     importLoaders: 3,
-                                    sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
+                                    sourceMap: isEnvDevelopment,
                                     modules: {
                                         mode: 'icss'
                                     }
@@ -182,6 +176,20 @@ const config = () => {
                                 'sass-loader'
                             ),
                             sideEffects: true
+                        },
+                        {
+                            test: sassModuleRegex,
+                            use: getStyleLoaders(
+                                {
+                                    importLoaders: 3,
+                                    sourceMap: isEnvDevelopment,
+                                    modules: {
+                                        mode: 'local',
+                                        getLocalIdent: getCSSModuleLocalIdent
+                                    }
+                                },
+                                'sass-loader'
+                            )
                         },
                         {
                             exclude: [/^$/, /\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],

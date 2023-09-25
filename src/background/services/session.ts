@@ -1,83 +1,77 @@
-export class Session {
-    origin = '';
+interface ISession {
+  origin: string;
+  icon: string;
+  name: string;
 
-    icon = '';
-
-    name = '';
-
-    constructor(data) {
-        if (data) {
-            this.setProp(data);
-        }
-    }
-
-    setProp({ origin, icon, name }) {
-        this.origin = origin;
-        this.icon = icon;
-        this.name = name;
-    }
+  pushMessage?: <T>(event: string, data: T) => void
 }
 
-// for each tab
-const sessionMap = new Map();
+class Session implements ISession {
+  origin = "";
+  icon = "";
+  name = "";
 
-const getSession = (id) => {
-    return sessionMap.get(id);
-};
-
-const getOrCreateSession = (id) => {
-    if (sessionMap.has(id)) {
-        return getSession(id);
+  constructor(data?: ISession) {
+    if (data) {
+      this.origin = data.origin;
+      this.icon = data.icon;
+      this.name = data.name;
     }
+  }
+}
 
-    return createSession(id, null);
-};
+class SessionMap {
+  sessionMap: Map<number, ISession>;
 
-const createSession = (id, data) => {
+  constructor() {
+    this.sessionMap = new Map();
+  }
+
+  getSession(id: number) {
+    return this.sessionMap.get(id);
+  }
+
+  getOrCreateSession(id: number) {
+    if (this.sessionMap.has(id)) {
+      return this.sessionMap.get(id);
+    }
+    this.createSession(id);
+  }
+
+  createSession(id: number, data?: ISession) {
     const session = new Session(data);
-    sessionMap.set(id, session);
-
+    this.sessionMap.set(id, session);
     return session;
-};
+  }
 
-const deleteSession = (id) => {
-    sessionMap.delete(id);
-};
+  deleteSession(id: number) {
+    this.sessionMap.delete(id);
+  }
 
-const broadcastEvent = (ev, data?, origin?) => {
-    let sessions: any[] = [];
-    sessionMap.forEach((session, key) => {
-        // if (permissionService.hasPermission(session.origin)) {
-        //     sessions.push({
-        //         key,
-        //         ...session
-        //     });
-        // }
-        sessions.push({
-            key,
-            ...session
-        });
+  broadcastEvent<T>(ev: string, data?: T, origin?: string) {
+    let sessions: (ISession & { key: number })[] = [];
+    this.sessionMap.forEach((session, key) => {
+      sessions.push({
+        key,
+        ...session,
+      });
     });
 
     // same origin
     if (origin) {
-        sessions = sessions.filter((session) => session.origin === origin);
+      sessions = sessions.filter((session) => session.origin === origin);
     }
 
-    sessions.forEach((session) => {
-        try {
-            session.pushMessage?.(ev, data);
-        } catch (e) {
-            if (sessionMap.has(session.key)) {
-                deleteSession(session.key);
-            }
-        }
-    });
-};
+    // sessions.forEach((session) => {
+    //   try {
+    //     session.pushMessage(ev, data);
+    //   } catch (e) {
+    //     if (this.sessionMap.has(session.key)) {
+    //       this.deleteSession(session.key);
+    //     }
+    //   }
+    // });
+  }
+}
 
-export default {
-    getSession,
-    getOrCreateSession,
-    deleteSession,
-    broadcastEvent
-};
+export default new SessionMap()

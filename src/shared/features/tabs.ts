@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
-import browser, { browserTabsCreate, browserTabsGetCurrent, browserTabsUpdate, browserTabsQuery } from '@/shared/utils/browser';
+import browser, {
+  browserTabsCreate,
+  browserTabsGetCurrent,
+  browserTabsQuery,
+  browserTabsUpdate
+} from '@/shared/utils/browser';
 
 export const openExtensionInTab = async () => {
   const url = browser.runtime.getURL('index.html');
-  const tab = await browserTabsCreate({ url });
-  return tab;
+  return await browserTabsCreate({ url });
 };
 
 export const extensionIsInTab = async () => {
@@ -14,12 +18,12 @@ export const extensionIsInTab = async () => {
 export const focusExtensionTab = async () => {
   const tab = await browserTabsGetCurrent();
   if (tab && tab?.id !== browser.tabs.TAB_ID_NONE && tab.id) {
-    browserTabsUpdate(tab.id, { active: true });
+    await browserTabsUpdate(tab.id, { active: true });
   }
 };
 
 export const useExtensionIsInTab = () => {
-  const [isInTab, setIsInTab] = useState(false);
+  const [ isInTab, setIsInTab ] = useState(false);
   useEffect(() => {
     const init = async () => {
       const inTab = await extensionIsInTab();

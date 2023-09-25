@@ -1,66 +1,57 @@
 import { EVENTS } from "@/shared/constant";
 import eventBus from "@/shared/eventBus";
 import { Message } from "@/shared/utils";
-import { IWalletController } from "../shared/interfaces/IWalletController";
+import { IWalletController } from "@/shared/interfaces";
 
 export function setupPm() {
-    const { PortMessage } = Message;
-    const portMessageChannel = new PortMessage();
-    portMessageChannel.connect('popup');
+  const { PortMessage } = Message;
+  const portMessageChannel = new PortMessage();
+  portMessageChannel.connect("popup");
 
-    portMessageChannel.listen((data) => {
-        if (data.type === 'broadcast') {
-            eventBus.emit(data.method, data.params);
-        }
+  portMessageChannel.listen((data: { method: string, params: any[], type: string }) => {
+    if (data.type === "broadcast") {
+      eventBus.emit(data.method, data.params);
+    }
+  });
+
+  eventBus.addEventListener(EVENTS.broadcastToBackground, async (data: { method: string, data: any }) => {
+    await portMessageChannel.request({
+      type: "broadcast",
+      method: data.method,
+      params: data.data,
     });
+  });
 
-    eventBus.addEventListener(EVENTS.broadcastToBackground, (data) => {
-        portMessageChannel.request({
-            type: 'broadcast',
-            method: data.method,
-            params: data.data
-        });
-    });
-
-    return portMessageChannel;
+  return portMessageChannel;
 }
 
 export function setupWalletProxy() {
-    const portMessageChannel = setupPm();
+  const portMessageChannel = setupPm();
 
-    const wallet: Record<string, any> = new Proxy(
-        {
-        },
-        {
-            get(obj, key) {
-                switch (key) {
-                    case 'openapi':
-                        return new Proxy(
-                            {},
-                            {
-                                get(obj, key) {
-                                    return function (...params: any) {
-                                        return portMessageChannel.request({
-                                            type: 'openapi',
-                                            method: key,
-                                            params
-                                        });
-                                    };
-                                }
-                            }
-                        );
-                        break;
-                    default:
-                        return function (...params: any) {
-                            return portMessageChannel.request({
-                                type: 'controller',
-                                method: key,
-                                params
-                            });
-                        };
-                }
-            }
+  const wallet: Record<string, any> = new Proxy(
+    {},
+    {
+      get(obj, key) {
+        switch (key) {
+          case "openapi":
+            return function (...params: any) {
+              return portMessageChannel.request({
+                type: "openapi",
+                method: key,
+                params,
+              });
+            };
+          default:
+            return function (...params: any) {
+              return portMessageChannel.request({
+                type: "controller",
+                method: key,
+                params,
+              });
+            };
         }
-    );
-    return wallet as IWalletController;
+      },
+    }
+  );
+  return wallet as IWalletController;
 }

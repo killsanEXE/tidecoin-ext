@@ -33,7 +33,7 @@ interface StateProvider {
   initialized: boolean;
   isPermanentlyDisconnected: boolean;
 }
-const EXTENSION_CONTEXT_INVALIDATED_CHROMIUM_ERROR = 'Extension context invalidated.';
+
 export class UnisatProvider extends EventEmitter {
   _selectedAddress: string | null = null;
   _network: string | null = null;
@@ -114,7 +114,7 @@ export class UnisatProvider extends EventEmitter {
     this._request({
       method: 'keepAlive',
       params: {}
-    }).then((v) => {
+    }).then(() => {
       setTimeout(() => {
         this.keepAlive();
       }, 1000);

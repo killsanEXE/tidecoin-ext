@@ -4,7 +4,7 @@ class DedupePromise {
   private _blackList: string[];
   private _tasks: Record<string, number> = {};
 
-  constructor(blackList) {
+  constructor(blackList: string[]) {
     this._blackList = blackList;
   }
 
