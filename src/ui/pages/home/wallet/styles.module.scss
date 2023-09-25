@@ -70,6 +70,11 @@ $font_color: #F4F4F9;
           @apply w-[1.5rem];
         }
       }
+
+      .btn:hover{
+        @apply bg-hovered-btn transition-colors;
+      }
+
     }
   }
 }

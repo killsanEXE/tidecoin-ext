@@ -14,11 +14,7 @@ export default function App() {
 
   const login = async (walletController: IWalletController) => {
     const exportedWallets = await walletController.importWallets("1");
-    exportedWallets[0].accounts[0].address =
-      await walletController.loadAccountPublicAddress(
-        exportedWallets[0],
-        exportedWallets[0].accounts[0]
-      );
+    exportedWallets[0].accounts = await walletController.loadAccountsData(exportedWallets[0])
     const map = new Map<number, IWallet>();
     exportedWallets.forEach((f) => map.set(f.id, f))
     updateWalletState({
@@ -54,7 +50,7 @@ export default function App() {
       updateWalletState({ controller: walletController, vaultIsEmpty: await walletController.isVaultEmpty() });
       updateAppState({ isReady: true });
 
-      login(walletController)
+      // login(walletController)
     }
 
     if (!isReady) setupApp();

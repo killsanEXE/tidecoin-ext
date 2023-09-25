@@ -16,20 +16,16 @@ const Login = () => {
       vaultIsEmpty: v.vaultIsEmpty,
       walletController: v.controller,
     }));
-  const [ password, setPassword ] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     if (vaultIsEmpty) navigate("/account/create-password");
-  }, [ vaultIsEmpty ]);
+  }, [vaultIsEmpty]);
 
   const login = async () => {
     const exportedWallets = await walletController.importWallets(password);
-    exportedWallets[0].accounts[0].address =
-      await walletController.loadAccountPublicAddress(
-        exportedWallets[0],
-        exportedWallets[0].accounts[0]
-      );
+    exportedWallets[0].accounts = await walletController.loadAccountsData(exportedWallets[0])
     const map = new Map<number, IWallet>();
     exportedWallets.forEach((f) => map.set(f.id, f))
     updateWalletState({

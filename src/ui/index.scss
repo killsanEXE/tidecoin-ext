@@ -26,12 +26,12 @@ body {
   @apply border-0 px-2 pb-1 pt-1.5 text-[1.1rem] w-1/2 mx-auto;
 
   &:hover {
-    @apply cursor-pointer shadow-sm;
+    @apply cursor-pointer shadow-sm ;
   }
 }
 
 .primary {
-  @apply bg-primary text-black leading-tight;
+  @apply bg-text text-black leading-tight;
 }
 
 .secondary {

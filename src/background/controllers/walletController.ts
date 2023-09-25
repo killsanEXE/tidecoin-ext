@@ -1,8 +1,9 @@
 import { storageService } from "@/background/services";
 import type { IAccount, IWallet, IWalletController } from "@/shared/interfaces";
-import { fromMnemonic } from "test-test-test-hd-wallet";
+import { fromMnemonic, fromSeed } from "test-test-test-hd-wallet";
 import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
 import { p2wpkh } from "tidecoinjs-lib/src/payments";
+import { bytesToHex as toHex, hexToBytes as fromHex } from '@noble/hashes/utils'
 
 export class WalletController implements IWalletController {
 
@@ -13,13 +14,21 @@ export class WalletController implements IWalletController {
 
   async createNewWallet(exportedWallets: IWallet[], name?: string) {
     const mnemonic = new Mnemonic();
-    const account: IAccount = { id: 0, name: "Account 1", balance: 0 };
+    const acc = fromMnemonic(mnemonic);
+    const account: IAccount = {
+      id: 0,
+      name: "Account 1",
+      balance: 0,
+      privateKey: toHex(acc.privateKey),
+      publicKey: toHex(acc.publicKey),
+      address: p2wpkh({ pubkey: acc.publicKey }).address
+    };
     const walletId = exportedWallets.length > 0 ? exportedWallets[exportedWallets.length - 1].id + 1 : 0;
 
     return {
       name: name === undefined ? `Wallet ${walletId + 1}` : name,
       id: walletId,
-      accounts: [ account ],
+      accounts: [account],
       currentAccount: account,
       phrase: mnemonic.getPhrase(),
     };
@@ -33,23 +42,51 @@ export class WalletController implements IWalletController {
     return await storageService.importWallets(password);
   }
 
-  async loadAccountPublicAddress(wallet: IWallet, account: IAccount) {
-    const accIndex = wallet.accounts.indexOf(account);
-    if (accIndex >= 0) return;
-    const rootWallet = fromMnemonic(Mnemonic.fromPhrase(wallet.phrase));
-    if (account.id === 0)
-      return p2wpkh({ pubkey: rootWallet.publicKey }).address;
-    return p2wpkh({ pubkey: rootWallet.derive(account.id).publicKey }).address;
+  async loadAccountsData(wallet: IWallet): Promise<IAccount[]> {
+    let accountId = 0;
+    const result: IAccount[] = []
+    wallet.accounts.forEach(async (i) => {
+      if (accountId === 0) {
+        const imported = fromMnemonic(Mnemonic.fromPhrase(wallet.phrase))
+        const address = p2wpkh({ pubkey: imported.publicKey }).address
+        result.push({
+          privateKey: toHex(imported.privateKey),
+          publicKey: toHex(imported.publicKey),
+          ...i,
+          address
+        })
+      } else {
+        const imported = fromSeed(Buffer.from(fromHex(result[-1].privateKey!)))
+        const address = p2wpkh({ pubkey: imported.derive(i.id - result[-1].id).publicKey }).address
+        result.push({
+          privateKey: toHex(imported.privateKey),
+          publicKey: toHex(imported.publicKey),
+          ...i,
+          address
+        })
+      }
+      accountId += 1;
+    })
+    return result;
+  }
+
+  loadAccountData(account: IAccount): Partial<IAccount> {
+    const imported = fromSeed(Buffer.from(fromHex(account.privateKey!))).derive(account.id + 1);
+    const address = p2wpkh({ pubkey: imported.publicKey }).address
+    return {
+      privateKey: toHex(imported.privateKey),
+      publicKey: toHex(imported.publicKey),
+      address
+    }
   }
 
   async createNewAccount(wallet: IWallet, name?: string) {
-    name = name === undefined ? `Account ${wallet.accounts.length}` : name;
+    const accName = !name?.length ? `Account ${wallet.accounts.length + 1}` : name;
     const account = { id: wallet.accounts[wallet.accounts.length - 1].id + 1 };
     wallet.accounts.push(account);
     return {
       ...account,
-      address: await this.loadAccountPublicAddress(wallet, account),
-      name: name,
+      name: accName,
       balance: 0,
     };
   }

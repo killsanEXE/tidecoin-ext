@@ -12,7 +12,8 @@ module.exports = {
                 secondary: '#a8d0db',
                 primary: '#ffbc42',
                 panel: '#3b4167',
-                hovered: '#323651'
+                hovered: '#323651',
+                'hovered-btn': '#474f80'
             }
         },
     },
