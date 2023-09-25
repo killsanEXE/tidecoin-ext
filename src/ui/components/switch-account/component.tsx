@@ -22,9 +22,9 @@ const SwitchAccount = () => {
   return (
     <div className={s.switchAccDiv}>
       <div className={s.controlDiv}>
-        <p className={cn(s.controlElem, s.back)} onClick={() => {
+        <p className={s.controlElem} onClick={() => {
           navigate(-1)
-        }}><ArrowLeft/> Back</p>
+        }}><ArrowLeft/></p>
         <p className={s.controlElem}>Switch account</p>
         <p className={cn(s.controlElem, s.addNew)} onClick={() => {
           navigate("/create-new-account")

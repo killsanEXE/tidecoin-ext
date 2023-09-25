@@ -7,7 +7,7 @@ import { useAppState } from "@/ui/states/appState";
 import { useWalletState } from "@/ui/states/walletState";
 
 const NewAccount = () => {
-  const [name, setName] = useState("");
+  const [ name, setName ] = useState("");
   const navigate = useNavigate();
   const { createNewAccount } = useWalletState((v) => ({
     createNewAccount: v.createNewAccount,
@@ -34,7 +34,7 @@ const NewAccount = () => {
             navigate(-1);
           }}
         >
-          <ArrowLeft /> Back
+          <ArrowLeft/>
         </p>
         <p>Create new account</p>
       </div>

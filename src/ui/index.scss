@@ -23,7 +23,7 @@ body {
 }
 
 .btn {
-  @apply border-0 p-2 text-[1.1rem] rounded-[0.6rem];
+  @apply border-0 px-2 pb-1 pt-1.5 text-[1.1rem] w-1/2 mx-auto;
 
   &:hover {
     @apply cursor-pointer shadow-sm;
@@ -31,7 +31,7 @@ body {
 }
 
 .primary {
-  @apply bg-primary;
+  @apply bg-primary text-black leading-tight;
 }
 
 .secondary {
@@ -39,5 +39,5 @@ body {
 }
 
 .input {
-  @apply border-0 text-[1.2rem] rounded-[0.6rem] p-2 bg-input-bg text-text;
+  @apply border-0 text-[1.2rem] p-2 bg-input-bg text-text;
 }

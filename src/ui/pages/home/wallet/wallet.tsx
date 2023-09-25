@@ -40,9 +40,7 @@ const Wallet = () => {
         </div>
       </div>
 
-      <div className={s.transactionsDiv}>
-        <p>transactions: </p>
-      </div>
+      <p className={s.transactions}>Transactions</p>
     </div>
   )
 }

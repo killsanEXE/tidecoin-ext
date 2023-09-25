@@ -64,21 +64,13 @@ $font_color: #F4F4F9;
       padding-top: 1rem;
 
       .btn {
-        background-color: $btn_background;
-        color: $font_color;
-        gap: 1rem;
-        font-size: 1rem;
-        padding-right: 1rem;
+        @apply bg-panel text-text gap-4 text-lg pr-4 px-3 py-1.5;
 
         .icon {
-          width: 1.5rem;
+          @apply w-[1.5rem];
         }
       }
     }
-  }
-
-  .transactionsDiv {
-    height: 50vh;
   }
 }
 
@@ -86,4 +78,8 @@ $font_color: #F4F4F9;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.transactions {
+  @apply text-lg text-center;
 }
