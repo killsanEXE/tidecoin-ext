@@ -1,6 +1,6 @@
 import { storageService } from "@/background/services";
 import type { IAccount, IWallet, IWalletController } from "@/shared/interfaces";
-import { fromMnemonic, fromSeed } from "test-test-test-hd-wallet";
+import { fromMnemonic, fromPrivateKey } from "test-test-test-hd-wallet";
 import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
 import { p2wpkh } from "tidecoinjs-lib/src/payments";
 import { bytesToHex as toHex, hexToBytes as fromHex } from '@noble/hashes/utils'
@@ -45,7 +45,7 @@ export class WalletController implements IWalletController {
   async loadAccountsData(wallet: IWallet): Promise<IAccount[]> {
     let accountId = 0;
     const result: IAccount[] = []
-    wallet.accounts.forEach(async (i) => {
+    wallet.accounts.forEach((i) => {
       if (accountId === 0) {
         const imported = fromMnemonic(Mnemonic.fromPhrase(wallet.phrase))
         const address = p2wpkh({ pubkey: imported.publicKey }).address
@@ -56,8 +56,9 @@ export class WalletController implements IWalletController {
           address
         })
       } else {
-        const imported = fromSeed(Buffer.from(fromHex(result[-1].privateKey!)))
-        const address = p2wpkh({ pubkey: imported.derive(i.id - result[-1].id).publicKey }).address
+        const lastAcc = result.length > 1 ? result[-1] : result[0]
+        const imported = fromPrivateKey(Buffer.from(fromHex((lastAcc.privateKey !== undefined ? lastAcc.privateKey : lastAcc.privateKey)!)), i.id)
+        const address = p2wpkh({ pubkey: imported.derive(i.id - lastAcc.id).publicKey }).address
         result.push({
           privateKey: toHex(imported.privateKey),
           publicKey: toHex(imported.publicKey),
@@ -71,7 +72,7 @@ export class WalletController implements IWalletController {
   }
 
   loadAccountData(account: IAccount): Partial<IAccount> {
-    const imported = fromSeed(Buffer.from(fromHex(account.privateKey!))).derive(account.id + 1);
+    const imported = fromPrivateKey(Buffer.from(fromHex(account.privateKey!)), account.id).derive(account.id + 1);
     const address = p2wpkh({ pubkey: imported.publicKey }).address
     return {
       privateKey: toHex(imported.privateKey),
