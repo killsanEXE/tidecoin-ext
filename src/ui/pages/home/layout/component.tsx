@@ -10,8 +10,8 @@ const Layout = () => {
 
   return (
     <div className={s.layout}>
-      {isUnlocked ? <Outlet/> : <Navigate to="/account/login"/>}
-      <Nav/>
+      {isUnlocked ? <Outlet /> : <Navigate to="/account/login" />}
+      <Nav />
     </div>
   );
 }

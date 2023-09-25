@@ -1,10 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import ArrowLeft from "@/ui/components/icons/ArrowLeft";
 import CheckIcon from "@/ui/components/icons/Checkicon";
 import CopyIcon from "@/ui/components/icons/CopyIcon";
 import KeyIcon from "@/ui/components/icons/KeyIcon";
-import PlusInCircleIcon from "@/ui/components/icons/PlusInCirlceIcon";
 import SmallMenuIcon from "@/ui/components/icons/SmallMenuIcon";
 import TagIcon from "@/ui/components/icons/TagIcon";
 import XMarkIcon from "@/ui/components/icons/XMarkIcon";
@@ -16,32 +13,12 @@ import cn from "classnames";
 const SwitchAccount = () => {
   const [selected, setSelected] = useState<number>();
 
-  const navigate = useNavigate();
   const { currentWallet } = useWalletState((v) => ({
     currentWallet: v.currentWallet,
   }));
 
   return (
     <div className={s.switchAccDiv}>
-      <div className={s.controlDiv}>
-        <p
-          className={cn(s.controlElem, s.back)}
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          <ArrowLeft /> Back
-        </p>
-        <p className={s.controlElem}>Switch account</p>
-        <p
-          className={cn(s.controlElem, s.addNew)}
-          onClick={() => {
-            navigate("/create-new-account");
-          }}
-        >
-          <PlusInCircleIcon />
-        </p>
-      </div>
       <div className={s.accounts}>
         {currentWallet?.accounts.map((acc, i) => (
           <div className={s.mainAcc} key={i}>

@@ -6,9 +6,7 @@ export interface IWalletController {
   saveWallets: (password: string, wallets: IWallet[]) => Promise<void>;
   isVaultEmpty: () => Promise<boolean>
   importWallets: (password: string) => Promise<IWallet[]>;
-  loadAccountPublicAddress: (
-    wallet: IWallet,
-    account: IAccount
-  ) => Promise<string | undefined>;
+  loadAccountsData: (wallet: IWallet) => Promise<IAccount[]>;
   createNewAccount: (wallet: IWallet, name?: string) => Promise<IAccount>;
+  loadAccountData: (account: IAccount) => Partial<IAccount>;
 }

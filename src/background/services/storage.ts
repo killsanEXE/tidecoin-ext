@@ -32,7 +32,7 @@ class StorageService {
     const { salt, iv, vault } = await this.getLocalValues();
     const decrypted = await this.decryptData(password, vault, salt, iv);
     const wallets: IWallet[] = JSON.parse(decrypted);
-    return wallets
+    return wallets.map((i, index) => ({ ...i, id: index }));
   }
 
   private async importKey(
@@ -54,7 +54,7 @@ class StorageService {
       keyHash,
       { name: "AES-GCM" },
       false,
-      [ encrypt ? "encrypt" : "decrypt" ]
+      [encrypt ? "encrypt" : "decrypt"]
     );
   }
 

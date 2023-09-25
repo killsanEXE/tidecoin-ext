@@ -1,0 +1,11 @@
+.layout{
+  @apply w-full h-full;
+}
+
+.controlDiv{
+  @apply flex justify-between items-center pt-5;
+}
+
+.controlElem{
+  @apply flex justify-between items-center;
+}

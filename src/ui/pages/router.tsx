@@ -6,8 +6,9 @@ import Settings from "@/ui/pages/home/settings/settings";
 
 import Login from "@/ui/pages/account/login";
 import CreatePassword from "@/ui/pages/account/create-password";
-import CreateNewAccount from "@/ui/components/new-account";
-import SwitchAccount from "@/ui/components/switch-account";
+import CreateNewAccount from "@/ui/components/pages/new-account";
+import SwitchAccount from "@/ui/components/pages/switch-account";
+import PagesLayout from "@/ui/components/pages";
 
 export const guestRouter = createHashRouter([
   {
@@ -29,7 +30,13 @@ export const authenticatedRouter = createHashRouter([
       { path: "settings", element: <Settings /> },
     ],
   },
-  { path: "switch-account", element: <SwitchAccount /> },
-  { path: "create-new-account", element: <CreateNewAccount /> },
+  {
+    path: "pages",
+    element: <PagesLayout />,
+    children: [
+      { path: "switch-account", element: <SwitchAccount /> },
+      { path: "create-new-account", element: <CreateNewAccount /> },
+    ]
+  },
   { path: "*", element: <Navigate to={"/home/wallet"} /> },
 ]);

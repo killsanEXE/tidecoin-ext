@@ -1,0 +1,8 @@
+.settings {
+    @apply h-full w-full flex flex-col gap-6 justify-center items-center;
+}
+
+.card {
+    @apply w-11/12 flex justify-center items-center;
+    background: blue;
+}

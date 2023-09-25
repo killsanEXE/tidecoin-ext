@@ -19,7 +19,7 @@ const Wallet = () => {
         <button className={cn(s.change, s.btn, 'bg-primary')}>{currentWallet?.name ?? "wallet"}</button>
         <button
           onClick={() => {
-            navigate("/switch-account")
+            navigate("/pages/switch-account")
           }}
           className={cn(s.change, s.btn)}>
           {currentWallet?.currentAccount.name}
