@@ -30,7 +30,13 @@ const Wallet = () => {
         <p className={cn(s.balance, s.center)}>{currentWallet?.currentAccount.balance} TDC</p>
         <p className={cn(s.accPubAddress, s.center)} onClick={() => {
           copyToClipboard(currentWallet?.currentAccount.address).then(() => {
-            toast.success("Copied")
+            toast.success("Copied", {
+              style: { borderRadius: 0 },
+              iconTheme: {
+                primary: '#ffbc42',
+                secondary: '#766c7f'
+              }
+            })
           })
         }}><CopyIcon/> {shortAddress(currentWallet?.currentAccount.address)}</p>
 

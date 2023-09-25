@@ -18,7 +18,9 @@ const NewAccount = () => {
   const createNewAcc = async () => {
     if (name.length <= 8) {
       await createNewAccount(password!, name);
-      toast.success("Created new account");
+      toast.success("Created new account", {
+        style: { borderRadius: 0 }
+      });
       navigate("/home/wallet");
     } else toast.error("Maximum name length is 8");
   };
