@@ -1,6 +1,7 @@
 import LinkIcon from "@/ui/components/icons/LinkIcon";
 import s from "./styles.module.scss";
 import { useAppState } from "@/ui/states/appState";
+import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
 
@@ -8,9 +9,11 @@ const Settings = () => {
     logout: v.logout
   }))
 
+  const navigate = useNavigate();
+
   return (
     <div className={s.settings}>
-      <div className={s.card}>
+      <div className={s.card} onClick={() => { navigate("/pages/change-password") }}>
         <div className={s.cardText}>
           Change Password
         </div>
