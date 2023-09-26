@@ -11,7 +11,6 @@ import { guestRouter, authenticatedRouter } from "@/ui/pages/router";
 import { IWallet, IWalletController } from '@/shared/interfaces';
 
 export default function App() {
-
   const login = async (walletController: IWalletController) => {
     const exportedWallets = await walletController.importWallets("1");
     exportedWallets[0].accounts = await walletController.loadAccountsData(exportedWallets[0])
@@ -29,7 +28,6 @@ export default function App() {
       password: "1",
     });
   };
-
 
   const [router, setRouter] = useState<Router>(guestRouter);
 
@@ -50,11 +48,12 @@ export default function App() {
       updateWalletState({ controller: walletController, vaultIsEmpty: await walletController.isVaultEmpty() });
       updateAppState({ isReady: true });
 
-      login(walletController)
+      // login(walletController)
     }
 
     if (!isReady) setupApp();
     else if (isReady && isUnlocked) setRouter(authenticatedRouter);
+    else setRouter(guestRouter);
   }, [isReady, isUnlocked, setupWalletProxy, updateWalletState, updateAppState, router, setRouter]);
 
   return (

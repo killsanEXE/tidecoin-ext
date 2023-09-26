@@ -4,4 +4,5 @@ export interface IApp {
   vault: string[];
   password: string | undefined;
   updateAppState: (app: Partial<IApp>) => void;
+  logout: () => void;
 }

@@ -1,14 +1,14 @@
-import {Outlet, useNavigate} from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import s from "./styles.module.scss";
 import cn from "classnames";
 import ArrowLeft from "@/ui/components/icons/ArrowLeft";
 import PlusInCircleIcon from "@/ui/components/icons/PlusInCirlceIcon";
 
-export default function PagesLayout(){
+export default function PagesLayout() {
 
     const navigate = useNavigate();
 
-    return(
+    return (
         <div className={s.layout}>
             <div className={s.controlDiv}>
                 <p
@@ -29,7 +29,9 @@ export default function PagesLayout(){
                     <PlusInCircleIcon />
                 </p>
             </div>
-            <Outlet />
+            <div className={s.contentDiv}>
+                <Outlet />
+            </div>
         </div>
     )
 }
