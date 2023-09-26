@@ -1,5 +1,11 @@
-import { browserStorageLocalGet, browserStorageLocalSet, } from "@/shared/utils/browser";
-import { bytesToHex as toHex, hexToBytes as fromHex, } from "@noble/hashes/utils";
+import {
+  browserStorageLocalGet,
+  browserStorageLocalSet,
+} from "@/shared/utils/browser";
+import {
+  bytesToHex as toHex,
+  hexToBytes as fromHex,
+} from "@noble/hashes/utils";
 import { pbkdf2Async } from "@noble/hashes/pbkdf2";
 import { sha256 } from "@noble/hashes/sha256";
 import { IWallet } from "@/shared/interfaces";
@@ -24,11 +30,11 @@ class StorageService {
   }
 
   async getLocalValues() {
-    const data = await browserStorageLocalGet(undefined) as any
-    return data as { iv: string, vault: string, salt: string }
+    const data = (await browserStorageLocalGet(undefined)) as any;
+    return data as { iv: string; vault: string; salt: string };
   }
 
-  async importWallets(password: string) {
+  async importWallets(password: string): Promise<IWallet[]> {
     const { salt, iv, vault } = await this.getLocalValues();
     const decrypted = await this.decryptData(password, vault, salt, iv);
     const wallets: IWallet[] = JSON.parse(decrypted);
