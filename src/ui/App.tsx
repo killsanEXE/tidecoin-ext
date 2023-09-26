@@ -50,11 +50,12 @@ export default function App() {
       updateWalletState({ controller: walletController, vaultIsEmpty: await walletController.isVaultEmpty() });
       updateAppState({ isReady: true });
 
-      login(walletController)
+      // login(walletController)
     }
 
     if (!isReady) setupApp();
     else if (isReady && isUnlocked) setRouter(authenticatedRouter);
+    else setRouter(guestRouter);
   }, [isReady, isUnlocked, setupWalletProxy, updateWalletState, updateAppState, router, setRouter]);
 
   return (

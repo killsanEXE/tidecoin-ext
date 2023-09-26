@@ -9,4 +9,7 @@ export const useAppState = create<IApp>()((set) => ({
   updateAppState: async (app: Partial<IApp>) => {
     set(app);
   },
+  logout: () => {
+    set({ password: undefined, isUnlocked: false });
+  },
 }));

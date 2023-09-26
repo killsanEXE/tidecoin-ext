@@ -3,6 +3,13 @@
 }
 
 .card {
-    @apply w-11/12 flex justify-center items-center;
-    background: blue;
+    @apply w-11/12 flex justify-center items-center bg-panel;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    .cardText {
+        @apply text-lg p-2;
+    }
 }
