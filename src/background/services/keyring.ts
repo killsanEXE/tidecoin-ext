@@ -1,19 +1,18 @@
 import * as tidecoin from "tidecoinjs-lib";
 import { EventEmitter } from "events";
-import log from "loglevel";
 import HDPrivateKey from "test-test-test-hd-wallet/src/hd/private";
 import storageService from "./storage";
+import { falconPairFactory } from "tidepair";
+import {
+  hexToBytes as fromHex,
+  bytesToHex as toHex,
+} from "@noble/hashes/utils";
 
 import { ADDRESS_TYPES, KEYRING_TYPE } from "@/shared/constant";
 import { AddressType } from "@/shared/types";
 import { IWallet } from "@/shared/interfaces";
 
-interface MemStoreState {
-  isUnlocked: boolean;
-  keyringTypes: any[];
-  keyrings: any[];
-  preMnemonics: string;
-}
+const falconPair = falconPairFactory();
 
 export interface DisplayedKeyring {
   type: string;
@@ -32,94 +31,11 @@ export interface ToSignInput {
   index: number;
   publicKey: string;
 }
-export interface Keyring {
-  type: string;
-  serialize(): Promise<any>;
-  deserialize(opts: any): Promise<void>;
-  addAccounts(n: number): Promise<string[]>;
-  getAccounts(): Promise<string[]>;
-  signTransaction(
-    psbt: tidecoin.Psbt,
-    inputs: ToSignInput[]
-  ): Promise<tidecoin.Psbt>;
-  signMessage(address: string, message: string): Promise<string>;
-  verifyMessage(
-    address: string,
-    message: string,
-    sig: string
-  ): Promise<boolean>;
-  exportAccount(address: string): Promise<string>;
-  removeAccount(address: string): void;
-
-  accounts?: string[];
-  unlock?(): Promise<void>;
-  getFirstPage?(): Promise<{ address: string; index: number }[]>;
-  getNextPage?(): Promise<{ address: string; index: number }[]>;
-  getPreviousPage?(): Promise<{ address: string; index: number }[]>;
-  getAddresses?(
-    start: number,
-    end: number
-  ): { address: string; index: number }[];
-  getIndexByAddress?(address: string): number;
-
-  getAccountsWithBrand?(): { address: string; index: number }[];
-  activeAccounts?(indexes: number[]): string[];
-
-  changeHdPath?(hdPath: string): void;
-  getAccountByHdPath?(hdPath: string, index: number): string;
-}
-
-class EmptyKeyring implements Keyring {
-  type = KEYRING_TYPE.Empty;
-  constructor() {
-    // todo
-  }
-  async addAccounts(n: number): Promise<string[]> {
-    return [];
-  }
-
-  async getAccounts(): Promise<string[]> {
-    return [];
-  }
-  signTransaction(
-    psbt: tidecoin.Psbt,
-    inputs: ToSignInput[]
-  ): Promise<tidecoin.Psbt> {
-    throw new Error("Method not implemented.");
-  }
-  signMessage(address: string, message: string): Promise<string> {
-    throw new Error("Method not implemented.");
-  }
-  verifyMessage(
-    address: string,
-    message: string,
-    sig: string
-  ): Promise<boolean> {
-    throw new Error("Method not implemented.");
-  }
-  exportAccount(address: string): Promise<string> {
-    throw new Error("Method not implemented.");
-  }
-  removeAccount(address: string): void {
-    throw new Error("Method not implemented.");
-  }
-
-  async serialize() {
-    return "";
-  }
-
-  async deserialize(opts: any) {
-    return;
-  }
-}
 
 class KeyringService extends EventEmitter {
-  //
-  // PUBLIC METHODS
-  //
   storage = storageService;
   state: IWallet[];
-  keyrings: Keyring[];
+  keyrings: HDPrivateKey[];
   addressTypes: AddressType[];
   password: string | null = null;
 
@@ -135,131 +51,51 @@ class KeyringService extends EventEmitter {
     this.state = await this.storage.importWallets(this.password);
   }
 
-  importPrivateKey = async (privateKey: string, addressType: AddressType) => {
-    await this.persistAllKeyrings();
-    const keyring = await this.addNewKeyring(
-      "Simple Key Pair",
-      [privateKey],
-      addressType
-    );
-    await this.persistAllKeyrings();
-    this.setUnlocked();
-    return keyring;
-  };
-
-  private generateMnemonic = (): string => {
-    return bip39.generateMnemonic(128);
-  };
-
-  removePreMnemonics = () => {
-    this.memStore.updateState({ preMnemonics: "" });
-  };
-
-  getPreMnemonics = async (): Promise<any> => {
-    if (!this.memStore.getState().preMnemonics) {
-      return "";
+  getKeyringForAccount(accountPublicKey: string) {
+    if (!this.state.length) {
+      throw new Error("State not initialized");
     }
+    let address: string | undefined = undefined;
 
-    if (!this.password) {
-      throw new Error(i18n.t("you need to unlock wallet first"));
+    for (const i of this.state) {
+      const acc = i.accounts.find((i) => i.address === accountPublicKey);
+      if (acc) {
+        address = acc.privateKey;
+        break;
+      }
     }
+    if (!address) throw new Error("Account not founded");
 
-    return await this.encryptor.decrypt(
-      this.password,
-      this.memStore.getState().preMnemonics
-    );
-  };
-
-  createKeyringWithMnemonics = async (
-    seed: string,
-    hdPath: string,
-    passphrase: string,
-    addressType: AddressType,
-    accountCount: number
-  ) => {
-    if (!bip39.validateMnemonic(seed)) {
-      return Promise.reject(new Error(i18n.t("mnemonic phrase is invalid")));
-    }
-
-    await this.persistAllKeyrings();
-    const activeIndexes: number[] = [];
-    for (let i = 0; i < accountCount; i++) {
-      activeIndexes.push(i);
-    }
-    const keyring = await this.addNewKeyring(
-      "HD Key Tree",
-      {
-        mnemonic: seed,
-        activeIndexes,
-        hdPath,
-        passphrase,
-      },
-      addressType
-    );
-    const accounts = await keyring.getAccounts();
-    if (!accounts[0]) {
-      throw new Error("KeyringController - First Account not found.");
-    }
-    this.persistAllKeyrings();
-    this.setUnlocked();
-    this.fullUpdate();
-    return keyring;
-  };
-
-  async addNewAccount(selectedKeyring: Keyring): Promise<string[]> {
-    const accounts = await selectedKeyring.addAccounts(1);
-    accounts.forEach((hexAccount) => {
-      this.emit("newAccount", hexAccount);
-    });
-    return accounts;
+    return falconPair.fromPrivateKey(Buffer.from(fromHex(address)));
   }
 
-  async exportAccount(address: string): Promise<string> {
-    const keyring = await this.getKeyringForAccount(address);
-    const privkey = await keyring.exportAccount(address);
-    return privkey;
-  }
-
-  async removeAccount(address: string, type: string): Promise<any> {
-    const keyring = await this.getKeyringForAccount(address, type);
-
-    if (typeof keyring.removeAccount != "function") {
-      throw new Error(
-        `Keyring ${keyring.type} doesn't support account removal operations`
-      );
-    }
-    keyring.removeAccount(address);
-    this.emit("removedAccount", address);
-    await this.persistAllKeyrings();
-    await this._updateMemStoreKeyrings();
-    await this.fullUpdate();
-  }
-
-  async removeKeyring(keyringIndex: number): Promise<any> {
-    delete this.keyrings[keyringIndex];
-    this.keyrings[keyringIndex] = new EmptyKeyring();
-    await this.persistAllKeyrings();
-    await this._updateMemStoreKeyrings();
-    await this.fullUpdate();
-  }
-
-  async signTransaction(
-    keyring: Keyring,
+  signTransaction(
     psbt: tidecoin.Psbt,
-    inputs: ToSignInput[]
+    inputs: (ToSignInput & { sighashTypes?: number[] })[]
   ) {
-    return await keyring.signTransaction(psbt, inputs);
+    inputs.forEach((i) => {
+      const keypair = this.getKeyringForAccount(i.publicKey);
+      const pair = falconPair.fromPrivateKey(keypair.privateKey);
+      psbt.signInput(i.index, pair, i.sighashTypes);
+    });
+    return psbt;
   }
 
-  async signMessage(address: string, data: string) {
-    const keyring = await this.getKeyringForAccount(address);
-    const sig = await keyring.signMessage(address, data);
-    return sig;
+  signMessage(address: string, data: string) {
+    const keyring = this.getKeyringForAccount(address);
+    const sig = keyring.sign(
+      Buffer.from(new TextEncoder().encode(data)),
+      window.crypto.getRandomValues(new Uint8Array(48))
+    );
+    return toHex(sig);
   }
 
-  async verifyMessage(address: string, data: string, sig: string) {
-    const keyring = await this.getKeyringForAccount(address);
-    const result = await keyring.verifyMessage(address, data, sig);
+  verifyMessage(address: string, data: string, sig: string) {
+    const keyring = this.getKeyringForAccount(address);
+    const result = keyring.verify(
+      Buffer.from(fromHex(data)),
+      Buffer.from(fromHex(sig))
+    );
     return result;
   }
 }
