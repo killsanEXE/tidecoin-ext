@@ -38,11 +38,13 @@ const Wallet = () => {
               }
             })
           })
-        }}><CopyIcon/> {shortAddress(currentWallet?.currentAccount.address)}</p>
+        }}><CopyIcon /> {shortAddress(currentWallet?.currentAccount.address)}</p>
 
         <div className={cn(s.receiveSendBtns, s.center)}>
-          <button className={cn(s.btn, s.center)}><ReceiveIcon/> Receive</button>
-          <button className={cn(s.btn, s.center)}><SendIcon/> Send</button>
+          <button onClick={() => {
+            navigate("/pages/receive")
+          }} className={cn(s.btn, s.center)}><ReceiveIcon /> Receive</button>
+          <button className={cn(s.btn, s.center)}><SendIcon /> Send</button>
         </div>
       </div>
 
