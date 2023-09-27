@@ -11,6 +11,7 @@ import SwitchAccount from "@/ui/components/pages/switch-account";
 import PagesLayout from "@/ui/components/pages";
 import ChangePassword from "../components/pages/change-password";
 import Receive from "../components/pages/receive";
+import SwitchWallet from "../components/pages/switch-wallet";
 
 export const guestRouter = createHashRouter([
   {
@@ -40,6 +41,7 @@ export const authenticatedRouter = createHashRouter([
       { path: "create-new-account", element: <CreateNewAccount /> },
       { path: "change-password", element: <ChangePassword /> },
       { path: "receive", element: <Receive /> },
+      { path: "switch-wallet", element: <SwitchWallet /> },
     ]
   },
   { path: "*", element: <Navigate to={"/home/wallet"} /> },
