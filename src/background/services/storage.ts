@@ -15,6 +15,7 @@ class StorageService {
     const walletsToSave = wallets.map((wallet) => {
       return {
         phrase: wallet.phrase,
+        name: wallet.name,
         accounts: wallet.accounts.map((account) => ({
           id: account.id,
           name: account.name ?? "",
