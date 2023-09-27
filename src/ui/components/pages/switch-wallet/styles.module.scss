@@ -23,19 +23,7 @@
                 @apply flex p-2 justify-between;
 
                 .walletInfo {
-                    @apply flex flex-col gap-2;
-
-                    .name {
-                        @apply flex items-center gap-2;
-
-                        .icon {
-                            @apply w-[1.5rem];
-                        }
-                    }
-
-                    .address {
-                        @apply text-[.8rem];
-                    }
+                    @apply flex items-center gap-2;
                 }
 
                 .walletControl {
@@ -54,16 +42,6 @@
 
                 .divider {
                     @apply bg-text h-[80%] w-[1px];
-                }
-
-                .walletSetting {
-                    .icon {
-                        @apply w-[1.8rem];
-
-                        &:hover {
-                            @apply scale-110 cursor-pointer;
-                        }
-                    }
                 }
             }
 

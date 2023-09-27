@@ -24,10 +24,8 @@ const SwitchWallet = () => {
                     <div className={s.mainWallet} key={i}>
                         <div className={s.wallet}>
                             <div className={s.walletInfo}>
-                                <div className={s.name}>
-                                    {wallet.id === currentWallet?.id ? <CheckIcon /> : undefined}
-                                    {wallet.name}
-                                </div>
+                                {wallet.id === currentWallet?.id ? <CheckIcon /> : undefined}
+                                {wallet.name}
                             </div>
                             <div className={s.walletControl}>
                                 <button className={s.manageAccButton} onClick={() => {
@@ -38,9 +36,9 @@ const SwitchWallet = () => {
                         <div className={cn(s.walletSettings, s.hidden, { [s.active]: selected === i })}>
                             <div className={cn(s.walletSetting, s.rename)}><TagIcon /></div>
                             <div className={s.divider}></div>
-                            <div className={s.walletSetting}><KeyIcon /></div>
+                            <div><KeyIcon /></div>
                             <div className={s.divider}></div>
-                            <div className={s.walletSetting} onClick={() => {
+                            <div onClick={() => {
                                 setSelected(undefined)
                             }}><XMarkIcon /></div>
                         </div>

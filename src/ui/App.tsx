@@ -48,7 +48,7 @@ export default function App() {
       updateWalletState({ controller: walletController, vaultIsEmpty: await walletController.isVaultEmpty() });
       updateAppState({ isReady: true });
 
-      // login(walletController)
+      login(walletController)
     }
 
     if (!isReady) setupApp();
