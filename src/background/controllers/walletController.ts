@@ -91,6 +91,10 @@ export class WalletController implements IWalletController {
       balance: 0,
     };
   }
+
+  generateMnemonicPhrase(): string {
+    return new Mnemonic().getPhrase();
+  }
 }
 
 export default new WalletController();

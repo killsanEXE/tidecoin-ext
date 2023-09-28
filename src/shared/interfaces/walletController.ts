@@ -1,3 +1,4 @@
+import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
 import { IAccount } from "./accounts";
 import { IWallet } from "./wallets";
 
@@ -9,4 +10,5 @@ export interface IWalletController {
   loadAccountsData: (wallet: IWallet) => Promise<IAccount[]>;
   createNewAccount: (wallet: IWallet, name?: string) => Promise<IAccount>;
   loadAccountData: (account: IAccount) => Partial<IAccount>;
+  generateMnemonicPhrase: () => string;
 }

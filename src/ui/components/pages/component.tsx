@@ -10,7 +10,7 @@ export default function PagesLayout() {
     const routeTitles = {
         "/pages/switch-account": {
             "title": "Switch Account",
-            "action": () => { navigate("/pages/create-new-account ") },
+            "action": () => { navigate("/pages/create-new-account") },
         },
         "/pages/create-new-account": {
             "title": "Create New Account",
@@ -23,8 +23,20 @@ export default function PagesLayout() {
         },
         "/pages/switch-wallet": {
             "title": "Switch Wallet",
-            "action": () => { console.log("CREATE NEW WALLET ") },
-        }
+            "action": () => { navigate("/pages/create-new-wallet") },
+        },
+        "/pages/create-new-wallet": {
+            "title": "Create New Wallet"
+        },
+        "/pages/new-mnemonic": {
+            "title": "Create New Wallet"
+        },
+        "/pages/restore-mnemonic": {
+            "title": "Create New Wallet"
+        },
+        "/pages/restore-priv-key": {
+            "title": "Create New Wallet"
+        },
     }
 
     const currentRoute = useLocation();

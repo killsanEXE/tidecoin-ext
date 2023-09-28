@@ -1,0 +1,15 @@
+.choice {
+    @apply w-full h-full flex flex-col items-center text-[1rem];
+
+    .choiceDiv {
+        @apply pt-[2rem] w-full;
+
+        .variant {
+            @apply bg-panel mt-[1rem] p-[1rem] w-[90%] flex justify-center;
+
+            &:hover {
+                @apply cursor-pointer;
+            }
+        }
+    }
+}
