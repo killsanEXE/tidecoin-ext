@@ -25,7 +25,8 @@ const SwitchAccount = () => {
     if (!currentWallet) return;
     const acc = currentWallet.accounts.find(f => f.id === id)
     if (!acc) return;
-    updateCurrentWallet({ currentAccount: currentWallet.accounts[currentWallet.accounts.indexOf(acc)] });
+    updateCurrentWallet({ ...currentWallet, currentAccount: acc });
+    navigate("/home/wallet")
   }
 
   return (
