@@ -19,9 +19,9 @@ export const useWalletState = create<IWalletState>()((set, get) => ({
   updateWalletState: (state: Partial<IWalletState>) => {
     set(state);
   },
-  createNewWallet: async (password: string) => {
+  createNewWallet: async (password: string, phrase: string, name?: string) => {
     const { wallets, controller } = get();
-    const wallet = await controller.createNewWallet(Array.from(wallets.values()));
+    const wallet = await controller.createNewWallet(Array.from(wallets.values()), phrase, name);
     wallet.currentAccount = wallet.accounts[0];
     wallets.set(wallet.id, wallet)
     await controller.saveWallets(password, Array.from(wallets.values()))

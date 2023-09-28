@@ -2,7 +2,6 @@ import { createHashRouter, Navigate } from "react-router-dom";
 
 import Layout from "@/ui/pages/home/layout";
 import Wallet from "@/ui/pages/home/wallet";
-import Settings from "@/ui/pages/home/settings/settings";
 
 import Login from "@/ui/pages/account/login";
 import CreatePassword from "@/ui/pages/account/create-password";
@@ -16,6 +15,7 @@ import NewWallet from "../components/pages/new-wallet";
 import NewMnemonic from "../components/pages/new-wallet/new-mnemonic";
 import RestoreMnemonic from "../components/pages/new-wallet/restore-mnemonic";
 import RestorePrivKey from "../components/pages/new-wallet/restore-priv-key";
+import Settings from "./home/settings";
 
 export const guestRouter = createHashRouter([
   {

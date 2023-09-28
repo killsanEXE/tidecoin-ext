@@ -12,8 +12,8 @@ export class WalletController implements IWalletController {
     return values.vault === undefined;
   }
 
-  async createNewWallet(exportedWallets: IWallet[], name?: string) {
-    const mnemonic = new Mnemonic();
+  async createNewWallet(exportedWallets: IWallet[], phrase: string, name?: string) {
+    const mnemonic = Mnemonic.fromPhrase(phrase);
     const acc = fromMnemonic(mnemonic);
     const account: IAccount = {
       id: 0,

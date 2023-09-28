@@ -3,7 +3,7 @@ import { IAccount } from "./accounts";
 import { IWallet } from "./wallets";
 
 export interface IWalletController {
-  createNewWallet: (exportedWallets: IWallet[], name?: string) => Promise<IWallet>;
+  createNewWallet: (exportedWallets: IWallet[], phrase: string, name?: string) => Promise<IWallet>;
   saveWallets: (password: string, wallets: IWallet[]) => Promise<void>;
   isVaultEmpty: () => Promise<boolean>
   importWallets: (password: string) => Promise<IWallet[]>;

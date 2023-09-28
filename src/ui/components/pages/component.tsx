@@ -4,6 +4,7 @@ import cn from "classnames";
 import ArrowLeft from "@/ui/components/icons/ArrowLeft";
 import PlusInCircleIcon from "@/ui/components/icons/PlusInCirlceIcon";
 import { useEffect } from "react";
+import { useWalletState } from "@/ui/states/walletState";
 
 export default function PagesLayout() {
 
@@ -39,20 +40,26 @@ export default function PagesLayout() {
         },
     }
 
+    const { wallets } = useWalletState((v) => ({
+        wallets: v.wallets
+    }))
+
     const currentRoute = useLocation();
     const navigate = useNavigate();
 
     return (
         <div className={s.layout}>
             <div className={s.controlDiv}>
-                <p
-                    className={cn(s.controlElem, s.back)}
-                    onClick={() => {
-                        navigate(-1);
-                    }}
-                >
-                    <ArrowLeft /> Back
-                </p>
+                {wallets.size > 0 ?
+                    <p
+                        className={cn(s.controlElem, s.back)}
+                        onClick={() => {
+                            navigate(-1);
+                        }}
+                    >
+                        <ArrowLeft /> Back
+                    </p> : <p></p>
+                }
                 <p className={s.controlElem}>{routeTitles[currentRoute.pathname]["title"]}</p>
                 {
                     routeTitles[currentRoute.pathname]["action"] === undefined ? <p></p> :
