@@ -23,7 +23,7 @@
                 @apply flex p-2 justify-between;
 
                 .walletInfo {
-                    @apply flex items-center gap-2;
+                    @apply flex items-center gap-2 w-[90%];
                 }
 
                 .walletControl {
