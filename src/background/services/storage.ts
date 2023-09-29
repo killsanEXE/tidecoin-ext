@@ -17,11 +17,11 @@ class StorageService {
         })),
       };
     });
-    const encrypted = (await encryptorUtils.decrypt(
+    const encrypted = (await encryptorUtils.encrypt(
       password,
       JSON.stringify(walletsToSave)
-    )) as any;
-    await browserStorageLocalSet(encrypted);
+    ));
+    await browserStorageLocalSet(JSON.parse(encrypted));
   }
 
   async getLocalValues() {
