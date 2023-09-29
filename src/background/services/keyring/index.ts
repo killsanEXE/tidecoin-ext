@@ -4,12 +4,42 @@ import * as encryptorUtils from "@metamask/browser-passworder";
 import { ObservableStore } from "@metamask/obs-store";
 import { EventEmitter } from "events";
 
+import { KeyringControllerError, KeyringType } from "./consts";
+import {
+  BuildersKeys,
+  Eip1024EncryptedData,
+  Hex,
+  Json,
+  Keyring,
+  KeyringClass,
+  KeyringControllerPersistentState,
+  KeyringControllerState,
+  SerializedKeyring,
+} from "./types";
+
+interface KeyringControllerArgs {
+  keyringBuilders: { (): Keyring<Json>; type: string }[];
+  initState: KeyringControllerPersistentState;
+  cacheEncryptionKey: string;
+  encryptor: typeof encryptorUtils;
+}
+
+const availableKeyringBuilders: Record<
+  BuildersKeys,
+  ReturnType<typeof keyringBuilderFactory>
+> = {
+  "Simple Wallet": keyringBuilderFactory(SimpleKeyring),
+  "HD Wallet": keyringBuilderFactory(HDKeyring),
+};
+
 class KeyringController extends EventEmitter {
+  keyringBuilders: typeof availableKeyringBuilders;
+
   public store: ObservableStore<KeyringControllerPersistentState>;
 
   public memStore: ObservableStore<KeyringControllerState>;
 
-  public encryptor: any;
+  public encryptor: typeof encryptorUtils;
 
   public keyrings: Keyring<Json>[];
 
@@ -20,12 +50,12 @@ class KeyringController extends EventEmitter {
   public password?: string;
 
   constructor({
-    keyringBuilders,
     cacheEncryptionKey,
     initState = {},
     encryptor = encryptorUtils,
   }: KeyringControllerArgs) {
     super();
+    this.keyringBuilders = availableKeyringBuilders;
     this.store = new ObservableStore(initState);
     this.memStore = new ObservableStore({
       isUnlocked: false,
@@ -41,41 +71,11 @@ class KeyringController extends EventEmitter {
     this.cacheEncryptionKey = Boolean(cacheEncryptionKey);
   }
 
-  /**
-   * Full Update
-   *
-   * Emits the `update` event and @returns a Promise that resolves to
-   * the current state.
-   *
-   * Frequently used to end asynchronous chains in this class,
-   * indicating consumers can often either listen for updates,
-   * or accept a state-resolving promise to consume their results.
-   *
-   * @returns The controller state.
-   */
   fullUpdate() {
     this.emit("update", this.memStore.getState());
     return this.memStore.getState();
   }
 
-  /**
-   * =======================================
-   * === Public Vault Management Methods ===
-   * =======================================
-   */
-
-  /**
-   * Create New Vault And Keychain
-   *
-   * Destroys any old encrypted storage,
-   * creates a new encrypted store with the given password,
-   * randomly creates a new HD wallet with 1 account,
-   * faucets that account on the testnet.
-   *
-   * @fires KeyringController#unlock
-   * @param password - The password to encrypt the vault with.
-   * @returns A promise that resolves to the state.
-   */
   async createNewVaultAndKeychain(
     password: string
   ): Promise<KeyringControllerState> {
@@ -86,19 +86,6 @@ class KeyringController extends EventEmitter {
     return this.fullUpdate();
   }
 
-  /**
-   * CreateNewVaultAndRestore
-   *
-   * Destroys any old encrypted storage,
-   * creates a new encrypted store with the given password,
-   * creates a new HD wallet from the given seed with 1 account.
-   *
-   * @fires KeyringController#unlock
-   * @param password - The password to encrypt the vault with.
-   * @param seedPhrase - The BIP39-compliant seed phrase,
-   * either as a string or Uint8Array.
-   * @returns A promise that resolves to the state.
-   */
   async createNewVaultAndRestore(
     password: string,
     seedPhrase: Uint8Array | string | number[]
@@ -123,13 +110,6 @@ class KeyringController extends EventEmitter {
     return this.fullUpdate();
   }
 
-  /**
-   * Set Locked.
-   * This method deallocates all secrets, and effectively locks MetaMask.
-   *
-   * @fires KeyringController#lock
-   * @returns A promise that resolves to the state.
-   */
   async setLocked(): Promise<KeyringControllerState> {
     delete this.password;
 
@@ -145,19 +125,6 @@ class KeyringController extends EventEmitter {
     return this.fullUpdate();
   }
 
-  /**
-   * Submit password.
-   *
-   * Attempts to decrypt the current vault and load its keyrings
-   * into memory.
-   *
-   * Temporarily also migrates any old-style vaults first, as well
-   * (Pre MetaMask 3.0.0).
-   *
-   * @fires KeyringController#unlock
-   * @param password - The keyring controller password.
-   * @returns A promise that resolves to the state.
-   */
   async submitPassword(password: string): Promise<KeyringControllerState> {
     this.keyrings = await this.unlockKeyrings(password);
 
@@ -165,17 +132,12 @@ class KeyringController extends EventEmitter {
     return this.fullUpdate();
   }
 
-  /**
-   * Submit Encryption Key.
-   *
-   * Attempts to decrypt the current vault and load its keyrings
-   * into memory based on the vault and CryptoKey information.
-   *
-   * @fires KeyringController#unlock
-   * @param encryptionKey - The encrypted key information used to decrypt the vault.
-   * @param encryptionSalt - The salt used to generate the last key.
-   * @returns A promise that resolves to the state.
-   */
+  getKeyringBuilderForType(
+    type: keyof typeof availableKeyringBuilders
+  ): { (): Keyring<Json>; type: string } | undefined {
+    return this.keyringBuilders[type];
+  }
+
   async submitEncryptionKey(
     encryptionKey: string,
     encryptionSalt: string
@@ -189,14 +151,6 @@ class KeyringController extends EventEmitter {
     return this.fullUpdate();
   }
 
-  /**
-   * Verify Password
-   *
-   * Attempts to decrypt the current vault with a given password
-   * to verify its validity.
-   *
-   * @param password - The vault password.
-   */
   async verifyPassword(password: string): Promise<void> {
     const encryptedVault = this.store.getState().vault;
     if (!encryptedVault) {
@@ -205,21 +159,6 @@ class KeyringController extends EventEmitter {
     await this.encryptor.decrypt(password, encryptedVault);
   }
 
-  /**
-   * =========================================
-   * === Public Account Management Methods ===
-   * =========================================
-   */
-
-  /**
-   * Add New Account.
-   *
-   * Calls the `addAccounts` method on the given keyring,
-   * and then saves those changes.
-   *
-   * @param selectedKeyring - The currently selected keyring.
-   * @returns A Promise that resolves to the state.
-   */
   async addNewAccount(
     selectedKeyring: Keyring<Json>
   ): Promise<KeyringControllerState> {
@@ -238,7 +177,7 @@ class KeyringController extends EventEmitter {
       throw new Error(KeyringControllerError.UnsupportedExportAccount);
     }
 
-    return await keyring.exportAccount(normalizeToHex(address) as Hex);
+    return await keyring.exportAccount(address.toLowerCase());
   }
 
   async removeAccount(address: Hex): Promise<KeyringControllerState> {
@@ -273,15 +212,7 @@ class KeyringController extends EventEmitter {
 
     // Cast to `Hex[]` here is safe here because `addresses` has no nullish
     // values, and `normalizeToHex` returns `Hex` unless given a nullish value
-    return addresses.map(normalizeToHex) as Hex[];
-  }
-
-  getKeyringBuilderForType(
-    type: string
-  ): { (): Keyring<Json>; type: string } | undefined {
-    return this.keyringBuilders.find(
-      (keyringBuilder) => keyringBuilder.type === type
-    );
+    return addresses.map((v) => v.toLowerCase()) as Hex[];
   }
 
   async updateMemStoreKeyrings(): Promise<void> {
@@ -290,30 +221,19 @@ class KeyringController extends EventEmitter {
   }
 
   async signTransaction(
-    ethTx: TypedTransaction,
+    tideTx: unknown,
     rawAddress: string,
     opts: Record<string, unknown> = {}
-  ): Promise<TxData> {
-    const address = normalizeToHex(rawAddress) as Hex;
+  ): Promise<unknown> {
+    const address = rawAddress.toLowerCase() as Hex;
     const keyring = await this.getKeyringForAccount(address);
     if (!keyring.signTransaction) {
       throw new Error(KeyringControllerError.UnsupportedSignTransaction);
     }
 
-    return await keyring.signTransaction(address, ethTx, opts);
+    return await keyring.signTransaction(address, tideTx, opts);
   }
 
-  /**
-   * Sign Message
-   *
-   * Attempts to sign the provided message parameters.
-   *
-   * @param msgParams - The message parameters to sign.
-   * @param msgParams.from - From address.
-   * @param msgParams.data - The message to sign.
-   * @param opts - Additional signing options.
-   * @returns The raw signature.
-   */
   async signMessage(
     msgParams: {
       from: string;
@@ -321,7 +241,7 @@ class KeyringController extends EventEmitter {
     },
     opts: Record<string, unknown> = {}
   ): Promise<string> {
-    const address = normalizeToHex(msgParams.from) as Hex;
+    const address = msgParams.from.toLowerCase() as Hex;
     const keyring = await this.getKeyringForAccount(address);
     if (!keyring.signMessage) {
       throw new Error(KeyringControllerError.UnsupportedSignMessage);
@@ -330,18 +250,6 @@ class KeyringController extends EventEmitter {
     return await keyring.signMessage(address, msgParams.data, opts);
   }
 
-  /**
-   * Sign Personal Message
-   *
-   * Attempts to sign the provided message parameters.
-   * Prefixes the hash before signing per the personal sign expectation.
-   *
-   * @param msgParams - The message parameters to sign.
-   * @param msgParams.from - From address.
-   * @param msgParams.data - The message to sign.
-   * @param opts - Additional signing options.
-   * @returns The raw signature.
-   */
   async signPersonalMessage(
     msgParams: {
       from: string;
@@ -349,31 +257,22 @@ class KeyringController extends EventEmitter {
     },
     opts: Record<string, unknown> = {}
   ): Promise<string> {
-    const address = normalizeToHex(msgParams.from) as Hex;
+    const address = msgParams.from.toLowerCase() as Hex;
     const keyring = await this.getKeyringForAccount(address);
     if (!keyring.signPersonalMessage) {
       throw new Error(KeyringControllerError.UnsupportedSignPersonalMessage);
     }
 
-    const normalizedData = normalizeToHex(msgParams.data) as Hex;
+    const normalizedData = msgParams.data.toLowerCase() as Hex;
 
     return await keyring.signPersonalMessage(address, normalizedData, opts);
   }
 
-  /**
-   * Get encryption public key
-   *
-   * Get encryption public key for using in encrypt/decrypt process.
-   *
-   * @param address - The address to get the encryption public key for.
-   * @param opts - Additional encryption options.
-   * @returns The public key.
-   */
   async getEncryptionPublicKey(
     address: string,
     opts: Record<string, unknown> = {}
   ): Promise<string> {
-    const normalizedAddress = normalizeToHex(address) as Hex;
+    const normalizedAddress = address.toLowerCase() as Hex;
     const keyring = await this.getKeyringForAccount(address);
     if (!keyring.getEncryptionPublicKey) {
       throw new Error(KeyringControllerError.UnsupportedGetEncryptionPublicKey);
@@ -382,21 +281,11 @@ class KeyringController extends EventEmitter {
     return await keyring.getEncryptionPublicKey(normalizedAddress, opts);
   }
 
-  /**
-   * Decrypt Message
-   *
-   * Attempts to decrypt the provided message parameters.
-   *
-   * @param msgParams - The decryption message parameters.
-   * @param msgParams.from - The address of the account you want to use to decrypt the message.
-   * @param msgParams.data - The encrypted data that you want to decrypt.
-   * @returns The raw decryption result.
-   */
   async decryptMessage(msgParams: {
     from: string;
     data: Eip1024EncryptedData;
   }): Promise<string> {
-    const address = normalizeToHex(msgParams.from) as Hex;
+    const address = msgParams.from.toLowerCase() as Hex;
     const keyring = await this.getKeyringForAccount(address);
     if (!keyring.decryptMessage) {
       throw new Error(KeyringControllerError.UnsupportedDecryptMessage);
@@ -405,16 +294,6 @@ class KeyringController extends EventEmitter {
     return keyring.decryptMessage(address, msgParams.data);
   }
 
-  /**
-   * Sign Typed Data.
-   *
-   * @see {@link https://github.com/ethereum/EIPs/pull/712#issuecomment-329988454|EIP712}.
-   * @param msgParams - The message parameters to sign.
-   * @param msgParams.from - From address.
-   * @param msgParams.data - The data to sign.
-   * @param opts - Additional signing options.
-   * @returns The raw signature.
-   */
   async signTypedMessage(
     msgParams: {
       from: string;
@@ -424,7 +303,7 @@ class KeyringController extends EventEmitter {
   ): Promise<string> {
     // Cast to `Hex` here is safe here because `msgParams.from` is not nullish.
     // `normalizeToHex` returns `Hex` unless given a nullish value.
-    const address = normalizeToHex(msgParams.from) as Hex;
+    const address = msgParams.from.toLowerCase() as Hex;
     const keyring = await this.getKeyringForAccount(address);
     if (!keyring.signTypedData) {
       throw new Error(KeyringControllerError.UnsupportedSignTypedMessage);
@@ -436,15 +315,8 @@ class KeyringController extends EventEmitter {
     return keyring.signTypedData(address, msgParams.data, opts);
   }
 
-  /**
-   * Gets the app key address for the given Ethereum address and origin.
-   *
-   * @param rawAddress - The Ethereum address for the app key.
-   * @param origin - The origin for the app key.
-   * @returns The app key address.
-   */
   async getAppKeyAddress(rawAddress: string, origin: string): Promise<string> {
-    const address = normalizeToHex(rawAddress) as Hex;
+    const address = rawAddress.toLowerCase() as Hex;
     const keyring = await this.getKeyringForAccount(address);
     if (!keyring.getAppKeyAddress) {
       throw new Error(KeyringControllerError.UnsupportedGetAppKeyAddress);
@@ -453,18 +325,11 @@ class KeyringController extends EventEmitter {
     return keyring.getAppKeyAddress(address, origin);
   }
 
-  /**
-   * Exports an app key private key for the given Ethereum address and origin.
-   *
-   * @param rawAddress - The Ethereum address for the app key.
-   * @param origin - The origin for the app key.
-   * @returns The app key private key.
-   */
   async exportAppKeyForAddress(
     rawAddress: string,
     origin: string
   ): Promise<string> {
-    const address = normalizeToHex(rawAddress) as Hex;
+    const address = rawAddress.toLowerCase() as Hex;
     const keyring = await this.getKeyringForAccount(address);
     if (!keyring.exportAccount) {
       throw new Error(KeyringControllerError.UnsupportedExportAppKeyForAddress);
@@ -472,33 +337,20 @@ class KeyringController extends EventEmitter {
     return keyring.exportAccount(address, { withAppKeyOrigin: origin });
   }
 
-  /**
-   * =========================================
-   * === Public Keyring Management Methods ===
-   * =========================================
-   */
-
-  /**
-   * Add New Keyring
-   *
-   * Adds a new Keyring of the given `type` to the vault
-   * and the current decrypted Keyrings array.
-   *
-   * All Keyring classes implement a unique `type` string,
-   * and this is used to retrieve them from the keyringBuilders array.
-   *
-   * @param type - The type of keyring to add.
-   * @param opts - The constructor options for the keyring.
-   * @returns The new keyring.
-   */
-  async addNewKeyring(type: string, opts?: unknown): Promise<Keyring<Json>> {
+  async addNewKeyring(
+    type: keyof typeof availableKeyringBuilders,
+    opts?: unknown
+  ): Promise<Keyring<Json>> {
     const keyring = await this.#newKeyring(type, opts);
 
     if (!keyring) {
       throw new Error(KeyringControllerError.NoKeyring);
     }
 
-    if (type === KeyringType.HD && (!isObject(opts) || !opts.mnemonic)) {
+    if (
+      type === KeyringType.HD &&
+      (!(opts instanceof Object) || !(opts as any).mnemonic)
+    ) {
       if (!keyring.generateRandomMnemonic) {
         throw new Error(
           KeyringControllerError.UnsupportedGenerateRandomMnemonic
@@ -520,18 +372,8 @@ class KeyringController extends EventEmitter {
     return keyring;
   }
 
-  /**
-   * Remove empty keyrings.
-   *
-   * Loops through the keyrings and removes the ones with empty accounts
-   * (usually after removing the last / only account) from a keyring.
-   */
   async removeEmptyKeyrings(): Promise<void> {
     const validKeyrings: Keyring<Json>[] = [];
-
-    // Since getAccounts returns a Promise
-    // We need to wait to hear back form each keyring
-    // in order to decide which ones are now valid (accounts.length > 0)
 
     await Promise.all(
       this.keyrings.map(async (keyring: Keyring<Json>) => {
@@ -546,16 +388,6 @@ class KeyringController extends EventEmitter {
     this.keyrings = validKeyrings;
   }
 
-  /**
-   * Checks for duplicate keypairs, using the the first account in the given
-   * array. Rejects if a duplicate is found.
-   *
-   * Only supports 'Simple Key Pair'.
-   *
-   * @param type - The key pair type to check for.
-   * @param newAccountArray - Array of new accounts.
-   * @returns The account, if no duplicate is found.
-   */
   async checkForDuplicate(
     type: string,
     newAccountArray: string[]
@@ -566,10 +398,7 @@ class KeyringController extends EventEmitter {
       case KeyringType.Simple: {
         const isIncluded = Boolean(
           accounts.find(
-            (key) =>
-              newAccountArray[0] &&
-              (key === newAccountArray[0] ||
-                key === remove0x(newAccountArray[0]))
+            (key) => newAccountArray[0] && key === newAccountArray[0]
           )
         );
 
@@ -585,19 +414,8 @@ class KeyringController extends EventEmitter {
     }
   }
 
-  /**
-   * Get Keyring For Account
-   *
-   * Returns the currently initialized keyring that manages
-   * the specified `address` if one exists.
-   *
-   * @param address - An account address.
-   * @returns The keyring of the account, if it exists.
-   */
   async getKeyringForAccount(address: string): Promise<Keyring<Json>> {
-    // Cast to `Hex` here is safe here because `address` is not nullish.
-    // `normalizeToHex` returns `Hex` unless given a nullish value.
-    const hexed = normalizeToHex(address) as Hex;
+    const hexed = address.toLowerCase() as Hex;
 
     const candidates = await Promise.all(
       this.keyrings.map(async (keyring) => {
@@ -606,7 +424,7 @@ class KeyringController extends EventEmitter {
     );
 
     const winners = candidates.filter((candidate) => {
-      const accounts = candidate[1].map(normalizeToHex);
+      const accounts = candidate[1].map((i) => i.toLowerCase());
       return accounts.includes(hexed);
     });
 
@@ -616,9 +434,7 @@ class KeyringController extends EventEmitter {
 
     // Adding more info to the error
     let errorInfo = "";
-    if (!isValidHexAddress(hexed)) {
-      errorInfo = "The address passed in is invalid/empty";
-    } else if (!candidates.length) {
+    if (!candidates.length) {
       errorInfo = "There are no keyrings";
     } else if (!winners.length) {
       errorInfo = "There are keyrings, but none match the address";
@@ -628,16 +444,6 @@ class KeyringController extends EventEmitter {
     );
   }
 
-  /**
-   * Restore Keyring
-   *
-   * Attempts to initialize a new keyring from the provided serialized payload.
-   * On success, updates the memStore keyrings and returns the resulting
-   * keyring instance.
-   *
-   * @param serialized - The serialized keyring.
-   * @returns The deserialized keyring.
-   */
   async restoreKeyring(
     serialized: SerializedKeyring
   ): Promise<Keyring<Json> | undefined> {
@@ -648,28 +454,10 @@ class KeyringController extends EventEmitter {
     return keyring;
   }
 
-  /**
-   * Get Keyrings by Type
-   *
-   * Gets all keyrings of the given type.
-   *
-   * @param type - The keyring types to retrieve.
-   * @returns Keyrings matching the specified type.
-   */
   getKeyringsByType(type: string): Keyring<Json>[] {
     return this.keyrings.filter((keyring) => keyring.type === type);
   }
 
-  /**
-   * Persist All Keyrings
-   *
-   * Iterates the current `keyrings` array,
-   * serializes each one into a serialized array,
-   * encrypts that array with the provided `password`,
-   * and persists that encrypted string to storage.
-   *
-   * @returns Resolves to true once keyrings are persisted.
-   */
   async persistAllKeyrings(): Promise<boolean> {
     const { encryptionKey, encryptionSalt } = this.memStore.getState();
 
@@ -689,8 +477,8 @@ class KeyringController extends EventEmitter {
 
     serializedKeyrings.push(...this.unsupportedKeyrings);
 
-    let vault;
-    let newEncryptionKey;
+    let vault: string | undefined;
+    let newEncryptionKey: string | undefined;
 
     if (this.cacheEncryptionKey) {
       if (this.password) {
@@ -739,17 +527,6 @@ class KeyringController extends EventEmitter {
     return true;
   }
 
-  /**
-   * Unlock Keyrings.
-   *
-   * Attempts to unlock the persisted encrypted storage,
-   * initializing the persisted keyrings to RAM.
-   *
-   * @param password - The keyring controller password.
-   * @param encryptionKey - An exported key string to unlock keyrings with.
-   * @param encryptionSalt - The salt used to encrypt the vault.
-   * @returns The keyrings array.
-   */
   async unlockKeyrings(
     password: string | undefined,
     encryptionKey?: string,
@@ -815,22 +592,6 @@ class KeyringController extends EventEmitter {
     return this.keyrings;
   }
 
-  // =======================
-  // === Private Methods ===
-  // =======================
-
-  /**
-   * Create First Key Tree.
-   *
-   * - Clears the existing vault.
-   * - Creates a new vault.
-   * - Creates a random new HD Keyring with 1 account.
-   * - Makes that account the selected account.
-   * - Faucets that account on testnet.
-   * - Puts the current seed words into the state tree.
-   *
-   * @returns A promise that resolves if the operation was successful.
-   */
   async #createFirstKeyTree(): Promise<null> {
     await this.#clearKeyrings();
 
@@ -844,22 +605,11 @@ class KeyringController extends EventEmitter {
       throw new Error(KeyringControllerError.NoAccountOnKeychain);
     }
 
-    const hexAccount = normalizeToHex(firstAccount);
+    const hexAccount = firstAccount.toLowerCase();
     this.emit("newVault", hexAccount);
     return null;
   }
 
-  /**
-   * Restore Keyring Helper
-   *
-   * Attempts to initialize a new keyring from the provided serialized payload.
-   * On success, returns the resulting keyring instance.
-   *
-   * @param serialized - The serialized keyring.
-   * @param serialized.type - Keyring type.
-   * @param serialized.data - Keyring data.
-   * @returns The deserialized keyring or undefined if the keyring type is unsupported.
-   */
   async #restoreKeyring(
     serialized: SerializedKeyring
   ): Promise<Keyring<Json> | undefined> {
@@ -884,13 +634,6 @@ class KeyringController extends EventEmitter {
     return keyring;
   }
 
-  /**
-   * Clear Keyrings
-   *
-   * Deallocates all currently managed keyrings and accounts.
-   * Used before initializing a new vault and after locking
-   * MetaMask.
-   */
   async #clearKeyrings() {
     // clear keyrings from memory
     for (const keyring of this.keyrings) {
@@ -902,41 +645,19 @@ class KeyringController extends EventEmitter {
     });
   }
 
-  /**
-   * Destroy Keyring
-   *
-   * Some keyrings support a method called `destroy`, that destroys the
-   * keyring along with removing all its event listeners and, in some cases,
-   * clears the keyring bridge iframe from the DOM.
-   *
-   * @param keyring - The keyring to destroy.
-   */
   async #destroyKeyring(keyring: Keyring<Json>) {
     await keyring.destroy?.();
   }
 
-  /**
-   * Unlock Keyrings
-   *
-   * Unlocks the keyrings.
-   *
-   * @fires KeyringController#unlock
-   */
   #setUnlocked(): void {
     this.memStore.updateState({ isUnlocked: true });
     this.emit("unlock");
   }
 
-  /**
-   * Instantiate, initialize and return a new keyring
-   *
-   * The keyring instantiated is of the given `type`.
-   *
-   * @param type - The type of keyring to add.
-   * @param data - The data to restore a previously serialized keyring.
-   * @returns The new keyring.
-   */
-  async #newKeyring(type: string, data: unknown): Promise<Keyring<Json>> {
+  async #newKeyring(
+    type: keyof typeof availableKeyringBuilders,
+    data: unknown
+  ): Promise<Keyring<Json>> {
     const keyringBuilder = this.getKeyringBuilderForType(type);
 
     if (!keyringBuilder) {
@@ -946,8 +667,6 @@ class KeyringController extends EventEmitter {
     }
 
     const keyring = keyringBuilder();
-
-    // @ts-expect-error Enforce data type after updating clients
     await keyring.deserialize(data);
 
     if (keyring.init) {
@@ -958,14 +677,6 @@ class KeyringController extends EventEmitter {
   }
 }
 
-/**
- * Get builder function for `Keyring`
- *
- * Returns a builder function for `Keyring` with a `type` property.
- *
- * @param KeyringConstructor - The Keyring class for the builder.
- * @returns A builder function for the given Keyring.
- */
 function keyringBuilderFactory(KeyringConstructor: KeyringClass<Json>) {
   const builder = () => new KeyringConstructor();
 
@@ -974,14 +685,6 @@ function keyringBuilderFactory(KeyringConstructor: KeyringClass<Json>) {
   return builder;
 }
 
-/**
- * Display For Keyring
- *
- * Is used for adding the current keyrings to the state object.
- *
- * @param keyring - The keyring to display.
- * @returns A keyring display object, with type and accounts properties.
- */
 async function displayForKeyring(
   keyring: Keyring<Json>
 ): Promise<{ type: string; accounts: string[] }> {
@@ -991,7 +694,7 @@ async function displayForKeyring(
     type: keyring.type,
     // Cast to `Hex[]` here is safe here because `addresses` has no nullish
     // values, and `normalizeToHex` returns `Hex` unless given a nullish value
-    accounts: accounts.map(normalizeToHex) as Hex[],
+    accounts: accounts.map((i) => i.toLowerCase()) as Hex[],
   };
 }
 
