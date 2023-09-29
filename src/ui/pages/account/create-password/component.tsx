@@ -9,7 +9,6 @@ const CreatePassword = () => {
 
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const navigate = useNavigate();
 
   const createPassword = async () => {
     if (password === passwordConfirm) {

@@ -7,13 +7,14 @@ import { useWalletState } from "@/ui/states/walletState";
 
 const Layout = () => {
 
-  const { wallets } = useWalletState((v) => ({
-    wallets: v.wallets
+  const { wallets, vaultIsEmpty } = useWalletState((v) => ({
+    wallets: v.wallets,
+    vaultIsEmpty: v.vaultIsEmpty
   }))
 
   return (
     <div className={s.layout}>
-      {wallets.size > 0 ? <Outlet /> : <Navigate to="/pages/create-new-wallet" />}
+      {(wallets.size > 0 || !vaultIsEmpty) ? <Outlet /> : <Navigate to="/pages/create-new-wallet" />}
       <Nav />
     </div>
   );

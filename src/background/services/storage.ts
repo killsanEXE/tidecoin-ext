@@ -40,7 +40,7 @@ class StorageService {
     const { salt, iv, vault } = await this.getLocalValues();
     const decrypted = await this.decryptData(password, vault, salt, iv);
     const wallets: IWallet[] = JSON.parse(decrypted);
-    return wallets.map((i, index) => ({ ...i, id: index }));
+    return wallets.map((i) => ({ ...i, id: i.id }));
   }
 
   private async importKey(

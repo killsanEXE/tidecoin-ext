@@ -10,9 +10,10 @@ const NewMnemonic = () => {
 
   const [step, setStep] = useState(1);
   const [savedPhrase, setSavedPhrase] = useState(false);
-  const { walletController, createNewWallet } = useWalletState((v) => ({
+  const { walletController, createNewWallet, updateWalletState } = useWalletState((v) => ({
     walletController: v.controller,
-    createNewWallet: v.createNewWallet
+    createNewWallet: v.createNewWallet,
+    updateWalletState: v.updateWalletState
   }))
 
   const { password } = useAppState((v) => ({ password: v.password }))
@@ -60,6 +61,7 @@ const NewMnemonic = () => {
         <div className={s.stepTwo}>
           <button onClick={() => {
             createNewWallet(password!, mnemonicPhrase!);
+            updateWalletState({ vaultIsEmpty: false });
             navigate("/home/wallet");
           }}>Continue</button>
         </div>
