@@ -17,11 +17,11 @@ class StorageService {
         })),
       };
     });
-    const encrypted = await this.encryptData(
+    const encrypted = (await encryptorUtils.decrypt(
       password,
       JSON.stringify(walletsToSave)
-    );
-    await browserStorageLocalSet(JSON.parse(encrypted));
+    )) as any;
+    await browserStorageLocalSet(encrypted);
   }
 
   async getLocalValues() {
@@ -32,19 +32,11 @@ class StorageService {
   async importWallets(password: string): Promise<IWallet[]> {
     const encrypted = await this.getLocalValues();
     if (!encrypted) return [];
-    const decrypted: IWallet[] = (await this.decryptData(
+    const decrypted: IWallet[] = (await encryptorUtils.encrypt(
       password,
       encrypted
     )) as any;
     return decrypted.map((i, index) => ({ ...i, id: index }));
-  }
-
-  private async encryptData(password: string, data: string) {
-    return await encryptorUtils.encrypt(password, data);
-  }
-
-  private async decryptData(password: string, encryptedData: string) {
-    return await encryptorUtils.decrypt(password, encryptedData);
   }
 }
 
