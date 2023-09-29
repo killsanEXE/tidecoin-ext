@@ -1,1 +1,1 @@
-export { default } from './wallet'
+export { default } from './component'

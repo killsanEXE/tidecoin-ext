@@ -1,6 +1,6 @@
 import ReactLoading from 'react-loading';
 import './App.scss';
-import { RouterProvider } from 'react-router-dom';
+import { RouterProvider, useNavigate } from 'react-router-dom';
 import { Router } from '@remix-run/router'
 import { useEffect, useState } from 'react';
 import { Toaster } from "react-hot-toast";
@@ -41,14 +41,13 @@ export default function App() {
     updateWalletState: v.updateWalletState,
   }))
 
-
   useEffect(() => {
     const setupApp = async () => {
       const walletController = setupWalletProxy();
       updateWalletState({ controller: walletController, vaultIsEmpty: await walletController.isVaultEmpty() });
       updateAppState({ isReady: true });
 
-      login(walletController)
+      // login(walletController)
     }
 
     if (!isReady) setupApp();

@@ -1,26 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAppState } from '@/ui/states/appState';
-import { useWalletState } from '@/ui/states/walletState';
 
 const CreatePassword = () => {
   const { updateAppState } = useAppState((v) => ({
     updateAppState: v.updateAppState,
   }));
 
-  const { createNewWallet } = useWalletState((v) => ({
-    createNewWallet: v.createNewWallet
-  }));
-
-  const [ password, setPassword ] = useState("");
-  const [ passwordConfirm, setPasswordConfirm ] = useState("");
-  const navigate = useNavigate();
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
 
   const createPassword = async () => {
     if (password === passwordConfirm) {
-      await createNewWallet(password);
       updateAppState({ password: password, isUnlocked: true });
-      navigate("/home/wallet");
     }
   }
 

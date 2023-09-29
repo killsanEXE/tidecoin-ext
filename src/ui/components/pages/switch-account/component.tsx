@@ -9,11 +9,25 @@ import s from "./styles.module.scss";
 import { shortAddress } from "@/ui/utils";
 import { useWalletState } from "@/ui/states/walletState";
 import cn from 'classnames';
+import { useNavigate } from "react-router-dom";
 
 const SwitchAccount = () => {
-  const [ selected, setSelected ] = useState<number>()
+  const [selected, setSelected] = useState<number>()
 
-  const { currentWallet } = useWalletState((v) => ({ currentWallet: v.currentWallet }))
+  const { currentWallet, updateCurrentWallet } = useWalletState((v) => ({
+    currentWallet: v.currentWallet,
+    updateCurrentWallet: v.updateCurrentWallet
+  }))
+
+  const navigate = useNavigate();
+
+  const switchAccount = (id: number) => {
+    if (!currentWallet) return;
+    const acc = currentWallet.accounts.find(f => f.id === id)
+    if (!acc) return;
+    updateCurrentWallet({ ...currentWallet, currentAccount: acc });
+    navigate("/home/wallet")
+  }
 
   return (
     <div className={s.switchAccDiv}>
@@ -21,9 +35,9 @@ const SwitchAccount = () => {
         {currentWallet?.accounts.map((acc, i) =>
           <div className={s.mainAcc} key={i}>
             <div className={s.account}>
-              <div className={s.accInfo}>
+              <div className={s.accInfo} onClick={() => { switchAccount(acc.id) }}>
                 <div className={s.name}>
-                  {currentWallet.currentAccount.address === acc.address ? <CheckIcon/> : undefined}
+                  {currentWallet.currentAccount.address === acc.address ? <CheckIcon /> : undefined}
                   {acc.name}
                 </div>
                 <div className={s.address}>
@@ -33,19 +47,19 @@ const SwitchAccount = () => {
               <div className={s.accControl}>
                 <button className={s.manageAccButton} onClick={() => {
                   setSelected(i)
-                }}><SmallMenuIcon/></button>
+                }}><SmallMenuIcon /></button>
               </div>
             </div>
             <div className={cn(s.accSettings, s.hidden, { [s.active]: selected === i })}>
-              <div className={cn(s.accSetting, s.copy)}><CopyIcon/></div>
+              <div className={cn(s.accSetting, s.copy)}><CopyIcon /></div>
               <div className={s.divider}></div>
-              <div className={cn(s.accSetting, s.rename)}><TagIcon/></div>
+              <div className={cn(s.accSetting, s.rename)}><TagIcon /></div>
               <div className={s.divider}></div>
-              <div className={s.accSetting}><KeyIcon/></div>
+              <div className={s.accSetting}><KeyIcon /></div>
               <div className={s.divider}></div>
               <div className={s.accSetting} onClick={() => {
                 setSelected(undefined)
-              }}><XMarkIcon/></div>
+              }}><XMarkIcon /></div>
             </div>
           </div>
         )}

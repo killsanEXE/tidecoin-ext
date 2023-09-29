@@ -2,7 +2,6 @@ import { createHashRouter, Navigate } from "react-router-dom";
 
 import Layout from "@/ui/pages/home/layout";
 import Wallet from "@/ui/pages/home/wallet";
-import Settings from "@/ui/pages/home/settings/settings";
 
 import Login from "@/ui/pages/account/login";
 import CreatePassword from "@/ui/pages/account/create-password";
@@ -11,6 +10,12 @@ import SwitchAccount from "@/ui/components/pages/switch-account";
 import PagesLayout from "@/ui/components/pages";
 import ChangePassword from "../components/pages/change-password";
 import Receive from "../components/pages/receive";
+import SwitchWallet from "../components/pages/switch-wallet";
+import NewWallet from "../components/pages/new-wallet";
+import NewMnemonic from "../components/pages/new-wallet/new-mnemonic";
+import RestoreMnemonic from "../components/pages/new-wallet/restore-mnemonic";
+import RestorePrivKey from "../components/pages/new-wallet/restore-priv-key";
+import Settings from "./home/settings";
 
 export const guestRouter = createHashRouter([
   {
@@ -40,6 +45,11 @@ export const authenticatedRouter = createHashRouter([
       { path: "create-new-account", element: <CreateNewAccount /> },
       { path: "change-password", element: <ChangePassword /> },
       { path: "receive", element: <Receive /> },
+      { path: "switch-wallet", element: <SwitchWallet /> },
+      { path: "create-new-wallet", element: <NewWallet /> },
+      { path: "new-mnemonic", element: <NewMnemonic /> },
+      { path: "restore-mnemonic", element: <RestoreMnemonic /> },
+      { path: "restore-priv-key", element: <RestorePrivKey /> },
     ]
   },
   { path: "*", element: <Navigate to={"/home/wallet"} /> },

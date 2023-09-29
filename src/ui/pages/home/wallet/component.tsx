@@ -16,7 +16,11 @@ const Wallet = () => {
   return (
     <div className={s.walletDiv}>
       <div className={s.changeWalletAccDiv}>
-        <button className={cn(s.change, s.btn, 'bg-primary')}>{currentWallet?.name ?? "wallet"}</button>
+        <button
+          onClick={() => { navigate("/pages/switch-wallet") }}
+          className={cn(s.change, s.btn, 'bg-primary')}>
+          {currentWallet?.name ?? "wallet"}
+        </button>
         <button
           onClick={() => {
             navigate("/pages/switch-account")
