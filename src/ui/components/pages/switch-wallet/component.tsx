@@ -7,14 +7,16 @@ import TagIcon from "../../icons/TagIcon";
 import KeyIcon from "../../icons/KeyIcon";
 import XMarkIcon from "../../icons/XMarkIcon";
 import SmallMenuIcon from "../../icons/SmallMenuIcon";
+import { useSwitchWallet } from "@/ui/hooks/wallet";
 
 const SwitchWallet = () => {
 
-    const { wallets, currentWallet, switchWallet } = useWalletState((v) => ({
+    const { wallets, currentWallet } = useWalletState((v) => ({
         wallets: v.wallets,
         currentWallet: v.currentWallet,
-        switchWallet: v.switchWallet
     }))
+
+    const switchWallet = useSwitchWallet();
 
     const [selected, setSelected] = useState<number>()
 

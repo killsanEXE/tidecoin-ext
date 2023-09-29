@@ -3,21 +3,22 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAppState } from "@/ui/states/appState";
 import { useWalletState } from "@/ui/states/walletState";
+import { useControllersState } from "@/ui/states/controllerState";
+import { useCreateNewAccount } from "@/ui/hooks/wallet";
 
 const NewAccount = () => {
   const [name, setName] = useState("");
   const navigate = useNavigate();
-  const { createNewAccount } = useWalletState((v) => ({
-    createNewAccount: v.createNewAccount,
-  }));
 
+  const createNewAccount = useCreateNewAccount();
   const { password } = useAppState((v) => ({
     password: v.password,
   }));
 
+
   const createNewAcc = async () => {
     if (name.length <= 8) {
-      await createNewAccount(password!, name);
+      await createNewAccount(name);
       toast.success("Created new account", {
         style: { borderRadius: 0 },
         iconTheme: {

@@ -5,20 +5,21 @@ import ReactLoading from "react-loading";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAppState } from "@/ui/states/appState";
+import { useControllersState } from "@/ui/states/controllerState";
+import { useCreateNewWallet } from "@/ui/hooks/wallet";
 
 const NewMnemonic = () => {
 
   const [step, setStep] = useState(1);
   const [savedPhrase, setSavedPhrase] = useState(false);
-  const { walletController, createNewWallet, updateWalletState } = useWalletState((v) => ({
-    walletController: v.controller,
-    createNewWallet: v.createNewWallet,
+  const { updateWalletState } = useWalletState((v) => ({
     updateWalletState: v.updateWalletState
   }))
-
+  const { walletController } = useControllersState((v) => ({ walletController: v.walletController }))
   const { password } = useAppState((v) => ({ password: v.password }))
-
   const [mnemonicPhrase, setMnemonicPhrase] = useState<string | undefined>(undefined);
+
+  const createNewWallet = useCreateNewWallet();
 
   useEffect(() => {
     const setPhrase = async () => {
@@ -60,7 +61,7 @@ const NewMnemonic = () => {
         </div> :
         <div className={s.stepTwo}>
           <button onClick={() => {
-            createNewWallet(password!, mnemonicPhrase!);
+            createNewWallet(mnemonicPhrase!);
             updateWalletState({ vaultIsEmpty: false });
             navigate("/home/wallet");
           }}>Continue</button>

@@ -10,14 +10,15 @@ import { shortAddress } from "@/ui/utils";
 import { useWalletState } from "@/ui/states/walletState";
 import cn from 'classnames';
 import { useNavigate } from "react-router-dom";
+import { useUpdateCurrentWallet } from "@/ui/hooks/wallet";
 
 const SwitchAccount = () => {
   const [selected, setSelected] = useState<number>()
 
-  const { currentWallet, updateCurrentWallet } = useWalletState((v) => ({
+  const { currentWallet } = useWalletState((v) => ({
     currentWallet: v.currentWallet,
-    updateCurrentWallet: v.updateCurrentWallet
   }))
+  const updateCurrentWallet = useUpdateCurrentWallet();
 
   const navigate = useNavigate();
 

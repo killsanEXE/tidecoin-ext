@@ -13,10 +13,5 @@ export interface IWalletState {
   wallets: Map<number, IWallet>;
   vaultIsEmpty: boolean;
   currentWallet?: IWallet;
-  controller: IWalletController;
   updateWalletState: (state: Partial<IWalletState>) => void;
-  updateCurrentWallet: (wallet: Partial<IWallet>) => void;
-  createNewWallet: (password: string, phrase: string, name?: string) => Promise<void>;
-  createNewAccount: (password: string, name?: string) => Promise<void>;
-  switchWallet: (id: number, key: number) => Promise<void>;
 }

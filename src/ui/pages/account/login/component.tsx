@@ -4,20 +4,21 @@ import { useNavigate } from "react-router-dom";
 import { useAppState } from "@/ui/states/appState";
 import { useWalletState } from "@/ui/states/walletState";
 import { IWallet } from "@/shared/interfaces";
+import { useControllersState } from "@/ui/states/controllerState";
 
 const Login = () => {
   const { updateAppState } = useAppState((v) => ({
     updateAppState: v.updateAppState,
   }));
 
-  const { updateWalletState, vaultIsEmpty, walletController } =
+  const { updateWalletState, vaultIsEmpty } =
     useWalletState((v) => ({
       updateWalletState: v.updateWalletState,
       vaultIsEmpty: v.vaultIsEmpty,
-      walletController: v.controller,
     }));
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { walletController } = useControllersState((v) => ({ walletController: v.walletController }))
 
   useEffect(() => {
     if (vaultIsEmpty) navigate("/account/create-password");
