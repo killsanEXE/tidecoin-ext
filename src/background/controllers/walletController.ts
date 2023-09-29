@@ -9,7 +9,7 @@ export class WalletController implements IWalletController {
 
   async isVaultEmpty() {
     const values = await storageService.getLocalValues()
-    return values.vault === undefined;
+    return values.data === undefined;
   }
 
   async createNewWallet(exportedWallets: IWallet[], phrase: string, name?: string) {

@@ -17,13 +17,18 @@ const SwitchWallet = () => {
 
     const [selected, setSelected] = useState<number>()
 
+    const switchWallet = (id: number) => {
+        const wallet = wallets.get(id);
+        console.log(wallet);
+    }
+
     return (
         <div className={s.switchWalletDiv}>
             <div className={s.wallets}>
                 {Array.from(wallets.values()).map((wallet, i) =>
                     <div className={s.mainWallet} key={i}>
                         <div className={s.wallet}>
-                            <div className={s.walletInfo}>
+                            <div className={s.walletInfo} onClick={() => { switchWallet(i) }}>
                                 {wallet.id === currentWallet?.id ? <CheckIcon /> : undefined}
                                 {wallet.name}
                             </div>

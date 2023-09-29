@@ -32,10 +32,10 @@ class StorageService {
   async importWallets(password: string): Promise<IWallet[]> {
     const encrypted = await this.getLocalValues();
     if (!encrypted) return [];
-    const decrypted: IWallet[] = (await encryptorUtils.encrypt(
+    const decrypted: IWallet[] = JSON.parse((await encryptorUtils.decrypt(
       password,
-      encrypted
-    )) as any;
+      JSON.stringify(encrypted)
+    )) as any)
     return decrypted.map((i, index) => ({ ...i, id: index }));
   }
 }

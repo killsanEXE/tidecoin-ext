@@ -24,6 +24,10 @@
 
                 .walletInfo {
                     @apply flex items-center gap-2 w-[90%];
+
+                    &:hover {
+                        @apply cursor-pointer;
+                    }
                 }
 
                 .walletControl {
