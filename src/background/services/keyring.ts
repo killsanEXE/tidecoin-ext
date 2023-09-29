@@ -1,26 +1,8 @@
 // forked from https://github.com/MetaMask/KeyringController/blob/main/src/KeyringController.ts
 
-import type { TypedTransaction, TxData } from "@ethereumjs/tx";
 import * as encryptorUtils from "@metamask/browser-passworder";
-import { normalize as normalizeToHex } from "@metamask/eth-sig-util";
 import { ObservableStore } from "@metamask/obs-store";
-import { remove0x, isValidHexAddress, isObject } from "@metamask/utils";
-import type {
-  Hex,
-  Json,
-  Keyring,
-  KeyringClass,
-  Eip1024EncryptedData,
-} from "@metamask/utils";
 import { EventEmitter } from "events";
-
-import { KeyringType, KeyringControllerError } from "./constants";
-import {
-  SerializedKeyring,
-  KeyringControllerArgs,
-  KeyringControllerState,
-  KeyringControllerPersistentState,
-} from "./types";
 
 class KeyringController extends EventEmitter {
   public store: ObservableStore<KeyringControllerPersistentState>;
@@ -250,17 +232,6 @@ class KeyringController extends EventEmitter {
     return this.fullUpdate();
   }
 
-  /**
-   * Export Account
-   *
-   * Requests the private key from the keyring controlling
-   * the specified address.
-   *
-   * Returns a Promise that may resolve with the private key string.
-   *
-   * @param address - The address of the account to export.
-   * @returns The private key of the account.
-   */
   async exportAccount(address: string): Promise<string> {
     const keyring = await this.getKeyringForAccount(address);
     if (!keyring.exportAccount) {
@@ -270,15 +241,6 @@ class KeyringController extends EventEmitter {
     return await keyring.exportAccount(normalizeToHex(address) as Hex);
   }
 
-  /**
-   * Remove Account.
-   *
-   * Removes a specific account from a keyring
-   * If the account is the last/only one then it also removes the keyring.
-   *
-   * @param address - The address of the account to remove.
-   * @returns A promise that resolves if the operation was successful.
-   */
   async removeAccount(address: Hex): Promise<KeyringControllerState> {
     const keyring = await this.getKeyringForAccount(address);
 
@@ -299,14 +261,6 @@ class KeyringController extends EventEmitter {
     return this.fullUpdate();
   }
 
-  /**
-   * Get Accounts
-   *
-   * Returns the public addresses of all current accounts
-   * managed by all currently unlocked keyrings.
-   *
-   * @returns The array of accounts.
-   */
   async getAccounts(): Promise<string[]> {
     const keyrings = this.keyrings || [];
 
@@ -322,17 +276,6 @@ class KeyringController extends EventEmitter {
     return addresses.map(normalizeToHex) as Hex[];
   }
 
-  /**
-   * Get Keyring Class For Type
-   *
-   * Searches the current `keyringBuilders` array
-   * for a Keyring builder whose unique `type` property
-   * matches the provided `type`,
-   * returning it if it exists.
-   *
-   * @param type - The type whose class to get.
-   * @returns The class, if it exists.
-   */
   getKeyringBuilderForType(
     type: string
   ): { (): Keyring<Json>; type: string } | undefined {
@@ -341,32 +284,11 @@ class KeyringController extends EventEmitter {
     );
   }
 
-  /**
-   * Update memStore Keyrings
-   *
-   * Updates the in-memory keyrings, without persisting.
-   */
   async updateMemStoreKeyrings(): Promise<void> {
     const keyrings = await Promise.all(this.keyrings.map(displayForKeyring));
     this.memStore.updateState({ keyrings });
   }
 
-  /**
-   * ===========================================
-   * === Public RPC Requests Routing Methods ===
-   * ===========================================
-   */
-
-  /**
-   * Sign Ethereum Transaction
-   *
-   * Signs an Ethereum transaction object.
-   *
-   * @param ethTx - The transaction to sign.
-   * @param rawAddress - The transaction 'from' address.
-   * @param opts - Signing options.
-   * @returns The signed transaction object.
-   */
   async signTransaction(
     ethTx: TypedTransaction,
     rawAddress: string,
