@@ -1,5 +1,3 @@
-import { KeyringType } from "./consts";
-
 export type Json = any;
 export type Hex = string;
 
@@ -18,7 +16,6 @@ export type Eip1024EncryptedData = {
 };
 
 export type KeyringObject = {
-  type: string;
   accounts: string[];
 };
 
@@ -34,15 +31,7 @@ export type KeyringControllerState = {
 };
 
 export type SerializedKeyring = {
-  type: string;
   data: Json;
-};
-
-export type BuildersKeys = (typeof KeyringType)[keyof typeof KeyringType];
-
-export type KeyringClass<State extends Json> = {
-  new (options?: Record<string, unknown>): Keyring<State>;
-  type: BuildersKeys;
 };
 
 export type Keyring<State extends Json> = {

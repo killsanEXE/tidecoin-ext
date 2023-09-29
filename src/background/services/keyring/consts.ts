@@ -22,8 +22,3 @@ export enum KeyringControllerError {
   NoKeyringBuilder = "KeyringController - No keyringBuilder found for keyring",
   DataType = "KeyringController - Incorrect data type provided",
 }
-
-export enum KeyringType {
-  HD = "HD Wallet",
-  Simple = "Simple Wallet",
-}

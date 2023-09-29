@@ -4,37 +4,25 @@ import * as encryptorUtils from "@metamask/browser-passworder";
 import { ObservableStore } from "@metamask/obs-store";
 import { EventEmitter } from "events";
 
-import { KeyringControllerError, KeyringType } from "./consts";
+import { KeyringControllerError } from "./consts";
 import {
-  BuildersKeys,
   Eip1024EncryptedData,
   Hex,
   Json,
   Keyring,
-  KeyringClass,
   KeyringControllerPersistentState,
   KeyringControllerState,
   SerializedKeyring,
 } from "./types";
+import HDPrivateKey from "test-test-test-hd-wallet/src/hd/private";
 
 interface KeyringControllerArgs {
-  keyringBuilders: { (): Keyring<Json>; type: string }[];
   initState: KeyringControllerPersistentState;
   cacheEncryptionKey: string;
   encryptor: typeof encryptorUtils;
 }
 
-const availableKeyringBuilders: Record<
-  BuildersKeys,
-  ReturnType<typeof keyringBuilderFactory>
-> = {
-  "Simple Wallet": keyringBuilderFactory(SimpleKeyring),
-  "HD Wallet": keyringBuilderFactory(HDKeyring),
-};
-
 class KeyringController extends EventEmitter {
-  keyringBuilders: typeof availableKeyringBuilders;
-
   public store: ObservableStore<KeyringControllerPersistentState>;
 
   public memStore: ObservableStore<KeyringControllerState>;
@@ -55,7 +43,6 @@ class KeyringController extends EventEmitter {
     encryptor = encryptorUtils,
   }: KeyringControllerArgs) {
     super();
-    this.keyringBuilders = availableKeyringBuilders;
     this.store = new ObservableStore(initState);
     this.memStore = new ObservableStore({
       isUnlocked: false,
@@ -96,7 +83,7 @@ class KeyringController extends EventEmitter {
     this.password = password;
 
     await this.#clearKeyrings();
-    const keyring = await this.addNewKeyring(KeyringType.HD, {
+    const keyring = await this.addNewKeyring({
       mnemonic: seedPhrase,
       numberOfAccounts: 1,
     });
@@ -130,12 +117,6 @@ class KeyringController extends EventEmitter {
 
     this.#setUnlocked();
     return this.fullUpdate();
-  }
-
-  getKeyringBuilderForType(
-    type: keyof typeof availableKeyringBuilders
-  ): { (): Keyring<Json>; type: string } | undefined {
-    return this.keyringBuilders[type];
   }
 
   async submitEncryptionKey(
@@ -337,20 +318,14 @@ class KeyringController extends EventEmitter {
     return keyring.exportAccount(address, { withAppKeyOrigin: origin });
   }
 
-  async addNewKeyring(
-    type: keyof typeof availableKeyringBuilders,
-    opts?: unknown
-  ): Promise<Keyring<Json>> {
-    const keyring = await this.#newKeyring(type, opts);
+  async addNewKeyring(opts?: unknown): Promise<Keyring<Json>> {
+    const keyring = await this.#newKeyring(opts);
 
     if (!keyring) {
       throw new Error(KeyringControllerError.NoKeyring);
     }
 
-    if (
-      type === KeyringType.HD &&
-      (!(opts instanceof Object) || !(opts as any).mnemonic)
-    ) {
+    if (!(opts instanceof Object) || !(opts as any).mnemonic) {
       if (!keyring.generateRandomMnemonic) {
         throw new Error(
           KeyringControllerError.UnsupportedGenerateRandomMnemonic
@@ -362,7 +337,7 @@ class KeyringController extends EventEmitter {
     }
 
     const accounts = await keyring.getAccounts();
-    await this.checkForDuplicate(type, accounts);
+    await this.checkForDuplicate(accounts);
 
     this.keyrings.push(keyring);
     await this.persistAllKeyrings();
@@ -388,30 +363,8 @@ class KeyringController extends EventEmitter {
     this.keyrings = validKeyrings;
   }
 
-  async checkForDuplicate(
-    type: string,
-    newAccountArray: string[]
-  ): Promise<string[]> {
-    const accounts = await this.getAccounts();
-
-    switch (type) {
-      case KeyringType.Simple: {
-        const isIncluded = Boolean(
-          accounts.find(
-            (key) => newAccountArray[0] && key === newAccountArray[0]
-          )
-        );
-
-        if (isIncluded) {
-          throw new Error(KeyringControllerError.DuplicatedAccount);
-        }
-        return newAccountArray;
-      }
-
-      default: {
-        return newAccountArray;
-      }
-    }
+  async checkForDuplicate(newAccountArray: string[]): Promise<string[]> {
+    return newAccountArray;
   }
 
   async getKeyringForAccount(address: string): Promise<Keyring<Json>> {
@@ -467,11 +420,8 @@ class KeyringController extends EventEmitter {
 
     const serializedKeyrings = await Promise.all(
       this.keyrings.map(async (keyring) => {
-        const [type, data] = await Promise.all([
-          keyring.type,
-          keyring.serialize(),
-        ]);
-        return { type, data };
+        const [data] = await Promise.all([keyring.serialize()]);
+        return { data };
       })
     );
 
@@ -595,7 +545,7 @@ class KeyringController extends EventEmitter {
   async #createFirstKeyTree(): Promise<null> {
     await this.#clearKeyrings();
 
-    const keyring = await this.addNewKeyring(KeyringType.HD);
+    const keyring = await this.addNewKeyring();
     if (!keyring) {
       throw new Error(KeyringControllerError.NoKeyring);
     }
@@ -613,11 +563,11 @@ class KeyringController extends EventEmitter {
   async #restoreKeyring(
     serialized: SerializedKeyring
   ): Promise<Keyring<Json> | undefined> {
-    const { type, data } = serialized;
+    const { data } = serialized;
 
     let keyring: Keyring<Json> | undefined;
     try {
-      keyring = await this.#newKeyring(type, data);
+      keyring = await this.#newKeyring(data);
     } catch (error) {
       // Ignore error.
       console.error(error);
@@ -654,11 +604,8 @@ class KeyringController extends EventEmitter {
     this.emit("unlock");
   }
 
-  async #newKeyring(
-    type: keyof typeof availableKeyringBuilders,
-    data: unknown
-  ): Promise<Keyring<Json>> {
-    const keyringBuilder = this.getKeyringBuilderForType(type);
+  async #newKeyring(data: unknown): Promise<Keyring<Json>> {
+    const keyringBuilder = HDPrivateKey;
 
     if (!keyringBuilder) {
       throw new Error(
@@ -666,7 +613,7 @@ class KeyringController extends EventEmitter {
       );
     }
 
-    const keyring = keyringBuilder();
+    const keyring = new keyringBuilder();
     await keyring.deserialize(data);
 
     if (keyring.init) {
@@ -677,12 +624,8 @@ class KeyringController extends EventEmitter {
   }
 }
 
-function keyringBuilderFactory(KeyringConstructor: KeyringClass<Json>) {
-  const builder = () => new KeyringConstructor();
-
-  builder.type = KeyringConstructor.type;
-
-  return builder;
+function keyringBuilderFactory() {
+  return new HDPrivateKey();
 }
 
 async function displayForKeyring(
