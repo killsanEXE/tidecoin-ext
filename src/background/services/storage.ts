@@ -11,7 +11,6 @@ class StorageService {
       return {
         phrase: wallet.phrase,
         name: wallet.name,
-        id: wallet.id,
         accounts: wallet.accounts.map((account) => ({
           id: account.id,
           name: account.name ?? "",
