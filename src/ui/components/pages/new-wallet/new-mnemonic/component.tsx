@@ -4,9 +4,9 @@ import { useWalletState } from "@/ui/states/walletState";
 import ReactLoading from "react-loading";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useAppState } from "@/ui/states/appState";
 import { useControllersState } from "@/ui/states/controllerState";
 import { useCreateNewWallet } from "@/ui/hooks/wallet";
+import CopyIcon from "@/ui/components/icons/CopyIcon";
 
 const NewMnemonic = () => {
 
@@ -16,7 +16,6 @@ const NewMnemonic = () => {
     updateWalletState: v.updateWalletState
   }))
   const { walletController } = useControllersState((v) => ({ walletController: v.walletController }))
-  const { password } = useAppState((v) => ({ password: v.password }))
   const [mnemonicPhrase, setMnemonicPhrase] = useState<string | undefined>(undefined);
 
   const createNewWallet = useCreateNewWallet();
@@ -47,15 +46,22 @@ const NewMnemonic = () => {
                   <div key={index} className={s.word}>{index + 1}. <p className={s.wordWord}>{word}</p></div>
                 )}
               </div>
-              <div className={s.saveToClipboard}></div>
+              <div className={s.saveToClipboard}><CopyIcon /> Copy to ClickBoard</div>
               <div className={s.savePhrase}>
                 <p>I saved this phrase</p>
                 <input type="checkbox" onChange={() => { setSavedPhrase(!savedPhrase) }} />
               </div>
-              <button onClick={() => {
-                if (!savedPhrase) toast("Save the phrase first")
-                else setStep(2);
-              }}>Continue</button>
+              <div className={s.continueWrapper}>
+                <button
+                  className={s.continue}
+                  onClick={() => {
+                    if (!savedPhrase) toast("Save the phrase first")
+                    else setStep(2);
+                  }}>
+                  Continue
+                </button>
+              </div>
+
             </div>
           }
         </div> :

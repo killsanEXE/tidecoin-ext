@@ -1,3 +1,38 @@
 .newMnemonic {
-    @apply w-full h-full;
+    @apply w-full h-full flex flex-col items-center gap-[2rem];
+}
+
+.phrase {
+    @apply grid grid-cols-3;
+}
+
+.stepTitle {
+    @apply flex justify-between w-[50%];
+}
+
+.word {
+    @apply p-5;
+}
+
+.active {
+    color: red;
+}
+
+.word {
+    @apply flex justify-between items-center;
+
+    .wordWord {
+        @apply bg-panel p-[.5rem] rounded-lg w-[80%] flex justify-center;
+    }
+}
+
+.savePhrase,
+.saveToClipboard {
+    @apply flex items-center w-full justify-center;
+}
+
+.continueWrapper {
+    @apply w-full flex justify-center;
+
+    .continue {}
 }
