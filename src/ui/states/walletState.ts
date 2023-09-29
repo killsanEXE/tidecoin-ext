@@ -46,8 +46,15 @@ export const useWalletState = create<IWalletState>()((set, get) => ({
     updateCurrentWallet(updatedWallet);
     await controller.saveWallets(password, Array.from(get().wallets.values()));
   },
-  switchWallet: async (password: string, wallet: IWallet) => {
-    const { wallets } = get();
-    // if(wallets.)
+  switchWallet: async (id: number, key: number) => {
+    const { wallets, controller } = get();
+    const wallet = wallets.get(key);
+    if (!wallet || wallet.id !== id) return;
+    if (!wallet.accounts[0].address) {
+      wallet.accounts = await controller.loadAccountsData(wallet);
+    }
+    wallet.currentAccount = wallet.accounts[0];
+    wallets[key] = wallet;
+    set({ currentWallet: wallet, wallets: wallets })
   }
 }));

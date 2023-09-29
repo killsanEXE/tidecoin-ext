@@ -18,4 +18,5 @@ export interface IWalletState {
   updateCurrentWallet: (wallet: Partial<IWallet>) => void;
   createNewWallet: (password: string, phrase: string, name?: string) => Promise<void>;
   createNewAccount: (password: string, name?: string) => Promise<void>;
+  switchWallet: (id: number, key: number) => Promise<void>;
 }

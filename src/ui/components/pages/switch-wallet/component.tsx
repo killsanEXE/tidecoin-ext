@@ -10,17 +10,13 @@ import SmallMenuIcon from "../../icons/SmallMenuIcon";
 
 const SwitchWallet = () => {
 
-    const { wallets, currentWallet } = useWalletState((v) => ({
+    const { wallets, currentWallet, switchWallet } = useWalletState((v) => ({
         wallets: v.wallets,
-        currentWallet: v.currentWallet
+        currentWallet: v.currentWallet,
+        switchWallet: v.switchWallet
     }))
 
     const [selected, setSelected] = useState<number>()
-
-    const switchWallet = (id: number) => {
-        const wallet = wallets.get(id);
-
-    }
 
     return (
         <div className={s.switchWalletDiv}>
@@ -28,7 +24,7 @@ const SwitchWallet = () => {
                 {Array.from(wallets.values()).map((wallet, i) =>
                     <div className={s.mainWallet} key={i}>
                         <div className={s.wallet}>
-                            <div className={s.walletInfo} onClick={() => { switchWallet(i) }}>
+                            <div className={s.walletInfo} onClick={() => { switchWallet(i, wallet.id) }}>
                                 {wallet.id === currentWallet?.id ? <CheckIcon /> : undefined}
                                 {wallet.name}
                             </div>
