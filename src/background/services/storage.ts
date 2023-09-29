@@ -21,8 +21,7 @@ class StorageService {
       password,
       JSON.stringify(walletsToSave)
     );
-
-    await browserStorageLocalSet(encrypted);
+    await browserStorageLocalSet(JSON.parse(encrypted));
   }
 
   async getLocalValues() {
