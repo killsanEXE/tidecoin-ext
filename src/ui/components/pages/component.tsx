@@ -50,7 +50,8 @@ export default function PagesLayout() {
     return (
         <div className={s.layout}>
             <div className={s.controlDiv}>
-                {wallets.size > 0 ?
+                {(wallets.size <= 0 && currentRoute.pathname === "/pages/create-new-wallet") ?
+                    <p></p> :
                     <p
                         className={cn(s.controlElem, s.back)}
                         onClick={() => {
@@ -58,7 +59,7 @@ export default function PagesLayout() {
                         }}
                     >
                         <ArrowLeft /> Back
-                    </p> : <p></p>
+                    </p>
                 }
                 <p className={s.controlElem}>{routeTitles[currentRoute.pathname]["title"]}</p>
                 {
