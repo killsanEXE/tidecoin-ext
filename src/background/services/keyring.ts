@@ -51,7 +51,7 @@ class KeyringService extends EventEmitter {
     this.state = await this.storage.importWallets(this.password);
   }
 
-  getKeyringForAccount(accountPublicKey: string) {
+  private getKeyringForAccount(accountPublicKey: string) {
     if (!this.state.length) {
       throw new Error("State not initialized");
     }
@@ -69,19 +69,18 @@ class KeyringService extends EventEmitter {
     return falconPair.fromPrivateKey(Buffer.from(fromHex(address)));
   }
 
-  signTransaction(
+  async signTransaction(
     psbt: tidecoin.Psbt,
     inputs: (ToSignInput & { sighashTypes?: number[] })[]
   ) {
     inputs.forEach((i) => {
       const keypair = this.getKeyringForAccount(i.publicKey);
-      const pair = falconPair.fromPrivateKey(keypair.privateKey);
-      psbt.signInput(i.index, pair, i.sighashTypes);
+      psbt.signInput(i.index, keypair, i.sighashTypes);
     });
     return psbt;
   }
 
-  signMessage(address: string, data: string) {
+  async signMessage(address: string, data: string) {
     const keyring = this.getKeyringForAccount(address);
     const sig = keyring.sign(
       Buffer.from(new TextEncoder().encode(data)),
@@ -90,7 +89,7 @@ class KeyringService extends EventEmitter {
     return toHex(sig);
   }
 
-  verifyMessage(address: string, data: string, sig: string) {
+  async verifyMessage(address: string, data: string, sig: string) {
     const keyring = this.getKeyringForAccount(address);
     const result = keyring.verify(
       Buffer.from(fromHex(data)),
