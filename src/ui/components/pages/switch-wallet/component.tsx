@@ -19,7 +19,7 @@ const SwitchWallet = () => {
 
     const switchWallet = (id: number) => {
         const wallet = wallets.get(id);
-        console.log(wallet);
+
     }
 
     return (

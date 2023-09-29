@@ -45,5 +45,9 @@ export const useWalletState = create<IWalletState>()((set, get) => ({
 
     updateCurrentWallet(updatedWallet);
     await controller.saveWallets(password, Array.from(get().wallets.values()));
+  },
+  switchWallet: async (password: string, wallet: IWallet) => {
+    const { wallets } = get();
+    // if(wallets.)
   }
 }));
