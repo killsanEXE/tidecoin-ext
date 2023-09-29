@@ -26,7 +26,7 @@ class StorageService {
 
   async getLocalValues() {
     const data = (await browserStorageLocalGet(undefined)) as any;
-    return data as string | undefined;
+    return data;
   }
 
   async importWallets(password: string): Promise<IWallet[]> {

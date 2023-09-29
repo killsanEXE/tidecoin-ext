@@ -26,7 +26,7 @@ export class WalletController implements IWalletController {
     const walletId = exportedWallets.length > 0 ? exportedWallets[exportedWallets.length - 1].id + 1 : 0;
 
     return {
-      name: name === undefined ? `Wallet ${walletId + 1}` : name,
+      name: !name ? `Wallet ${walletId + 1}` : name,
       id: walletId,
       accounts: [account],
       currentAccount: account,
