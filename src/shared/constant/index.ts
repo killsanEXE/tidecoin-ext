@@ -112,55 +112,55 @@ export const ADDRESS_TYPES: {
   displayIndex: number;
   isUnisatLegacy?: boolean;
 }[] = [
-  {
-    value: AddressType.P2PKH,
-    label: 'P2PKH',
-    name: 'Legacy (P2PKH)',
-    hdPath: "m/44'/0'/0'/0",
-    displayIndex: 3,
-    isUnisatLegacy: false
-  },
-  {
-    value: AddressType.P2WPKH,
-    label: 'P2WPKH',
-    name: 'Native Segwit (P2WPKH)',
-    hdPath: "m/84'/0'/0'/0",
-    displayIndex: 0,
-    isUnisatLegacy: false
-  },
-  {
-    value: AddressType.P2TR,
-    label: 'P2TR',
-    name: 'Taproot (P2TR)',
-    hdPath: "m/86'/0'/0'/0",
-    displayIndex: 2,
-    isUnisatLegacy: false
-  },
-  {
-    value: AddressType.P2SH_P2WPKH,
-    label: 'P2SH-P2WPKH',
-    name: 'Nested Segwit (P2SH-P2WPKH)',
-    hdPath: "m/49'/0'/0'/0",
-    displayIndex: 1,
-    isUnisatLegacy: false
-  },
-  {
-    value: AddressType.M44_P2WPKH,
-    label: 'P2WPKH',
-    name: 'Native SegWit (P2WPKH)',
-    hdPath: "m/44'/0'/0'/0",
-    displayIndex: 4,
-    isUnisatLegacy: true
-  },
-  {
-    value: AddressType.M44_P2TR,
-    label: 'P2TR',
-    name: 'Taproot (P2TR)',
-    hdPath: "m/44'/0'/0'/0",
-    displayIndex: 5,
-    isUnisatLegacy: true
-  }
-];
+    {
+      value: AddressType.P2PKH,
+      label: 'P2PKH',
+      name: 'Legacy (P2PKH)',
+      hdPath: "m/44'/0'/0'/0",
+      displayIndex: 3,
+      isUnisatLegacy: false
+    },
+    {
+      value: AddressType.P2WPKH,
+      label: 'P2WPKH',
+      name: 'Native Segwit (P2WPKH)',
+      hdPath: "m/84'/0'/0'/0",
+      displayIndex: 0,
+      isUnisatLegacy: false
+    },
+    {
+      value: AddressType.P2TR,
+      label: 'P2TR',
+      name: 'Taproot (P2TR)',
+      hdPath: "m/86'/0'/0'/0",
+      displayIndex: 2,
+      isUnisatLegacy: false
+    },
+    {
+      value: AddressType.P2SH_P2WPKH,
+      label: 'P2SH-P2WPKH',
+      name: 'Nested Segwit (P2SH-P2WPKH)',
+      hdPath: "m/49'/0'/0'/0",
+      displayIndex: 1,
+      isUnisatLegacy: false
+    },
+    {
+      value: AddressType.M44_P2WPKH,
+      label: 'P2WPKH',
+      name: 'Native SegWit (P2WPKH)',
+      hdPath: "m/44'/0'/0'/0",
+      displayIndex: 4,
+      isUnisatLegacy: true
+    },
+    {
+      value: AddressType.M44_P2TR,
+      label: 'P2TR',
+      name: 'Taproot (P2TR)',
+      hdPath: "m/44'/0'/0'/0",
+      displayIndex: 5,
+      isUnisatLegacy: true
+    }
+  ];
 
 export const RESTORE_WALLETS: { value: RestoreWalletType; name: string; addressTypes: AddressType[] }[] = [
   {
@@ -178,12 +178,12 @@ export const RESTORE_WALLETS: { value: RestoreWalletType; name: string; addressT
   {
     value: RestoreWalletType.SPARROW,
     name: 'Sparrow Wallet',
-    addressTypes: [ AddressType.P2PKH, AddressType.P2WPKH, AddressType.P2SH_P2WPKH, AddressType.P2TR ]
+    addressTypes: [AddressType.P2PKH, AddressType.P2WPKH, AddressType.P2SH_P2WPKH, AddressType.P2TR]
   },
   {
     value: RestoreWalletType.XVERSE,
     name: 'Xverse Wallet',
-    addressTypes: [ AddressType.P2SH_P2WPKH, AddressType.P2TR ]
+    addressTypes: [AddressType.P2SH_P2WPKH, AddressType.P2TR]
   },
   {
     value: RestoreWalletType.OTHERS,
@@ -200,8 +200,8 @@ export const RESTORE_WALLETS: { value: RestoreWalletType; name: string; addressT
 ];
 
 export const NETWORK_TYPES = [
-  { value: NetworkType.MAINNET, label: 'LIVENET', name: 'livenet', validNames: [ 0, 'livenet', 'mainnet' ] },
-  { value: NetworkType.TESTNET, label: 'TESTNET', name: 'testnet', validNames: [ 'testnet' ] }
+  { value: NetworkType.MAINNET, label: 'LIVENET', name: 'livenet', validNames: [0, 'livenet', 'mainnet'] },
+  { value: NetworkType.TESTNET, label: 'TESTNET', name: 'testnet', validNames: ['testnet'] }
 ];
 
 export const MINIMUM_GAS_LIMIT = 21000;
@@ -249,7 +249,7 @@ export const SORT_WEIGHT = {
 };
 
 export const GASPRICE_RANGE = {
-  [CHAINS_ENUM.BTC]: [ 0, 10000 ]
+  [CHAINS_ENUM.BTC]: [0, 10000]
 };
 
 export const COIN_NAME = 'BTC';
@@ -269,3 +269,6 @@ export const DISCORD_URL = 'https://discord.com/invite/EMskB2sMz8';
 export const TWITTER_URL = 'https://twitter.com/unisat_wallet';
 
 export const CHANNEL = "chrome";
+
+export const TDC_API_URL = "https://tdc.cash/api/";
+export const TDC_MAINNET_URL = TDC_API_URL + "TDC/mainnet/";

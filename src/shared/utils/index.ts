@@ -1,4 +1,4 @@
-import { CHAINS } from "@/shared/constant";
+import { CHAINS, TDC_MAINNET_URL } from "@/shared/constant";
 import browser from "./browser";
 import BroadcastChannelMessage from "./message/broadcastChannelMessage";
 import PortMessage from "./message/portMessage";
@@ -24,3 +24,28 @@ export const getChain = (chainId?: string) => {
   }
   return chainsDict[chainId];
 };
+
+interface fetchProps extends RequestInit {
+  method?: 'POST' | 'GET' | 'PUT' | 'DELETE'
+  headers?: HeadersInit
+  path: string
+  error?: boolean
+}
+
+export const fetchTDCMainnet = async <T>({
+  path,
+  ...props
+}: fetchProps): Promise<T | undefined> => {
+  try {
+    const res = await fetch(`${TDC_MAINNET_URL}${path}`, { ...props })
+
+    if (!res.ok) {
+      console.log("ERROR IN RESPONSE")
+      console.log(res.body)
+    }
+
+    return await res.json()
+  } catch (error) {
+    console.log(error)
+  }
+}

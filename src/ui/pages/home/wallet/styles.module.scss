@@ -38,6 +38,7 @@ $font_color: #F4F4F9;
     }
 
     .balance {
+      @apply flex items-center justify-center;
       font-size: 2rem;
       width: 100%;
     }
@@ -71,7 +72,7 @@ $font_color: #F4F4F9;
         }
       }
 
-      .btn:hover{
+      .btn:hover {
         @apply bg-hovered-btn transition-colors;
       }
 

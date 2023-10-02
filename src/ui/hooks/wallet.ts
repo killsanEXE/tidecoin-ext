@@ -84,3 +84,18 @@ export const useSwitchWallet = () => {
         updateWalletState({ currentWallet: wallet, wallets: wallets })
     }
 }
+
+export const useUpdateCurrentAccountBalance = () => {
+    const { currentWallet } = useWalletState((v) => ({
+        currentWallet: v.currentWallet
+    }));
+    const { apiController } = useControllersState((v) => ({ apiController: v.apiController }));
+    const updateCurrentWallet = useUpdateCurrentWallet();
+
+    return async () => {
+        const balance = await apiController.getAccountBalance(currentWallet?.currentAccount.address ?? "");
+        console.log(balance);
+        if (!balance || !currentWallet?.currentAccount) return;
+        updateCurrentWallet({ currentAccount: { ...currentWallet?.currentAccount, balance: balance } })
+    }
+}

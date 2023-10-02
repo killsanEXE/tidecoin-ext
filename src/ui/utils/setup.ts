@@ -2,6 +2,7 @@ import { EVENTS } from "@/shared/constant";
 import eventBus from "@/shared/eventBus";
 import { Message } from "@/shared/utils";
 import { IWalletController } from "@/shared/interfaces";
+import { IApiController } from "@/shared/interfaces/apiController";
 
 export function setupPm() {
   const { PortMessage } = Message;
@@ -32,26 +33,35 @@ export function setupWalletProxy() {
     {},
     {
       get(obj, key) {
-        switch (key) {
-          case "openapi":
-            return function (...params: any) {
-              return portMessageChannel.request({
-                type: "openapi",
-                method: key,
-                params,
-              });
-            };
-          default:
-            return function (...params: any) {
-              return portMessageChannel.request({
-                type: "controller",
-                method: key,
-                params,
-              });
-            };
-        }
+        return function (...params: any) {
+          return portMessageChannel.request({
+            type: "controller",
+            method: key,
+            params,
+          });
+        };
       },
     }
   );
   return wallet as IWalletController;
+}
+
+export function setupOpenAPIProxy() {
+  const portMessageChannel = setupPm();
+
+  const openapi: Record<string, any> = new Proxy(
+    {},
+    {
+      get(obj, key) {
+        return function (...params: any) {
+          return portMessageChannel.request({
+            type: "openapi",
+            method: key,
+            params,
+          });
+        };
+      },
+    }
+  );
+  return openapi as IApiController;
 }

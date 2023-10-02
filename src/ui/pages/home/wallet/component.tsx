@@ -7,11 +7,22 @@ import { copyToClipboard, shortAddress } from '@/ui/utils';
 import toast from 'react-hot-toast';
 import { useWalletState } from '@/ui/states/walletState';
 import cn from "classnames";
+import { useEffect } from 'react';
+import { useUpdateCurrentAccountBalance } from '@/ui/hooks/wallet';
+import ReactLoading from 'react-loading';
 
 const Wallet = () => {
 
   const { currentWallet } = useWalletState((v) => ({ currentWallet: v.currentWallet }))
   const navigate = useNavigate();
+
+  const updateCurrentAccountBalance = useUpdateCurrentAccountBalance()
+
+  useEffect(() => {
+    console.log(currentWallet?.currentAccount.balance)
+    if (currentWallet?.currentAccount && !currentWallet.currentAccount.balance) updateCurrentAccountBalance();
+    console.log(currentWallet?.currentAccount.balance)
+  })
 
   return (
     <div className={s.walletDiv}>
@@ -31,7 +42,11 @@ const Wallet = () => {
       </div>
 
       <div className={cn(s.accPanel, s.center)}>
-        <p className={cn(s.balance, s.center)}>{currentWallet?.currentAccount.balance} TDC</p>
+        <div className={cn(s.balance, s.center)}>
+          {currentWallet?.currentAccount.balance === undefined ?
+            <ReactLoading type="spin" color="#fff" width={"2rem"} /> : currentWallet?.currentAccount.balance
+          } TDC
+        </div>
         <p className={cn(s.accPubAddress, s.center)} onClick={() => {
           copyToClipboard(currentWallet?.currentAccount.address).then(() => {
             toast.success("Copied", {

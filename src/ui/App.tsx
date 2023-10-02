@@ -4,7 +4,7 @@ import { RouterProvider, useNavigate } from 'react-router-dom';
 import { Router } from '@remix-run/router'
 import { useEffect, useState } from 'react';
 import { Toaster } from "react-hot-toast";
-import { setupWalletProxy } from '@/ui/utils/setup';
+import { setupOpenAPIProxy, setupWalletProxy } from '@/ui/utils/setup';
 import { useAppState } from './states/appState';
 import { useWalletState } from './states/walletState';
 import { guestRouter, authenticatedRouter } from "@/ui/pages/router";
@@ -47,7 +47,8 @@ export default function App() {
   useEffect(() => {
     const setupApp = async () => {
       const walletController = setupWalletProxy();
-      updateControllers({ walletController: walletController });
+      const apiController = setupOpenAPIProxy();
+      updateControllers({ walletController, apiController });
       updateWalletState({ vaultIsEmpty: await walletController.isVaultEmpty() });
       updateAppState({ isReady: true });
 

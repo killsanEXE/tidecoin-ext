@@ -8,6 +8,7 @@ import {
   browserRuntimeOnInstalled,
 } from "@/shared/utils/browser";
 import walletController from "./controllers/walletController";
+import apiController from "./controllers/apiController";
 
 const { PortMessage } = Message;
 
@@ -26,9 +27,9 @@ browserRuntimeOnConnect((port: any) => {
             eventBus.emit(data.method, data.params);
             break;
           case "openapi":
-            // if (walletController.openapi[data.method]) {
-            //     return walletController.openapi[data.method].apply(null, data.params);
-            // }
+            if (apiController[data.method]) {
+              return apiController[data.method].apply(null, data.params);
+            }
             break;
           case "controller":
           default:
