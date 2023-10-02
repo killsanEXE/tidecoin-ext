@@ -46,6 +46,10 @@ export default function PagesLayout() {
             route: "/pages/restore-priv-key",
             title: "Create New Wallet"
         },
+        {
+            route: "/send",
+            title: "Send"
+        },
     ]
 
     const { wallets } = useWalletState((v) => ({ wallets: v.wallets }))

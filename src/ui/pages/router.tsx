@@ -18,6 +18,7 @@ import RestorePrivKey from "../components/pages/new-wallet/restore-priv-key";
 import Settings from "./home/settings";
 import ShowPk from "../components/pages/switch-account/show-pk";
 import ShowMnemonic from "../components/pages/switch-wallet/show-mnemonic";
+import Send from "../components/pages/send";
 
 export const guestRouter = createHashRouter([
   {
@@ -54,6 +55,7 @@ export const authenticatedRouter = createHashRouter([
       { path: "restore-priv-key", element: <RestorePrivKey /> },
       { path: "show-pk/:accId", element: <ShowPk /> },
       { path: "show-mnemonic/:walletId", element: <ShowMnemonic /> },
+      { path: "send", element: <Send /> },
     ]
   },
   { path: "*", element: <Navigate to={"/home/wallet"} /> },

@@ -66,7 +66,9 @@ const Wallet = () => {
           <button onClick={() => {
             navigate("/pages/receive")
           }} className={cn(s.btn, s.center)}><ReceiveIcon /> Receive</button>
-          <button className={cn(s.btn, s.center)}><SendIcon /> Send</button>
+          <button onClick={() => {
+            navigate("/pages/send")
+          }} className={cn(s.btn, s.center)}><SendIcon /> Send</button>
         </div>
       </div>
 

@@ -20,6 +20,14 @@ body {
   .form-title {
     @apply p-0 mx-auto text-[1.3rem];
   }
+
+  .form-field {
+    @apply w-full flex flex-col gap-[.3rem];
+
+    .input {
+      @apply text-[.9rem];
+    }
+  }
 }
 
 .btn {
