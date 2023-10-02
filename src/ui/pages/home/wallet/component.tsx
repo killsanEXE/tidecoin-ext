@@ -13,14 +13,19 @@ import ReactLoading from 'react-loading';
 
 const Wallet = () => {
 
-  const { currentWallet } = useWalletState((v) => ({ currentWallet: v.currentWallet }))
+  const { currentWallet } = useWalletState((v) => ({ currentWallet: v.currentWallet }));
   const navigate = useNavigate();
 
-  const updateCurrentAccountBalance = useUpdateCurrentAccountBalance()
+  const updateCurrentAccountBalance = useUpdateCurrentAccountBalance();
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      updateCurrentAccountBalance();
+    }, 10000);
+
     if (currentWallet?.currentAccount && currentWallet.currentAccount.balance === undefined) updateCurrentAccountBalance();
-  })
+    return () => clearInterval(interval);
+  }, [updateCurrentAccountBalance, currentWallet])
 
   return (
     <div className={s.walletDiv}>
