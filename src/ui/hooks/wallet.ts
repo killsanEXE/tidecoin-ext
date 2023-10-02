@@ -95,6 +95,6 @@ export const useUpdateCurrentAccountBalance = () => {
     return async () => {
         const balance = await apiController.getAccountBalance(currentWallet?.currentAccount.address ?? "");
         if (balance === undefined || !currentWallet?.currentAccount) return;
-        updateCurrentWallet({ ...currentWallet, currentAccount: { ...currentWallet?.currentAccount, balance } })
+        updateCurrentWallet({ ...currentWallet, currentAccount: { ...currentWallet?.currentAccount, balance: (balance / 10 ** 8) } })
     }
 }

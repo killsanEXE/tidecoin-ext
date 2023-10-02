@@ -1,4 +1,3 @@
-import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
 import { IAccount } from "./accounts";
 import { IWallet } from "./wallets";
 

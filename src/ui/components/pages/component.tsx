@@ -47,7 +47,7 @@ export default function PagesLayout() {
             title: "Create New Wallet"
         },
         {
-            route: "/send",
+            route: "/pages/send",
             title: "Send"
         },
     ]

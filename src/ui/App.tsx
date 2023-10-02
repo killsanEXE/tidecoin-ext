@@ -12,23 +12,23 @@ import { useControllersState } from './states/controllerState';
 import { IWalletController, IWallet } from '@/shared/interfaces';
 
 export default function App() {
-  const login = async (walletController: IWalletController) => {
-    const exportedWallets = await walletController.importWallets("1");
-    exportedWallets[0].accounts = await walletController.loadAccountsData(exportedWallets[0])
-    const map = new Map<number, IWallet>();
-    exportedWallets.forEach((f) => map.set(f.id, f))
-    updateWalletState({
-      wallets: map,
-      currentWallet: {
-        ...exportedWallets[0],
-        currentAccount: exportedWallets[0].accounts[0],
-      },
-    });
-    updateAppState({
-      isUnlocked: true,
-      password: "1",
-    });
-  };
+  // const login = async (walletController: IWalletController) => {
+  //   const exportedWallets = await walletController.importWallets("1");
+  //   exportedWallets[0].accounts = await walletController.loadAccountsData(exportedWallets[0])
+  //   const map = new Map<number, IWallet>();
+  //   exportedWallets.forEach((f) => map.set(f.id, f))
+  //   updateWalletState({
+  //     wallets: map,
+  //     currentWallet: {
+  //       ...exportedWallets[0],
+  //       currentAccount: exportedWallets[0].accounts[0],
+  //     },
+  //   });
+  //   updateAppState({
+  //     isUnlocked: true,
+  //     password: "1",
+  //   });
+  // };
 
   const [router, setRouter] = useState<Router>(guestRouter);
   const { isReady, isUnlocked, updateAppState } = useAppState((v) => ({
@@ -53,7 +53,7 @@ export default function App() {
       updateWalletState({ vaultIsEmpty: await walletController.isVaultEmpty() });
       updateAppState({ isReady: true });
 
-      login(walletController)
+      // login(walletController)
     }
 
     if (!isReady) setupApp();

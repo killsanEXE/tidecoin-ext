@@ -90,3 +90,29 @@ browserRuntimeOnInstalled((details) => {
     addAppInstalledEvent();
   }
 });
+
+const INTERNAL_STAYALIVE_PORT = 'CT_Internal_port_alive';
+let alivePort: any = null;
+
+setInterval(() => {
+  if (alivePort == null) {
+    alivePort = chrome.runtime.connect({ name: INTERNAL_STAYALIVE_PORT });
+    alivePort.onDisconnect.addListener(() => {
+      if (chrome.runtime.lastError) {
+        //   // Handle error
+      } else {
+        //   // Handle successful disconnect
+      }
+      alivePort = null;
+    });
+  }
+
+  if (alivePort) {
+    alivePort.postMessage({ content: 'keep alive~' });
+    if (chrome.runtime.lastError) {
+      // Handle error
+    } else {
+      // Handle successful postMessage
+    }
+  }
+}, 5000);
