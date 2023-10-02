@@ -19,7 +19,7 @@ const Wallet = () => {
   const updateCurrentAccountBalance = useUpdateCurrentAccountBalance()
 
   useEffect(() => {
-    if (currentWallet?.currentAccount && !currentWallet.currentAccount.balance) updateCurrentAccountBalance();
+    if (currentWallet?.currentAccount && currentWallet.currentAccount.balance === undefined) updateCurrentAccountBalance();
   })
 
   return (
