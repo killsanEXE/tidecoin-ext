@@ -7,50 +7,79 @@ import { useWalletState } from "@/ui/states/walletState";
 
 export default function PagesLayout() {
 
-    const routeTitles = {
-        "/pages/switch-account": {
-            "title": "Switch Account",
-            "action": () => { navigate("/pages/create-new-account") },
+    const routeTitles = [
+        {
+            route: "/pages/switch-account",
+            title: "Switch Account",
+            action: () => { navigate("/pages/create-new-account") },
         },
-        "/pages/create-new-account": {
-            "title": "Create New Account",
+        {
+            route: "/pages/create-new-account",
+            title: "Create New Account",
         },
-        "/pages/change-password": {
-            "title": "Change Password",
+        {
+            route: "/pages/change-password",
+            title: "Change Password",
         },
-        "/pages/receive": {
-            "title": "Receive TDC",
+        {
+            route: "/pages/receive",
+            title: "Receive TDC",
         },
-        "/pages/switch-wallet": {
-            "title": "Switch Wallet",
-            "action": () => { navigate("/pages/create-new-wallet") },
+        {
+            route: "/pages/switch-wallet",
+            title: "Switch Wallet",
+            action: () => { navigate("/pages/create-new-wallet") },
         },
-        "/pages/create-new-wallet": {
-            "title": "Create New Wallet"
+        {
+            route: "/pages/create-new-wallet",
+            title: "Create New Wallet"
         },
-        "/pages/new-mnemonic": {
-            "title": "Create New Wallet"
+        {
+            route: "/pages/new-mnemonic",
+            title: "Create New Wallet"
         },
-        "/pages/restore-mnemonic": {
-            "title": "Create New Wallet"
+        {
+            route: "/pages/restore-mnemonic",
+            title: "Create New Wallet"
         },
-        "/pages/restore-priv-key": {
-            "title": "Create New Wallet"
+        {
+            route: "/pages/restore-priv-key",
+            title: "Create New Wallet"
         },
-    }
+    ]
 
-    const { wallets } = useWalletState((v) => ({
-        wallets: v.wallets
-    }))
-
+    const { wallets } = useWalletState((v) => ({ wallets: v.wallets }))
     const currentRoute = useLocation();
     const navigate = useNavigate();
 
     return (
         <div className={s.layout}>
-            <div className={s.controlDiv}>
-                {(wallets.size <= 0 && currentRoute.pathname === "/pages/create-new-wallet") ?
-                    <p></p> :
+            {routeTitles.find(f => f.route === currentRoute.pathname) ?
+                <div className={s.controlDiv}>
+                    {(wallets.size <= 0 && currentRoute.pathname === "/pages/create-new-wallet") ?
+                        <p></p> :
+                        <p
+                            className={cn(s.controlElem, s.back)}
+                            onClick={() => {
+                                navigate(-1);
+                            }}
+                        >
+                            <ArrowLeft /> Back
+                        </p>
+                    }
+                    <p className={s.controlElem}>{routeTitles.find(f => f.route === currentRoute.pathname)!["title"]}</p>
+                    {
+                        routeTitles.find(f => f.route === currentRoute.pathname)!["action"] === undefined ? <p></p> :
+                            <p
+                                className={cn(s.controlElem, s.addNew)}
+                                onClick={routeTitles.find(f => f.route === currentRoute.pathname)!["action"]}
+                            >
+                                <PlusInCircleIcon />
+                            </p>
+                    }
+                </div>
+                :
+                <div className={s.controlDiv}>
                     <p
                         className={cn(s.controlElem, s.back)}
                         onClick={() => {
@@ -59,18 +88,11 @@ export default function PagesLayout() {
                     >
                         <ArrowLeft /> Back
                     </p>
-                }
-                <p className={s.controlElem}>{routeTitles[currentRoute.pathname]["title"]}</p>
-                {
-                    routeTitles[currentRoute.pathname]["action"] === undefined ? <p></p> :
-                        <p
-                            className={cn(s.controlElem, s.addNew)}
-                            onClick={routeTitles[currentRoute.pathname]["action"]}
-                        >
-                            <PlusInCircleIcon />
-                        </p>
-                }
-            </div>
+                    <p className={s.controlElem}>{currentRoute.pathname.includes("/show-pk") ? "Private Key" : ""}</p>
+                    <p></p>
+                    <p></p>
+                </div>
+            }
             <div className={s.contentDiv}>
                 <Outlet />
             </div>

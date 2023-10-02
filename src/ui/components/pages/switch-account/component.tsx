@@ -56,7 +56,7 @@ const SwitchAccount = () => {
               <div className={s.divider}></div>
               <div className={cn(s.accSetting, s.rename)}><TagIcon /></div>
               <div className={s.divider}></div>
-              <div className={s.accSetting}><KeyIcon /></div>
+              <div className={s.accSetting} onClick={() => { navigate(`/pages/show-pk/${acc.id}`) }}><KeyIcon /></div>
               <div className={s.divider}></div>
               <div className={s.accSetting} onClick={() => {
                 setSelected(undefined)
@@ -65,7 +65,7 @@ const SwitchAccount = () => {
           </div>
         )}
       </div>
-    </div>
+    </div >
   )
 }
 
