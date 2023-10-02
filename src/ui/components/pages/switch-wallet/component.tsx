@@ -8,6 +8,7 @@ import KeyIcon from "../../icons/KeyIcon";
 import XMarkIcon from "../../icons/XMarkIcon";
 import SmallMenuIcon from "../../icons/SmallMenuIcon";
 import { useSwitchWallet } from "@/ui/hooks/wallet";
+import { useNavigate } from "react-router-dom";
 
 const SwitchWallet = () => {
 
@@ -15,10 +16,9 @@ const SwitchWallet = () => {
         wallets: v.wallets,
         currentWallet: v.currentWallet,
     }))
-
     const switchWallet = useSwitchWallet();
-
     const [selected, setSelected] = useState<number>()
+    const navigate = useNavigate();
 
     return (
         <div className={s.switchWalletDiv}>
@@ -39,7 +39,7 @@ const SwitchWallet = () => {
                         <div className={cn(s.walletSettings, s.hidden, { [s.active]: selected === i })}>
                             <div className={cn(s.walletSetting, s.rename)}><TagIcon /></div>
                             <div className={s.divider}></div>
-                            <div><KeyIcon /></div>
+                            <div onClick={() => { navigate(`/pages/show-mnemonic/${i}`) }}><KeyIcon /></div>
                             <div className={s.divider}></div>
                             <div onClick={() => {
                                 setSelected(undefined)

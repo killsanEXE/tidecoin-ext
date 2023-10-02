@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import s from "./styles.module.scss";
 import CheckPassword from "../../../check-password";
 import { useParams } from "react-router-dom";

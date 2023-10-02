@@ -88,7 +88,7 @@ export default function PagesLayout() {
                     >
                         <ArrowLeft /> Back
                     </p>
-                    <p className={s.controlElem}>{currentRoute.pathname.includes("/show-pk") ? "Private Key" : ""}</p>
+                    <p className={s.controlElem}>{currentRoute.pathname.includes("/show") ? "Private" : ""}</p>
                     <p></p>
                     <p></p>
                 </div>
