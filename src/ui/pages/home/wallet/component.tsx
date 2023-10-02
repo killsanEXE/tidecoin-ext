@@ -19,9 +19,7 @@ const Wallet = () => {
   const updateCurrentAccountBalance = useUpdateCurrentAccountBalance()
 
   useEffect(() => {
-    console.log(currentWallet?.currentAccount.balance)
     if (currentWallet?.currentAccount && !currentWallet.currentAccount.balance) updateCurrentAccountBalance();
-    console.log(currentWallet?.currentAccount.balance)
   })
 
   return (
@@ -44,7 +42,7 @@ const Wallet = () => {
       <div className={cn(s.accPanel, s.center)}>
         <div className={cn(s.balance, s.center)}>
           {currentWallet?.currentAccount.balance === undefined ?
-            <ReactLoading type="spin" color="#fff" width={"2rem"} /> : currentWallet?.currentAccount.balance
+            <ReactLoading type="spin" color="#fff" width={"2rem"} className='react-loading' /> : currentWallet?.currentAccount.balance
           } TDC
         </div>
         <p className={cn(s.accPubAddress, s.center)} onClick={() => {

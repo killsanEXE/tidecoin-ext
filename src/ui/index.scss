@@ -26,7 +26,7 @@ body {
   @apply border-0 px-2 pb-1 pt-1.5 text-[1.1rem] w-1/2 mx-auto;
 
   &:hover {
-    @apply cursor-pointer shadow-sm ;
+    @apply cursor-pointer shadow-sm;
   }
 }
 
@@ -40,4 +40,8 @@ body {
 
 .input {
   @apply border-0 text-[1.2rem] p-2 bg-input-bg text-text;
+}
+
+.react-loading {
+  display: flex;
 }
