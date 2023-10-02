@@ -3,7 +3,6 @@ import s from "./styles.module.scss";
 import cn from "classnames";
 import ArrowLeft from "@/ui/components/icons/ArrowLeft";
 import PlusInCircleIcon from "@/ui/components/icons/PlusInCirlceIcon";
-import { useEffect } from "react";
 import { useWalletState } from "@/ui/states/walletState";
 
 export default function PagesLayout() {

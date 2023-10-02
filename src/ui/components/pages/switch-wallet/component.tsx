@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useWalletState } from "@/ui/states/walletState";
 import s from "./styles.module.scss";
 import cn from "classnames";

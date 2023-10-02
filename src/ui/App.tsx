@@ -1,6 +1,6 @@
 import ReactLoading from 'react-loading';
 import './App.scss';
-import { RouterProvider, useNavigate } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { Router } from '@remix-run/router'
 import { useEffect, useState } from 'react';
 import { Toaster } from "react-hot-toast";

@@ -1,7 +1,6 @@
 import Nav from "@/ui/components/nav";
 import s from "./styles.module.scss";
 import { Navigate, Outlet } from "react-router-dom";
-import { useAppState } from "@/ui/states/appState";
 import { useWalletState } from "@/ui/states/walletState";
 
 

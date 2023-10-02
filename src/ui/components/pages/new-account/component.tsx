@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useAppState } from "@/ui/states/appState";
-import { useWalletState } from "@/ui/states/walletState";
-import { useControllersState } from "@/ui/states/controllerState";
 import { useCreateNewAccount } from "@/ui/hooks/wallet";
 
 const NewAccount = () => {
@@ -11,10 +8,6 @@ const NewAccount = () => {
   const navigate = useNavigate();
 
   const createNewAccount = useCreateNewAccount();
-  const { password } = useAppState((v) => ({
-    password: v.password,
-  }));
-
 
   const createNewAcc = async () => {
     if (name.length <= 8) {
