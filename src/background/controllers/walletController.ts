@@ -2,17 +2,26 @@ import { storageService } from "@/background/services";
 import type { IAccount, IWallet, IWalletController } from "@/shared/interfaces";
 import { fromMnemonic } from "test-test-test-hd-wallet";
 import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
-import { p2wpkh } from "tidecoinjs-lib/src/payments";
-import { bytesToHex as toHex, hexToBytes as fromHex } from '@noble/hashes/utils'
+import { payments } from "tidecoinjs-lib";
+import { falconPairFactory } from "tidepair";
+import {
+  bytesToHex as toHex,
+  hexToBytes as fromHex,
+} from "@noble/hashes/utils";
+
+const falconPair = falconPairFactory();
 
 export class WalletController implements IWalletController {
-
   async isVaultEmpty() {
-    const values = await storageService.getLocalValues()
+    const values = await storageService.getLocalValues();
     return values.data === undefined;
   }
 
-  async createNewWallet(exportedWallets: IWallet[], phrase: string, name?: string) {
+  async createNewWallet(
+    exportedWallets: IWallet[],
+    phrase: string,
+    name?: string
+  ) {
     const mnemonic = Mnemonic.fromPhrase(phrase);
     const acc = fromMnemonic(mnemonic);
     const account: IAccount = {
@@ -21,16 +30,21 @@ export class WalletController implements IWalletController {
       balance: 0,
       privateKey: toHex(acc.privateKey),
       publicKey: toHex(acc.publicKey),
-      address: p2wpkh({ pubkey: Buffer.from(acc.publicKey) }).address
+      address: payments.p2wpkh({ pubkey: Buffer.from(acc.publicKey) }).address,
     };
-    const walletId = exportedWallets.length > 0 ? exportedWallets[exportedWallets.length - 1].id + 1 : 0;
+    const walletId =
+      exportedWallets.length > 0
+        ? exportedWallets[exportedWallets.length - 1].id + 1
+        : 0;
+
+    const randomSeed = crypto.getRandomValues(new Uint8Array(16));
 
     return {
       name: !name ? `Wallet ${walletId + 1}` : name,
       id: walletId,
       accounts: [account],
       currentAccount: account,
-      phrase: mnemonic.getPhrase(),
+      phrase: mnemonic.getPhrase(randomSeed),
     };
   }
 
@@ -45,26 +59,39 @@ export class WalletController implements IWalletController {
   async loadAccountsData(wallet: IWallet): Promise<IAccount[]> {
     const result: IAccount[] = [];
     const root = fromMnemonic(Mnemonic.fromPhrase(wallet.phrase));
-    const addresses = root.addAccounts(wallet.accounts[-1] ? wallet.accounts[0].id : wallet.accounts[-1].id);
-    wallet.accounts.forEach(acc => {
-      if (acc.id === 0) result.push({ ...acc, address: p2wpkh({ pubkey: Buffer.from(root.publicKey) }).address })
-      else result.push({ ...acc, address: addresses[acc.id] })
-    })
+    const addresses = await root.addAccounts(
+      wallet.accounts[-1]
+        ? wallet.accounts[-1].id + 1
+        : wallet.accounts[0].id + 1
+    );
+    wallet.accounts.forEach((acc) => {
+      if (acc.id === 0)
+        result.push({
+          ...acc,
+          address: payments.p2wpkh({ pubkey: Buffer.from(root.publicKey) })
+            .address,
+        });
+      else result.push({ ...acc, address: addresses[acc.id] });
+    });
     return result;
   }
 
-  loadAccountData(account: IAccount): Partial<IAccount> {
-    const imported = fromPrivateKey(Buffer.from(fromHex(account.privateKey!)), account.id).derive(account.id + 1);
-    const address = p2wpkh({ pubkey: imported.publicKey }).address
+  async loadAccountData(account: IAccount): Promise<Partial<IAccount>> {
+    const imported = falconPair.fromPrivateKey(
+      Buffer.from(fromHex(account.privateKey!))
+    );
+    const address = payments.p2wpkh({ pubkey: imported.publicKey }).address;
     return {
       privateKey: toHex(imported.privateKey),
       publicKey: toHex(imported.publicKey),
-      address
-    }
+      address,
+    };
   }
 
   async createNewAccount(wallet: IWallet, name?: string) {
-    const accName = !name?.length ? `Account ${wallet.accounts.length + 1}` : name;
+    const accName = !name?.length
+      ? `Account ${wallet.accounts.length + 1}`
+      : name;
     const account = { id: wallet.accounts[wallet.accounts.length - 1].id + 1 };
     wallet.accounts.push(account);
     return {
@@ -75,7 +102,9 @@ export class WalletController implements IWalletController {
   }
 
   generateMnemonicPhrase(): string {
-    return new Mnemonic().getPhrase();
+    const randomSeed = crypto.getRandomValues(new Uint8Array(16));
+
+    return new Mnemonic().getPhrase(randomSeed);
   }
 }
 

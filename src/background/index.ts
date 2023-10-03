@@ -9,6 +9,7 @@ import {
 } from "@/shared/utils/browser";
 import walletController from "./controllers/walletController";
 import apiController from "./controllers/apiController";
+import keyringController from "./services/keyring";
 
 const { PortMessage } = Message;
 
@@ -31,6 +32,8 @@ browserRuntimeOnConnect((port: any) => {
               return apiController[data.method].apply(null, data.params);
             }
             break;
+          case "keyring":
+            return keyringController[data.method].apply(null, data.params);
           case "controller":
           default:
             if (data.method) {
@@ -68,6 +71,7 @@ browserRuntimeOnConnect((port: any) => {
 
     const req = { data, session };
     // for background push to respective page
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     req.session!.pushMessage = (event, data) => {
       pm.send("message", { event, data });
     };
@@ -91,7 +95,7 @@ browserRuntimeOnInstalled((details) => {
   }
 });
 
-const INTERNAL_STAYALIVE_PORT = 'CT_Internal_port_alive';
+const INTERNAL_STAYALIVE_PORT = "CT_Internal_port_alive";
 let alivePort: any = null;
 
 setInterval(() => {
@@ -108,7 +112,7 @@ setInterval(() => {
   }
 
   if (alivePort) {
-    alivePort.postMessage({ content: 'keep alive~' });
+    alivePort.postMessage({ content: "keep alive~" });
     if (chrome.runtime.lastError) {
       // Handle error
     } else {
