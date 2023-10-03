@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { useControllersState } from "@/ui/states/controllerState";
 import { useCreateNewWallet } from "@/ui/hooks/wallet";
 import CopyIcon from "@/ui/components/icons/CopyIcon";
+import cn from "classnames";
+import { copyToClipboard } from "@/ui/utils";
 
 const NewMnemonic = () => {
 
@@ -37,23 +39,30 @@ const NewMnemonic = () => {
         <p className={step === 2 ? s.active : ""}>Step 2</p>
       </div>
       {step === 1 ?
-        <div className={s.stepOneWrapper}>
+        <div className={cn(s.stepOneWrapper, s.step)}>
           {mnemonicPhrase === undefined ? <ReactLoading type="spin" color="#fff" /> :
-            <div className={s.stepOne}>
-              <p className={s.warning}>Please save these words somewhere</p>
-              <div className={s.phrase}>
-                {mnemonicPhrase.split(" ").map((word, index) =>
-                  <div key={index} className={s.word}>{index + 1}. <p className={s.wordWord}>{word}</p></div>
-                )}
+            <div className={cn(s.stepOne, s.step)}>
+              <div>
+                <p className={s.warning}>Please save these words somewhere</p>
+                <div className={s.phrase}>
+                  {mnemonicPhrase.split(" ").map((word, index) =>
+                    <div key={index} className={s.word}>{index + 1}. <p className={s.wordWord}>{word}</p></div>
+                  )}
+                </div>
               </div>
-              <div className={s.saveToClipboard}><CopyIcon /> Copy to ClickBoard</div>
-              <div className={s.savePhrase}>
-                <p>I saved this phrase</p>
-                <input type="checkbox" onChange={() => { setSavedPhrase(!savedPhrase) }} />
+              <div className={s.savePhraseWrapper}>
+                <div className={s.saveToClipboard} onClick={() => {
+                  copyToClipboard(mnemonicPhrase);
+                  toast.success("Copied");
+                }}><CopyIcon /> Copy to ClickBoard</div>
+                <div className={s.savePhrase}>
+                  <p>I saved this phrase</p>
+                  <input type="checkbox" onChange={() => { setSavedPhrase(!savedPhrase) }} />
+                </div>
               </div>
               <div className={s.continueWrapper}>
                 <button
-                  className={s.continue}
+                  className={cn(s.continue, "btn", "primary")}
                   onClick={() => {
                     if (!savedPhrase) toast("Save the phrase first")
                     else setStep(2);
@@ -65,15 +74,18 @@ const NewMnemonic = () => {
             </div>
           }
         </div> :
-        <div className={s.stepTwo}>
-          <button onClick={() => {
-            createNewWallet(mnemonicPhrase!);
-            updateWalletState({ vaultIsEmpty: false });
-            navigate("/home/wallet");
-          }}>Continue</button>
+        <div className={cn(s.stepTwo, s.step)}>
+          <div className={s.continueWrapper}>
+            <button onClick={() => {
+              createNewWallet(mnemonicPhrase!);
+              updateWalletState({ vaultIsEmpty: false });
+              navigate("/home/wallet");
+            }}
+              className={cn(s.continue, "btn", "primary")}>Continue</button>
+          </div>
         </div>
       }
-    </div>
+    </div >
   );
 };
 

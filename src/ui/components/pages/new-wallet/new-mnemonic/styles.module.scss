@@ -1,9 +1,9 @@
 .newMnemonic {
-    @apply w-full h-full flex flex-col items-center gap-[2rem];
+    @apply w-full h-full flex flex-col items-center gap-[2rem] text-[1rem] p-[1rem];
 }
 
 .phrase {
-    @apply grid grid-cols-3;
+    @apply grid grid-cols-3 text-[0.8rem];
 }
 
 .stepTitle {
@@ -11,7 +11,7 @@
 }
 
 .word {
-    @apply p-5;
+    @apply p-5 gap-[.5rem];
 }
 
 .active {
@@ -29,10 +29,28 @@
 .savePhrase,
 .saveToClipboard {
     @apply flex items-center w-full justify-center;
+
+    &:hover {
+        cursor: default;
+    }
 }
 
 .continueWrapper {
-    @apply w-full flex justify-center;
+    @apply w-full flex justify-center py-[1rem];
+}
 
-    .continue {}
+.warning {
+    @apply w-full flex justify-center text-yellow-200;
+}
+
+.step {
+    @apply h-full flex flex-col justify-between;
+}
+
+.savePhraseWrapper {
+    @apply flex flex-col gap-[1rem];
+}
+
+.savePhrase {
+    @apply flex items-center gap-[1rem]
 }

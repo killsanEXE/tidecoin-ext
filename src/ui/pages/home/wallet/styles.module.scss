@@ -85,6 +85,7 @@ $font_color: #F4F4F9;
   display: flex;
   justify-content: center;
   align-items: center;
+  @apply rounded-[.3rem];
 }
 
 .transactions {

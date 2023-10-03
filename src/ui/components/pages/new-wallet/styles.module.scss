@@ -5,7 +5,7 @@
         @apply pt-[2rem] w-full flex justify-center flex-col items-center;
 
         .variant {
-            @apply bg-panel mt-[1rem] p-[1rem] w-[90%] flex justify-center;
+            @apply bg-panel mt-[1rem] p-[1rem] w-[90%] flex justify-center rounded-[.3rem];
 
             &:hover {
                 @apply cursor-pointer;

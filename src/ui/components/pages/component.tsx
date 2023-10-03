@@ -73,7 +73,7 @@ export default function PagesLayout() {
                     }
                     <p className={s.controlElem}>{routeTitles.find(f => f.route === currentRoute.pathname)!["title"]}</p>
                     {
-                        routeTitles.find(f => f.route === currentRoute.pathname)!["action"] === undefined ? <p></p> :
+                        routeTitles.find(f => f.route === currentRoute.pathname)!["action"] === undefined ? <p className="w-[20%]"></p> :
                             <p
                                 className={cn(s.controlElem, s.addNew)}
                                 onClick={routeTitles.find(f => f.route === currentRoute.pathname)!["action"]}
@@ -93,8 +93,7 @@ export default function PagesLayout() {
                         <ArrowLeft /> Back
                     </p>
                     <p className={s.controlElem}>{currentRoute.pathname.includes("/show") ? "Private" : ""}</p>
-                    <p></p>
-                    <p></p>
+                    <p className="w-[20%]"></p>
                 </div>
             }
             <div className={s.contentDiv}>

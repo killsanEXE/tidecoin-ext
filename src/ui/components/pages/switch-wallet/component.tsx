@@ -31,7 +31,7 @@ const SwitchWallet = () => {
                                 {wallet.name}
                             </div>
                             <div className={s.walletControl}>
-                                <button className={s.manageAccButton} onClick={() => {
+                                <button className={s.manageWalletButton} onClick={() => {
                                     setSelected(i)
                                 }}><SmallMenuIcon /></button>
                             </div>
