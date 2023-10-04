@@ -4,18 +4,12 @@ import * as encryptorUtils from "@metamask/browser-passworder";
 import { EventEmitter } from "events";
 
 import { KeyringControllerError } from "./consts";
-import {
-  Hex,
-  Json,
-  Keyring,
-  KeyringControllerPersistentState,
-  KeyringControllerState,
-  SerializedKeyring,
-} from "./types";
+import { Hex, Json, Keyring, KeyringControllerState } from "./types";
 import { SimpleKey, HDPrivateKey } from "test-test-test-hd-wallet";
+import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
+import { storageService } from "..";
 
 interface KeyringControllerArgs {
-  initState?: KeyringControllerPersistentState;
   encryptor?: typeof encryptorUtils;
 }
 
@@ -25,34 +19,38 @@ export const KEYRING_SDK_TYPES = {
 };
 
 class KeyringController extends EventEmitter {
-  public store: KeyringControllerPersistentState;
-
   public memStore: KeyringControllerState;
 
   public encryptor: typeof encryptorUtils;
 
   public keyrings: Record<string | "root", Keyring<Json>>;
 
-  public unsupportedKeyrings: SerializedKeyring[];
-
   public password?: string;
 
-  constructor(
-    { initState = {}, encryptor = encryptorUtils }: KeyringControllerArgs = {
-      initState: {},
-      encryptor: encryptorUtils,
-    }
-  ) {
+  constructor(options?: KeyringControllerArgs) {
     super();
-    this.store = initState;
     this.memStore = {
       isUnlocked: false,
       keyrings: [],
     };
 
-    this.encryptor = encryptor;
+    this.encryptor = options?.encryptor ?? encryptorUtils;
     this.keyrings = {};
-    this.unsupportedKeyrings = [];
+  }
+
+  async init(password: string) {
+    this.password = password;
+
+    const wallets = await storageService.importWallets(password);
+    wallets.forEach((i) => {
+      const wallet = HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(i.phrase));
+      if (i.accounts.length > 1) {
+        wallet.addAccounts(i.accounts.length - 1);
+      }
+      this.keyrings[i.id] = wallet;
+    });
+
+    return wallets;
   }
 
   fullUpdate() {

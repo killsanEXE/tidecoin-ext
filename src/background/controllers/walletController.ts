@@ -1,4 +1,4 @@
-import { storageService } from "@/background/services";
+import { storageService, keyringService } from "@/background/services";
 import type { IAccount, IWallet, IWalletController } from "@/shared/interfaces";
 import { fromMnemonic } from "test-test-test-hd-wallet";
 import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
@@ -53,7 +53,7 @@ export class WalletController implements IWalletController {
   }
 
   async importWallets(password: string) {
-    return await storageService.importWallets(password);
+    return await keyringService.init(password);
   }
 
   async loadAccountsData(wallet: IWallet): Promise<IAccount[]> {

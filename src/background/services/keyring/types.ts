@@ -1,10 +1,12 @@
+import { TideInput } from "test-test-test-hd-wallet/src/hd/types";
+import { Psbt } from "tidecoinjs-lib";
+
 export type Json = any;
 export type Hex = string;
 
 export type KeyringControllerArgs = {
   keyringBuilders?: { (): Keyring<Json>; type: string }[];
   cacheEncryptionKey: boolean;
-  initState?: KeyringControllerPersistentState;
   encryptor?: any;
 };
 
@@ -17,10 +19,6 @@ export type Eip1024EncryptedData = {
 
 export type KeyringObject = {
   accounts: string[];
-};
-
-export type KeyringControllerPersistentState = {
-  vault?: string;
 };
 
 export type KeyringControllerState = {
@@ -47,20 +45,12 @@ export type Keyring<State extends Json> = {
     options?: Record<string, unknown>
   ): Promise<string>;
   getAppKeyAddress?(address: Hex, origin: string): Promise<Hex>;
-  signTransaction?(
-    address: Hex,
-    transaction: unknown,
-    options?: Record<string, unknown>
-  ): Promise<unknown>;
-  signMessage?(
-    address: Hex,
-    message: string,
-    options?: Record<string, unknown>
-  ): Promise<string>;
+  signTransaction?(psbt: Psbt, inputs: TideInput[]): Promise<unknown>;
+  signMessage(address: Hex, message: string, seed: Uint8Array): Promise<string>;
   signPersonalMessage?(
     address: Hex,
     message: Hex,
-    options?: { version?: string } & Record<string, unknown>
+    seed: Uint8Array
   ): Promise<string>;
   signTypedData?(
     address: Hex,
