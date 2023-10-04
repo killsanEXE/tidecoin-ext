@@ -1,12 +1,13 @@
+import { TideInput } from "test-test-test-hd-wallet/src/hd/types";
+import { Psbt } from "tidecoinjs-lib";
+import * as encryptorUtils from "@metamask/browser-passworder";
+
 export type Json = any;
 export type Hex = string;
 
-export type KeyringControllerArgs = {
-  keyringBuilders?: { (): Keyring<Json>; type: string }[];
-  cacheEncryptionKey: boolean;
-  initState?: KeyringControllerPersistentState;
-  encryptor?: any;
-};
+export interface KeyringControllerArgs {
+  encryptor?: typeof encryptorUtils;
+}
 
 export type Eip1024EncryptedData = {
   version: string;
@@ -15,52 +16,24 @@ export type Eip1024EncryptedData = {
   ciphertext: string;
 };
 
-export type KeyringObject = {
-  accounts: string[];
-};
-
-export type KeyringControllerPersistentState = {
-  vault?: string;
-};
-
-export type KeyringControllerState = {
-  keyrings: KeyringObject[];
-  isUnlocked: boolean;
-  encryptionKey?: string;
-  encryptionSalt?: string;
-};
-
-export type SerializedKeyring = {
-  data: Json;
-};
-
 export type Keyring<State extends Json> = {
   type: string;
   getAccounts(): Promise<Hex[]>;
   addAccounts(number: number): Promise<Hex[]>;
   serialize(): Promise<State>;
   deserialize(state: State): Promise<void>;
-  init?(): Promise<void>;
   removeAccount?(address: Hex): void;
   exportAccount?(
     address: Hex,
     options?: Record<string, unknown>
   ): Promise<string>;
   getAppKeyAddress?(address: Hex, origin: string): Promise<Hex>;
-  signTransaction?(
-    address: Hex,
-    transaction: unknown,
-    options?: Record<string, unknown>
-  ): Promise<unknown>;
-  signMessage?(
-    address: Hex,
-    message: string,
-    options?: Record<string, unknown>
-  ): Promise<string>;
+  signTransaction(psbt: Psbt, inputs: TideInput[]): Promise<unknown>;
+  signMessage(address: Hex, message: string, seed: Uint8Array): Promise<string>;
   signPersonalMessage?(
     address: Hex,
     message: Hex,
-    options?: { version?: string } & Record<string, unknown>
+    seed: Uint8Array
   ): Promise<string>;
   signTypedData?(
     address: Hex,

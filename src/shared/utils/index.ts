@@ -26,10 +26,11 @@ export const getChain = (chainId?: string) => {
 };
 
 interface fetchProps extends RequestInit {
-  method?: 'POST' | 'GET' | 'PUT' | 'DELETE'
-  headers?: HeadersInit
-  path: string
-  error?: boolean
+  method?: "POST" | "GET" | "PUT" | "DELETE";
+  headers?: HeadersInit;
+  path: string;
+  params?: Record<string, string>;
+  error?: boolean;
 }
 
 export const fetchTDCMainnet = async <T>({
@@ -37,15 +38,20 @@ export const fetchTDCMainnet = async <T>({
   ...props
 }: fetchProps): Promise<T | undefined> => {
   try {
-    const res = await fetch(`${TDC_MAINNET_URL}${path}`, { ...props })
+    const url = new URL(path, TDC_MAINNET_URL);
+    if (props.params) {
+      Object.entries(props.params).forEach((v) => url.searchParams.set(...v));
+    }
+    const res = await fetch(url.toString(), { ...props });
 
     if (!res.ok) {
-      console.log("ERROR IN RESPONSE")
-      console.log(res.body)
+      console.error(res);
+      throw new Error("^^^ Error in response ^^^");
     }
 
-    return await res.json()
+    return await res.json();
   } catch (error) {
-    console.log(error)
+    console.error(error);
+    throw error;
   }
-}
+};

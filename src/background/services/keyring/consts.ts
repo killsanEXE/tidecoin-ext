@@ -7,8 +7,6 @@ export enum KeyringControllerError {
   UnsupportedGenerateRandomMnemonic = "KeyringController - The current keyring does not support the method generateRandomMnemonic.",
   UnsupportedExportAccount = "`KeyringController - The keyring for the current address does not support the method exportAccount",
   UnsupportedRemoveAccount = "`KeyringController - The keyring for the current address does not support the method removeAccount",
-  UnsupportedSignTransaction = "KeyringController - The keyring for the current address does not support the method signTransaction.",
-  UnsupportedSignMessage = "KeyringController - The keyring for the current address does not support the method signMessage.",
   UnsupportedSignPersonalMessage = "KeyringController - The keyring for the current address does not support the method signPersonalMessage.",
   UnsupportedGetEncryptionPublicKey = "KeyringController - The keyring for the current address does not support the method getEncryptionPublicKey.",
   UnsupportedDecryptMessage = "KeyringController - The keyring for the current address does not support the method decryptMessage.",

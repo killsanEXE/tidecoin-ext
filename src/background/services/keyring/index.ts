@@ -4,20 +4,11 @@ import * as encryptorUtils from "@metamask/browser-passworder";
 import { EventEmitter } from "events";
 
 import { KeyringControllerError } from "./consts";
-import {
-  Hex,
-  Json,
-  Keyring,
-  KeyringControllerPersistentState,
-  KeyringControllerState,
-  SerializedKeyring,
-} from "./types";
+import { Hex, Json, Keyring, KeyringControllerArgs } from "./types";
 import { SimpleKey, HDPrivateKey } from "test-test-test-hd-wallet";
-
-interface KeyringControllerArgs {
-  initState?: KeyringControllerPersistentState;
-  encryptor?: typeof encryptorUtils;
-}
+import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
+import { storageService } from "..";
+import { Psbt } from "tidecoinjs-lib";
 
 export const KEYRING_SDK_TYPES = {
   SimpleKey,
@@ -25,39 +16,36 @@ export const KEYRING_SDK_TYPES = {
 };
 
 class KeyringController extends EventEmitter {
-  public store: KeyringControllerPersistentState;
-
-  public memStore: KeyringControllerState;
-
   public encryptor: typeof encryptorUtils;
 
   public keyrings: Record<string | "root", Keyring<Json>>;
 
-  public unsupportedKeyrings: SerializedKeyring[];
-
   public password?: string;
 
-  constructor(
-    { initState = {}, encryptor = encryptorUtils }: KeyringControllerArgs = {
-      initState: {},
-      encryptor: encryptorUtils,
-    }
-  ) {
-    super();
-    this.store = initState;
-    this.memStore = {
-      isUnlocked: false,
-      keyrings: [],
-    };
+  public isUnlocked?: boolean;
 
-    this.encryptor = encryptor;
+  constructor(options?: KeyringControllerArgs) {
+    super();
+
+    this.isUnlocked = false;
+    this.encryptor = options?.encryptor ?? encryptorUtils;
     this.keyrings = {};
-    this.unsupportedKeyrings = [];
   }
 
-  fullUpdate() {
-    this.emit("update", this.memStore);
-    return this.memStore;
+  async init(password: string) {
+    this.password = password;
+    this.isUnlocked = true;
+
+    const wallets = await storageService.importWallets(password);
+    wallets.forEach((i) => {
+      const wallet = HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(i.phrase));
+      if (i.accounts.length > 1) {
+        wallet.addAccounts(i.accounts.length - 1);
+      }
+      this.keyrings[i.id] = wallet;
+    });
+
+    return wallets;
   }
 
   async exportAccount(address: string): Promise<string> {
@@ -69,7 +57,7 @@ class KeyringController extends EventEmitter {
     return await keyring.exportAccount(address.toLowerCase());
   }
 
-  async removeAccount(address: Hex): Promise<KeyringControllerState> {
+  async removeAccount(address: Hex) {
     const keyring = await this.getKeyringForAccount(address);
 
     // Not all the keyrings support this, so we have to check
@@ -78,8 +66,6 @@ class KeyringController extends EventEmitter {
     }
     keyring.removeAccount(address);
     this.emit("removedAccount", address);
-
-    return this.fullUpdate();
   }
 
   async getAccounts(keyring = "root"): Promise<string[]> {
@@ -93,52 +79,61 @@ class KeyringController extends EventEmitter {
     return this.keyrings.root;
   }
 
-  async signTransaction(
-    tideTx: unknown,
-    rawAddress: string,
-    opts: Record<string, unknown> = {}
-  ): Promise<unknown> {
-    const address = rawAddress.toLowerCase() as Hex;
-    const keyring = await this.getKeyringForAccount(address);
-    if (!keyring.signTransaction) {
-      throw new Error(KeyringControllerError.UnsupportedSignTransaction);
-    }
-
-    return await keyring.signTransaction(address, tideTx, opts);
+  private async _signTransactionMultisig() {
+    // TODO It is base to develop multisign wallets
+    throw new Error("Unimplemented");
+    // const keyring = await this.getKeyringForAccount("");
+    // const addresses = await keyring.getAccounts();
+    // const utxos = (await Promise.all(addresses.map(apiController.getUtxos)))
+    //   .filter((i) => i !== undefined)
+    //   .reduce((prev, cur) => prev?.concat(...(cur ?? [])), []) as ApiUTXO[];
   }
 
-  async signMessage(
-    msgParams: {
-      from: string;
-      data: string;
-    },
-    opts: Record<string, unknown> = {}
-  ): Promise<string> {
-    const address = msgParams.from.toLowerCase() as Hex;
+  async signTransaction(tideTx: Psbt, address: string): Promise<unknown> {
     const keyring = await this.getKeyringForAccount(address);
-    if (!keyring.signMessage) {
-      throw new Error(KeyringControllerError.UnsupportedSignMessage);
-    }
 
-    return await keyring.signMessage(address, msgParams.data, opts);
+    return await keyring.signTransaction(
+      tideTx,
+      tideTx.data.inputs.map((_i, index) => ({
+        index: index,
+        address: address,
+      }))
+    );
   }
 
-  async signPersonalMessage(
-    msgParams: {
-      from: string;
-      data: string;
-    },
-    opts: Record<string, unknown> = {}
-  ): Promise<string> {
-    const address = msgParams.from.toLowerCase() as Hex;
-    const keyring = await this.getKeyringForAccount(address);
+  async signMessage(msgParams: {
+    from: string;
+    data: string;
+  }): Promise<string> {
+    const keyring = await this.getKeyringForAccount(msgParams.from);
+
+    const randomSeed = crypto.getRandomValues(new Uint8Array(48));
+
+    return await keyring.signMessage(
+      msgParams.from,
+      msgParams.data,
+      randomSeed
+    );
+  }
+
+  async signPersonalMessage(msgParams: {
+    from: string;
+    data: string;
+  }): Promise<string> {
+    const keyring = await this.getKeyringForAccount(msgParams.from);
     if (!keyring.signPersonalMessage) {
       throw new Error(KeyringControllerError.UnsupportedSignPersonalMessage);
     }
 
     const normalizedData = msgParams.data.toLowerCase() as Hex;
 
-    return await keyring.signPersonalMessage(address, normalizedData, opts);
+    const randomSeed = crypto.getRandomValues(new Uint8Array(48));
+
+    return await keyring.signPersonalMessage(
+      msgParams.from,
+      normalizedData,
+      randomSeed
+    );
   }
 
   async getEncryptionPublicKey(
