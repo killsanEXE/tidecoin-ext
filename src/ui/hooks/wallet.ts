@@ -3,19 +3,28 @@ import { useAppState } from "../states/appState"
 import { useControllersState } from "../states/controllerState"
 import { useWalletState } from "../states/walletState"
 
+export const useSaveWallets = () => {
+    const { password } = useAppState((v) => ({ password: v.password }))
+    const { walletController } = useControllersState((v) => ({ walletController: v.walletController }))
+
+    return async (wallets: IWallet[]) => {
+        await walletController.saveWallets(password!, wallets);
+    }
+}
+
 export const useCreateNewWallet = () => {
     const { wallets, updateWalletState } = useWalletState((v) => ({
         wallets: v.wallets,
         updateWalletState: v.updateWalletState
     }))
-    const { password } = useAppState((v) => ({ password: v.password }))
     const { walletController } = useControllersState((v) => ({ walletController: v.walletController }))
+    const saveWallets = useSaveWallets();
 
     return async (phrase: string, name?: string) => {
         const wallet = await walletController.createNewWallet(Array.from(wallets.values()), phrase, name);
         wallet.currentAccount = wallet.accounts[0];
         wallets.set(wallet.id, wallet)
-        await walletController.saveWallets(password!, Array.from(wallets.values()))
+        await saveWallets(Array.from(wallets.values()));
         updateWalletState({
             currentWallet: wallet, wallets
         })
@@ -46,7 +55,7 @@ export const useCreateNewAccount = () => {
         wallets: v.wallets
     }))
     const { walletController } = useControllersState((v) => ({ walletController: v.walletController }))
-    const { password } = useAppState((v) => ({ password: v.password }))
+    const saveWallets = useSaveWallets();
 
     return async (name?: string) => {
         if (!currentWallet) return;
@@ -62,7 +71,7 @@ export const useCreateNewAccount = () => {
         };
 
         updateCurrentWallet(updatedWallet);
-        await walletController.saveWallets(password!, Array.from(wallets.values()));
+        await saveWallets(Array.from(wallets.values()));
     }
 }
 
