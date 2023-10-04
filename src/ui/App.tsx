@@ -3,7 +3,7 @@ import { RouterProvider } from "react-router-dom";
 import { Router } from "@remix-run/router";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { setupOpenAPIProxy, setupWalletProxy } from "@/ui/utils/setup";
+import { setupOpenAPIProxy, setupStateProxy, setupWalletProxy } from "@/ui/utils/setup";
 import { useAppState } from "./states/appState";
 import { useWalletState } from "./states/walletState";
 import { guestRouter, authenticatedRouter } from "@/ui/pages/router";
@@ -11,23 +11,23 @@ import { useControllersState } from "./states/controllerState";
 import { IWalletController, IWallet } from "@/shared/interfaces";
 
 export default function App() {
-  // const login = async (walletController: IWalletController) => {
-  //   const exportedWallets = await walletController.importWallets("1");
-  //   exportedWallets[0].accounts = await walletController.loadAccountsData(exportedWallets[0])
-  //   const map = new Map<number, IWallet>();
-  //   exportedWallets.forEach((f) => map.set(f.id, f))
-  //   updateWalletState({
-  //     wallets: map,
-  //     currentWallet: {
-  //       ...exportedWallets[0],
-  //       currentAccount: exportedWallets[0].accounts[0],
-  //     },
-  //   });
-  //   updateAppState({
-  //     isUnlocked: true,
-  //     password: "1",
-  //   });
-  // };
+  const login = async (walletController: IWalletController) => {
+    const exportedWallets = await walletController.importWallets("1");
+    exportedWallets[0].accounts = await walletController.loadAccountsData(exportedWallets[0])
+    const map = new Map<number, IWallet>();
+    exportedWallets.forEach((f) => map.set(f.id, f))
+    updateWalletState({
+      wallets: map,
+      currentWallet: {
+        ...exportedWallets[0],
+        currentAccount: exportedWallets[0].accounts[0],
+      },
+    });
+    updateAppState({
+      isUnlocked: true,
+      password: "1",
+    });
+  };
 
   const [router, setRouter] = useState<Router>(guestRouter);
   const { isReady, isUnlocked, updateAppState } = useAppState((v) => ({
@@ -48,7 +48,12 @@ export default function App() {
     const setupApp = async () => {
       const walletController = setupWalletProxy();
       const apiController = setupOpenAPIProxy();
-      updateControllers({ walletController, apiController });
+      const stateController = setupStateProxy();
+
+      const shit = await stateController.getAppState();
+      if (shit.isUnlocked) login(walletController);
+
+      updateControllers({ walletController, apiController, stateController });
       updateWalletState({
         vaultIsEmpty: await walletController.isVaultEmpty(),
       });
@@ -65,6 +70,8 @@ export default function App() {
     isUnlocked,
     setupWalletProxy,
     updateWalletState,
+    setupStateProxy,
+    setupStateProxy,
     updateAppState,
     router,
     setRouter,

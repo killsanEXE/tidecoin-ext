@@ -9,6 +9,7 @@ import {
 import walletController from "./controllers/walletController";
 import apiController from "./controllers/apiController";
 import keyringController from "./services/keyring";
+import stateController from "./controllers/stateController";
 
 const { PortMessage } = Message;
 
@@ -33,6 +34,10 @@ browserRuntimeOnConnect((port: any) => {
             break;
           case "keyring":
             return keyringController[data.method].apply(null, data.params);
+            break;
+          case "state":
+            console.log(JSON.stringify(data))
+            return stateController[data.method].apply(null, data.params);
           case "controller":
           default:
             if (data.method) {

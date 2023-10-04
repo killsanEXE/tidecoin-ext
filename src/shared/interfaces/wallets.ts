@@ -8,9 +8,12 @@ export interface IWallet {
   name: string;
 }
 
-export interface IWalletState {
+export interface IWalletStateBase {
   wallets: Map<number, IWallet>;
   vaultIsEmpty: boolean;
   currentWallet?: IWallet;
+}
+
+export interface IWalletState extends IWalletStateBase {
   updateWalletState: (state: Partial<IWalletState>) => void;
 }

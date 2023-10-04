@@ -103,7 +103,6 @@ export class WalletController implements IWalletController {
 
   generateMnemonicPhrase(): string {
     const randomSeed = crypto.getRandomValues(new Uint8Array(16));
-
     return new Mnemonic().getPhrase(randomSeed);
   }
 }

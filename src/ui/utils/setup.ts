@@ -3,8 +3,9 @@ import eventBus from "@/shared/eventBus";
 import { Message } from "@/shared/utils";
 import { IWalletController } from "@/shared/interfaces";
 import { IApiController } from "@/shared/interfaces/apiController";
+import { IStateController } from "@/shared/interfaces/stateController";
 
-export function setupPm() {
+function setupPm() {
   const { PortMessage } = Message;
   const portMessageChannel = new PortMessage();
   portMessageChannel.connect("popup");
@@ -26,9 +27,9 @@ export function setupPm() {
   return portMessageChannel;
 }
 
-export function setupWalletProxy() {
-  const portMessageChannel = setupPm();
+const portMessageChannel = setupPm()
 
+export function setupWalletProxy() {
   const wallet: Record<string, any> = new Proxy(
     {},
     {
@@ -47,8 +48,6 @@ export function setupWalletProxy() {
 }
 
 export function setupOpenAPIProxy() {
-  const portMessageChannel = setupPm();
-
   const openapi: Record<string, any> = new Proxy(
     {},
     {
@@ -64,4 +63,22 @@ export function setupOpenAPIProxy() {
     }
   );
   return openapi as IApiController;
+}
+
+export function setupStateProxy() {
+  const state: Record<string, any> = new Proxy(
+    {},
+    {
+      get(obj, key) {
+        return function (...params: any) {
+          return portMessageChannel.request({
+            type: "state",
+            method: key,
+            params,
+          });
+        };
+      },
+    }
+  );
+  return state as IStateController;
 }
