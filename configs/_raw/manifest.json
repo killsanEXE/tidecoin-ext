@@ -1,16 +1,23 @@
 {
-  "short_name": "React App",
+  "short_name": "Tidecoin",
   "version": "1.0",
   "manifest_version": 3,
   "name": "TIDECOIN",
   "icons": {
-    "16": "favicon.ico",
-    "48": "favicon.ico",
-    "128": "favicon.ico"
+    "16": "/favicon.ico",
+    "32": "/favicon.ico",
+    "48": "/favicon.ico",
+    "128": "/favicon.ico"
   },
   "action": {
     "default_popup": "index.html",
-    "default_title": "Open the popup"
+    "default_title": "Open the popup",
+    "default_icon": {
+      "16": "/favicon.ico",
+      "32": "/favicon.ico",
+      "48": "/favicon.ico",
+      "128": "/favicon.ico"
+    }
   },
   "chrome_url_overrides": {
     "newtab": "index.html"

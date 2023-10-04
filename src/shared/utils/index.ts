@@ -1,4 +1,4 @@
-import { CHAINS, TDC_MAINNET_URL } from "@/shared/constant";
+import { CHAINS, TDC_API_URL, TDC_MAINNET_PATH } from "@/shared/constant";
 import browser from "./browser";
 import BroadcastChannelMessage from "./message/broadcastChannelMessage";
 import PortMessage from "./message/portMessage";
@@ -38,7 +38,7 @@ export const fetchTDCMainnet = async <T>({
   ...props
 }: fetchProps): Promise<T | undefined> => {
   try {
-    const url = new URL(path, TDC_MAINNET_URL);
+    const url = new URL(TDC_MAINNET_PATH.concat(path), TDC_API_URL);
     if (props.params) {
       Object.entries(props.params).forEach((v) => url.searchParams.set(...v));
     }

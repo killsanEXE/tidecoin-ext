@@ -56,6 +56,7 @@
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
+    "autoprefixer": "^10.4.16",
     "bun-types": "^1.0.2",
     "copy-webpack-plugin": "^11.0.0",
     "esbuild": "^0.19.4",

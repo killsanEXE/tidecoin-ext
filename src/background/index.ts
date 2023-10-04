@@ -2,7 +2,6 @@ import { EVENTS } from "@/shared/constant";
 import eventBus from "@/shared/eventBus";
 import { Message } from "@/shared/utils";
 import { sessionService } from "@/background/services";
-import { openExtensionInTab } from "@/shared/features/tabs";
 import {
   browserRuntimeOnConnect,
   browserRuntimeOnInstalled,
@@ -85,7 +84,7 @@ browserRuntimeOnConnect((port: any) => {
 });
 
 const addAppInstalledEvent = () => {
-  openExtensionInTab();
+  // openExtensionInTab();
   return;
 };
 

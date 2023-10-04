@@ -4,13 +4,13 @@
 import { AddressType, Chain, NetworkType, RestoreWalletType } from "../types";
 
 export enum CHAINS_ENUM {
-  BTC = "BTC",
+  TDC = "TDC",
 }
 
 export const CHAINS: Record<string, Chain> = {
-  [CHAINS_ENUM.BTC]: {
-    name: "BTC",
-    enum: CHAINS_ENUM.BTC,
+  [CHAINS_ENUM.TDC]: {
+    name: "TDC",
+    enum: CHAINS_ENUM.TDC,
     logo: "",
     network: "mainnet",
   },
@@ -19,9 +19,6 @@ export const CHAINS: Record<string, Chain> = {
 export const KEYRING_TYPE = {
   HdKeyring: "HD Key Tree",
   SimpleKeyring: "Simple Key Pair",
-  WatchAddressKeyring: "Watch Address",
-  WalletConnectKeyring: "WalletConnect",
-  Empty: "Empty",
 };
 
 export const KEYRING_CLASS = {
@@ -32,12 +29,10 @@ export const KEYRING_CLASS = {
 export const KEYRING_TYPE_TEXT = {
   [KEYRING_TYPE.HdKeyring]: "Created by Mnemonic",
   [KEYRING_TYPE.SimpleKeyring]: "Imported by Private Key",
-  [KEYRING_TYPE.WatchAddressKeyring]: "Watch Mode",
 };
 export const BRAND_ALIAN_TYPE_TEXT = {
   [KEYRING_TYPE.HdKeyring]: "Account",
   [KEYRING_TYPE.SimpleKeyring]: "Private Key",
-  [KEYRING_TYPE.WatchAddressKeyring]: "Watch",
 };
 
 export const KEYRING_TYPES: {
@@ -112,7 +107,6 @@ export const ADDRESS_TYPES: {
   name: string;
   hdPath: string;
   displayIndex: number;
-  isUnisatLegacy?: boolean;
 }[] = [
   {
     value: AddressType.P2PKH,
@@ -120,7 +114,6 @@ export const ADDRESS_TYPES: {
     name: "Legacy (P2PKH)",
     hdPath: "m/44'/0'/0'/0",
     displayIndex: 3,
-    isUnisatLegacy: false,
   },
   {
     value: AddressType.P2WPKH,
@@ -128,7 +121,6 @@ export const ADDRESS_TYPES: {
     name: "Native Segwit (P2WPKH)",
     hdPath: "m/84'/0'/0'/0",
     displayIndex: 0,
-    isUnisatLegacy: false,
   },
   {
     value: AddressType.P2TR,
@@ -136,7 +128,6 @@ export const ADDRESS_TYPES: {
     name: "Taproot (P2TR)",
     hdPath: "m/86'/0'/0'/0",
     displayIndex: 2,
-    isUnisatLegacy: false,
   },
   {
     value: AddressType.P2SH_P2WPKH,
@@ -144,7 +135,6 @@ export const ADDRESS_TYPES: {
     name: "Nested Segwit (P2SH-P2WPKH)",
     hdPath: "m/49'/0'/0'/0",
     displayIndex: 1,
-    isUnisatLegacy: false,
   },
   {
     value: AddressType.M44_P2WPKH,
@@ -152,7 +142,6 @@ export const ADDRESS_TYPES: {
     name: "Native SegWit (P2WPKH)",
     hdPath: "m/44'/0'/0'/0",
     displayIndex: 4,
-    isUnisatLegacy: true,
   },
   {
     value: AddressType.M44_P2TR,
@@ -160,7 +149,6 @@ export const ADDRESS_TYPES: {
     name: "Taproot (P2TR)",
     hdPath: "m/44'/0'/0'/0",
     displayIndex: 5,
-    isUnisatLegacy: true,
   },
 ];
 
@@ -170,8 +158,8 @@ export const RESTORE_WALLETS: {
   addressTypes: AddressType[];
 }[] = [
   {
-    value: RestoreWalletType.UNISAT,
-    name: "UniSat Wallet",
+    value: RestoreWalletType.TIDECOIN,
+    name: "TideCoin Wallet",
     addressTypes: [
       AddressType.P2WPKH,
       AddressType.P2SH_P2WPKH,
@@ -240,16 +228,16 @@ export const WALLETCONNECT_STATUS_MAP = {
   FAILD: 6,
 };
 
-export const INTERNAL_REQUEST_ORIGIN = "https://unisat.io";
+export const INTERNAL_REQUEST_ORIGIN = "https://tdc.cash";
 
 export const INTERNAL_REQUEST_SESSION = {
-  name: "UniSat Wallet",
+  name: "TideCoin Wallet",
   origin: INTERNAL_REQUEST_ORIGIN,
   icon: "./images/logo/logo@128x.png",
 };
 
-export const OPENAPI_URL_MAINNET = "https://api.unisat.io/wallet-v4";
-export const OPENAPI_URL_TESTNET = "https://api-testnet.unisat.io/wallet-v4";
+export const OPENAPI_URL_MAINNET = "https://tdc.cash";
+export const OPENAPI_URL_TESTNET = "https://tdc.cash";
 
 export const EVENTS = {
   broadcastToUI: "broadcastToUI",
@@ -265,16 +253,14 @@ export const EVENTS = {
 export const SORT_WEIGHT = {
   [KEYRING_TYPE.HdKeyring]: 1,
   [KEYRING_TYPE.SimpleKeyring]: 2,
-  [KEYRING_TYPE.WalletConnectKeyring]: 4,
-  [KEYRING_TYPE.WatchAddressKeyring]: 5,
 };
 
 export const GASPRICE_RANGE = {
-  [CHAINS_ENUM.BTC]: [0, 10000],
+  [CHAINS_ENUM.TDC]: [0, 10000],
 };
 
-export const COIN_NAME = "BTC";
-export const COIN_SYMBOL = "BTC";
+export const COIN_NAME = "TDC";
+export const COIN_SYMBOL = "TDC";
 
 export const COIN_DUST = 1000;
 
@@ -283,13 +269,8 @@ export const TO_LOCALE_STRING_CONFIG = {
 };
 
 export const SATS_DOMAIN = ".sats";
-export const UNISAT_DOMAIN = ".unisat";
-
-export const GITHUB_URL = "https://github.com/unisat-wallet/extension";
-export const DISCORD_URL = "https://discord.com/invite/EMskB2sMz8";
-export const TWITTER_URL = "https://twitter.com/unisat_wallet";
 
 export const CHANNEL = "chrome";
 
-export const TDC_API_URL = "https://tdc.cash/api";
-export const TDC_MAINNET_URL = TDC_API_URL + "/TDC/mainnet";
+export const TDC_API_URL = "https://tdc.cash";
+export const TDC_MAINNET_PATH = "/api/TDC/mainnet";

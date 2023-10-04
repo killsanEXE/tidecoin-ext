@@ -1,25 +1,25 @@
 // this script is injected into webpage's context
-import { ethErrors, serializeError } from 'eth-rpc-errors';
-import { EventEmitter } from 'events';
+import { ethErrors, serializeError } from "eth-rpc-errors";
+import { EventEmitter } from "events";
 
-import { TxType } from '@/shared/types';
-import BroadcastChannelMessage from '@/shared/utils/message/broadcastChannelMessage';
+import { TxType } from "@/shared/types";
+import BroadcastChannelMessage from "@/shared/utils/message/broadcastChannelMessage";
 
-import PushEventHandlers from './pushEventHandlers';
-import ReadyPromise from './readyPromise';
-import { $, domReadyCall } from './utils';
+import PushEventHandlers from "./pushEventHandlers";
+import ReadyPromise from "./readyPromise";
+import { $, domReadyCall } from "./utils";
 
 const log = (event, ...args) => {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     console.log(
-      `%c [unisat] (${new Date().toTimeString().slice(0, 8)}) ${event}`,
-      'font-weight: 600; background-color: #7d6ef9; color: white;',
+      `%c [tidecoin] (${new Date().toTimeString().slice(0, 8)}) ${event}`,
+      "font-weight: 600; background-color: #7d6ef9; color: white;",
       ...args
     );
   }
 };
 const script = document.currentScript;
-const channelName = script?.getAttribute('channel') || 'UNISAT';
+const channelName = script?.getAttribute("channel") || "TIDEWALLET";
 
 export interface Interceptor {
   onRequest?: (data: any) => any;
@@ -34,7 +34,7 @@ interface StateProvider {
   isPermanentlyDisconnected: boolean;
 }
 
-export class UnisatProvider extends EventEmitter {
+export class TidecoinProvider extends EventEmitter {
   _selectedAddress: string | null = null;
   _network: string | null = null;
   _isConnected = false;
@@ -46,7 +46,7 @@ export class UnisatProvider extends EventEmitter {
     isConnected: false,
     isUnlocked: false,
     initialized: false,
-    isPermanentlyDisconnected: false
+    isPermanentlyDisconnected: false,
   };
 
   private _pushEventHandlers: PushEventHandlers;
@@ -62,20 +62,26 @@ export class UnisatProvider extends EventEmitter {
   }
 
   initialize = async () => {
-    document.addEventListener('visibilitychange', this._requestPromiseCheckVisibility);
+    document.addEventListener(
+      "visibilitychange",
+      this._requestPromiseCheckVisibility
+    );
 
-    this._bcm.connect().on('message', this._handleBackgroundMessage);
+    this._bcm.connect().on("message", this._handleBackgroundMessage);
     domReadyCall(() => {
       const origin = window.top?.location.origin;
       const icon =
         ($('head > link[rel~="icon"]') as HTMLLinkElement)?.href ||
         ($('head > meta[itemprop="image"]') as HTMLMetaElement)?.content;
 
-      const name = document.title || ($('head > meta[name="title"]') as HTMLMetaElement)?.content || origin;
+      const name =
+        document.title ||
+        ($('head > meta[name="title"]') as HTMLMetaElement)?.content ||
+        origin;
 
       this._bcm.request({
-        method: 'tabCheckin',
-        params: { icon, name, origin }
+        method: "tabCheckin",
+        params: { icon, name, origin },
       });
 
       // Do not force to tabCheckin
@@ -84,15 +90,15 @@ export class UnisatProvider extends EventEmitter {
 
     try {
       const { network, accounts, isUnlocked }: any = await this._request({
-        method: 'getProviderState'
+        method: "getProviderState",
       });
       if (isUnlocked) {
         this._isUnlocked = true;
         this._state.isUnlocked = true;
       }
-      this.emit('connect', {});
+      this.emit("connect", {});
       this._pushEventHandlers.networkChanged({
-        network
+        network,
       });
 
       this._pushEventHandlers.accountsChanged(accounts);
@@ -101,7 +107,7 @@ export class UnisatProvider extends EventEmitter {
     } finally {
       this._initialized = true;
       this._state.initialized = true;
-      this.emit('_initialized');
+      this.emit("_initialized");
     }
 
     this.keepAlive();
@@ -112,8 +118,8 @@ export class UnisatProvider extends EventEmitter {
    */
   private keepAlive = () => {
     this._request({
-      method: 'keepAlive',
-      params: {}
+      method: "keepAlive",
+      params: {},
     }).then(() => {
       setTimeout(() => {
         this.keepAlive();
@@ -122,7 +128,7 @@ export class UnisatProvider extends EventEmitter {
   };
 
   private _requestPromiseCheckVisibility = () => {
-    if (document.visibilityState === 'visible') {
+    if (document.visibilityState === "visible") {
       this._requestPromise.check(1);
     } else {
       this._requestPromise.uncheck(1);
@@ -130,7 +136,7 @@ export class UnisatProvider extends EventEmitter {
   };
 
   private _handleBackgroundMessage = ({ event, data }) => {
-    log('[push event]', event, data);
+    log("[push event]", event, data);
     if (this._pushEventHandlers[event]) {
       return this._pushEventHandlers[event](data);
     }
@@ -150,15 +156,15 @@ export class UnisatProvider extends EventEmitter {
     this._requestPromiseCheckVisibility();
 
     return this._requestPromise.call(() => {
-      log('[request]', JSON.stringify(data, null, 2));
+      log("[request]", JSON.stringify(data, null, 2));
       return this._bcm
         .request(data)
         .then((res) => {
-          log('[request: success]', data.method, res);
+          log("[request: success]", data.method, res);
           return res;
         })
         .catch((err) => {
-          log('[request: error]', data.method, serializeError(err));
+          log("[request: error]", data.method, serializeError(err));
           throw serializeError(err);
         });
     });
@@ -167,84 +173,92 @@ export class UnisatProvider extends EventEmitter {
   // public methods
   requestAccounts = async () => {
     return this._request({
-      method: 'requestAccounts'
+      method: "requestAccounts",
     });
   };
 
   getNetwork = async () => {
     return this._request({
-      method: 'getNetwork'
+      method: "getNetwork",
     });
   };
 
   switchNetwork = async (network: string) => {
     return this._request({
-      method: 'switchNetwork',
+      method: "switchNetwork",
       params: {
-        network
-      }
+        network,
+      },
     });
   };
 
   getAccounts = async () => {
     return this._request({
-      method: 'getAccounts'
+      method: "getAccounts",
     });
   };
 
   getPublicKey = async () => {
     return this._request({
-      method: 'getPublicKey'
+      method: "getPublicKey",
     });
   };
 
   getBalance = async () => {
     return this._request({
-      method: 'getBalance'
+      method: "getBalance",
     });
   };
 
   getInscriptions = async (cursor = 0, size = 20) => {
     return this._request({
-      method: 'getInscriptions',
+      method: "getInscriptions",
       params: {
         cursor,
-        size
-      }
+        size,
+      },
     });
   };
 
   signMessage = async (text: string, type: string) => {
     return this._request({
-      method: 'signMessage',
+      method: "signMessage",
       params: {
         text,
-        type
-      }
+        type,
+      },
     });
   };
 
-  sendBitcoin = async (toAddress: string, satoshis: number, options?: { feeRate: number }) => {
+  sendBitcoin = async (
+    toAddress: string,
+    satoshis: number,
+    options?: { feeRate: number }
+  ) => {
     return this._request({
-      method: 'sendBitcoin',
+      method: "sendBitcoin",
       params: {
         toAddress,
         satoshis,
         feeRate: options?.feeRate,
-        type: TxType.SEND_BITCOIN
-      }
+        type: TxType.SEND_BITCOIN,
+      },
     });
   };
 
-  sendInscription = async (toAddress: string, inscriptionId: string, options?: { feeRate: number }) => {
+  sendInscription = async (
+    toAddress: string,
+    inscriptionId: string,
+    options?: { feeRate: number }
+  ) => {
     return this._request({
-      method: 'sendInscription',
+      method: "sendInscription",
       params: {
         toAddress,
         inscriptionId,
         feeRate: options?.feeRate,
-        type: TxType.SEND_INSCRIPTION
-      }
+        type: TxType.SEND_INSCRIPTION,
+      },
     });
   };
 
@@ -262,73 +276,73 @@ export class UnisatProvider extends EventEmitter {
    */
   pushTx = async (rawtx: string) => {
     return this._request({
-      method: 'pushTx',
+      method: "pushTx",
       params: {
-        rawtx
-      }
+        rawtx,
+      },
     });
   };
 
   signPsbt = async (psbtHex: string, options?: any) => {
     return this._request({
-      method: 'signPsbt',
+      method: "signPsbt",
       params: {
         psbtHex,
         type: TxType.SIGN_TX,
-        options
-      }
+        options,
+      },
     });
   };
 
   signPsbts = async (psbtHexs: string[], options?: any[]) => {
     return this._request({
-      method: 'multiSignPsbt',
+      method: "multiSignPsbt",
       params: {
         psbtHexs,
-        options
-      }
+        options,
+      },
     });
   };
 
   pushPsbt = async (psbtHex: string) => {
     return this._request({
-      method: 'pushPsbt',
+      method: "pushPsbt",
       params: {
-        psbtHex
-      }
+        psbtHex,
+      },
     });
   };
 
   inscribeTransfer = async (ticker: string, amount: string) => {
     return this._request({
-      method: 'inscribeTransfer',
+      method: "inscribeTransfer",
       params: {
         ticker,
-        amount
-      }
+        amount,
+      },
     });
   };
 }
 
 declare global {
   interface Window {
-    unisat: UnisatProvider;
+    tidecoin: TidecoinProvider;
   }
 }
 
-const provider = new UnisatProvider();
+const provider = new TidecoinProvider();
 
-if (!window.unisat) {
-  window.unisat = new Proxy(provider, {
-    deleteProperty: () => true
+if (!window.tidecoin) {
+  window.tidecoin = new Proxy(provider, {
+    deleteProperty: () => true,
   });
 }
 
-Object.defineProperty(window, 'unisat', {
+Object.defineProperty(window, "tidecoin", {
   value: new Proxy(provider, {
-    deleteProperty: () => true
+    deleteProperty: () => true,
   }),
-  writable: false
+  writable: false,
 });
 
-window.dispatchEvent(new Event('unisat#initialized'));
+window.dispatchEvent(new Event("tidecoin#initialized"));
