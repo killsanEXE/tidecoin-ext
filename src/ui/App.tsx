@@ -1,15 +1,14 @@
-import ReactLoading from 'react-loading';
-import './App.scss';
-import { RouterProvider } from 'react-router-dom';
-import { Router } from '@remix-run/router'
-import { useEffect, useState } from 'react';
+import ReactLoading from "react-loading";
+import { RouterProvider } from "react-router-dom";
+import { Router } from "@remix-run/router";
+import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { setupOpenAPIProxy, setupWalletProxy } from '@/ui/utils/setup';
-import { useAppState } from './states/appState';
-import { useWalletState } from './states/walletState';
+import { setupOpenAPIProxy, setupWalletProxy } from "@/ui/utils/setup";
+import { useAppState } from "./states/appState";
+import { useWalletState } from "./states/walletState";
 import { guestRouter, authenticatedRouter } from "@/ui/pages/router";
-import { useControllersState } from './states/controllerState';
-import { IWalletController, IWallet } from '@/shared/interfaces';
+import { useControllersState } from "./states/controllerState";
+import { IWalletController, IWallet } from "@/shared/interfaces";
 
 export default function App() {
   // const login = async (walletController: IWalletController) => {
@@ -38,35 +37,52 @@ export default function App() {
   }));
 
   const { updateControllers } = useControllersState((v) => ({
-    updateControllers: v.updateControllers
+    updateControllers: v.updateControllers,
   }));
 
   const { updateWalletState } = useWalletState((v) => ({
     updateWalletState: v.updateWalletState,
-  }))
+  }));
 
   useEffect(() => {
     const setupApp = async () => {
       const walletController = setupWalletProxy();
       const apiController = setupOpenAPIProxy();
       updateControllers({ walletController, apiController });
-      updateWalletState({ vaultIsEmpty: await walletController.isVaultEmpty() });
+      updateWalletState({
+        vaultIsEmpty: await walletController.isVaultEmpty(),
+      });
       updateAppState({ isReady: true });
 
       // login(walletController)
-    }
+    };
 
     if (!isReady) setupApp();
     else if (isReady && isUnlocked) setRouter(authenticatedRouter);
     else setRouter(guestRouter);
-  }, [isReady, isUnlocked, setupWalletProxy, updateWalletState, updateAppState, router, setRouter]);
+  }, [
+    isReady,
+    isUnlocked,
+    setupWalletProxy,
+    updateWalletState,
+    updateAppState,
+    router,
+    setRouter,
+  ]);
 
   return (
-    <div className='app'>
-      {isReady ? <RouterProvider router={router} /> : <ReactLoading type="spin" color="#fff" />}
-      <Toaster position="bottom-center" toastOptions={{
-        className: "toast"
-      }} />
+    <div className="app">
+      {isReady ? (
+        <RouterProvider router={router} />
+      ) : (
+        <ReactLoading type="spin" color="#fff" />
+      )}
+      <Toaster
+        position="bottom-center"
+        toastOptions={{
+          className: "toast",
+        }}
+      />
     </div>
   );
 }
