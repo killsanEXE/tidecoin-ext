@@ -1,0 +1,27 @@
+.showMnemonic {
+    @apply w-full h-full flex justify-center items-center;
+
+    .phraseDiv {
+        @apply px-[2rem];
+
+        .phrase {
+            @apply bg-hovered text-[1.2rem];
+        }
+
+        .copyDiv {
+            @apply flex w-full justify-center gap-[1rem] items-center text-[1.1rem] pt-[2rem];
+        }
+    }
+}
+
+.phraseWrapper {
+    @apply grid grid-cols-3 text-[0.8rem];
+}
+
+.word {
+    @apply flex justify-between items-center p-5 gap-[.5rem];
+
+    .wordWord {
+        @apply bg-panel p-[.5rem] rounded-lg w-[80%] flex justify-center;
+    }
+}
