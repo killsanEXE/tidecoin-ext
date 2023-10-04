@@ -49,13 +49,13 @@ const Wallet = () => {
           }}
           className={cn(s.change, s.btn)}
         >
-          {currentWallet?.currentAccount.name}
+          {currentWallet?.currentAccount?.name}
         </button>
       </div>
 
       <div className={cn(s.accPanel, s.center)}>
         <div className={cn(s.balance, s.center)}>
-          {currentWallet?.currentAccount.balance === undefined ? (
+          {currentWallet?.currentAccount?.balance === undefined ? (
             <ReactLoading
               type="spin"
               color="#fff"
@@ -70,7 +70,7 @@ const Wallet = () => {
         <p
           className={cn(s.accPubAddress, s.center)}
           onClick={() => {
-            copyToClipboard(currentWallet?.currentAccount.address).then(() => {
+            copyToClipboard(currentWallet?.currentAccount?.address).then(() => {
               toast.success("Copied", {
                 style: { borderRadius: 0 },
                 iconTheme: {
@@ -81,7 +81,7 @@ const Wallet = () => {
             });
           }}
         >
-          <CopyIcon /> {shortAddress(currentWallet?.currentAccount.address)}
+          <CopyIcon /> {shortAddress(currentWallet?.currentAccount?.address)}
         </p>
 
         <div className={cn(s.receiveSendBtns, s.center)}>

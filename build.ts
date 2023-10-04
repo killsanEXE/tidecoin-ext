@@ -16,6 +16,7 @@ const ctx = await context({
   outdir: "dist",
   minify: true,
   bundle: true,
+  logLevel: "info",
   plugins: [
     stylePlugin({
       postcss: {
