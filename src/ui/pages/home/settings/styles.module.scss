@@ -3,7 +3,7 @@
 }
 
 .card {
-    @apply w-11/12 flex justify-center items-center bg-panel;
+    @apply w-11/12 flex justify-center items-center bg-panel rounded-[.3rem];
 
     &:hover {
         cursor: pointer;

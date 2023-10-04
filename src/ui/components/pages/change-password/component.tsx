@@ -34,33 +34,39 @@ const ChangePassword = () => {
 
   return (
     <form className="form" onSubmit={(e) => e.preventDefault()}>
-      <input
-        type="password"
-        value={oldPassword}
-        className="input"
-        placeholder="Enter old password"
-        onChange={(e) => {
-          setOldPassword(e.target.value);
-        }}
-      />
-      <input
-        type="password"
-        value={password}
-        className="input"
-        placeholder="Enter new password"
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-      />
-      <input
-        type="password"
-        value={confirmPassword}
-        className="input"
-        placeholder="Confirm new password"
-        onChange={(e) => {
-          setConfirmPassword(e.target.value);
-        }}
-      />
+      <div className="form-field">
+        <span className="input-span">Old password</span>
+        <input
+          type="password"
+          value={oldPassword}
+          className="input"
+          onChange={(e) => {
+            setOldPassword(e.target.value);
+          }}
+        />
+      </div>
+      <div className="form-field">
+        <span className="input-span">New password</span>
+        <input
+          type="password"
+          value={password}
+          className="input"
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+        />
+      </div>
+      <div className="form-field">
+        <span className="input-span">Confirm password</span>
+        <input
+          type="password"
+          value={confirmPassword}
+          className="input"
+          onChange={(e) => {
+            setConfirmPassword(e.target.value);
+          }}
+        />
+      </div>
       <button className="btn primary" onClick={executeChangePassword}>
         Change password
       </button>
