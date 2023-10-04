@@ -4,12 +4,13 @@ import {
 } from "@/shared/utils/browser";
 import * as encryptorUtils from "@metamask/browser-passworder";
 import { IWallet } from "@/shared/interfaces";
+import { DecryptedSecrets, StorageInterface } from "./types";
 
 class StorageService {
   async saveWallets(password: string, wallets: IWallet[]) {
+    const phrases = wallets.map((w) => w.phrase);
     const walletsToSave = wallets.map((wallet) => {
       return {
-        phrase: wallet.phrase,
         name: wallet.name,
         accounts: wallet.accounts.map((account) => ({
           id: account.id,
@@ -19,23 +20,35 @@ class StorageService {
     });
     const encrypted = await encryptorUtils.encrypt(
       password,
-      JSON.stringify(walletsToSave)
+      JSON.stringify(phrases)
     );
-    await browserStorageLocalSet(JSON.parse(encrypted));
+
+    const data: StorageInterface = {
+      enc: JSON.parse(encrypted),
+      cache: walletsToSave,
+    };
+
+    await browserStorageLocalSet(data);
   }
 
   async getLocalValues() {
-    const data = (await browserStorageLocalGet(undefined)) as any;
-    return data;
+    return await browserStorageLocalGet<StorageInterface>(undefined);
   }
 
   async importWallets(password: string): Promise<IWallet[]> {
     const encrypted = await this.getLocalValues();
     if (!encrypted) return [];
-    const decrypted: IWallet[] = JSON.parse(
-      (await encryptorUtils.decrypt(password, JSON.stringify(encrypted))) as any
+    const decryptedPhrases: DecryptedSecrets = JSON.parse(
+      (await encryptorUtils.decrypt(
+        password,
+        JSON.stringify(encrypted.enc)
+      )) as string
     );
-    return decrypted.map((i, index) => ({ ...i, id: index }));
+    return encrypted.cache.map((i, index: number) => ({
+      ...i,
+      id: index,
+      phrase: decryptedPhrases[index],
+    }));
   }
 }
 

@@ -16,11 +16,11 @@ export async function browserWindowsRemove(windowId: number) {
   return await browser.windows.remove(windowId);
 }
 
-export async function browserStorageLocalGet(val: any) {
-  return await browser.storage.local.get(val);
+export async function browserStorageLocalGet<T>(val: any): Promise<T> {
+  return (await browser.storage.local.get(val)) as T;
 }
 
-export async function browserStorageLocalSet(val: any) {
+export async function browserStorageLocalSet<T extends object>(val: T) {
   return await browser.storage.local.set(val);
 }
 
@@ -66,7 +66,6 @@ export function browserRuntimeOnInstalled(listener: any) {
 
 export function browserRuntimeConnect(connectInfo?: any) {
   return browser.runtime.connect(browser.runtime.id, connectInfo);
-
 }
 
 export default browser;
