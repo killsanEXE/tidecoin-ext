@@ -291,5 +291,5 @@ export const TWITTER_URL = "https://twitter.com/unisat_wallet";
 
 export const CHANNEL = "chrome";
 
-export const TDC_API_URL = "https://tdc.cash/api";
-export const TDC_MAINNET_URL = TDC_API_URL + "/TDC/mainnet";
+export const TDC_API_URL = "https://tdc.cash";
+export const TDC_MAINNET_PATH = "/api/TDC/mainnet";
