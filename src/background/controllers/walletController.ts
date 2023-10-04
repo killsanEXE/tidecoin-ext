@@ -14,7 +14,7 @@ const falconPair = falconPairFactory();
 export class WalletController implements IWalletController {
   async isVaultEmpty() {
     const values = await storageService.getLocalValues();
-    return values.data === undefined;
+    return values.enc === undefined;
   }
 
   async createNewWallet(
