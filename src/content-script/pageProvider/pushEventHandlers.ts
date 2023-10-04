@@ -1,9 +1,9 @@
-import { ethErrors } from 'eth-rpc-errors';
+import { ethErrors } from "eth-rpc-errors";
 
-import { UnisatProvider } from './index';
+import { TidecoinProvider } from "./index";
 
 class PushEventHandlers {
-  provider: UnisatProvider;
+  provider: TidecoinProvider;
 
   constructor(provider) {
     this.provider = provider;
@@ -19,7 +19,7 @@ class PushEventHandlers {
     if (!this.provider._isConnected) {
       this.provider._isConnected = true;
       this.provider._state.isConnected = true;
-      this._emit('connect', data);
+      this._emit("connect", data);
     }
   };
 
@@ -39,9 +39,9 @@ class PushEventHandlers {
     this.provider._selectedAddress = null;
     const disconnectError = ethErrors.provider.disconnected();
 
-    this._emit('accountsChanged', []);
-    this._emit('disconnect', disconnectError);
-    this._emit('close', disconnectError);
+    this._emit("accountsChanged", []);
+    this._emit("disconnect", disconnectError);
+    this._emit("close", disconnectError);
   };
 
   accountsChanged = (accounts: string[]) => {
@@ -51,7 +51,7 @@ class PushEventHandlers {
 
     this.provider._selectedAddress = accounts?.[0];
     this.provider._state.accounts = accounts;
-    this._emit('accountsChanged', accounts);
+    this._emit("accountsChanged", accounts);
   };
 
   networkChanged = ({ network }) => {
@@ -59,7 +59,7 @@ class PushEventHandlers {
 
     if (network !== this.provider._network) {
       this.provider._network = network;
-      this._emit('networkChanged', network);
+      this._emit("networkChanged", network);
     }
   };
 }

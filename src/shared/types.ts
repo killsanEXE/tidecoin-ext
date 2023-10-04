@@ -1,4 +1,4 @@
-import { CHAINS_ENUM } from './constant';
+import { CHAINS_ENUM } from "./constant";
 
 export enum AddressType {
   P2PKH,
@@ -6,19 +6,19 @@ export enum AddressType {
   P2TR,
   P2SH_P2WPKH,
   M44_P2WPKH,
-  M44_P2TR
+  M44_P2TR,
 }
 
 export enum NetworkType {
   MAINNET,
-  TESTNET
+  TESTNET,
 }
 
 export enum RestoreWalletType {
-  UNISAT,
+  TIDECOIN,
   SPARROW,
   XVERSE,
-  OTHERS
+  OTHERS,
 }
 
 export interface Chain {
@@ -134,7 +134,7 @@ export interface UTXO_Detail {
 export enum TxType {
   SIGN_TX,
   SEND_BITCOIN,
-  SEND_INSCRIPTION
+  SEND_INSCRIPTION,
 }
 
 interface BaseUserToSignInput {
@@ -211,7 +211,7 @@ export interface TokenInfo {
 
 export enum TokenInscriptionType {
   INSCRIBE_TRANSFER,
-  INSCRIBE_MINT
+  INSCRIBE_MINT,
 }
 
 export interface TokenTransfer {
@@ -271,5 +271,5 @@ export interface WalletConfig {
 export enum WebsiteState {
   CHECKING,
   SCAMMER,
-  SAFE
+  SAFE,
 }
