@@ -10,14 +10,15 @@ const Login = () => {
     updateAppState: v.updateAppState,
   }));
 
-  const { updateWalletState, vaultIsEmpty } =
-    useWalletState((v) => ({
-      updateWalletState: v.updateWalletState,
-      vaultIsEmpty: v.vaultIsEmpty,
-    }));
+  const { updateWalletState, vaultIsEmpty } = useWalletState((v) => ({
+    updateWalletState: v.updateWalletState,
+    vaultIsEmpty: v.vaultIsEmpty,
+  }));
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { walletController } = useControllersState((v) => ({ walletController: v.walletController }))
+  const { walletController } = useControllersState((v) => ({
+    walletController: v.walletController,
+  }));
 
   useEffect(() => {
     if (vaultIsEmpty) navigate("/account/create-password");
@@ -25,15 +26,18 @@ const Login = () => {
 
   const login = async () => {
     const exportedWallets = await walletController.importWallets(password);
-    exportedWallets[0].accounts = await walletController.loadAccountsData(password, 0)
-    updateWalletState({
+    exportedWallets[0].accounts = await walletController.loadAccountsData(
+      password,
+      0
+    );
+    await updateWalletState({
       wallets: exportedWallets,
       currentWallet: {
         ...exportedWallets[0],
         currentAccount: exportedWallets[0].accounts[0],
       },
     });
-    updateAppState({
+    await updateAppState({
       isUnlocked: true,
       password: password,
     });
@@ -55,6 +59,6 @@ const Login = () => {
       </button>
     </form>
   );
-}
+};
 
-export default Login
+export default Login;

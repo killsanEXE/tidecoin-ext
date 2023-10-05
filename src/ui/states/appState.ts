@@ -23,16 +23,15 @@ export const useAppState = create<IAppState>()((set) => ({
   password: undefined,
   updateAppState: async (app: Partial<IAppState>) => {
     const proxy = setupStateProxy();
-    proxy.updateAppState(app);
+    await proxy.updateAppState(app);
     set(app);
   },
-  logout: () => {
+  logout: async () => {
     const proxy = setupStateProxy();
-    proxy.updateAppState({ password: undefined, isUnlocked: false });
+    await proxy.updateAppState({ password: undefined, isUnlocked: false });
     set({ password: undefined, isUnlocked: false });
   },
 }));
-
 
 // export const useAppState = create<IAppState>(updateState((set) => ({
 //   isReady: false,

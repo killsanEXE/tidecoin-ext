@@ -86,8 +86,9 @@ class StorageService {
       encrypted.cache.map(async (i, index: number) => ({
         ...i,
         id: index,
-        phrase: (await this.getSecrets(encrypted, password))?.find((i) => i.id)
-          ?.secret,
+        phrase: (
+          await this.getSecrets(encrypted, password)
+        )?.find((i) => i.id === index)?.secret,
       }))
     );
   }

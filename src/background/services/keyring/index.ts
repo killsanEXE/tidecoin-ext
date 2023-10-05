@@ -15,7 +15,7 @@ export const KEYRING_SDK_TYPES = {
 };
 
 class KeyringService {
-  private keyrings: Keyring<Json>[];
+  keyrings: Keyring<Json>[];
 
   constructor() {
     this.keyrings = [];

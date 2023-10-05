@@ -45,13 +45,13 @@ export default function App() {
         appState.isUnlocked &&
         walletState.currentWallet
       ) {
-        updateWalletState(walletState);
-        updateAppState(appState);
+        await updateWalletState(walletState);
+        await updateAppState(appState);
       } else {
-        updateWalletState({
+        await updateWalletState({
           vaultIsEmpty: await walletController.isVaultEmpty(),
         });
-        updateAppState({ isReady: true });
+        await updateAppState({ isReady: true });
       }
       updateControllers({
         walletController,
