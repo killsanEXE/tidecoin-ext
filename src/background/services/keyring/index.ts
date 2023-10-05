@@ -7,6 +7,7 @@ import { storageService } from "@/background/services";
 import { Psbt, networks, payments } from "tidecoinjs-lib";
 import { Keyring } from "test-test-test-hd-wallet/src/hd/types";
 import { createSendTidecoin } from "tidecoin-utils";
+import { AddressType } from "@/shared/types";
 
 export const KEYRING_SDK_TYPES = {
   SimpleKey,
@@ -130,13 +131,13 @@ class KeyringService {
     const psbt = await createSendTidecoin({
       utxos: data.utxos.map((v) => {
         return {
-          txId: v.txId,
-          outputIndex: v.outputIndex,
-          satoshis: v.satoshis,
-          scriptPk: v.scriptPk,
-          addressType: v.addressType,
-          address: account.address!,
-          ords: v.inscriptions,
+          txId: v.mintTxid,
+          outputIndex: v.mintIndex,
+          satoshis: v.value,
+          scriptPk: v.script,
+          addressType: AddressType.P2WPKH,
+          address: v.address,
+          ords: [],
         };
       }),
       toAddress: data.to,

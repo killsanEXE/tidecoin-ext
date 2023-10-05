@@ -17,4 +17,5 @@ export interface ApiUTXO {
 export interface IApiController {
   getAccountBalance(address: string): Promise<number | undefined>;
   getUtxos(address: string): Promise<ApiUTXO[] | undefined>;
+  pushTx(rawTx: string): Promise<{ txId: string } | undefined>;
 }

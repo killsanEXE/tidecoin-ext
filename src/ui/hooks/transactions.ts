@@ -23,7 +23,7 @@ export function useCreateBitcoinTxCallback() {
     async (
       toAddress: Hex,
       toAmount: number,
-      feeRate?: number,
+      feeRate: number,
       receiverToPayFee = false
     ) => {
       const utxos = await apiController.getUtxos(fromAddress!);
@@ -39,74 +39,35 @@ export function useCreateBitcoinTxCallback() {
         );
       }
 
-      if (!feeRate) {
-        const summary = await currentWallet.getFeeSummary();
-        feeRate = summary.list[1].feeRate;
-      }
       const psbtHex = await keyringController.sendTDC({
         to: toAddress,
         amount: toAmount,
         utxos: utxos!,
         receiverToPayFee,
-        feeRate: feeRate!,
+        feeRate: feeRate,
       });
       const psbt = Psbt.fromHex(psbtHex);
       const rawtx = psbt.extractTransaction().toHex();
-      const fee = psbt.getFee();
-      dispatch(
-        transactionsActions.updateBitcoinTx({
-          rawtx,
-          psbtHex,
-          fromAddress,
-          feeRate,
-        })
-      );
-      const rawTxInfo: RawTxInfo = {
-        psbtHex,
-        rawtx,
-        toAddressInfo,
-        fee,
-      };
-      return rawTxInfo;
+      return rawtx;
     },
     [currentWallet, apiController]
   );
 }
 
 export function usePushBitcoinTxCallback() {
-  const dispatch = useAppDispatch();
-  const wallet = useWallet();
-  const tools = useTools();
+  const { apiController } = useControllersState((v) => ({
+    apiController: v.apiController,
+  }));
+
   return useCallback(
     async (rawtx: string) => {
-      const ret = {
-        success: false,
-        txid: "",
-        error: "",
-      };
       try {
-        tools.showLoading(true);
-        const txid = await wallet.pushTx(rawtx);
-        await sleep(3); // Wait for transaction synchronization
-        tools.showLoading(false);
-        dispatch(transactionsActions.updateBitcoinTx({ txid }));
-        dispatch(accountActions.expireBalance());
-        setTimeout(() => {
-          dispatch(accountActions.expireBalance());
-        }, 2000);
-        setTimeout(() => {
-          dispatch(accountActions.expireBalance());
-        }, 5000);
-
-        ret.success = true;
-        ret.txid = txid;
+        const txid = await apiController.pushTx(rawtx);
+        return txid;
       } catch (e) {
-        ret.error = (e as Error).message;
-        tools.showLoading(false);
+        console.error(e);
       }
-
-      return ret;
     },
-    [dispatch, wallet]
+    [apiController]
   );
 }
