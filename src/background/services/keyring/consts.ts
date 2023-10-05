@@ -1,4 +1,4 @@
-export enum KeyringControllerError {
+export enum KeyringServiceError {
   NoKeyring = "KeyringController - No keyring found",
   WrongPasswordType = "KeyringController - Password must be of type string.",
   NoFirstAccount = "KeyringController - First Account not found.",

@@ -7,15 +7,8 @@ import type {
 } from "@/shared/interfaces";
 import { fromMnemonic } from "test-test-test-hd-wallet";
 import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
-import { payments } from "tidecoinjs-lib";
-import { falconPairFactory } from "tidepair";
-import {
-  bytesToHex as toHex,
-  hexToBytes as fromHex,
-} from "@noble/hashes/utils";
 import { extractKeysFromObj } from "@/shared/utils";
-
-const falconPair = falconPairFactory();
+import keyringService from "@/background/services/keyring";
 
 export class WalletController implements IWalletController {
   async isVaultEmpty() {
@@ -28,29 +21,24 @@ export class WalletController implements IWalletController {
     phrase: string,
     name?: string
   ): Promise<IPrivateWallet> {
-    const mnemonic = Mnemonic.fromPhrase(phrase);
-    const acc = fromMnemonic(mnemonic);
+    const address = keyringService.newWallet(phrase);
     const account: IAccount = {
       id: 0,
       name: "Account 1",
       balance: 0,
-      privateKey: toHex(acc.privateKey),
-      publicKey: toHex(acc.publicKey),
-      address: payments.p2wpkh({ pubkey: Buffer.from(acc.publicKey) }).address,
+      address,
     };
     const walletId =
       exportedWallets.length > 0
         ? exportedWallets[exportedWallets.length - 1].id + 1
         : 0;
 
-    const randomSeed = crypto.getRandomValues(new Uint8Array(16));
-
     return {
       name: !name ? `Wallet ${walletId + 1}` : name,
       id: walletId,
       accounts: [account],
       currentAccount: account,
-      phrase: mnemonic.getPhrase(randomSeed),
+      phrase,
     };
   }
 
@@ -69,45 +57,35 @@ export class WalletController implements IWalletController {
 
     const result: IAccount[] = [];
     const root = fromMnemonic(Mnemonic.fromPhrase(rootWallet.phrase));
-    const addresses = await root.addAccounts(
-      rootWallet.accounts[-1]
-        ? rootWallet.accounts[-1].id + 1
-        : rootWallet.accounts[0].id + 1
-    );
+    const idx = rootWallet.accounts.length > 1 ? -1 : 0;
+    const addresses = root.addAccounts(rootWallet.accounts[idx].id + 1);
     rootWallet.accounts.forEach((acc) => {
       if (acc.id === 0)
         result.push({
           ...acc,
-          address: payments.p2wpkh({ pubkey: Buffer.from(root.publicKey) })
-            .address,
+          address: root.getAccounts()[0],
         });
       else result.push({ ...acc, address: addresses[acc.id] });
     });
     return result;
   }
 
-  async loadAccountData(account: IAccount): Promise<Partial<IAccount>> {
-    const imported = falconPair.fromPrivateKey(
-      Buffer.from(fromHex(account.privateKey!))
-    );
-    const address = payments.p2wpkh({ pubkey: imported.publicKey }).address;
-    return {
-      privateKey: toHex(imported.privateKey),
-      publicKey: toHex(imported.publicKey),
-      address,
-    };
-  }
-
-  async createNewAccount(wallet: IWallet, name?: string) {
+  async createNewAccount(wallet: IWallet, name?: string): Promise<IAccount> {
     const accName = !name?.length
       ? `Account ${wallet.accounts.length + 1}`
       : name;
-    const account = { id: wallet.accounts[wallet.accounts.length - 1].id + 1 };
+    const addresses = keyringService.getKeyringForAccount(
+      wallet.accounts[-1].address!
+    ).addAccounts!(1);
+    const account = {
+      id: wallet.accounts[wallet.accounts.length - 1].id + 1,
+    };
     wallet.accounts.push(account);
     return {
       ...account,
       name: accName,
       balance: 0,
+      address: addresses[0],
     };
   }
 
