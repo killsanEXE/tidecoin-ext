@@ -1,10 +1,9 @@
 // forked from https://github.com/MetaMask/KeyringController/blob/main/src/KeyringController.ts
 
-import * as encryptorUtils from "@metamask/browser-passworder";
 import { EventEmitter } from "events";
 
 import { KeyringControllerError } from "./consts";
-import { Hex, Json, Keyring, KeyringControllerArgs } from "./types";
+import { Hex, Json, Keyring } from "./types";
 import { SimpleKey, HDPrivateKey } from "test-test-test-hd-wallet";
 import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
 import { storageService } from "..";
@@ -16,26 +15,14 @@ export const KEYRING_SDK_TYPES = {
 };
 
 class KeyringController extends EventEmitter {
-  public encryptor: typeof encryptorUtils;
-
   public keyrings: Record<string | "root", Keyring<Json>>;
 
-  public password?: string;
-
-  public isUnlocked?: boolean;
-
-  constructor(options?: KeyringControllerArgs) {
+  constructor() {
     super();
-
-    this.isUnlocked = false;
-    this.encryptor = options?.encryptor ?? encryptorUtils;
     this.keyrings = {};
   }
 
   async init(password: string) {
-    this.password = password;
-    this.isUnlocked = true;
-
     const wallets = await storageService.importWallets(password);
     wallets.forEach((i) => {
       const wallet = HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(i.phrase));
