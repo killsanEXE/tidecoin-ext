@@ -13,7 +13,7 @@ const Send = () => {
   const pushTx = usePushTidecoinTxCallback();
 
   const send = async () => {
-    const hex = await sendTdc(addres, amount * 10 ** 8, 0.001, true);
+    const hex = await sendTdc(addres, amount * 10 ** 8, 1, true);
     console.log(hex);
     const txid = await pushTx(hex)
     console.log(txid)
