@@ -32,7 +32,7 @@ browserRuntimeOnConnect((port: any) => {
           case "openapi":
             return apiController[data.method].apply(null, data.params);
           case "keyring":
-            return keyringService[data.method].apply(null, data.params);
+            return keyringService[data.method](...data.params);
           case "state":
             return stateController[data.method].apply(null, data.params);
           default:

@@ -37,7 +37,7 @@ const Send = () => {
           <span className="input-span">Amount</span>
           <input
             placeholder="0"
-            type="number"
+            type="text"
             className="input"
             onChange={(e) => {
               setAmount(Number(e.target.value));
