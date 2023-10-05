@@ -17,7 +17,6 @@ export const useCreateNewWallet = () => {
       phrase,
       name
     );
-    console.log(wallet);
     wallet.currentAccount = wallet.accounts[0];
     wallets.push(wallet);
     updateWalletState({

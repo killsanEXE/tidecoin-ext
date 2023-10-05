@@ -23,7 +23,6 @@ class KeyringService {
 
   async init(password: string) {
     const wallets = await storageService.importWallets(password);
-    console.log(wallets)
     wallets.forEach((i) => {
       const wallet = HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(i.phrase!));
       if (i.accounts.length > 1) {
