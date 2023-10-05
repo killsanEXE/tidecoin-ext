@@ -3,13 +3,15 @@ import { useWalletState } from "../states/walletState";
 import { useControllersState } from "../states/controllerState";
 import { tidoshisToAmount } from "../utils";
 import { Psbt } from "tidecoinjs-lib";
+import { Hex } from "@/background/services/keyring/types";
 
 export function useCreateBitcoinTxCallback() {
   const { currentWallet } = useWalletState((v) => ({
     currentWallet: v.currentWallet,
   }));
-  const { apiController } = useControllersState((v) => ({
+  const { apiController, keyringController } = useControllersState((v) => ({
     apiController: v.apiController,
+    keyringController: v.keyringController,
   }));
 
   if (!currentWallet || !currentWallet?.currentAccount)
@@ -19,7 +21,7 @@ export function useCreateBitcoinTxCallback() {
 
   return useCallback(
     async (
-      toAddressInfo: ToAddressInfo,
+      toAddress: Hex,
       toAmount: number,
       feeRate?: number,
       receiverToPayFee = false
@@ -41,12 +43,12 @@ export function useCreateBitcoinTxCallback() {
         const summary = await currentWallet.getFeeSummary();
         feeRate = summary.list[1].feeRate;
       }
-      const psbtHex = await wallet.sendBTC({
-        to: toAddressInfo.address,
+      const psbtHex = await keyringController.sendTDC({
+        to: toAddress,
         amount: toAmount,
-        utxos,
+        utxos: utxos!,
         receiverToPayFee,
-        feeRate,
+        feeRate: feeRate!,
       });
       const psbt = Psbt.fromHex(psbtHex);
       const rawtx = psbt.extractTransaction().toHex();

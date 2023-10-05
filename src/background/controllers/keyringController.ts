@@ -1,8 +1,9 @@
 import { Psbt } from "tidecoinjs-lib";
 import { keyringService } from "../services";
 import { Hex, SendTDC } from "../services/keyring/types";
+import { IKeyringController } from "@/shared/interfaces/keyringController";
 
-class KeyringController {
+class KeyringController implements IKeyringController {
   async init(password: string) {
     return await keyringService.init(password);
   }

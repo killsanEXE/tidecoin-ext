@@ -3,14 +3,18 @@ import { RouterProvider } from "react-router-dom";
 import { Router } from "@remix-run/router";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { setupOpenAPIProxy, setupStateProxy, setupWalletProxy } from "@/ui/utils/setup";
+import {
+  setupKeyringProxy,
+  setupOpenAPIProxy,
+  setupStateProxy,
+  setupWalletProxy,
+} from "@/ui/utils/setup";
 import { useAppState } from "./states/appState";
 import { useWalletState } from "./states/walletState";
 import { guestRouter, authenticatedRouter } from "@/ui/pages/router";
 import { useControllersState } from "./states/controllerState";
 
 export default function App() {
-
   const [router, setRouter] = useState<Router>(guestRouter);
   const { isReady, isUnlocked, updateAppState } = useAppState((v) => ({
     isReady: v.isReady,
@@ -31,11 +35,16 @@ export default function App() {
       const walletController = setupWalletProxy();
       const apiController = setupOpenAPIProxy();
       const stateController = setupStateProxy();
+      const keyringController = setupKeyringProxy();
 
       const appState = await stateController.getAppState();
       const walletState = await stateController.getWalletState();
 
-      if (appState.isReady && appState.isUnlocked && walletState.currentWallet) {
+      if (
+        appState.isReady &&
+        appState.isUnlocked &&
+        walletState.currentWallet
+      ) {
         updateWalletState(walletState);
         updateAppState(appState);
       } else {
@@ -44,7 +53,12 @@ export default function App() {
         });
         updateAppState({ isReady: true });
       }
-      updateControllers({ walletController, apiController, stateController });
+      updateControllers({
+        walletController,
+        apiController,
+        stateController,
+        keyringController,
+      });
     };
 
     if (!isReady) setupApp();
@@ -53,10 +67,7 @@ export default function App() {
   }, [
     isReady,
     isUnlocked,
-    setupWalletProxy,
     updateWalletState,
-    setupStateProxy,
-    setupStateProxy,
     updateAppState,
     router,
     setRouter,

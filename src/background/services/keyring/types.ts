@@ -1,3 +1,4 @@
+import { ApiUTXO } from "@/shared/interfaces/apiController";
 import * as encryptorUtils from "@metamask/browser-passworder";
 
 export type Json = any;
@@ -17,7 +18,7 @@ export type Eip1024EncryptedData = {
 export interface SendTDC {
   to: string;
   amount: number;
-  utxos: any[];
+  utxos: ApiUTXO[];
   receiverToPayFee: boolean;
   feeRate: number;
 }

@@ -4,39 +4,47 @@ import { Message } from "@/shared/utils";
 import { IWalletController } from "@/shared/interfaces";
 import { IApiController } from "@/shared/interfaces/apiController";
 import { IStateController } from "@/shared/interfaces/stateController";
+import { IKeyringController } from "@/shared/interfaces/keyringController";
 
 function setupPm() {
   const { PortMessage } = Message;
   const portMessageChannel = new PortMessage();
   portMessageChannel.connect("popup");
 
-  portMessageChannel.listen((data: { method: string, params: any[], type: string }) => {
-    if (data.type === "broadcast") {
-      eventBus.emit(data.method, data.params);
+  portMessageChannel.listen(
+    (data: { method: string; params: any[]; type: string }) => {
+      if (data.type === "broadcast") {
+        eventBus.emit(data.method, data.params);
+      }
     }
-  });
+  );
 
-  eventBus.addEventListener(EVENTS.broadcastToBackground, async (data: { method: string, data: any }) => {
-    await portMessageChannel.request({
-      type: "broadcast",
-      method: data.method,
-      params: data.data,
-    });
-  });
+  eventBus.addEventListener(
+    EVENTS.broadcastToBackground,
+    async (data: { method: string; data: any }) => {
+      await portMessageChannel.request({
+        type: "broadcast",
+        method: data.method,
+        params: data.data,
+      });
+    }
+  );
 
   return portMessageChannel;
 }
 
-const portMessageChannel = setupPm()
+const portMessageChannel = setupPm();
 
-export function setupWalletProxy() {
+type AvailableType = "controller" | "openai" | "state" | "keyring";
+
+function setupProxy<T>(type: AvailableType): T {
   const wallet: Record<string, any> = new Proxy(
     {},
     {
-      get(obj, key) {
+      get(_obj, key) {
         return function (...params: any) {
           return portMessageChannel.request({
-            type: "controller",
+            type: type,
             method: key,
             params,
           });
@@ -44,41 +52,21 @@ export function setupWalletProxy() {
       },
     }
   );
-  return wallet as IWalletController;
+  return wallet as T;
+}
+
+export function setupWalletProxy() {
+  return setupProxy<IWalletController>("controller");
 }
 
 export function setupOpenAPIProxy() {
-  const openapi: Record<string, any> = new Proxy(
-    {},
-    {
-      get(obj, key) {
-        return function (...params: any) {
-          return portMessageChannel.request({
-            type: "openapi",
-            method: key,
-            params,
-          });
-        };
-      },
-    }
-  );
-  return openapi as IApiController;
+  return setupProxy<IApiController>("openai");
 }
 
 export function setupStateProxy() {
-  const state: Record<string, any> = new Proxy(
-    {},
-    {
-      get(obj, key) {
-        return function (...params: any) {
-          return portMessageChannel.request({
-            type: "state",
-            method: key,
-            params,
-          });
-        };
-      },
-    }
-  );
-  return state as IStateController;
+  return setupProxy<IStateController>("state");
+}
+
+export function setupKeyringProxy() {
+  return setupProxy<IKeyringController>("keyring");
 }
