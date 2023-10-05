@@ -36,7 +36,10 @@ browserRuntimeOnConnect((port: any) => {
           case "state":
             return stateController[data.method].apply(null, data.params);
           default:
-            if (!walletController[data.method]) return;
+            if (!walletController[data.method])
+              throw new Error(
+                `Method ${data.method} is not founded in the walletController`
+              );
             return walletController[data.method].apply(null, data.params);
         }
       }

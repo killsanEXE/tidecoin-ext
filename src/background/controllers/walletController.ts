@@ -1,4 +1,4 @@
-import { storageService, keyringService } from "@/background/services";
+import { storageService } from "@/background/services";
 import type {
   IAccount,
   IPrivateWallet,

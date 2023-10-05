@@ -1,12 +1,10 @@
 // forked from https://github.com/MetaMask/KeyringController/blob/main/src/KeyringController.ts
 
-import { EventEmitter } from "events";
-
 import { KeyringControllerError } from "./consts";
 import { Hex, Json, Keyring } from "./types";
 import { SimpleKey, HDPrivateKey } from "test-test-test-hd-wallet";
 import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
-import { storageService } from "..";
+import { storageService } from "@/background/services";
 import { Psbt } from "tidecoinjs-lib";
 
 export const KEYRING_SDK_TYPES = {
@@ -14,12 +12,10 @@ export const KEYRING_SDK_TYPES = {
   HDPrivateKey,
 };
 
-class KeyringController extends EventEmitter {
-  public keyrings: Record<string | "root", Keyring<Json>>;
+class KeyringController {
+  private keyrings: Record<string | "root", Keyring<Json>>;
 
   constructor() {
-    super();
-
     this.keyrings = {};
   }
 
@@ -57,7 +53,6 @@ class KeyringController extends EventEmitter {
       throw new Error(KeyringControllerError.UnsupportedRemoveAccount);
     }
     keyring.removeAccount(address);
-    this.emit("removedAccount", address);
   }
 
   async getAccounts(keyring = "root"): Promise<string[]> {
@@ -118,7 +113,7 @@ class KeyringController extends EventEmitter {
 
   async getEncryptionPublicKey(
     address: string,
-    opts: Record<string, unknown> = {}
+    opts: Record<string, unknown>
   ): Promise<string> {
     const keyring = await this.getKeyringForAccount(address);
     if (!keyring.getEncryptionPublicKey) {
