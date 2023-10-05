@@ -4,18 +4,16 @@ import { stateService } from "../services";
 
 
 export class StateController implements IStateController {
-    updateAppState(state: Partial<IAppStateBase>): void {
-        console.log(state)
+    async updateAppState(state: Partial<IAppStateBase>): Promise<void> {
         stateService.updateAppState(state);
-        console.log(stateService.getAppState())
     }
-    updateWalletState(state: Partial<IWalletState>): void {
+    async updateWalletState(state: Partial<IWalletState>): Promise<void> {
         stateService.updateWalletState(state);
     }
-    getAppState(): IAppStateBase {
+    async getAppState(): Promise<IAppStateBase> {
         return stateService.getAppState();
     }
-    getWalletState(): IWalletStateBase {
+    async getWalletState(): Promise<IWalletStateBase> {
         return stateService.getWalletState();
     }
 }

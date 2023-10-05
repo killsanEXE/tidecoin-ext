@@ -8,26 +8,8 @@ import { useAppState } from "./states/appState";
 import { useWalletState } from "./states/walletState";
 import { guestRouter, authenticatedRouter } from "@/ui/pages/router";
 import { useControllersState } from "./states/controllerState";
-import { IWalletController, IWallet } from "@/shared/interfaces";
 
 export default function App() {
-  const login = async (walletController: IWalletController) => {
-    const exportedWallets = await walletController.importWallets("1");
-    exportedWallets[0].accounts = await walletController.loadAccountsData(exportedWallets[0])
-    const map = new Map<number, IWallet>();
-    exportedWallets.forEach((f) => map.set(f.id, f))
-    updateWalletState({
-      wallets: map,
-      currentWallet: {
-        ...exportedWallets[0],
-        currentAccount: exportedWallets[0].accounts[0],
-      },
-    });
-    updateAppState({
-      isUnlocked: true,
-      password: "1",
-    });
-  };
 
   const [router, setRouter] = useState<Router>(guestRouter);
   const { isReady, isUnlocked, updateAppState } = useAppState((v) => ({
@@ -50,16 +32,19 @@ export default function App() {
       const apiController = setupOpenAPIProxy();
       const stateController = setupStateProxy();
 
-      const shit = await stateController.getAppState();
-      if (shit.isUnlocked) login(walletController);
+      const appState = await stateController.getAppState();
+      const walletState = await stateController.getWalletState();
 
+      if (appState.isReady && appState.isUnlocked && walletState.currentWallet) {
+        updateWalletState(walletState);
+        updateAppState(appState);
+      } else {
+        updateWalletState({
+          vaultIsEmpty: await walletController.isVaultEmpty(),
+        });
+        updateAppState({ isReady: true });
+      }
       updateControllers({ walletController, apiController, stateController });
-      updateWalletState({
-        vaultIsEmpty: await walletController.isVaultEmpty(),
-      });
-      updateAppState({ isReady: true });
-
-      // login(walletController)
     };
 
     if (!isReady) setupApp();

@@ -36,7 +36,6 @@ browserRuntimeOnConnect((port: any) => {
             return keyringController[data.method].apply(null, data.params);
             break;
           case "state":
-            console.log(JSON.stringify(data))
             return stateController[data.method].apply(null, data.params);
           case "controller":
           default:

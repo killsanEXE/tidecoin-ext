@@ -27,6 +27,8 @@ export const useAppState = create<IAppState>()((set) => ({
     set(app);
   },
   logout: () => {
+    const proxy = setupStateProxy();
+    proxy.updateAppState({ password: undefined, isUnlocked: false });
     set({ password: undefined, isUnlocked: false });
   },
 }));
