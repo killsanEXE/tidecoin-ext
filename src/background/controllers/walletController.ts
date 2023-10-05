@@ -7,6 +7,7 @@ import type {
 import { fromMnemonic } from "test-test-test-hd-wallet";
 import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
 import keyringService from "@/background/services/keyring";
+import { extractKeysFromObj } from "@/shared/utils";
 
 class WalletController implements IWalletController {
   async isVaultEmpty() {
@@ -45,8 +46,7 @@ class WalletController implements IWalletController {
 
   async importWallets(password: string) {
     const wallets = await keyringService.init(password);
-    // return wallets.map((i) => extractKeysFromObj(i, ["phrase", "privateKey"]));
-    return wallets;
+    return wallets.map((i) => extractKeysFromObj(i, ["phrase", "privateKey"]));
   }
 
   async loadAccountsData(password: string, walletKey: number): Promise<IAccount[]> {
