@@ -26,13 +26,13 @@ export const useCreateNewWallet = () => {
 
   return async (phrase: string, name?: string) => {
     const wallet = await walletController.createNewWallet(
-      Array.from(wallets.values()),
+      wallets,
       phrase,
       name
     );
     wallet.currentAccount = wallet.accounts[0];
-    wallets.set(wallet.id, wallet);
-    await saveWallets(Array.from(wallets.values()));
+    wallets.push(wallet);
+    await saveWallets(wallets);
     updateWalletState({
       currentWallet: wallet,
       wallets,
@@ -47,12 +47,12 @@ export const useUpdateCurrentWallet = () => {
   }));
 
   return (wallet: Partial<IWallet>) => {
-    if (wallet.id === undefined || !wallets.has(wallet.id)) return {};
-    const old = wallets.get(wallet.id);
-    wallets.set(wallet.id, { ...old, ...wallet } as IWallet);
+    const oldWallet = wallets.find(f => f.id === wallet.id);
+    if (wallet.id === undefined || !oldWallet) return {};
+    wallets[wallet.id] = { ...oldWallet, ...wallet } as IWallet;
     updateWalletState({
-      wallets: new Map(wallets.entries()),
-      currentWallet: wallets.get(wallet.id),
+      wallets,
+      currentWallet: wallets.find(f => f.id === wallet.id),
     });
   };
 };
@@ -89,7 +89,7 @@ export const useCreateNewAccount = () => {
     };
 
     updateCurrentWallet(updatedWallet);
-    await saveWallets(Array.from(wallets.values()));
+    await saveWallets(wallets);
   };
 };
 
@@ -103,7 +103,7 @@ export const useSwitchWallet = () => {
   }));
 
   return async (id: number, key: number) => {
-    const wallet = wallets.get(key);
+    const wallet = wallets.find(f => f.id === key);
     if (!wallet || wallet.id !== id) return;
     if (!wallet.accounts[0].address) {
       wallet.accounts = await walletController.loadAccountsData(wallet);

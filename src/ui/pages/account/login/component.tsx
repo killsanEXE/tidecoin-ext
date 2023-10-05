@@ -3,7 +3,6 @@ import s from "./styles.module.scss";
 import { useNavigate } from "react-router-dom";
 import { useAppState } from "@/ui/states/appState";
 import { useWalletState } from "@/ui/states/walletState";
-import { IWallet } from "@/shared/interfaces";
 import { useControllersState } from "@/ui/states/controllerState";
 
 const Login = () => {
@@ -27,10 +26,8 @@ const Login = () => {
   const login = async () => {
     const exportedWallets = await walletController.importWallets(password);
     exportedWallets[0].accounts = await walletController.loadAccountsData(exportedWallets[0])
-    const map = new Map<number, IWallet>();
-    exportedWallets.forEach((f) => map.set(f.id, f))
     updateWalletState({
-      wallets: map,
+      wallets: exportedWallets,
       currentWallet: {
         ...exportedWallets[0],
         currentAccount: exportedWallets[0].accounts[0],

@@ -8,6 +8,7 @@ export class StateController implements IStateController {
         stateService.updateAppState(state);
     }
     async updateWalletState(state: Partial<IWalletState>): Promise<void> {
+        console.log(state)
         stateService.updateWalletState(state);
     }
     async getAppState(): Promise<IAppStateBase> {

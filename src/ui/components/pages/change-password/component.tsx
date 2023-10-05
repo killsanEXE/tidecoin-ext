@@ -22,7 +22,7 @@ const ChangePassword = () => {
 
   const executeChangePassword = async () => {
     if (appPassword === oldPassword && password === confirmPassword && password !== appPassword) {
-      await walletController.saveWallets(password, Array.from(wallets.values()));
+      await walletController.saveWallets(password, wallets);
       logout();
     } else {
       toast.error("Try again");

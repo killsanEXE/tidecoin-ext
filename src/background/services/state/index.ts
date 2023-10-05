@@ -1,4 +1,4 @@
-import { IAppStateBase, IWallet, IWalletStateBase } from "@/shared/interfaces";
+import { IAppStateBase, IWalletStateBase } from "@/shared/interfaces";
 
 class StateService {
 
@@ -7,7 +7,7 @@ class StateService {
 
     private emptyWalletState(): IWalletStateBase {
         return {
-            wallets: new Map<number, IWallet>(),
+            wallets: [],
             vaultIsEmpty: true
         }
     }

@@ -23,7 +23,7 @@ const SwitchWallet = () => {
     return (
         <div className={s.switchWalletDiv}>
             <div className={s.wallets}>
-                {Array.from(wallets.values()).map((wallet, i) =>
+                {wallets.map((wallet, i) =>
                     <div className={s.mainWallet} key={i}>
                         <div className={s.wallet}>
                             <div className={s.walletInfo} onClick={() => { switchWallet(i, wallet.id) }}>

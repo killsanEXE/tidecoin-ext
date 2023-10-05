@@ -9,7 +9,7 @@ export interface IWallet {
 }
 
 export interface IWalletStateBase {
-  wallets: Map<number, IWallet>;
+  wallets: IWallet[];
   vaultIsEmpty: boolean;
   currentWallet?: IWallet;
 }
