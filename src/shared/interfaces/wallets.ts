@@ -2,10 +2,14 @@ import { IAccount } from "./accounts";
 
 export interface IWallet {
   id: number;
-  phrase: string;
   accounts: IAccount[];
   currentAccount?: IAccount;
   name: string;
+}
+
+export interface IPrivateWallet extends IWallet {
+  phrase?: string;
+  privateKey?: string;
 }
 
 export interface IWalletStateBase {

@@ -55,3 +55,15 @@ export const fetchTDCMainnet = async <T>({
     throw error;
   }
 };
+
+export const extractKeysFromObj = <
+  T extends Record<string, any>,
+  K extends keyof T
+>(
+  obj: T,
+  keysToExtract: K[]
+): Omit<T, K> => {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([k, _v]) => !keysToExtract.includes(k as K))
+  ) as Omit<T, K>;
+};

@@ -2,7 +2,7 @@ export interface IAppStateBase {
   isReady: boolean;
   isUnlocked: boolean;
   vault: string[];
-  password: string | undefined;
+  password?: string;
 }
 
 export interface IAppState extends IAppStateBase {

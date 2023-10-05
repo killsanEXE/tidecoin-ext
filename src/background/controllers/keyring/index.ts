@@ -19,13 +19,14 @@ class KeyringController extends EventEmitter {
 
   constructor() {
     super();
+
     this.keyrings = {};
   }
 
   async init(password: string) {
     const wallets = await storageService.importWallets(password);
     wallets.forEach((i) => {
-      const wallet = HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(i.phrase));
+      const wallet = HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(i.phrase!));
       if (i.accounts.length > 1) {
         wallet.addAccounts(i.accounts.length - 1);
       }
@@ -35,19 +36,23 @@ class KeyringController extends EventEmitter {
     return wallets;
   }
 
-  async exportAccount(address: string): Promise<string> {
+  /**
+   * Method export private key of selected account
+   * @param address P2WPKH address of account
+   * @returns {string} WIF representation of private key
+   */
+  async exportAccount(address: Hex): Promise<string> {
     const keyring = await this.getKeyringForAccount(address);
     if (!keyring.exportAccount) {
       throw new Error(KeyringControllerError.UnsupportedExportAccount);
     }
 
-    return await keyring.exportAccount(address.toLowerCase());
+    return await keyring.exportAccount(address);
   }
 
   async removeAccount(address: Hex) {
     const keyring = await this.getKeyringForAccount(address);
 
-    // Not all the keyrings support this, so we have to check
     if (!keyring.removeAccount) {
       throw new Error(KeyringControllerError.UnsupportedRemoveAccount);
     }
@@ -59,21 +64,11 @@ class KeyringController extends EventEmitter {
     return this.keyrings[keyring].getAccounts();
   }
 
-  async getKeyringForAccount(address: string) {
+  async getKeyringForAccount(address: Hex) {
     if (Object.keys(this.keyrings).includes(address)) {
       return this.keyrings[address];
     }
     return this.keyrings.root;
-  }
-
-  private async _signTransactionMultisig() {
-    // TODO It is base to develop multisign wallets
-    throw new Error("Unimplemented");
-    // const keyring = await this.getKeyringForAccount("");
-    // const addresses = await keyring.getAccounts();
-    // const utxos = (await Promise.all(addresses.map(apiController.getUtxos)))
-    //   .filter((i) => i !== undefined)
-    //   .reduce((prev, cur) => prev?.concat(...(cur ?? [])), []) as ApiUTXO[];
   }
 
   async signTransaction(tideTx: Psbt, address: string): Promise<unknown> {
@@ -112,13 +107,11 @@ class KeyringController extends EventEmitter {
       throw new Error(KeyringControllerError.UnsupportedSignPersonalMessage);
     }
 
-    const normalizedData = msgParams.data.toLowerCase() as Hex;
-
     const randomSeed = crypto.getRandomValues(new Uint8Array(48));
 
     return await keyring.signPersonalMessage(
       msgParams.from,
-      normalizedData,
+      msgParams.data,
       randomSeed
     );
   }
@@ -127,13 +120,23 @@ class KeyringController extends EventEmitter {
     address: string,
     opts: Record<string, unknown> = {}
   ): Promise<string> {
-    const normalizedAddress = address.toLowerCase() as Hex;
     const keyring = await this.getKeyringForAccount(address);
     if (!keyring.getEncryptionPublicKey) {
       throw new Error(KeyringControllerError.UnsupportedGetEncryptionPublicKey);
     }
 
-    return await keyring.getEncryptionPublicKey(normalizedAddress, opts);
+    return await keyring.getEncryptionPublicKey(address, opts);
+  }
+
+  private async _signTransactionMultisig() {
+    throw new Error("Unimplemented");
+
+    // TODO It's a base to develop multisign wallets
+    // const keyring = await this.getKeyringForAccount("");
+    // const addresses = await keyring.getAccounts();
+    // const utxos = (await Promise.all(addresses.map(apiController.getUtxos)))
+    //   .filter((i) => i !== undefined)
+    //   .reduce((prev, cur) => prev?.concat(...(cur ?? [])), []) as ApiUTXO[];
   }
 }
 

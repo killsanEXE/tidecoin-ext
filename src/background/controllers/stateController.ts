@@ -1,22 +1,27 @@
-import { IAppStateBase, IWalletState, IWalletStateBase } from "@/shared/interfaces";
+import {
+  IAppStateBase,
+  IWalletState,
+  IWalletStateBase,
+} from "@/shared/interfaces";
 import { IStateController } from "@/shared/interfaces/stateController";
-import { stateService } from "../services";
-
+import { storageService } from "../services";
 
 export class StateController implements IStateController {
-    async updateAppState(state: Partial<IAppStateBase>): Promise<void> {
-        stateService.updateAppState(state);
-    }
-    async updateWalletState(state: Partial<IWalletState>): Promise<void> {
-        console.log(state)
-        stateService.updateWalletState(state);
-    }
-    async getAppState(): Promise<IAppStateBase> {
-        return stateService.getAppState();
-    }
-    async getWalletState(): Promise<IWalletStateBase> {
-        return stateService.getWalletState();
-    }
+  async updateAppState(state: Partial<IAppStateBase>): Promise<void> {
+    storageService.updateAppState(state);
+  }
+
+  async updateWalletState(state: Partial<IWalletState>): Promise<void> {
+    storageService.updateWalletState(state);
+  }
+
+  async getAppState(): Promise<IAppStateBase> {
+    return storageService.appState;
+  }
+
+  async getWalletState(): Promise<IWalletStateBase> {
+    return storageService.walletState;
+  }
 }
 
 export default new StateController();

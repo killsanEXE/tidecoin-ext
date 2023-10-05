@@ -3,11 +3,37 @@ import {
   browserStorageLocalSet,
 } from "@/shared/utils/browser";
 import * as encryptorUtils from "@metamask/browser-passworder";
-import { IWallet } from "@/shared/interfaces";
+import { IPrivateWallet } from "@/shared/interfaces";
 import { DecryptedSecrets, StorageInterface } from "./types";
+import { IAppStateBase, IWalletStateBase } from "@/shared/interfaces";
+import { emptyAppState, emptyWalletState } from "./utils";
 
 class StorageService {
-  async saveWallets(password: string, wallets: IWallet[]) {
+  private _walletState: IWalletStateBase;
+  private _appState: IAppStateBase;
+
+  constructor() {
+    this._walletState = emptyWalletState();
+    this._appState = emptyAppState();
+  }
+
+  get walletState() {
+    return this._walletState;
+  }
+
+  get appState() {
+    return this._appState;
+  }
+
+  updateWalletState(state: Partial<IWalletStateBase>) {
+    this._walletState = { ...this._walletState, ...state };
+  }
+
+  updateAppState(state: Partial<IAppStateBase>) {
+    this._appState = { ...this._appState, ...state };
+  }
+
+  async saveWallets(password: string, wallets: IPrivateWallet[]) {
     const phrases = wallets.map((w) => w.phrase);
     const walletsToSave = wallets.map((wallet) => {
       return {
@@ -35,7 +61,7 @@ class StorageService {
     return await browserStorageLocalGet<StorageInterface>(undefined);
   }
 
-  async importWallets(password: string): Promise<IWallet[]> {
+  async importWallets(password: string): Promise<IPrivateWallet[]> {
     const encrypted = await this.getLocalValues();
     if (!encrypted) return [];
     const decryptedPhrases: DecryptedSecrets = JSON.parse(

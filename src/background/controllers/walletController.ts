@@ -1,5 +1,10 @@
 import { storageService, keyringService } from "@/background/services";
-import type { IAccount, IWallet, IWalletController } from "@/shared/interfaces";
+import type {
+  IAccount,
+  IPrivateWallet,
+  IWallet,
+  IWalletController,
+} from "@/shared/interfaces";
 import { fromMnemonic } from "test-test-test-hd-wallet";
 import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
 import { payments } from "tidecoinjs-lib";
@@ -8,6 +13,7 @@ import {
   bytesToHex as toHex,
   hexToBytes as fromHex,
 } from "@noble/hashes/utils";
+import { extractKeysFromObj } from "@/shared/utils";
 
 const falconPair = falconPairFactory();
 
@@ -21,7 +27,7 @@ export class WalletController implements IWalletController {
     exportedWallets: IWallet[],
     phrase: string,
     name?: string
-  ) {
+  ): Promise<IPrivateWallet> {
     const mnemonic = Mnemonic.fromPhrase(phrase);
     const acc = fromMnemonic(mnemonic);
     const account: IAccount = {
@@ -48,23 +54,27 @@ export class WalletController implements IWalletController {
     };
   }
 
-  async saveWallets(password: string, wallets: IWallet[]) {
+  async saveWallets(password: string, wallets: IPrivateWallet[]) {
     await storageService.saveWallets(password, wallets);
   }
 
   async importWallets(password: string) {
-    return await keyringService.init(password);
+    const wallets = await keyringService.init(password);
+
+    return wallets.map((i) => extractKeysFromObj(i, ["phrase", "privateKey"]));
   }
 
-  async loadAccountsData(wallet: IWallet): Promise<IAccount[]> {
+  async loadAccountsData(rootWallet: IPrivateWallet): Promise<IAccount[]> {
+    if (!rootWallet.phrase) throw new Error("Wallet should contains phrase");
+
     const result: IAccount[] = [];
-    const root = fromMnemonic(Mnemonic.fromPhrase(wallet.phrase));
+    const root = fromMnemonic(Mnemonic.fromPhrase(rootWallet.phrase));
     const addresses = await root.addAccounts(
-      wallet.accounts[-1]
-        ? wallet.accounts[-1].id + 1
-        : wallet.accounts[0].id + 1
+      rootWallet.accounts[-1]
+        ? rootWallet.accounts[-1].id + 1
+        : rootWallet.accounts[0].id + 1
     );
-    wallet.accounts.forEach((acc) => {
+    rootWallet.accounts.forEach((acc) => {
       if (acc.id === 0)
         result.push({
           ...acc,

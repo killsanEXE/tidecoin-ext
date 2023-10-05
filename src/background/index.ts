@@ -8,7 +8,7 @@ import {
 } from "@/shared/utils/browser";
 import walletController from "./controllers/walletController";
 import apiController from "./controllers/apiController";
-import keyringController from "./services/keyring";
+import keyringController from "./controllers/keyring";
 import stateController from "./controllers/stateController";
 
 const { PortMessage } = Message;
@@ -22,27 +22,22 @@ browserRuntimeOnConnect((port: any) => {
   ) {
     const pm = new PortMessage(port);
     pm.listen((data: any) => {
+      if (!data.method) return;
+
       if (data?.type) {
         switch (data.type) {
           case "broadcast":
             eventBus.emit(data.method, data.params);
             break;
           case "openapi":
-            if (apiController[data.method]) {
-              return apiController[data.method].apply(null, data.params);
-            }
-            break;
+            return apiController[data.method].apply(null, data.params);
           case "keyring":
             return keyringController[data.method].apply(null, data.params);
-            break;
           case "state":
             return stateController[data.method].apply(null, data.params);
-          case "controller":
           default:
-            if (data.method) {
-              return walletController[data.method].apply(null, data.params);
-              // return walletController[data.method](...data.params);
-            }
+            if (!walletController[data.method]) return;
+            return walletController[data.method].apply(null, data.params);
         }
       }
     });
