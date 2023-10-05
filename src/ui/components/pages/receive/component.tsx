@@ -21,8 +21,8 @@ const Receive = () => {
 
   return (
     <div className={s.receive}>
-      <QRCode value={currentWallet?.currentAccount.address ?? ""} />
-      <div className={s.accTitle}>{currentWallet?.currentAccount.name ?? "Account"}</div>
+      <QRCode value={currentWallet?.currentAccount!.address ?? ""} />
+      <div className={s.accTitle}>{currentWallet?.currentAccount!.name ?? "Account"}</div>
       <button className={cn("btn", "primary", s.copyButton)}><CopyIcon /> Copy address</button>
     </div >
   );

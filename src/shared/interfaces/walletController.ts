@@ -1,13 +1,12 @@
 import { IAccount } from "./accounts";
-import { IPrivateWallet, IWallet } from "./wallets";
+import { IPrivateWallet } from "./wallets";
 
 export interface IWalletController {
   createNewWallet: (
-    exportedWallets: IWallet[],
     phrase: string,
     name?: string
   ) => Promise<IPrivateWallet>;
-  saveWallets: (password: string, wallets: IPrivateWallet[]) => Promise<void>;
+  saveWallets: () => Promise<void>;
   isVaultEmpty: () => Promise<boolean>;
   importWallets: (password: string) => Promise<IPrivateWallet[]>;
   loadAccountsData: (wallet: IPrivateWallet) => Promise<IAccount[]>;

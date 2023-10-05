@@ -17,10 +17,10 @@ class WalletController implements IWalletController {
   }
 
   async createNewWallet(
-    exportedWallets: IWallet[],
     phrase: string,
     name?: string
-  ): Promise<IPrivateWallet> {
+  ): Promise<IWallet> {
+    const exportedWallets = storageService.walletState.wallets;
     const address = keyringService.newWallet(phrase);
     const account: IAccount = {
       id: 0,
@@ -38,12 +38,11 @@ class WalletController implements IWalletController {
       id: walletId,
       accounts: [account],
       currentAccount: account,
-      phrase,
     };
   }
 
-  async saveWallets(password: string, wallets: IPrivateWallet[]) {
-    await storageService.saveWallets(password, wallets);
+  async saveWallets() {
+    await storageService.saveWallets(storageService.appState.password!, storageService.walletState.wallets);
   }
 
   async importWallets(password: string) {

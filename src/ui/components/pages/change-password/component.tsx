@@ -1,7 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAppState } from "@/ui/states/appState";
-import { useWalletState } from "@/ui/states/walletState";
 import { useControllersState } from "@/ui/states/controllerState";
 
 const ChangePassword = () => {
@@ -15,14 +14,11 @@ const ChangePassword = () => {
     logout: v.logout,
   }));
 
-  const { wallets } = useWalletState((v) => ({
-    wallets: v.wallets,
-  }));
   const { walletController } = useControllersState((v) => ({ walletController: v.walletController }))
 
   const executeChangePassword = async () => {
     if (appPassword === oldPassword && password === confirmPassword && password !== appPassword) {
-      await walletController.saveWallets(password, wallets);
+      await walletController.saveWallets();
       logout();
     } else {
       toast.error("Try again");

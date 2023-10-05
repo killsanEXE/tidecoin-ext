@@ -13,7 +13,7 @@ const Layout = () => {
 
   return (
     <div className={s.layout}>
-      {(wallets.size > 0 || !vaultIsEmpty) ? <Outlet /> : <Navigate to="/pages/create-new-wallet" />}
+      {(wallets.length > 0 || !vaultIsEmpty) ? <Outlet /> : <Navigate to="/pages/create-new-wallet" />}
       <Nav />
     </div>
   );

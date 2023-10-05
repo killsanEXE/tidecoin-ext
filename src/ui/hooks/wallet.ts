@@ -1,18 +1,6 @@
 import { IWallet } from "@/shared/interfaces";
-import { useAppState } from "../states/appState";
 import { useControllersState } from "../states/controllerState";
 import { useWalletState } from "../states/walletState";
-
-export const useSaveWallets = () => {
-  const { password } = useAppState((v) => ({ password: v.password }));
-  const { walletController } = useControllersState((v) => ({
-    walletController: v.walletController,
-  }));
-
-  return async (wallets: IWallet[]) => {
-    await walletController.saveWallets(password!, wallets);
-  };
-};
 
 export const useCreateNewWallet = () => {
   const { wallets, updateWalletState } = useWalletState((v) => ({
@@ -22,21 +10,19 @@ export const useCreateNewWallet = () => {
   const { walletController } = useControllersState((v) => ({
     walletController: v.walletController,
   }));
-  const saveWallets = useSaveWallets();
 
   return async (phrase: string, name?: string) => {
     const wallet = await walletController.createNewWallet(
-      wallets,
       phrase,
       name
     );
     wallet.currentAccount = wallet.accounts[0];
     wallets.push(wallet);
-    await saveWallets(wallets);
     updateWalletState({
       currentWallet: wallet,
       wallets,
     });
+    await walletController.saveWallets();
   };
 };
 
@@ -59,21 +45,17 @@ export const useUpdateCurrentWallet = () => {
 
 export const useCreateNewAccount = () => {
   const updateCurrentWallet = useUpdateCurrentWallet();
-  const { currentWallet, wallets } = useWalletState((v) => ({
+  const { currentWallet } = useWalletState((v) => ({
     currentWallet: v.currentWallet,
     wallets: v.wallets,
   }));
   const { walletController } = useControllersState((v) => ({
     walletController: v.walletController,
   }));
-  const saveWallets = useSaveWallets();
 
   return async (name?: string) => {
     if (!currentWallet) return;
-    const createdAccount = await walletController.createNewAccount(
-      currentWallet,
-      name
-    );
+    const createdAccount = await walletController.createNewAccount(name);
     const updatedWallet: IWallet = {
       ...currentWallet,
       accounts: [...currentWallet.accounts, createdAccount],
@@ -81,7 +63,7 @@ export const useCreateNewAccount = () => {
     };
 
     updateCurrentWallet(updatedWallet);
-    await saveWallets(wallets);
+    await walletController.saveWallets();
   };
 };
 
