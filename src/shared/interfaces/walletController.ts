@@ -12,7 +12,6 @@ export interface IWalletController {
   importWallets: (password: string) => Promise<IPrivateWallet[]>;
   loadAccountsData: (wallet: IPrivateWallet) => Promise<IAccount[]>;
   createNewAccount: (
-    wallet: IPrivateWallet,
     name?: string
   ) => Promise<IAccount>;
   generateMnemonicPhrase: () => string;

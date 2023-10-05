@@ -38,7 +38,7 @@ const SwitchAccount = () => {
             <div className={s.account}>
               <div className={s.accInfo} onClick={() => { switchAccount(acc.id) }}>
                 <div className={s.name}>
-                  {currentWallet.currentAccount.address === acc.address ? <CheckIcon /> : undefined}
+                  {currentWallet.currentAccount!.address === acc.address ? <CheckIcon /> : undefined}
                   {acc.name}
                 </div>
                 <div className={s.address}>

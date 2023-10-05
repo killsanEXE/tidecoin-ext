@@ -70,7 +70,9 @@ class WalletController implements IWalletController {
     return result;
   }
 
-  async createNewAccount(wallet: IWallet, name?: string): Promise<IAccount> {
+  async createNewAccount(name?: string): Promise<IAccount> {
+    const wallet = storageService.walletState.currentWallet;
+    if (!wallet) return {} as any;
     const accName = !name?.length
       ? `Account ${wallet.accounts.length + 1}`
       : name;

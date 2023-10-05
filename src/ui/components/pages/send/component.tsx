@@ -19,7 +19,7 @@ const Send = () => {
         <div className="form-field">
           <span className="input-span">Address</span>
           <input
-            placeholder={currentWalet?.currentAccount.address}
+            placeholder={currentWalet?.currentAccount!.address}
             type="text"
             className="input"
             onChange={(e) => {
@@ -37,7 +37,7 @@ const Send = () => {
               setAmount(Number(e.target.value));
             }}
           />
-          <span className="input-info">MAX AMOUNT: {currentWalet?.currentAccount.balance}</span>
+          <span className="input-info">MAX AMOUNT: {currentWalet?.currentAccount!.balance}</span>
         </div>
       </div>
 

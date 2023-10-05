@@ -9,10 +9,12 @@ const ShowPk = () => {
   const { accId } = useParams();
   const { currentWallet } = useWalletState((v) => ({ currentWallet: v.currentWallet }))
 
+
+
   return (
     <div className={s.showPk}>
       {unlocked ?
-        <div>{currentWallet?.accounts.find(f => f.id === Number(accId))?.privateKey}</div>
+        <div>{ }</div>
         : <CheckPassword handler={() => { setUnlocked(true) }} />}
     </div >
   )
