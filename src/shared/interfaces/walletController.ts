@@ -9,9 +9,9 @@ export interface IWalletController {
   saveWallets: () => Promise<void>;
   isVaultEmpty: () => Promise<boolean>;
   importWallets: (password: string) => Promise<IPrivateWallet[]>;
-  loadAccountsData: (wallet: IPrivateWallet) => Promise<IAccount[]>;
+  loadAccountsData: (password: string, walletKey: number) => Promise<IAccount[]>;
   createNewAccount: (
     name?: string
   ) => Promise<IAccount>;
-  generateMnemonicPhrase: () => string;
+  generateMnemonicPhrase: () => Promise<string>;
 }

@@ -1,6 +1,7 @@
 import { IWallet } from "@/shared/interfaces";
 import { useControllersState } from "../states/controllerState";
 import { useWalletState } from "../states/walletState";
+import { useAppState } from "../states/appState";
 
 export const useCreateNewWallet = () => {
   const { wallets, updateWalletState } = useWalletState((v) => ({
@@ -16,6 +17,7 @@ export const useCreateNewWallet = () => {
       phrase,
       name
     );
+    console.log(wallet);
     wallet.currentAccount = wallet.accounts[0];
     wallets.push(wallet);
     updateWalletState({
@@ -32,7 +34,7 @@ export const useUpdateCurrentWallet = () => {
     updateWalletState: v.updateWalletState,
   }));
 
-  return (wallet: Partial<IWallet>) => {
+  return async (wallet: Partial<IWallet>) => {
     const oldWallet = wallets.find((f) => f.id === wallet.id);
     if (wallet.id === undefined || !oldWallet) return {};
     wallets[wallet.id] = { ...oldWallet, ...wallet } as IWallet;
@@ -75,12 +77,13 @@ export const useSwitchWallet = () => {
   const { walletController } = useControllersState((v) => ({
     walletController: v.walletController,
   }));
+  const { password } = useAppState((v) => ({ password: v.password }))
 
   return async (id: number, key: number) => {
     const wallet = wallets.find((f) => f.id === key);
     if (!wallet || wallet.id !== id) return;
     if (!wallet.accounts[0].address) {
-      wallet.accounts = await walletController.loadAccountsData(wallet);
+      wallet.accounts = await walletController.loadAccountsData(password!, key);
     }
     wallet.currentAccount = wallet.accounts[0];
     wallets[key] = wallet;

@@ -2,15 +2,21 @@ import { useState } from "react";
 import s from "./styles.module.scss";
 import cn from "classnames";
 import { useWalletState } from "@/ui/states/walletState";
+import { useCreateTidecoinTxCallback, usePushTidecoinTxCallback } from "@/ui/hooks/transactions";
 
 const Send = () => {
 
   const [addres, setAddres] = useState("");
   const [amount, setAmount] = useState(0);
   const { currentWalet } = useWalletState((v) => ({ currentWalet: v.currentWallet }))
+  const sendTdc = useCreateTidecoinTxCallback();
+  const pushTx = usePushTidecoinTxCallback();
 
-  const send = () => {
-
+  const send = async () => {
+    const hex = await sendTdc(addres, amount * 10 ** 8, 0.001, true);
+    console.log(hex);
+    const txid = await pushTx(hex)
+    console.log(txid)
   }
 
   return (

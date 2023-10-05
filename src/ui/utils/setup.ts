@@ -35,7 +35,7 @@ function setupPm() {
 
 const portMessageChannel = setupPm();
 
-type AvailableType = "controller" | "openai" | "state" | "keyring";
+type AvailableType = "controller" | "openapi" | "state" | "keyring";
 
 function setupProxy<T>(type: AvailableType): T {
   const wallet: Record<string, any> = new Proxy(
@@ -60,7 +60,7 @@ export function setupWalletProxy() {
 }
 
 export function setupOpenAPIProxy() {
-  return setupProxy<IApiController>("openai");
+  return setupProxy<IApiController>("openapi");
 }
 
 export function setupStateProxy() {

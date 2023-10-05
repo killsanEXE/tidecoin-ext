@@ -5,7 +5,7 @@ import { tidoshisToAmount } from "../utils";
 import { Psbt } from "tidecoinjs-lib";
 import { Hex } from "@/background/services/keyring/types";
 
-export function useCreateBitcoinTxCallback() {
+export function useCreateTidecoinTxCallback() {
   const { currentWallet } = useWalletState((v) => ({
     currentWallet: v.currentWallet,
   }));
@@ -54,7 +54,7 @@ export function useCreateBitcoinTxCallback() {
   );
 }
 
-export function usePushBitcoinTxCallback() {
+export function usePushTidecoinTxCallback() {
   const { apiController } = useControllersState((v) => ({
     apiController: v.apiController,
   }));

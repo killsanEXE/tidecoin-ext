@@ -1,13 +1,11 @@
 import { storageService } from "@/background/services";
 import type {
   IAccount,
-  IPrivateWallet,
   IWallet,
   IWalletController,
 } from "@/shared/interfaces";
 import { fromMnemonic } from "test-test-test-hd-wallet";
 import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
-import { extractKeysFromObj } from "@/shared/utils";
 import keyringService from "@/background/services/keyring";
 
 class WalletController implements IWalletController {
@@ -47,11 +45,12 @@ class WalletController implements IWalletController {
 
   async importWallets(password: string) {
     const wallets = await keyringService.init(password);
-
-    return wallets.map((i) => extractKeysFromObj(i, ["phrase", "privateKey"]));
+    // return wallets.map((i) => extractKeysFromObj(i, ["phrase", "privateKey"]));
+    return wallets;
   }
 
-  async loadAccountsData(rootWallet: IPrivateWallet): Promise<IAccount[]> {
+  async loadAccountsData(password: string, walletKey: number): Promise<IAccount[]> {
+    const rootWallet = (await keyringService.init(password))[walletKey]
     if (!rootWallet.phrase) throw new Error("Wallet should contains phrase");
 
     const result: IAccount[] = [];
@@ -87,7 +86,7 @@ class WalletController implements IWalletController {
     };
   }
 
-  generateMnemonicPhrase(): string {
+  async generateMnemonicPhrase(): Promise<string> {
     const randomSeed = crypto.getRandomValues(new Uint8Array(16));
     return new Mnemonic().getPhrase(randomSeed);
   }
