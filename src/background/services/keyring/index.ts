@@ -1,7 +1,7 @@
 // forked from https://github.com/MetaMask/KeyringController/blob/main/src/KeyringController.ts
 
 import { KeyringServiceError } from "./consts";
-import { Hex, Json } from "./types";
+import { Hex, Json, SendTDC } from "./types";
 import { SimpleKey, HDPrivateKey, Mnemonic } from "test-test-test-hd-wallet";
 import { storageService } from "@/background/services";
 import { Psbt, networks, payments } from "tidecoinjs-lib";
@@ -122,13 +122,7 @@ class KeyringService {
     return keyring.exportPublicKey(address);
   }
 
-  async sendTDC(data: {
-    to: string;
-    amount: number;
-    utxos: any[];
-    receiverToPayFee: boolean;
-    feeRate: number;
-  }) {
+  async sendTDC(data: SendTDC) {
     const account = storageService.walletState.currentWallet?.currentAccount;
     if (!account || !account.address)
       throw new Error("Error when trying to get the current account");

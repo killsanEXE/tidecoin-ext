@@ -8,7 +8,7 @@ import {
 } from "@/shared/utils/browser";
 import walletController from "./controllers/walletController";
 import apiController from "./controllers/apiController";
-import keyringController from "./controllers/keyring";
+import { keyringService } from "./services";
 import stateController from "./controllers/stateController";
 
 const { PortMessage } = Message;
@@ -32,7 +32,7 @@ browserRuntimeOnConnect((port: any) => {
           case "openapi":
             return apiController[data.method].apply(null, data.params);
           case "keyring":
-            return keyringController[data.method].apply(null, data.params);
+            return keyringService[data.method].apply(null, data.params);
           case "state":
             return stateController[data.method].apply(null, data.params);
           default:

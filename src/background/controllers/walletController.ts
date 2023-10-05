@@ -10,7 +10,7 @@ import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
 import { extractKeysFromObj } from "@/shared/utils";
 import keyringService from "@/background/services/keyring";
 
-export class WalletController implements IWalletController {
+class WalletController implements IWalletController {
   async isVaultEmpty() {
     const values = await storageService.getLocalValues();
     return values.enc === undefined;
@@ -77,12 +77,9 @@ export class WalletController implements IWalletController {
     const addresses = keyringService.getKeyringForAccount(
       wallet.accounts[-1].address!
     ).addAccounts!(1);
-    const account = {
-      id: wallet.accounts[wallet.accounts.length - 1].id + 1,
-    };
-    wallet.accounts.push(account);
+
     return {
-      ...account,
+      id: wallet.accounts[wallet.accounts.length - 1].id + 1,
       name: accName,
       balance: 0,
       address: addresses[0],

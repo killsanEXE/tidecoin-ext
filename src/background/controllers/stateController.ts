@@ -6,7 +6,7 @@ import {
 import { IStateController } from "@/shared/interfaces/stateController";
 import { storageService } from "../services";
 
-export class StateController implements IStateController {
+class StateController implements IStateController {
   async updateAppState(state: Partial<IAppStateBase>): Promise<void> {
     storageService.updateAppState(state);
   }

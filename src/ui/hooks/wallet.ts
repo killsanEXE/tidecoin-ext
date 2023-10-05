@@ -47,12 +47,12 @@ export const useUpdateCurrentWallet = () => {
   }));
 
   return (wallet: Partial<IWallet>) => {
-    const oldWallet = wallets.find(f => f.id === wallet.id);
+    const oldWallet = wallets.find((f) => f.id === wallet.id);
     if (wallet.id === undefined || !oldWallet) return {};
     wallets[wallet.id] = { ...oldWallet, ...wallet } as IWallet;
     updateWalletState({
       wallets,
-      currentWallet: wallets.find(f => f.id === wallet.id),
+      currentWallet: wallets.find((f) => f.id === wallet.id),
     });
   };
 };
@@ -70,18 +70,10 @@ export const useCreateNewAccount = () => {
 
   return async (name?: string) => {
     if (!currentWallet) return;
-    let createdAccount = await walletController.createNewAccount(
+    const createdAccount = await walletController.createNewAccount(
       currentWallet,
       name
     );
-    createdAccount = {
-      ...createdAccount,
-      ...(await walletController.loadAccountData(
-        currentWallet.accounts[-1] !== undefined
-          ? currentWallet.accounts[-1]
-          : currentWallet.accounts[0]
-      )),
-    };
     const updatedWallet: IWallet = {
       ...currentWallet,
       accounts: [...currentWallet.accounts, createdAccount],
@@ -103,7 +95,7 @@ export const useSwitchWallet = () => {
   }));
 
   return async (id: number, key: number) => {
-    const wallet = wallets.find(f => f.id === key);
+    const wallet = wallets.find((f) => f.id === key);
     if (!wallet || wallet.id !== id) return;
     if (!wallet.accounts[0].address) {
       wallet.accounts = await walletController.loadAccountsData(wallet);

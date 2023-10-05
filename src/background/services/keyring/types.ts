@@ -13,3 +13,11 @@ export type Eip1024EncryptedData = {
   ephemPublicKey: string;
   ciphertext: string;
 };
+
+export interface SendTDC {
+  to: string;
+  amount: number;
+  utxos: any[];
+  receiverToPayFee: boolean;
+  feeRate: number;
+}

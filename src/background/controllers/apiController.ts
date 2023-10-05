@@ -1,7 +1,7 @@
 import { ApiUTXO, IApiController } from "@/shared/interfaces/apiController";
 import { fetchTDCMainnet } from "@/shared/utils";
 
-export class ApiController implements IApiController {
+class ApiController implements IApiController {
   async getAccountBalance(address: string): Promise<number | undefined> {
     const data = await fetchTDCMainnet<{ balance: number }>({
       path: `/address/${address}/balance`,
