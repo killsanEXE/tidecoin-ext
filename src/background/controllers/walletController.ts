@@ -1,13 +1,10 @@
 import { storageService } from "@/background/services";
-import type {
-  IAccount,
-  IWallet,
-  IWalletController,
-} from "@/shared/interfaces";
+import type { IAccount, IWallet, IWalletController } from "@/shared/interfaces";
 import { fromMnemonic } from "test-test-test-hd-wallet";
 import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
 import keyringService from "@/background/services/keyring";
 import { extractKeysFromObj } from "@/shared/utils";
+import { DecryptedSecrets } from "../services/storage/types";
 
 class WalletController implements IWalletController {
   async isVaultEmpty() {
@@ -15,10 +12,7 @@ class WalletController implements IWalletController {
     return values.enc === undefined;
   }
 
-  async createNewWallet(
-    phrase: string,
-    name?: string
-  ): Promise<IWallet> {
+  async createNewWallet(phrase: string, name?: string): Promise<IWallet> {
     const exportedWallets = storageService.walletState.wallets;
     const address = keyringService.newWallet(phrase);
     const account: IAccount = {
@@ -40,8 +34,12 @@ class WalletController implements IWalletController {
     };
   }
 
-  async saveWallets() {
-    await storageService.saveWallets(storageService.appState.password!, storageService.walletState.wallets);
+  async saveWallets(phrases?: DecryptedSecrets) {
+    await storageService.saveWallets(
+      storageService.appState.password!,
+      storageService.walletState.wallets,
+      phrases
+    );
   }
 
   async importWallets(password: string) {
@@ -49,8 +47,11 @@ class WalletController implements IWalletController {
     return wallets.map((i) => extractKeysFromObj(i, ["phrase", "privateKey"]));
   }
 
-  async loadAccountsData(password: string, walletKey: number): Promise<IAccount[]> {
-    const rootWallet = (await keyringService.init(password))[walletKey]
+  async loadAccountsData(
+    password: string,
+    walletKey: number
+  ): Promise<IAccount[]> {
+    const rootWallet = (await keyringService.init(password))[walletKey];
     if (!rootWallet.phrase) throw new Error("Wallet should contains phrase");
 
     const result: IAccount[] = [];

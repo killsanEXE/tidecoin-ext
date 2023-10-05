@@ -1,17 +1,16 @@
+import { DecryptedSecrets } from "@/background/services/storage/types";
 import { IAccount } from "./accounts";
 import { IPrivateWallet } from "./wallets";
 
 export interface IWalletController {
-  createNewWallet: (
-    phrase: string,
-    name?: string
-  ) => Promise<IPrivateWallet>;
-  saveWallets: () => Promise<void>;
+  createNewWallet: (phrase: string, name?: string) => Promise<IPrivateWallet>;
+  saveWallets: (phrases?: DecryptedSecrets) => Promise<void>;
   isVaultEmpty: () => Promise<boolean>;
   importWallets: (password: string) => Promise<IPrivateWallet[]>;
-  loadAccountsData: (password: string, walletKey: number) => Promise<IAccount[]>;
-  createNewAccount: (
-    name?: string
-  ) => Promise<IAccount>;
+  loadAccountsData: (
+    password: string,
+    walletKey: number
+  ) => Promise<IAccount[]>;
+  createNewAccount: (name?: string) => Promise<IAccount>;
   generateMnemonicPhrase: () => Promise<string>;
 }

@@ -33,8 +33,16 @@ class StorageService {
     this._appState = { ...this._appState, ...state };
   }
 
-  async saveWallets(password: string, wallets: IPrivateWallet[]) {
-    const phrases = wallets.map((w) => w.phrase);
+  async saveWallets(
+    password: string,
+    wallets: IPrivateWallet[],
+    phrases?: DecryptedSecrets
+  ) {
+    if (phrases) {
+      const encrypted = await this.getLocalValues();
+      const current = await this.getSecrets(encrypted, password);
+      phrases = [...(current ?? []), ...phrases];
+    }
     const walletsToSave = wallets.map((wallet) => {
       return {
         name: wallet.name,
@@ -57,6 +65,15 @@ class StorageService {
     await browserStorageLocalSet(data);
   }
 
+  private async getSecrets(encrypted: StorageInterface, password: string) {
+    if (!encrypted.enc) return undefined;
+    const loaded = (await encryptorUtils.decrypt(
+      password,
+      JSON.stringify(encrypted.enc)
+    )) as string | undefined;
+    return JSON.parse(loaded!) as DecryptedSecrets | undefined;
+  }
+
   async getLocalValues() {
     return await browserStorageLocalGet<StorageInterface>(undefined);
   }
@@ -64,17 +81,15 @@ class StorageService {
   async importWallets(password: string): Promise<IPrivateWallet[]> {
     const encrypted = await this.getLocalValues();
     if (!encrypted) return [];
-    const decryptedPhrases: DecryptedSecrets = JSON.parse(
-      (await encryptorUtils.decrypt(
-        password,
-        JSON.stringify(encrypted.enc)
-      )) as string
+
+    return await Promise.all(
+      encrypted.cache.map(async (i, index: number) => ({
+        ...i,
+        id: index,
+        phrase: (await this.getSecrets(encrypted, password))?.find((i) => i.id)
+          ?.secret,
+      }))
     );
-    return encrypted.cache.map((i, index: number) => ({
-      ...i,
-      id: index,
-      phrase: decryptedPhrases[index],
-    }));
   }
 }
 

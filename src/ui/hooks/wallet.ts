@@ -13,17 +13,14 @@ export const useCreateNewWallet = () => {
   }));
 
   return async (phrase: string, name?: string) => {
-    const wallet = await walletController.createNewWallet(
-      phrase,
-      name
-    );
+    const wallet = await walletController.createNewWallet(phrase, name);
     wallet.currentAccount = wallet.accounts[0];
     wallets.push(wallet);
     updateWalletState({
       currentWallet: wallet,
       wallets,
     });
-    await walletController.saveWallets();
+    await walletController.saveWallets([{ id: wallet.id, secret: phrase }]);
   };
 };
 
@@ -76,7 +73,7 @@ export const useSwitchWallet = () => {
   const { walletController } = useControllersState((v) => ({
     walletController: v.walletController,
   }));
-  const { password } = useAppState((v) => ({ password: v.password }))
+  const { password } = useAppState((v) => ({ password: v.password }));
 
   return async (id: number, key: number) => {
     const wallet = wallets.find((f) => f.id === key);
