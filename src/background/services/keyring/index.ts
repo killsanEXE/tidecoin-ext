@@ -166,6 +166,12 @@ class KeyringService {
     psbt.__CACHE.__UNSAFE_SIGN_NONSEGWIT = false;
     return psbt.toHex();
   }
+
+
+  async changeAddressType(index: number, addressType: AddressType): Promise<string[]> {
+    this.keyrings[index].addressType = addressType
+    return this.keyrings[index].getAccounts();
+  }
 }
 
 export default new KeyringService();

@@ -3,6 +3,7 @@ import { keyringService } from "../services";
 import { Hex, SendTDC } from "../services/keyring/types";
 import { IKeyringController } from "@/shared/interfaces/keyringController";
 import { IPrivateWallet } from "@/shared/interfaces";
+import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 
 class KeyringController implements IKeyringController {
   /**
@@ -61,6 +62,10 @@ class KeyringController implements IKeyringController {
    */
   async sendTDC(data: SendTDC): Promise<string> {
     return await keyringService.sendTDC(data);
+  }
+
+  async changeAddressType(walletIndex: number, addressType: AddressType): Promise<void> {
+    keyringService.changeAddressType(walletIndex, addressType);
   }
 }
 

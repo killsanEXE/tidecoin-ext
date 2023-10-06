@@ -13,6 +13,12 @@ const Settings = () => {
 
   return (
     <div className={s.settings}>
+      <div className={s.card} onClick={() => { navigate("/pages/change-addr-type") }}>
+        <div className={s.cardText}>
+          Address Type
+        </div>
+        <LinkIcon />
+      </div>
       <div className={s.card} onClick={() => { navigate("/pages/change-password") }}>
         <div className={s.cardText}>
           Change Password
