@@ -36,7 +36,7 @@ const RestoreMnemonic = () => {
   const navigate = useNavigate();
 
   return (
-    <div className={s.newMnemonic}>
+    <div className={s.restoreMnemonic}>
       <div className={s.stepTitle}>
         <p className={step === 1 ? s.active : ""}>Step 1</p>
         <p className={step === 2 ? s.active : ""}>Step 2</p>
@@ -49,10 +49,10 @@ const RestoreMnemonic = () => {
               <div className={s.phrase}>
                 {mnemonicPhrase.map((word, index) => (
                   <div key={index} className={s.word}>
-                    <p>{index + 1}</p>
+                    <p>{index + 1}.</p>
                     <input
                       type="text"
-                      className="input"
+                      className={cn(s.wordInput, "input")}
                       value={mnemonicPhrase[index]}
                       onChange={(e) => {
                         const updatedMnemonicPhrase = [...mnemonicPhrase];
