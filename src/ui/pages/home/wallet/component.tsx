@@ -39,7 +39,7 @@ const Wallet = () => {
           onClick={() => {
             navigate("/pages/switch-wallet");
           }}
-          className={cn(s.change, s.btn, "bg-primary")}
+          className={cn(s.change, s.btn)}
         >
           {currentWallet?.name ?? "wallet"}
         </button>
