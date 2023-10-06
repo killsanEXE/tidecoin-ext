@@ -8,7 +8,7 @@ import { useControllersState } from "@/ui/states/controllerState";
 const ShowPk = () => {
   const [unlocked, setUnlocked] = useState(false);
   const { accId } = useParams();
-  const { selectedAccount, currentAccount } = useWalletState((v) => ({
+  const { currentAccount } = useWalletState((v) => ({
     currentAccount: v.currentAccount,
     selectedAccount: v.selectedAccount,
   }));
@@ -25,7 +25,7 @@ const ShowPk = () => {
     };
 
     load();
-  }, [setSecret, keyringController, selectedAccount, accId]);
+  }, [setSecret, keyringController, currentAccount(), accId]);
 
   return (
     <div className={s.showPk}>

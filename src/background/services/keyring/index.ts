@@ -167,9 +167,11 @@ class KeyringService {
     return psbt.toHex();
   }
 
-
-  async changeAddressType(index: number, addressType: AddressType): Promise<string[]> {
-    this.keyrings[index].addressType = addressType
+  async changeAddressType(
+    index: number,
+    addressType: AddressType
+  ): Promise<string[]> {
+    this.keyrings[index].addressType = addressType;
     return this.keyrings[index].getAccounts();
   }
 }

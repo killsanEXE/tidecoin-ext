@@ -18,11 +18,6 @@ export function useCreateTidecoinTxCallback() {
     keyringController: v.keyringController,
   }));
 
-  if (selectedWallet !== undefined || selectedAccount !== undefined)
-    throw new Error("Failed to get current wallet or account");
-
-  const fromAddress = currentAccount()?.address;
-
   return useCallback(
     async (
       toAddress: Hex,
@@ -30,6 +25,9 @@ export function useCreateTidecoinTxCallback() {
       feeRate: number,
       receiverToPayFee = false
     ) => {
+      if (selectedWallet !== undefined || selectedAccount !== undefined)
+        throw new Error("Failed to get current wallet or account");
+      const fromAddress = currentAccount()?.address;
       const utxos = await apiController.getUtxos(fromAddress!);
       const safeBalance = (utxos ?? []).reduce(
         (pre, cur) => pre + cur.value,
@@ -54,7 +52,13 @@ export function useCreateTidecoinTxCallback() {
       const rawtx = psbt.extractTransaction().toHex();
       return rawtx;
     },
-    [currentWallet(), apiController]
+    [
+      currentWallet(),
+      apiController,
+      currentAccount(),
+      selectedAccount,
+      selectedWallet,
+    ]
   );
 }
 

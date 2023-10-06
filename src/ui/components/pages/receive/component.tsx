@@ -7,7 +7,7 @@ import CopyIcon from "@/ui/components/icons/CopyIcon";
 import cn from "classnames";
 
 const Receive = () => {
-  const { currentAccount, selectedAccount } = useWalletState((v) => ({
+  const { currentAccount } = useWalletState((v) => ({
     currentAccount: v.currentAccount,
     selectedAccount: v.selectedAccount,
   }));
@@ -18,7 +18,7 @@ const Receive = () => {
 
   useEffect(() => {
     if (curAcc === undefined) navigate("/home/wallet");
-  }, [selectedAccount, navigate]);
+  }, [currentAccount(), navigate]);
 
   return (
     <div className={s.receive}>
