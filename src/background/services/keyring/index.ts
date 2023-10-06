@@ -4,12 +4,12 @@ import { KeyringServiceError } from "./consts";
 import { Hex, Json, SendTDC } from "./types";
 import { SimpleKey, HDPrivateKey, Mnemonic } from "test-test-test-hd-wallet";
 import { storageService } from "@/background/services";
-import { Psbt, networks, payments } from "tidecoinjs-lib";
-import { Keyring } from "test-test-test-hd-wallet/src/hd/types";
+import { Psbt, networks } from "tidecoinjs-lib";
+import { AddressType, Keyring } from "test-test-test-hd-wallet/src/hd/types";
 import { createSendTidecoin } from "tidecoin-utils";
-import { AddressType } from "@/shared/types";
 import HDSimpleKey from "test-test-test-hd-wallet/src/hd/simple";
 import { hexToBytes } from "@noble/hashes/utils";
+import { UTXOAddressType } from "tidecoin-utils/lib/OrdTransaction";
 
 export const KEYRING_SDK_TYPES = {
   SimpleKey,
@@ -26,9 +26,14 @@ class KeyringService {
   async init(password: string) {
     const wallets = await storageService.importWallets(password);
     wallets.forEach((i) => {
-      const wallet = HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(i.phrase!));
-      if (i.accounts.length > 1) {
-        wallet.addAccounts(i.accounts.length - 1);
+      let wallet: HDPrivateKey | SimpleKey;
+      if (i.data.seed) {
+        wallet = HDPrivateKey.deserialize(i.data);
+        if (i.accounts.length > 1) {
+          wallet.addAccounts(i.accounts.length - 1);
+        }
+      } else {
+        wallet = HDSimpleKey.deserialize(i.data) as any as HDSimpleKey;
       }
       this.keyrings[i.id] = wallet;
     });
@@ -36,15 +41,20 @@ class KeyringService {
     return wallets;
   }
 
-  newKeyring(type: "simple" | "root", payload: string) {
+  newKeyring(
+    type: "simple" | "root",
+    payload: string,
+    addressType: AddressType = AddressType.P2WPKH
+  ) {
     let keyring: HDPrivateKey | HDSimpleKey;
     if (type === "root") {
       keyring = HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(payload));
     } else {
       keyring = new HDSimpleKey(hexToBytes(payload));
     }
+    keyring.addressType = addressType;
     this.keyrings.push(keyring);
-    return payments.p2wpkh({ pubkey: Buffer.from(keyring.publicKey) }).address;
+    return keyring.getAddress(keyring.publicKey);
   }
 
   exportAccount(address: Hex): string {
@@ -135,7 +145,7 @@ class KeyringService {
           outputIndex: v.mintIndex,
           satoshis: v.value,
           scriptPk: v.script,
-          addressType: AddressType.P2WPKH,
+          addressType: UTXOAddressType.P2WPKH,
           address: v.address,
           ords: [],
         };

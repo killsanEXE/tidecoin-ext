@@ -7,7 +7,7 @@ export interface IKeyringController {
   init(password: string): Promise<IPrivateWallet[]>;
   newKeyring(
     type: "simple" | "root",
-    phrase: string
+    payload: string
   ): Promise<string | undefined>;
   exportAccount(address: Hex): Promise<string>;
   signTransaction(tideTx: Psbt, address: string): Promise<void>;

@@ -8,7 +8,7 @@ interface StorageWalletItem {
   accounts: StorageAccountItem[];
 }
 
-export type DecryptedSecrets = { id: number; secret: string }[];
+export type DecryptedSecrets = { id: number; data: any; phrase?: string }[];
 
 export interface StorageInterface {
   enc: Record<"data" | "iv" | "salt", string>;

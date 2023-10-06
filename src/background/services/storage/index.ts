@@ -3,10 +3,11 @@ import {
   browserStorageLocalSet,
 } from "@/shared/utils/browser";
 import * as encryptorUtils from "@metamask/browser-passworder";
-import { IPrivateWallet } from "@/shared/interfaces";
+import { IPrivateWallet, IWallet } from "@/shared/interfaces";
 import { DecryptedSecrets, StorageInterface } from "./types";
 import { IAppStateBase, IWalletStateBase } from "@/shared/interfaces";
 import { emptyAppState, emptyWalletState } from "./utils";
+import { keyringService } from "..";
 
 class StorageService {
   private _walletState: IWalletStateBase;
@@ -35,13 +36,13 @@ class StorageService {
 
   async saveWallets(
     password: string,
-    wallets: IPrivateWallet[],
-    phrases?: DecryptedSecrets
+    wallets: IWallet[],
+    payload?: DecryptedSecrets
   ) {
-    if (phrases) {
+    if (payload) {
       const encrypted = await this.getLocalValues();
       const current = await this.getSecrets(encrypted, password);
-      phrases = [...(current ?? []), ...phrases];
+      payload = [...(current ?? []), ...payload];
     }
     const walletsToSave = wallets.map((wallet) => {
       return {
@@ -52,9 +53,16 @@ class StorageService {
         })),
       };
     });
+    const keyringsToSave = wallets.map((i) => ({
+      id: i.id,
+      data: keyringService
+        .getKeyringForAccount(i.accounts[0].address!)
+        .serialize(),
+      phrase: payload?.find((d) => d.id === i.id)?.phrase,
+    }));
     const encrypted = await encryptorUtils.encrypt(
       password,
-      JSON.stringify(phrases)
+      JSON.stringify(keyringsToSave)
     );
 
     const data: StorageInterface = {
@@ -82,15 +90,17 @@ class StorageService {
     const encrypted = await this.getLocalValues();
     if (!encrypted) return [];
 
-    return await Promise.all(
-      encrypted.cache.map(async (i, index: number) => ({
+    const secrets = await this.getSecrets(encrypted, password);
+
+    return encrypted.cache.map((i, index: number) => {
+      const current = secrets?.find((i) => i.id === index);
+      return {
         ...i,
         id: index,
-        phrase: (
-          await this.getSecrets(encrypted, password)
-        )?.find((i) => i.id === index)?.secret,
-      }))
-    );
+        phrase: current?.phrase,
+        data: current?.data,
+      };
+    });
   }
 }
 

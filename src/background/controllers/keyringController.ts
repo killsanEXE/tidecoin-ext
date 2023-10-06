@@ -17,14 +17,14 @@ class KeyringController implements IKeyringController {
   /**
    * Method should be called to create a new wallet from mnemonic
    * @param {"simple" | "root"} type Type of wallet that should be created
-   * @param {string} phrase Phrases string words separated by space that generated for wallet
+   * @param {string} payload Phrases string words separated by space that generated for wallet or private key hex format
    * @returns {Promise<string | undefined>} P2PWKH address of created wallet
    */
   async newKeyring(
     type: "simple" | "root",
-    phrase: string
+    payload: string
   ): Promise<string | undefined> {
-    return keyringService.newKeyring(type, phrase);
+    return keyringService.newKeyring(type, payload);
   }
 
   /**

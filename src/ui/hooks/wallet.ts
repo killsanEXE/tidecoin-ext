@@ -1,7 +1,8 @@
 import { IWallet } from "@/shared/interfaces";
 import { useControllersState } from "../states/controllerState";
 import { useWalletState } from "../states/walletState";
-import { useAppState } from "../states/appState";
+import { keyringService } from "@/background/services";
+import { keyringController } from "@/background/controllers";
 
 export const useCreateNewWallet = () => {
   const { wallets, updateWalletState } = useWalletState((v) => ({
@@ -14,13 +15,17 @@ export const useCreateNewWallet = () => {
 
   return async (phrase: string, name?: string) => {
     const wallet = await walletController.createNewWallet(phrase, name);
+    const address = await keyringController.newKeyring("root", phrase);
     wallet.currentAccount = wallet.accounts[0];
     wallets.push(wallet);
-    updateWalletState({
+    await updateWalletState({
       currentWallet: wallet,
       wallets,
     });
-    await walletController.saveWallets([{ id: wallet.id, secret: phrase }]);
+    const keyring = keyringService.getKeyringForAccount(address!);
+    await walletController.saveWallets([
+      { id: wallet.id, phrase: phrase, data: keyring.serialize() },
+    ]);
   };
 };
 
@@ -34,7 +39,7 @@ export const useUpdateCurrentWallet = () => {
     const oldWallet = wallets.find((f) => f.id === wallet.id);
     if (wallet.id === undefined || !oldWallet) return {};
     wallets[wallet.id] = { ...oldWallet, ...wallet } as IWallet;
-    updateWalletState({
+    await updateWalletState({
       wallets,
       currentWallet: wallets.find((f) => f.id === wallet.id),
     });
@@ -60,7 +65,7 @@ export const useCreateNewAccount = () => {
       currentAccount: createdAccount,
     };
 
-    updateCurrentWallet(updatedWallet);
+    await updateCurrentWallet(updatedWallet);
     await walletController.saveWallets();
   };
 };
@@ -73,17 +78,19 @@ export const useSwitchWallet = () => {
   const { walletController } = useControllersState((v) => ({
     walletController: v.walletController,
   }));
-  const { password } = useAppState((v) => ({ password: v.password }));
 
   return async (id: number, key: number) => {
     const wallet = wallets.find((f) => f.id === key);
     if (!wallet || wallet.id !== id) return;
     if (!wallet.accounts[0].address) {
-      wallet.accounts = await walletController.loadAccountsData(password!, key);
+      wallet.accounts = await walletController.loadAccountsData(
+        wallet.id,
+        wallet.accounts
+      );
     }
     wallet.currentAccount = wallet.accounts[0];
     wallets[key] = wallet;
-    updateWalletState({ currentWallet: wallet, wallets: wallets });
+    await updateWalletState({ currentWallet: wallet, wallets: wallets });
   };
 };
 
@@ -101,7 +108,7 @@ export const useUpdateCurrentAccountBalance = () => {
       currentWallet?.currentAccount?.address ?? ""
     );
     if (balance === undefined || !currentWallet?.currentAccount) return;
-    updateCurrentWallet({
+    await updateCurrentWallet({
       ...currentWallet,
       currentAccount: {
         ...currentWallet?.currentAccount,

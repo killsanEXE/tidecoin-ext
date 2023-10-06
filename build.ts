@@ -14,7 +14,8 @@ const ctx = await context({
     ui: "src/ui/index.tsx",
   },
   outdir: "dist",
-  minify: true,
+  minify: false,
+  jsxDev: true,
   bundle: true,
   logLevel: "info",
   plugins: [

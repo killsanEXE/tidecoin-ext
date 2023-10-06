@@ -97,7 +97,7 @@ const NewMnemonic = () => {
             <button
               onClick={async () => {
                 await createNewWallet(mnemonicPhrase!);
-                updateWalletState({ vaultIsEmpty: false });
+                await updateWalletState({ vaultIsEmpty: false });
                 navigate("/home/wallet");
               }}
               className={cn(s.continue, "btn", "primary")}

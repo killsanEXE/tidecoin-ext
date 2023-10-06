@@ -39,7 +39,7 @@
     "react-loading": "^2.0.3",
     "react-qr-code": "^2.0.12",
     "react-router-dom": "^6.15.0",
-    "test-test-test-hd-wallet": "^0.2.3",
+    "test-test-test-hd-wallet": "^0.2.5",
     "tidecoin-utils": "^0.0.5",
     "tidecoinjs-lib": "^6.2.2",
     "tidepair": "^0.0.7",

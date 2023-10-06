@@ -1,6 +1,10 @@
 import { storageService } from "@/background/services";
 import type { IAccount, IWallet, IWalletController } from "@/shared/interfaces";
-import { fromMnemonic } from "test-test-test-hd-wallet";
+import {
+  HDPrivateKey,
+  SimpleKey,
+  fromMnemonic,
+} from "test-test-test-hd-wallet";
 import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
 import keyringService from "@/background/services/keyring";
 import { extractKeysFromObj } from "@/shared/utils";
@@ -34,39 +38,33 @@ class WalletController implements IWalletController {
     };
   }
 
-  async saveWallets(phrases?: DecryptedSecrets) {
+  async saveWallets(data?: DecryptedSecrets) {
     await storageService.saveWallets(
       storageService.appState.password!,
       storageService.walletState.wallets,
-      phrases
+      data
     );
   }
 
   async importWallets(password: string) {
     const wallets = await keyringService.init(password);
-    return wallets.map((i) => extractKeysFromObj(i, ["phrase", "privateKey"]));
+    return wallets.map((i) => extractKeysFromObj(i, ["data"]));
   }
 
   async loadAccountsData(
-    password: string,
-    walletKey: number
+    walletId: number,
+    accounts: IAccount[]
   ): Promise<IAccount[]> {
-    const rootWallet = (await keyringService.init(password))[walletKey];
-    if (!rootWallet.phrase) throw new Error("Wallet should contains phrase");
+    const wallet = keyringService.keyrings[walletId] as
+      | HDPrivateKey
+      | SimpleKey;
 
-    const result: IAccount[] = [];
-    const root = fromMnemonic(Mnemonic.fromPhrase(rootWallet.phrase));
-    const idx = rootWallet.accounts.length > 1 ? -1 : 0;
-    const addresses = root.addAccounts(rootWallet.accounts[idx].id + 1);
-    rootWallet.accounts.forEach((acc) => {
-      if (acc.id === 0)
-        result.push({
-          ...acc,
-          address: root.getAccounts()[0],
-        });
-      else result.push({ ...acc, address: addresses[acc.id] });
-    });
-    return result;
+    const addresses = wallet.getAccounts();
+
+    return accounts.map((i) => ({
+      ...i,
+      address: addresses[i.id],
+    }));
   }
 
   async createNewAccount(name?: string): Promise<IAccount> {

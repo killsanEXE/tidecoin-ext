@@ -8,8 +8,8 @@ export interface IWallet {
 }
 
 export interface IPrivateWallet extends IWallet {
+  data: any;
   phrase?: string;
-  privateKey?: string;
 }
 
 export interface IWalletStateBase {

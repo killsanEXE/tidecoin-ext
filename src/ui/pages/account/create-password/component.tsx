@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useAppState } from '@/ui/states/appState';
+import { useState } from "react";
+import { useAppState } from "@/ui/states/appState";
 
 const CreatePassword = () => {
   const { updateAppState } = useAppState((v) => ({
@@ -11,31 +11,33 @@ const CreatePassword = () => {
 
   const createPassword = async () => {
     if (password === passwordConfirm) {
-      updateAppState({ password: password, isUnlocked: true });
+      await updateAppState({ password: password, isUnlocked: true });
     }
-  }
+  };
 
   return (
-    <form className='form' onSubmit={(e) => e.preventDefault()}>
-      <p className='form-title'>Create new password</p>
+    <form className="form" onSubmit={(e) => e.preventDefault()}>
+      <p className="form-title">Create new password</p>
       <input
         type="password"
-        className='input'
+        className="input"
         onChange={(e) => {
-          setPassword(e.target.value)
+          setPassword(e.target.value);
         }}
       />
       <input
         type="password"
-        className='input'
+        className="input"
         onChange={(e) => {
-          setPasswordConfirm(e.target.value)
+          setPasswordConfirm(e.target.value);
         }}
       />
 
-      <button className='btn primary' onClick={createPassword}>Create password</button>
+      <button className="btn primary" onClick={createPassword}>
+        Create password
+      </button>
     </form>
-  )
-}
+  );
+};
 
-export default CreatePassword
+export default CreatePassword;

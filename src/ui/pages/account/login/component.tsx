@@ -27,8 +27,8 @@ const Login = () => {
   const login = async () => {
     const exportedWallets = await walletController.importWallets(password);
     exportedWallets[0].accounts = await walletController.loadAccountsData(
-      password,
-      0
+      0,
+      exportedWallets[0].accounts
     );
     await updateWalletState({
       wallets: exportedWallets,
