@@ -49,7 +49,7 @@ const RestoreMnemonic = () => {
               <div className={s.phrase}>
                 {mnemonicPhrase.map((word, index) => (
                   <div key={index} className={s.word}>
-                    {index + 1}.
+                    <p>{index + 1}</p>
                     <input
                       type="text"
                       className="input"
