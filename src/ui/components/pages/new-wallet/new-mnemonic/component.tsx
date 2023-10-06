@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useControllersState } from "@/ui/states/controllerState";
 import { useCreateNewWallet } from "@/ui/hooks/wallet";
-import CopyIcon from "@/ui/components/icons/CopyIcon";
+import CopyIcon from "@/ui/components/icons/CopyIcon.svg";
 import cn from "classnames";
 import { copyToClipboard } from "@/ui/utils";
 

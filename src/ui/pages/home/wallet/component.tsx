@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import CopyIcon from "@/ui/components/icons/CopyIcon";
-import ReceiveIcon from "@/ui/components/icons/ReceiveIcon";
-import SendIcon from "@/ui/components/icons/SendIcon";
+import CopyIcon from "@/ui/components/icons/CopyIcon.svg";
+import ReceiveIcon from "@/ui/components/icons/ReceiveIcon.svg";
+import SendIcon from "@/ui/components/icons/SendIcon.svg";
 import s from "./styles.module.scss";
 import { copyToClipboard, shortAddress } from "@/ui/utils";
 import toast from "react-hot-toast";

@@ -27,7 +27,7 @@ class KeyringService {
     const wallets = await storageService.importWallets(password);
     wallets.forEach((i) => {
       let wallet: HDPrivateKey | SimpleKey;
-      if (i.data.seed) {
+      if (i.data) {
         wallet = HDPrivateKey.deserialize(i.data);
         if (i.accounts.length > 1) {
           wallet.addAccounts(i.accounts.length - 1);

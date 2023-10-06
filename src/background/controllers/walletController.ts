@@ -34,7 +34,7 @@ class WalletController implements IWalletController {
       name: !name ? `Wallet ${walletId + 1}` : name,
       id: walletId,
       accounts: [account],
-      currentAccount: account,
+      currentAccount: 0,
     };
   }
 

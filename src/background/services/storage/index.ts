@@ -26,6 +26,18 @@ class StorageService {
     return this._appState;
   }
 
+  get currentWallet() {
+    const idx = this._walletState.currentWallet!;
+    if (idx === undefined) return undefined;
+    return this._walletState.wallets[idx];
+  }
+
+  get currentAccount() {
+    if (this.currentWallet === undefined || this.currentAccount === undefined)
+      return undefined;
+    return this.currentWallet.accounts[this.currentAccount];
+  }
+
   updateWalletState(state: Partial<IWalletStateBase>) {
     this._walletState = { ...this._walletState, ...state };
   }

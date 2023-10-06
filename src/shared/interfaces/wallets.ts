@@ -3,7 +3,7 @@ import { IAccount } from "./accounts";
 export interface IWallet {
   id: number;
   accounts: IAccount[];
-  currentAccount?: IAccount;
+  currentAccount?: number;
   name: string;
 }
 
@@ -15,7 +15,7 @@ export interface IPrivateWallet extends IWallet {
 export interface IWalletStateBase {
   wallets: IWallet[];
   vaultIsEmpty: boolean;
-  currentWallet?: IWallet;
+  currentWallet?: number;
 }
 
 export interface IWalletState extends IWalletStateBase {

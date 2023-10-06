@@ -1,10 +1,10 @@
 import { useState } from "react";
-import CheckIcon from "@/ui/components/icons/Checkicon";
-import CopyIcon from "@/ui/components/icons/CopyIcon";
-import KeyIcon from "@/ui/components/icons/KeyIcon";
-import SmallMenuIcon from "@/ui/components/icons/SmallMenuIcon";
-import TagIcon from "@/ui/components/icons/TagIcon";
-import XMarkIcon from "@/ui/components/icons/XMarkIcon";
+import CheckIcon from "@/ui/components/icons/Checkicon.svg";
+import CopyIcon from "@/ui/components/icons/CopyIcon.svg";
+import KeyIcon from "@/ui/components/icons/KeyIcon.svg";
+import SmallMenuIcon from "@/ui/components/icons/SmallMenuIcon.svg";
+import TagIcon from "@/ui/components/icons/TagIcon.svg";
+import XMarkIcon from "@/ui/components/icons/XMarkIcon.svg";
 import s from "./styles.module.scss";
 import { shortAddress } from "@/ui/utils";
 import { useWalletState } from "@/ui/states/walletState";

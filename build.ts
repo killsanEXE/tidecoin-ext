@@ -3,6 +3,8 @@ import { wasmLoader } from "esbuild-plugin-wasm";
 import { copy } from "esbuild-plugin-copy";
 import stylePlugin from "esbuild-style-plugin";
 import { nodeModulesPolyfillPlugin } from "esbuild-plugins-node-modules-polyfill";
+import svgPlugin from "esbuild-svg";
+
 const autoprefixer = require("autoprefixer");
 const tailwindcss = require("tailwindcss");
 
@@ -19,6 +21,7 @@ const ctx = await context({
   bundle: true,
   logLevel: "info",
   plugins: [
+    svgPlugin(),
     stylePlugin({
       postcss: {
         plugins: [autoprefixer(), tailwindcss()],
