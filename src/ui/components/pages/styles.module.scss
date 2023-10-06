@@ -3,7 +3,7 @@
 }
 
 .controlDiv {
-  @apply h-[5vh] flex justify-between items-center text-[.8rem] p-[1rem] pt-[1.8rem];
+  @apply h-[5%] flex justify-between items-center text-[.8rem] p-[1rem];
 }
 
 .controlElem {
@@ -11,5 +11,5 @@
 }
 
 .contentDiv {
-  @apply h-[95vh] flex items-center justify-center;
+  @apply h-[95%] flex items-center justify-center;
 }

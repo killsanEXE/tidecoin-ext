@@ -96,7 +96,7 @@ const config = () => {
       alias: {
         "@": path.resolve(__dirname, "..", "src/"),
       },
-      extensions: [".ts", ".tsx", ".js", ".jsx"],
+      extensions: [".ts", ".tsx", ".js"],
     },
     module: {
       rules: [
@@ -127,8 +127,8 @@ const config = () => {
 
                 plugins: [
                   isEnvDevelopment &&
-                    shouldUseReactRefresh &&
-                    require.resolve("react-refresh/babel"),
+                  shouldUseReactRefresh &&
+                  require.resolve("react-refresh/babel"),
                 ].filter(Boolean),
                 cacheDirectory: true,
                 cacheCompression: false,
