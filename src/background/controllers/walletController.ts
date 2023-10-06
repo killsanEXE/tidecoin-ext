@@ -1,10 +1,6 @@
 import { storageService } from "@/background/services";
 import type { IAccount, IWallet, IWalletController } from "@/shared/interfaces";
-import {
-  HDPrivateKey,
-  SimpleKey,
-  fromMnemonic,
-} from "test-test-test-hd-wallet";
+import { HDPrivateKey, SimpleKey } from "test-test-test-hd-wallet";
 import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
 import keyringService from "@/background/services/keyring";
 import { extractKeysFromObj } from "@/shared/utils";
@@ -34,7 +30,6 @@ class WalletController implements IWalletController {
       name: !name ? `Wallet ${walletId + 1}` : name,
       id: walletId,
       accounts: [account],
-      currentAccount: 0,
     };
   }
 
@@ -68,7 +63,7 @@ class WalletController implements IWalletController {
   }
 
   async createNewAccount(name?: string): Promise<IAccount> {
-    const wallet = storageService.walletState.currentWallet;
+    const wallet = storageService.currentWallet;
     if (!wallet) return {} as any;
     const accName = !name?.length
       ? `Account ${wallet.accounts.length + 1}`

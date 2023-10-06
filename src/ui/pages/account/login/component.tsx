@@ -31,11 +31,9 @@ const Login = () => {
       exportedWallets[0].accounts
     );
     await updateWalletState({
+      selectedAccount: 0,
+      selectedWallet: 0,
       wallets: exportedWallets,
-      currentWallet: {
-        ...exportedWallets[0],
-        currentAccount: exportedWallets[0].accounts[0],
-      },
     });
     await updateAppState({
       isUnlocked: true,

@@ -3,7 +3,7 @@ import {
   browserStorageLocalSet,
 } from "@/shared/utils/browser";
 import * as encryptorUtils from "@metamask/browser-passworder";
-import { IPrivateWallet, IWallet } from "@/shared/interfaces";
+import { IAccount, IPrivateWallet, IWallet } from "@/shared/interfaces";
 import { DecryptedSecrets, StorageInterface } from "./types";
 import { IAppStateBase, IWalletStateBase } from "@/shared/interfaces";
 import { emptyAppState, emptyWalletState } from "./utils";
@@ -26,16 +26,21 @@ class StorageService {
     return this._appState;
   }
 
-  get currentWallet() {
-    const idx = this._walletState.currentWallet!;
+  get currentWallet(): IWallet | undefined {
+    const idx = this._walletState.selectedWallet;
     if (idx === undefined) return undefined;
     return this._walletState.wallets[idx];
   }
 
-  get currentAccount() {
-    if (this.currentWallet === undefined || this.currentAccount === undefined)
+  get currentAccount(): IAccount | undefined {
+    if (
+      this._walletState.selectedWallet === undefined ||
+      this._walletState.selectedAccount === undefined
+    )
       return undefined;
-    return this.currentWallet.accounts[this.currentAccount];
+    return this._walletState.wallets[this._walletState.selectedWallet].accounts[
+      this._walletState.selectedAccount!
+    ];
   }
 
   updateWalletState(state: Partial<IWalletStateBase>) {

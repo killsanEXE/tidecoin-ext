@@ -2,22 +2,26 @@ import { useState } from "react";
 import s from "./styles.module.scss";
 import cn from "classnames";
 import { useWalletState } from "@/ui/states/walletState";
-import { useCreateTidecoinTxCallback, usePushTidecoinTxCallback } from "@/ui/hooks/transactions";
+import {
+  useCreateTidecoinTxCallback,
+  usePushTidecoinTxCallback,
+} from "@/ui/hooks/transactions";
 
 const Send = () => {
-
   const [addres, setAddres] = useState("");
   const [amount, setAmount] = useState(0);
-  const { currentWalet } = useWalletState((v) => ({ currentWalet: v.currentWallet }))
+  const { currentAccount } = useWalletState((v) => ({
+    currentAccount: v.currentAccount,
+  }));
   const sendTdc = useCreateTidecoinTxCallback();
   const pushTx = usePushTidecoinTxCallback();
 
   const send = async () => {
     const hex = await sendTdc(addres, amount * 10 ** 8, 1, true);
     console.log(hex);
-    const txid = await pushTx(hex)
-    console.log(txid)
-  }
+    const txid = await pushTx(hex);
+    console.log(txid);
+  };
 
   return (
     <form className={cn("form", s.send)} onSubmit={(e) => e.preventDefault()}>
@@ -25,7 +29,7 @@ const Send = () => {
         <div className="form-field">
           <span className="input-span">Address</span>
           <input
-            placeholder={currentWalet?.currentAccount!.address}
+            placeholder={currentAccount()!.address}
             type="text"
             className="input"
             onChange={(e) => {
@@ -43,7 +47,9 @@ const Send = () => {
               setAmount(Number(e.target.value));
             }}
           />
-          <span className="input-info">MAX AMOUNT: {currentWalet?.currentAccount!.balance}</span>
+          <span className="input-info">
+            MAX AMOUNT: {currentAccount()!.balance}
+          </span>
         </div>
       </div>
 

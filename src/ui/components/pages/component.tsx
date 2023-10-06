@@ -1,8 +1,8 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import s from "./styles.module.scss";
 import cn from "classnames";
-import ArrowLeft from "@/ui/components/icons/ArrowLeft.svg";
-import PlusInCircleIcon from "@/ui/components/icons/PlusInCirlceIcon.svg";
+import ArrowLeft from "@/ui/components/icons/ArrowLeft";
+import PlusInCircleIcon from "@/ui/components/icons/PlusInCirlceIcon";
 import { useWalletState } from "@/ui/states/walletState";
 
 export default function PagesLayout() {

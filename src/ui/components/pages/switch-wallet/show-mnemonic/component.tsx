@@ -3,7 +3,7 @@ import { useWalletState } from "@/ui/states/walletState";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import s from "./styles.module.scss";
-import CopyIcon from "@/ui/components/icons/CopyIcon.svg";
+import CopyIcon from "@/ui/components/icons/CopyIcon";
 import { copyToClipboard } from "@/ui/utils";
 
 const ShowMnemonic = () => {

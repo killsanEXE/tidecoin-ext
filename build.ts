@@ -21,7 +21,9 @@ const ctx = await context({
   bundle: true,
   logLevel: "info",
   plugins: [
-    svgPlugin(),
+    svgPlugin({
+      typescript: true,
+    }),
     stylePlugin({
       postcss: {
         plugins: [autoprefixer(), tailwindcss()],

@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useWalletState } from "@/ui/states/walletState";
 import s from "./styles.module.scss";
 import cn from "classnames";
-import CheckIcon from "@/ui/components/icons/Checkicon.svg";
-import TagIcon from "@/ui/components/icons/TagIcon.svg";
-import KeyIcon from "@/ui/components/icons/KeyIcon.svg";
-import XMarkIcon from "@/ui/components/icons/XMarkIcon.svg";
-import SmallMenuIcon from "@/ui/components/icons/SmallMenuIcon.svg";
+import CheckIcon from "@/ui/components/icons/Checkicon";
+import TagIcon from "@/ui/components/icons/TagIcon";
+import KeyIcon from "@/ui/components/icons/KeyIcon";
+import XMarkIcon from "@/ui/components/icons/XMarkIcon";
+import SmallMenuIcon from "@/ui/components/icons/SmallMenuIcon";
 import { useSwitchWallet } from "@/ui/hooks/wallet";
 import { useNavigate } from "react-router-dom";
 
@@ -31,7 +31,7 @@ const SwitchWallet = () => {
                   switchWallet(i, wallet.id);
                 }}
               >
-                {wallet.id === currentWallet?.id ? <CheckIcon /> : undefined}
+                {wallet.id === currentWallet()?.id ? <CheckIcon /> : undefined}
                 {wallet.name}
               </div>
               <div className={s.walletControl}>

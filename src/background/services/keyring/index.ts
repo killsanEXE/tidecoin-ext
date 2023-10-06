@@ -134,7 +134,7 @@ class KeyringService {
   }
 
   async sendTDC(data: SendTDC) {
-    const account = storageService.walletState.currentWallet?.currentAccount;
+    const account = storageService.currentAccount;
     if (!account || !account.address)
       throw new Error("Error when trying to get the current account");
 

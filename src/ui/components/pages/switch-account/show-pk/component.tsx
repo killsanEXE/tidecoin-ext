@@ -8,25 +8,38 @@ import { useControllersState } from "@/ui/states/controllerState";
 const ShowPk = () => {
   const [unlocked, setUnlocked] = useState(false);
   const { accId } = useParams();
-  const { currentWallet } = useWalletState((v) => ({ currentWallet: v.currentWallet }))
-  const { keyringController } = useControllersState((v) => ({ keyringController: v.keyringController }))
+  const { selectedAccount, currentAccount } = useWalletState((v) => ({
+    currentAccount: v.currentAccount,
+    selectedAccount: v.selectedAccount,
+  }));
+  const { keyringController } = useControllersState((v) => ({
+    keyringController: v.keyringController,
+  }));
   const [secret, setSecret] = useState("");
 
   useEffect(() => {
     const load = async () => {
-      setSecret(await keyringController.exportAccount(currentWallet?.accounts.find(f => f.id === Number(accId))?.address ?? ""))
-    }
+      setSecret(
+        await keyringController.exportAccount(currentAccount()?.address ?? "")
+      );
+    };
 
     load();
-  }, [setSecret, keyringController, currentWallet, accId])
+  }, [setSecret, keyringController, selectedAccount, accId]);
 
   return (
     <div className={s.showPk}>
-      {unlocked ?
+      {unlocked ? (
         <div>{secret}</div>
-        : <CheckPassword handler={() => { setUnlocked(true) }} />}
-    </div >
-  )
-}
+      ) : (
+        <CheckPassword
+          handler={() => {
+            setUnlocked(true);
+          }}
+        />
+      )}
+    </div>
+  );
+};
 
-export default ShowPk
+export default ShowPk;

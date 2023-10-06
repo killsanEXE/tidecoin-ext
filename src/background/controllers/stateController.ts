@@ -1,5 +1,7 @@
 import {
+  IAccount,
   IAppStateBase,
+  IWallet,
   IWalletState,
   IWalletStateBase,
 } from "@/shared/interfaces";
@@ -21,6 +23,14 @@ class StateController implements IStateController {
 
   async getWalletState(): Promise<IWalletStateBase> {
     return storageService.walletState;
+  }
+
+  async getCurrentWallet(): Promise<IWallet | undefined> {
+    return storageService.currentWallet;
+  }
+
+  async getCurrentAccount(): Promise<IAccount | undefined> {
+    return storageService.currentWallet;
   }
 }
 

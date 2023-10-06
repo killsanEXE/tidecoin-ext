@@ -6,18 +6,22 @@ import { Psbt } from "tidecoinjs-lib";
 import { Hex } from "@/background/services/keyring/types";
 
 export function useCreateTidecoinTxCallback() {
-  const { currentWallet } = useWalletState((v) => ({
-    currentWallet: v.currentWallet,
-  }));
+  const { currentWallet, currentAccount, selectedAccount, selectedWallet } =
+    useWalletState((v) => ({
+      currentWallet: v.currentWallet,
+      currentAccount: v.currentAccount,
+      selectedAccount: v.selectedAccount,
+      selectedWallet: v.selectedWallet,
+    }));
   const { apiController, keyringController } = useControllersState((v) => ({
     apiController: v.apiController,
     keyringController: v.keyringController,
   }));
 
-  if (!currentWallet || !currentWallet?.currentAccount)
+  if (selectedWallet !== undefined || selectedAccount !== undefined)
     throw new Error("Failed to get current wallet or account");
 
-  const fromAddress = currentWallet.currentAccount?.address;
+  const fromAddress = currentAccount()?.address;
 
   return useCallback(
     async (
@@ -50,7 +54,7 @@ export function useCreateTidecoinTxCallback() {
       const rawtx = psbt.extractTransaction().toHex();
       return rawtx;
     },
-    [currentWallet, apiController]
+    [currentWallet(), apiController]
   );
 }
 

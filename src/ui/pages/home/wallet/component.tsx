@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import CopyIcon from "@/ui/components/icons/CopyIcon.svg";
-import ReceiveIcon from "@/ui/components/icons/ReceiveIcon.svg";
-import SendIcon from "@/ui/components/icons/SendIcon.svg";
+import CopyIcon from "@/ui/components/icons/CopyIcon";
+import ReceiveIcon from "@/ui/components/icons/ReceiveIcon";
+import SendIcon from "@/ui/components/icons/SendIcon";
 import s from "./styles.module.scss";
 import { copyToClipboard, shortAddress } from "@/ui/utils";
 import toast from "react-hot-toast";
@@ -13,9 +13,13 @@ import ReactLoading from "react-loading";
 import { ITransaction } from "@/shared/interfaces/apiController";
 
 const Wallet = () => {
-  const { currentWallet } = useWalletState((v) => ({
-    currentWallet: v.currentWallet,
-  }));
+  const { currentAccount, selectedAccount, currentWallet } = useWalletState(
+    (v) => ({
+      currentAccount: v.currentAccount,
+      selectedAccount: v.selectedAccount,
+      currentWallet: v.currentWallet,
+    })
+  );
   const navigate = useNavigate();
 
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
@@ -35,15 +39,12 @@ const Wallet = () => {
       udpateTransactions();
     }, 10000);
 
-    if (
-      currentWallet?.currentAccount &&
-      currentWallet.currentAccount.balance === undefined
-    )
+    if (currentAccount() && currentAccount()?.balance === undefined)
       updateCurrentAccountBalance();
     udpateTransactions();
 
     return () => clearInterval(interval);
-  }, [updateCurrentAccountBalance, currentWallet]);
+  }, [updateCurrentAccountBalance, selectedAccount]);
 
   return (
     <div className={s.walletDiv}>
@@ -54,7 +55,7 @@ const Wallet = () => {
           }}
           className={cn(s.change, s.btn)}
         >
-          {currentWallet?.name ?? "wallet"}
+          {currentWallet()?.name ?? "wallet"}
         </button>
         <button
           onClick={() => {
@@ -62,13 +63,13 @@ const Wallet = () => {
           }}
           className={cn(s.change, s.btn)}
         >
-          {currentWallet?.currentAccount?.name}
+          {currentAccount()?.name}
         </button>
       </div>
 
       <div className={cn(s.accPanel, s.center)}>
         <div className={cn(s.balance, s.center)}>
-          {currentWallet?.currentAccount?.balance === undefined ? (
+          {currentAccount()?.balance === undefined ? (
             <ReactLoading
               type="spin"
               color="#fff"
@@ -76,14 +77,14 @@ const Wallet = () => {
               className="react-loading"
             />
           ) : (
-            currentWallet?.currentAccount.balance
+            currentAccount()?.balance
           )}{" "}
           TDC
         </div>
         <p
           className={cn(s.accPubAddress, s.center)}
           onClick={() => {
-            copyToClipboard(currentWallet?.currentAccount?.address).then(() => {
+            copyToClipboard(currentAccount()?.address).then(() => {
               toast.success("Copied", {
                 style: { borderRadius: 0 },
                 iconTheme: {
@@ -94,7 +95,7 @@ const Wallet = () => {
             });
           }}
         >
-          <CopyIcon /> {shortAddress(currentWallet?.currentAccount?.address)}
+          <CopyIcon /> {shortAddress(currentAccount()?.address)}
         </p>
 
         <div className={cn(s.receiveSendBtns, s.center)}>

@@ -1,7 +1,7 @@
 import s from "./styles.module.scss";
 import { useNavigate } from "react-router-dom";
-import WalletIcon from "@/ui/components/icons/WalletIcon.svg";
-import SettingsIcon from "@/ui/components/icons/SettingsIcon.svg";
+import WalletIcon from "@/ui/components/icons/WalletIcon";
+import SettingsIcon from "@/ui/components/icons/SettingsIcon";
 
 const Nav = () => {
   const navigate = useNavigate();

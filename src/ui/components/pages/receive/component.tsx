@@ -3,26 +3,27 @@ import { useNavigate } from "react-router-dom";
 import { useWalletState } from "@/ui/states/walletState";
 import QRCode from "react-qr-code";
 import s from "./styles.module.scss";
-import CopyIcon from "@/ui/components/icons/CopyIcon.svg";
+import CopyIcon from "@/ui/components/icons/CopyIcon";
 import cn from "classnames";
 
 const Receive = () => {
-  const { currentWallet } = useWalletState((v) => ({
-    currentWallet: v.currentWallet,
+  const { currentAccount, selectedAccount } = useWalletState((v) => ({
+    currentAccount: v.currentAccount,
+    selectedAccount: v.selectedAccount,
   }));
 
   const navigate = useNavigate();
 
+  const curAcc = currentAccount();
+
   useEffect(() => {
-    if (currentWallet === undefined) navigate("/home/wallet");
-  }, [currentWallet, navigate]);
+    if (curAcc === undefined) navigate("/home/wallet");
+  }, [selectedAccount, navigate]);
 
   return (
     <div className={s.receive}>
-      <QRCode value={currentWallet?.currentAccount!.address ?? ""} />
-      <div className={s.accTitle}>
-        {currentWallet?.currentAccount!.name ?? "Account"}
-      </div>
+      <QRCode value={curAcc!.address ?? ""} />
+      <div className={s.accTitle}>{curAcc!.name ?? "Account"}</div>
       <button className={cn("btn", "primary", s.copyButton)}>
         <CopyIcon /> Copy address
       </button>

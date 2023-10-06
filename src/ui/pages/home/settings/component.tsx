@@ -1,4 +1,4 @@
-import LinkIcon from "@/ui/components/icons/LinkIcon.svg";
+import LinkIcon from "@/ui/components/icons/LinkIcon";
 import s from "./styles.module.scss";
 import { useAppState } from "@/ui/states/appState";
 import { useNavigate } from "react-router-dom";
