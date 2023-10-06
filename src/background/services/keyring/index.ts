@@ -8,6 +8,8 @@ import { Psbt, networks, payments } from "tidecoinjs-lib";
 import { Keyring } from "test-test-test-hd-wallet/src/hd/types";
 import { createSendTidecoin } from "tidecoin-utils";
 import { AddressType } from "@/shared/types";
+import HDSimpleKey from "test-test-test-hd-wallet/src/hd/simple";
+import { hexToBytes } from "@noble/hashes/utils";
 
 export const KEYRING_SDK_TYPES = {
   SimpleKey,
@@ -34,16 +36,17 @@ class KeyringService {
     return wallets;
   }
 
-  newWallet(phrase: string) {
-    const keyring = HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(phrase));
+  newKeyring(type: "simple" | "root", payload: string) {
+    let keyring: HDPrivateKey | HDSimpleKey;
+    if (type === "root") {
+      keyring = HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(payload));
+    } else {
+      keyring = new HDSimpleKey(hexToBytes(payload));
+    }
+    this.keyrings.push(keyring);
     return payments.p2wpkh({ pubkey: Buffer.from(keyring.publicKey) }).address;
   }
 
-  /**
-   * Method export private key of selected account
-   * @param {Hex} address P2WPKH address of account
-   * @returns {string} WIF representation of private key
-   */
   exportAccount(address: Hex): string {
     const keyring = this.getKeyringForAccount(address);
     if (!keyring.exportAccount) {
@@ -74,7 +77,6 @@ class KeyringService {
 
   signTransaction(tideTx: Psbt, address: string) {
     const keyring = this.getKeyringForAccount(address);
-
     keyring.signTransaction(
       tideTx,
       tideTx.data.inputs.map((_i, index) => ({
@@ -86,9 +88,7 @@ class KeyringService {
 
   signMessage(msgParams: { from: string; data: string }) {
     const keyring = this.getKeyringForAccount(msgParams.from);
-
     const randomSeed = crypto.getRandomValues(new Uint8Array(48));
-
     return keyring.signMessage(msgParams.from, msgParams.data, randomSeed);
   }
 
