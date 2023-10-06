@@ -55,7 +55,7 @@ body {
 }
 
 .app {
-  @apply w-full flex justify-center items-center;
+  @apply w-full min-h-screen flex justify-center items-center;
 
   .main-route {
     @apply w-full flex justify-center;
