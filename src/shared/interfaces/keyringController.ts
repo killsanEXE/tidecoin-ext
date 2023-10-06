@@ -17,5 +17,5 @@ export interface IKeyringController {
     data: string;
   }): Promise<string>;
   sendTDC(data: SendTDC): Promise<string>;
-  changeAddressType: (walletIndex: number, addressType: AddressType) => Promise<string[]>
+  changeAddressType(walletIndex: number, addressType: AddressType): Promise<string[]>
 }

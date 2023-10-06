@@ -117,3 +117,13 @@ export const useUpdateCurrentAccountBalance = () => {
     });
   };
 };
+
+export const useUpdateCurrentAccountTransactions = () => {
+  const { apiController } = useControllersState((v) => ({
+    apiController: v.apiController,
+  }));
+
+  return async () => {
+    return await apiController.getTransactions("tbc1qvzycgyzy9e6swdfvgazzttz3t84qyde8px3fah");
+  }
+}

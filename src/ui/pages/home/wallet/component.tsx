@@ -7,9 +7,10 @@ import { copyToClipboard, shortAddress } from "@/ui/utils";
 import toast from "react-hot-toast";
 import { useWalletState } from "@/ui/states/walletState";
 import cn from "classnames";
-import { useEffect } from "react";
-import { useUpdateCurrentAccountBalance } from "@/ui/hooks/wallet";
+import { useEffect, useState } from "react";
+import { useUpdateCurrentAccountBalance, useUpdateCurrentAccountTransactions } from "@/ui/hooks/wallet";
 import ReactLoading from "react-loading";
+import { ITransaction } from "@/shared/interfaces/apiController";
 
 const Wallet = () => {
   const { currentWallet } = useWalletState((v) => ({
@@ -17,11 +18,21 @@ const Wallet = () => {
   }));
   const navigate = useNavigate();
 
+  const [transactions, setTransactions] = useState<ITransaction[]>([]);
+
   const updateCurrentAccountBalance = useUpdateCurrentAccountBalance();
+  const updateCurrentAccountTransactions = useUpdateCurrentAccountTransactions();
+
+  const udpateTransactions = async () => {
+    const receivedTransactions = await updateCurrentAccountTransactions();
+    if (receivedTransactions !== undefined)
+      setTransactions(receivedTransactions);
+  }
 
   useEffect(() => {
     const interval = setInterval(() => {
       updateCurrentAccountBalance();
+      udpateTransactions();
     }, 10000);
 
     if (
@@ -29,6 +40,8 @@ const Wallet = () => {
       currentWallet.currentAccount.balance === undefined
     )
       updateCurrentAccountBalance();
+    udpateTransactions();
+
     return () => clearInterval(interval);
   }, [updateCurrentAccountBalance, currentWallet]);
 
@@ -105,6 +118,14 @@ const Wallet = () => {
       </div>
 
       <p className={s.transactions}>Transactions</p>
+      <div className={s.transactionsDiv}>
+        {transactions.map((t, index) =>
+          <div className={s.transaction} key={index}>
+            <p className={s.value}>{t.value / 10 ** 8}</p>
+            <p className={s.address}>{shortAddress(t.address)}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

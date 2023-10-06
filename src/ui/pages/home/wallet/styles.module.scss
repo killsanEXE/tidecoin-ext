@@ -68,3 +68,12 @@ $font_color: #f4f4f9;
 .transactions {
   @apply text-lg text-center mt-6;
 }
+
+.transactionsDiv {
+  overflow-y: scroll;
+  @apply h-full flex flex-col items-center pt-[1rem];
+
+  .transaction {
+    @apply bg-hovered w-[90%] p-[.5rem] rounded-[.3rem];
+  }
+}
