@@ -1,3 +1,5 @@
+import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
+
 interface StorageAccountItem {
   id: number;
   name: string;
@@ -5,6 +7,7 @@ interface StorageAccountItem {
 
 interface StorageWalletItem {
   name: string;
+  addressType: AddressType,
   accounts: StorageAccountItem[];
 }
 
