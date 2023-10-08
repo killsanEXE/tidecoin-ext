@@ -5,6 +5,7 @@ import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
 import keyringService from "@/background/services/keyring";
 import { extractKeysFromObj } from "@/shared/utils";
 import { DecryptedSecrets } from "../services/storage/types";
+import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 
 class WalletController implements IWalletController {
   async isVaultEmpty() {
@@ -29,6 +30,7 @@ class WalletController implements IWalletController {
     return {
       name: !name ? `Wallet ${walletId + 1}` : name,
       id: walletId,
+      addressType: AddressType.P2WPKH,
       accounts: [account],
     };
   }

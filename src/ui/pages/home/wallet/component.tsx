@@ -45,10 +45,11 @@ const Wallet = () => {
 
     if (currentAccount() && currentAccount()?.balance === undefined)
       updateCurrentAccountBalance();
-    udpateTransactions();
+    if (!transactions.length)
+      udpateTransactions();
 
     return () => clearInterval(interval);
-  }, [updateCurrentAccountBalance, currentAccount()]);
+  }, [updateCurrentAccountBalance, currentAccount(), udpateTransactions, transactions]);
 
   return (
     <div className={s.walletDiv}>

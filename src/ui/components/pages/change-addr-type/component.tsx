@@ -6,8 +6,9 @@ import { useWalletState } from "@/ui/states/walletState";
 import { useUpdateCurrentWallet } from "@/ui/hooks/wallet";
 
 const ChangeAddrType = () => {
-  const { keyringController } = useControllersState((v) => ({
+  const { keyringController, walletController } = useControllersState((v) => ({
     keyringController: v.keyringController,
+    walletController: v.walletController
   }));
   const { currentWallet, selectedWallet } = useWalletState((v) => ({
     currentWallet: v.currentWallet,
@@ -30,6 +31,7 @@ const ChangeAddrType = () => {
               address: addresses[f.id],
             })),
           });
+          await walletController.saveWallets()
         }}
       />
     </div>
