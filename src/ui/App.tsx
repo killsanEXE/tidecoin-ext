@@ -45,6 +45,7 @@ export default function App() {
         appState.isReady &&
         appState.isUnlocked &&
         walletState.selectedWallet !== undefined
+        && !currentWallet()
       ) {
         await updateWalletState(walletState);
         await updateAppState(appState);
@@ -72,6 +73,7 @@ export default function App() {
     updateAppState,
     router,
     setRouter,
+    currentWallet()
   ]);
 
   return (

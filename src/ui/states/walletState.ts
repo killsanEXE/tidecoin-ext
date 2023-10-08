@@ -15,10 +15,9 @@ export const useWalletState = create<IWalletState>()((set, get) => ({
   },
 
   currentWallet: () => {
-    const { wallets, selectedAccount } = get();
-    const idx = selectedAccount!;
-    if (idx === undefined) return undefined;
-    return wallets[idx];
+    const { wallets, selectedWallet } = get();
+    if (selectedWallet === undefined) return undefined;
+    return wallets[selectedWallet];
   },
 
   currentAccount: () => {

@@ -15,7 +15,6 @@ export const useCreateNewWallet = () => {
 
   return async (phrase: string, name?: string) => {
     const wallet = await walletController.createNewWallet(phrase, name);
-    console.log(wallet.id);
     const address = await keyringController.newKeyring("root", phrase);
     wallets.push(wallet);
     await updateWalletState({
@@ -99,9 +98,9 @@ export const useSwitchWallet = () => {
     walletController: v.walletController,
   }));
 
-  return async (id: number, key: number) => {
+  return async (key: number) => {
     const wallet = wallets.find((f) => f.id === key);
-    if (!wallet || wallet.id !== id) return;
+    if (!wallet) return;
     if (!wallet.accounts[0].address) {
       wallet.accounts = await walletController.loadAccountsData(
         wallet.id,
@@ -110,7 +109,7 @@ export const useSwitchWallet = () => {
     }
     wallets[key] = wallet;
     await updateWalletState({
-      selectedWallet: wallet.id,
+      selectedWallet: key,
       wallets: wallets,
       selectedAccount: 0,
     });

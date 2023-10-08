@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useWalletState } from "@/ui/states/walletState";
 import s from "./styles.module.scss";
 import cn from "classnames";
@@ -28,7 +28,7 @@ const SwitchWallet = () => {
               <div
                 className={s.walletInfo}
                 onClick={() => {
-                  switchWallet(i, wallet.id);
+                  switchWallet(i);
                 }}
               >
                 {wallet.id === currentWallet()?.id ? <CheckIcon /> : undefined}

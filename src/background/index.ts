@@ -53,10 +53,6 @@ browserRuntimeOnConnect((port: any) => {
       });
     };
 
-    if (port.name === "popup") {
-      // console.log("PORT NAME IS POPUP")
-    }
-
     eventBus.addEventListener(EVENTS.broadcastToUI, broadcastCallback);
     port.onDisconnect.addListener(() => {
       eventBus.removeEventListener(EVENTS.broadcastToUI, broadcastCallback);
