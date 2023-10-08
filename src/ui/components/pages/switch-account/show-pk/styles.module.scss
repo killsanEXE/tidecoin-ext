@@ -1,3 +1,7 @@
 .showPk {
-    @apply w-full h-full max-w-[350px];
+    @apply w-full h-full max-w-[350px] flex justify-center items-center break-all;
+}
+
+.secret {
+    @apply max-w-[350px] break-all h-[50%];
 }

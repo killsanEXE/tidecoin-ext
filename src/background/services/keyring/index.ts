@@ -174,6 +174,13 @@ class KeyringService {
     this.keyrings[index].addressType = addressType;
     return this.keyrings[index].getAccounts();
   }
+
+  async getWalletSecret(walletKey: number, password: string): Promise<string | undefined> {
+    const wallets = await storageService.importWallets(password);
+    if (!wallets[walletKey]) return;
+    const wallet = HDPrivateKey.deserialize(wallets[walletKey].data);
+    return Mnemonic.fromEntropy((wallet as any).seed).getPhrase();
+  }
 }
 
 export default new KeyringService();

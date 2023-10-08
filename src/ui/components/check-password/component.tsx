@@ -3,13 +3,13 @@ import s from "./styles.module.scss"
 import { useAppState } from "@/ui/states/appState";
 import toast from "react-hot-toast";
 
-const CheckPassword = (props: { handler: () => void; }) => {
+const CheckPassword = (props: { handler: (password?: string) => void; }) => {
 
     const [password, setPassword] = useState("");
     const { appPassword } = useAppState((v) => ({ appPassword: v.password }))
 
     const checkPassword = () => {
-        if (password === appPassword) props.handler();
+        if (password === appPassword) props.handler(password);
         else toast.error("Password is incorrect");
     }
 

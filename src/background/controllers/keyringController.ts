@@ -70,6 +70,11 @@ class KeyringController implements IKeyringController {
   ): Promise<string[]> {
     return await keyringService.changeAddressType(walletIndex, addressType);
   }
+
+  async getWalletSecret(walletKey: number, password: string): Promise<string | undefined> {
+    await keyringService.getWalletSecret(walletKey, password);
+    return "SHTI";
+  }
 }
 
 export default new KeyringController();

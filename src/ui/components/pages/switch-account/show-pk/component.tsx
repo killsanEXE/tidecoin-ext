@@ -30,7 +30,7 @@ const ShowPk = () => {
   return (
     <div className={s.showPk}>
       {unlocked ? (
-        <div>{secret}</div>
+        <div className={s.secret}>{secret}</div>
       ) : (
         <CheckPassword
           handler={() => {
