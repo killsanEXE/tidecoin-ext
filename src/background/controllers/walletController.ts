@@ -71,7 +71,7 @@ class WalletController implements IWalletController {
       ? `Account ${wallet.accounts.length + 1}`
       : name;
     const addresses = keyringService.getKeyringForAccount(
-      wallet.accounts[-1].address!
+      wallet.accounts[-1] ? wallet.accounts[-1].address! : wallet.accounts[0].address!
     ).addAccounts!(1);
 
     return {
