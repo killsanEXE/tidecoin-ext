@@ -2,7 +2,7 @@ $btn_background: #3b4167;
 $font_color: #f4f4f9;
 
 .walletDiv {
-  @apply w-full flex flex-col justify-start;
+  @apply w-full h-full pt-[1rem] flex flex-col justify-start;
 
   .changeWalletAccDiv {
     @apply flex justify-evenly h-[10vh];
@@ -71,9 +71,17 @@ $font_color: #f4f4f9;
 
 .transactionsDiv {
   overflow-y: scroll;
-  @apply h-full flex flex-col items-center pt-[1rem];
+  @apply h-full flex flex-col items-center py-[1rem];
 
   .transaction {
-    @apply bg-hovered w-[90%] p-[.5rem] rounded-[.3rem];
+    @apply bg-hovered w-[90%] p-[.5rem] rounded-[.3rem] my-[.3rem];
+
+    &:hover {
+      @apply cursor-pointer bg-input-bg;
+    }
   }
+}
+
+.noTransactions {
+  @apply w-full h-full items-center flex justify-center pb-[4rem];
 }

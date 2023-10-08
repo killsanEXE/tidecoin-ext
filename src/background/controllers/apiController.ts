@@ -1,4 +1,4 @@
-import { ApiUTXO, IApiController, ITransaction } from "@/shared/interfaces/apiController";
+import { ApiUTXO, IApiController, ITransaction, ITransactionInfo } from "@/shared/interfaces/apiController";
 import { fetchTDCMainnet } from "@/shared/utils";
 
 class ApiController implements IApiController {
@@ -39,6 +39,13 @@ class ApiController implements IApiController {
       path: `/address/${address}/txs`,
     })
   }
+
+  async getTransactionInfo(txid: string): Promise<ITransactionInfo | undefined> {
+    return await fetchTDCMainnet<ITransactionInfo>({
+      path: `/tx/${txid}`
+    })
+  }
+
 }
 
 export default new ApiController();

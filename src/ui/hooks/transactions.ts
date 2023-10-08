@@ -79,3 +79,14 @@ export function usePushTidecoinTxCallback() {
     [apiController]
   );
 }
+
+export function useUpdateCurrentAccountTransactions() {
+  const { apiController } = useControllersState((v) => ({
+    apiController: v.apiController,
+  }));
+  const { currentAccount } = useWalletState((v) => ({ currentAccount: v.currentAccount }))
+
+  return async () => {
+    return await apiController.getTransactions(currentAccount()!.address ?? "");
+  }
+}

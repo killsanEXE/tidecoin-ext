@@ -20,6 +20,7 @@ import ShowPk from "../components/pages/switch-account/show-pk";
 import ShowMnemonic from "../components/pages/switch-wallet/show-mnemonic";
 import Send from "../components/pages/send";
 import ChangeAddrType from "../components/pages/change-addr-type";
+import TransactionInfo from "../components/pages/transaction-info";
 
 export const guestRouter = createHashRouter([
   {
@@ -57,7 +58,8 @@ export const authenticatedRouter = createHashRouter([
       { path: "show-pk/:accId", element: <ShowPk /> },
       { path: "show-mnemonic/:walletId", element: <ShowMnemonic /> },
       { path: "send", element: <Send /> },
-      { path: "change-addr-type", element: <ChangeAddrType /> }
+      { path: "change-addr-type", element: <ChangeAddrType /> },
+      { path: "transaction-info/:txId", element: <TransactionInfo /> }
     ]
   },
   { path: "*", element: <Navigate to={"/home/wallet"} /> },

@@ -1,0 +1,11 @@
+.transactionInfoDiv {
+    @apply h-full w-full flex items-center justify-center break-all;
+
+    .transaction {
+        @apply flex flex-col h-full w-full break-all;
+
+        .transactionP {
+            @apply max-w-[350px] break-all bg-input-bg p-[.5rem] m-[1rem] rounded-[.3rem];
+        }
+    }
+}

@@ -10,13 +10,13 @@ import cn from "classnames";
 import { useEffect, useState } from "react";
 import {
   useUpdateCurrentAccountBalance,
-  useUpdateCurrentAccountTransactions,
 } from "@/ui/hooks/wallet";
 import ReactLoading from "react-loading";
 import { ITransaction } from "@/shared/interfaces/apiController";
+import { useUpdateCurrentAccountTransactions } from "@/ui/hooks/transactions";
 
 const Wallet = () => {
-  const { currentAccount, selectedAccount, currentWallet } = useWalletState(
+  const { currentAccount, currentWallet } = useWalletState(
     (v) => ({
       currentAccount: v.currentAccount,
       selectedAccount: v.selectedAccount,
@@ -24,9 +24,8 @@ const Wallet = () => {
     })
   );
   const navigate = useNavigate();
-
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
-
+  const [updatedTransactions, setUpdatedTransactions] = useState(false);
   const updateCurrentAccountBalance = useUpdateCurrentAccountBalance();
   const updateCurrentAccountTransactions =
     useUpdateCurrentAccountTransactions();
@@ -45,8 +44,10 @@ const Wallet = () => {
 
     if (currentAccount() && currentAccount()?.balance === undefined)
       updateCurrentAccountBalance();
-    if (!transactions.length)
+    if (!updatedTransactions) {
       udpateTransactions();
+      setUpdatedTransactions(true);
+    }
 
     return () => clearInterval(interval);
   }, [updateCurrentAccountBalance, currentAccount(), udpateTransactions, transactions]);
@@ -124,14 +125,18 @@ const Wallet = () => {
       </div>
 
       <p className={s.transactions}>Transactions</p>
-      <div className={s.transactionsDiv}>
-        {transactions.map((t, index) => (
-          <div className={s.transaction} key={index}>
-            <p className={s.value}>{t.value / 10 ** 8}</p>
-            <p className={s.address}>{shortAddress(t.address)}</p>
-          </div>
-        ))}
-      </div>
+      {transactions.length > 0 ?
+        <div className={s.transactionsDiv}>
+          {transactions.map((t, index) => (
+            <div className={s.transaction} key={index}
+              onClick={() => { navigate(`/pages/transaction-info/${t.spentTxid}`) }}>
+              <p className={s.value}>{t.value / 10 ** 8}</p>
+              <p className={s.address}>{shortAddress(t.address)}</p>
+            </div>
+          ))}
+        </div>
+        :
+        <p className={s.noTransactions}>No transactions</p>}
     </div>
   );
 };

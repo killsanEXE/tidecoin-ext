@@ -55,7 +55,7 @@ body {
 }
 
 .app {
-  @apply w-full min-h-screen flex justify-center items-center;
+  @apply w-full h-full min-h-screen flex justify-center items-center;
 
   .main-route {
     @apply w-full flex justify-center;
@@ -64,4 +64,21 @@ body {
   .toast {
     @apply bg-panel text-text text-[.9rem] border border-bg;
   }
+}
+
+::-webkit-scrollbar {
+  width: .2rem;
+  height: .2rem;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #121420;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

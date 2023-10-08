@@ -19,6 +19,7 @@ export interface IApiController {
   getUtxos(address: string): Promise<ApiUTXO[] | undefined>;
   pushTx(rawTx: string): Promise<{ txId: string } | undefined>;
   getTransactions(address: string): Promise<ITransaction[] | undefined>;
+  getTransactionInfo(txid: string): Promise<ITransactionInfo | undefined>;
 }
 
 export interface ITransaction {
@@ -36,4 +37,23 @@ export interface ITransaction {
   value: number
   confirmations: number
   sequenceNumber: number
+}
+
+export interface ITransactionInfo {
+  _id: string
+  txid: string
+  network: string
+  chain: string
+  blockHeight: number
+  blockHash: string
+  blockTime: string
+  blockTimeNormalized: string
+  coinbase: boolean
+  locktime: number
+  inputCount: number
+  outputCount: number
+  size: number
+  fee: number
+  value: number
+  confirmations: number
 }
