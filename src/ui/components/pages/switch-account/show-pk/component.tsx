@@ -2,16 +2,13 @@ import { useEffect, useState } from "react";
 import s from "./styles.module.scss";
 import CheckPassword from "../../../check-password";
 import { useParams } from "react-router-dom";
-import { useWalletState } from "@/ui/states/walletState";
+import { useGetCurrentAccount } from "@/ui/states/walletState";
 import { useControllersState } from "@/ui/states/controllerState";
 
 const ShowPk = () => {
   const [unlocked, setUnlocked] = useState(false);
   const { accId } = useParams();
-  const { currentAccount } = useWalletState((v) => ({
-    currentAccount: v.currentAccount,
-    selectedAccount: v.selectedAccount,
-  }));
+  const currentAccount = useGetCurrentAccount();
   const { keyringController } = useControllersState((v) => ({
     keyringController: v.keyringController,
   }));
@@ -20,12 +17,12 @@ const ShowPk = () => {
   useEffect(() => {
     const load = async () => {
       setSecret(
-        await keyringController.exportAccount(currentAccount()?.address ?? "")
+        await keyringController.exportAccount(currentAccount?.address ?? "")
       );
     };
 
     load();
-  }, [setSecret, keyringController, currentAccount(), accId]);
+  }, [setSecret, keyringController, currentAccount, accId]);
 
   return (
     <div className={s.showPk}>

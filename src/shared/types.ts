@@ -1,3 +1,4 @@
+import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 import { CHAINS_ENUM } from "./constant";
 
 export enum NetworkType {

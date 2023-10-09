@@ -1,4 +1,9 @@
-import { ApiUTXO, IApiController, ITransaction, ITransactionInfo } from "@/shared/interfaces/apiController";
+import {
+  ApiUTXO,
+  IApiController,
+  ITransaction,
+  ITransactionInfo,
+} from "@/shared/interfaces/apiController";
 import { fetchTDCMainnet } from "@/shared/utils";
 
 class ApiController implements IApiController {
@@ -25,7 +30,7 @@ class ApiController implements IApiController {
       path: "/tx/send",
       method: "POST",
       headers: {
-        "content-type": "application/json"
+        "content-type": "application/json",
       },
       body: JSON.stringify({
         rawTx,
@@ -37,15 +42,16 @@ class ApiController implements IApiController {
   async getTransactions(address: string): Promise<ITransaction[] | undefined> {
     return await fetchTDCMainnet<ITransaction[]>({
       path: `/address/${address}/txs`,
-    })
+    });
   }
 
-  async getTransactionInfo(txid: string): Promise<ITransactionInfo | undefined> {
+  async getTransactionInfo(
+    txid: string
+  ): Promise<ITransactionInfo | undefined> {
     return await fetchTDCMainnet<ITransactionInfo>({
-      path: `/tx/${txid}`
-    })
+      path: `/tx/${txid}`,
+    });
   }
-
 }
 
 export default new ApiController();

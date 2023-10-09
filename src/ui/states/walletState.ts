@@ -1,8 +1,9 @@
 import { IWalletState } from "@/shared/interfaces";
 import { create } from "zustand";
 import { setupStateProxy } from "../utils/setup";
+import { useMemo } from "react";
 
-export const useWalletState = create<IWalletState>()((set, get) => ({
+export const useWalletState = create<IWalletState>()((set) => ({
   wallets: [],
   vaultIsEmpty: true,
   selectedAccount: undefined,
@@ -13,17 +14,35 @@ export const useWalletState = create<IWalletState>()((set, get) => ({
     await proxy.updateWalletState(state);
     set(state);
   },
+}));
 
-  currentWallet: () => {
-    const { wallets, selectedWallet } = get();
-    if (selectedWallet === undefined) return undefined;
-    return wallets[selectedWallet];
-  },
+export const useGetCurrentAccount = () => {
+  const { selectedAccount, selectedWallet, wallets } = useWalletState((v) => ({
+    selectedWallet: v.selectedWallet,
+    selectedAccount: v.selectedAccount,
+    wallets: v.wallets,
+  }));
 
-  currentAccount: () => {
-    const { selectedWallet, selectedAccount, wallets } = get();
+  return useMemo(() => {
     if (selectedWallet === undefined || selectedAccount === undefined)
       return undefined;
     return wallets[selectedWallet].accounts[selectedAccount];
-  },
-}));
+  }, [
+    selectedAccount,
+    selectedWallet,
+    wallets[selectedWallet!],
+    wallets[selectedWallet!].accounts[selectedAccount!],
+  ]);
+};
+
+export const useGetCurrentWallet = () => {
+  const { selectedWallet, wallets } = useWalletState((v) => ({
+    selectedWallet: v.selectedWallet,
+    wallets: v.wallets,
+  }));
+
+  return useMemo(() => {
+    if (selectedWallet === undefined) return undefined;
+    return wallets[selectedWallet];
+  }, [selectedWallet, wallets[selectedWallet!]]);
+};

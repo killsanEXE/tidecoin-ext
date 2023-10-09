@@ -26,9 +26,8 @@ export default function App() {
     updateControllers: v.updateControllers,
   }));
 
-  const { updateWalletState, currentWallet } = useWalletState((v) => ({
+  const { updateWalletState } = useWalletState((v) => ({
     updateWalletState: v.updateWalletState,
-    currentWallet: v.currentWallet,
   }));
 
   useEffect(() => {
@@ -45,7 +44,6 @@ export default function App() {
         appState.isReady &&
         appState.isUnlocked &&
         walletState.selectedWallet !== undefined
-        && !currentWallet()
       ) {
         await updateWalletState(walletState);
         await updateAppState(appState);
@@ -73,7 +71,6 @@ export default function App() {
     updateAppState,
     router,
     setRouter,
-    currentWallet()
   ]);
 
   return (

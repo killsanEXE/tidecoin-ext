@@ -2,7 +2,7 @@ import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 import SwitchAddressType from "../../switch-address-type";
 import s from "./styles.module.scss";
 import { useControllersState } from "@/ui/states/controllerState";
-import { useWalletState } from "@/ui/states/walletState";
+import { useGetCurrentWallet, useWalletState } from "@/ui/states/walletState";
 import { useUpdateCurrentWallet } from "@/ui/hooks/wallet";
 
 const ChangeAddrType = () => {
@@ -10,8 +10,8 @@ const ChangeAddrType = () => {
     keyringController: v.keyringController,
     walletController: v.walletController
   }));
-  const { currentWallet, selectedWallet } = useWalletState((v) => ({
-    currentWallet: v.currentWallet,
+  const currentWallet = useGetCurrentWallet();
+  const { selectedWallet } = useWalletState((v) => ({
     selectedWallet: v.selectedWallet,
   }));
   const udpateCurrentWallet = useUpdateCurrentWallet();
@@ -26,7 +26,7 @@ const ChangeAddrType = () => {
           );
           await udpateCurrentWallet({
             ...currentWallet,
-            accounts: currentWallet()?.accounts.map((f) => ({
+            accounts: currentWallet?.accounts.map((f) => ({
               ...f,
               address: addresses[f.id],
             })),

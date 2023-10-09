@@ -128,7 +128,7 @@ class KeyringService {
     //   .reduce((prev, cur) => prev?.concat(...(cur ?? [])), []) as ApiUTXO[];
   }
 
-  private getPubKey(address: Hex) {
+  exportPublicKey(address: Hex) {
     const keyring = this.getKeyringForAccount(address);
     return keyring.exportPublicKey(address);
   }
@@ -156,7 +156,7 @@ class KeyringService {
       network: networks.TIDECOIN,
       changeAddress: account.address,
       receiverToPayFee: data.receiverToPayFee,
-      pubkey: this.getPubKey(account.address),
+      pubkey: this.exportPublicKey(account.address),
       feeRate: data.feeRate,
       enableRBF: false,
     });

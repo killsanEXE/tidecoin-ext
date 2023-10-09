@@ -37,23 +37,13 @@ export const fetchTDCMainnet = async <T>({
   path,
   ...props
 }: fetchProps): Promise<T | undefined> => {
-  try {
-    const url = new URL(TDC_MAINNET_PATH.concat(path), TDC_API_URL);
-    if (props.params) {
-      Object.entries(props.params).forEach((v) => url.searchParams.set(...v));
-    }
-    const res = await fetch(url.toString(), { ...props });
-
-    if (!res.ok) {
-      console.error(res);
-      throw new Error("^^^ Error in response ^^^");
-    }
-
-    return await res.json();
-  } catch (error) {
-    console.error(error);
-    throw error;
+  const url = new URL(TDC_MAINNET_PATH.concat(path), TDC_API_URL);
+  if (props.params) {
+    Object.entries(props.params).forEach((v) => url.searchParams.set(...v));
   }
+  const res = await fetch(url.toString(), { ...props });
+
+  return await res.json();
 };
 
 export const extractKeysFromObj = <

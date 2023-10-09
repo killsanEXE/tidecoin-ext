@@ -22,6 +22,4 @@ export interface IWalletStateBase {
 
 export interface IWalletState extends IWalletStateBase {
   updateWalletState: (state: Partial<IWalletState>) => Promise<void>;
-  currentWallet: () => IWallet | undefined;
-  currentAccount: () => IAccount | undefined;
 }

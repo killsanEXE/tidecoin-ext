@@ -1,18 +1,21 @@
 import { useCallback } from "react";
-import { useWalletState } from "../states/walletState";
+import {
+  useGetCurrentAccount,
+  useGetCurrentWallet,
+  useWalletState,
+} from "../states/walletState";
 import { useControllersState } from "../states/controllerState";
 import { tidoshisToAmount } from "../utils";
 import { Psbt } from "tidecoinjs-lib";
 import { Hex } from "@/background/services/keyring/types";
 
 export function useCreateTidecoinTxCallback() {
-  const { currentWallet, currentAccount, selectedAccount, selectedWallet } =
-    useWalletState((v) => ({
-      currentWallet: v.currentWallet,
-      currentAccount: v.currentAccount,
-      selectedAccount: v.selectedAccount,
-      selectedWallet: v.selectedWallet,
-    }));
+  const currentAccount = useGetCurrentAccount();
+  const currentWallet = useGetCurrentWallet();
+  const { selectedAccount, selectedWallet } = useWalletState((v) => ({
+    selectedAccount: v.selectedAccount,
+    selectedWallet: v.selectedWallet,
+  }));
   const { apiController, keyringController } = useControllersState((v) => ({
     apiController: v.apiController,
     keyringController: v.keyringController,
@@ -27,7 +30,7 @@ export function useCreateTidecoinTxCallback() {
     ) => {
       if (selectedWallet !== undefined || selectedAccount !== undefined)
         throw new Error("Failed to get current wallet or account");
-      const fromAddress = currentAccount()?.address;
+      const fromAddress = currentAccount?.address;
       const utxos = await apiController.getUtxos(fromAddress!);
       const safeBalance = (utxos ?? []).reduce(
         (pre, cur) => pre + cur.value,
@@ -53,11 +56,12 @@ export function useCreateTidecoinTxCallback() {
       return rawtx;
     },
     [
-      currentWallet(),
+      currentWallet,
       apiController,
-      currentAccount(),
+      currentAccount,
       selectedAccount,
       selectedWallet,
+      keyringController,
     ]
   );
 }

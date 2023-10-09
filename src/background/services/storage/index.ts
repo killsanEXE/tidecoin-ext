@@ -100,6 +100,15 @@ class StorageService {
     return JSON.parse(loaded!) as DecryptedSecrets | undefined;
   }
 
+  async getWalletPhrase(index: number, password: string) {
+    const encrypted = await this.getLocalValues();
+    const current = await this.getSecrets(encrypted, password);
+    if (current?.length === undefined || current.length < index) {
+      throw new Error(`Failed to found wallet with id ${index}`);
+    }
+    return current[index].phrase!;
+  }
+
   async getLocalValues() {
     return await browserStorageLocalGet<StorageInterface>(undefined);
   }

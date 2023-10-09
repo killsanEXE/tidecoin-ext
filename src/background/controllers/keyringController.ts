@@ -64,6 +64,10 @@ class KeyringController implements IKeyringController {
     return await keyringService.sendTDC(data);
   }
 
+  async exportPublicKey(address: string): Promise<string> {
+    return keyringService.exportPublicKey(address);
+  }
+
   async changeAddressType(
     walletIndex: number,
     addressType: AddressType

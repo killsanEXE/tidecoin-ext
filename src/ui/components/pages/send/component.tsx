@@ -1,7 +1,7 @@
 import { useState } from "react";
 import s from "./styles.module.scss";
 import cn from "classnames";
-import { useWalletState } from "@/ui/states/walletState";
+import { useGetCurrentAccount } from "@/ui/states/walletState";
 import {
   useCreateTidecoinTxCallback,
   usePushTidecoinTxCallback,
@@ -10,9 +10,7 @@ import {
 const Send = () => {
   const [addres, setAddres] = useState("");
   const [amount, setAmount] = useState(0);
-  const { currentAccount } = useWalletState((v) => ({
-    currentAccount: v.currentAccount,
-  }));
+  const currentAccount = useGetCurrentAccount();
   const sendTdc = useCreateTidecoinTxCallback();
   const pushTx = usePushTidecoinTxCallback();
 
@@ -27,7 +25,7 @@ const Send = () => {
         <div className="form-field">
           <span className="input-span">Address</span>
           <input
-            placeholder={currentAccount()!.address}
+            placeholder={currentAccount!.address}
             type="text"
             className="input"
             onChange={(e) => {
@@ -46,7 +44,7 @@ const Send = () => {
             }}
           />
           <span className="input-info">
-            MAX AMOUNT: {currentAccount()!.balance}
+            MAX AMOUNT: {currentAccount!.balance}
           </span>
         </div>
       </div>

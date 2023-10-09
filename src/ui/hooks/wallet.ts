@@ -1,8 +1,13 @@
 import { IAccount, IWallet } from "@/shared/interfaces";
 import { useControllersState } from "../states/controllerState";
-import { useWalletState } from "../states/walletState";
+import {
+  useGetCurrentAccount,
+  useGetCurrentWallet,
+  useWalletState,
+} from "../states/walletState";
 import { keyringService } from "@/background/services";
 import { keyringController } from "@/background/controllers";
+import { useCallback } from "react";
 
 export const useCreateNewWallet = () => {
   const { wallets, updateWalletState } = useWalletState((v) => ({
@@ -13,20 +18,22 @@ export const useCreateNewWallet = () => {
     walletController: v.walletController,
   }));
 
-  return async (phrase: string, name?: string) => {
-    const wallet = await walletController.createNewWallet(phrase, name);
-    const address = await keyringController.newKeyring("root", phrase);
-    wallets.push(wallet);
-    await updateWalletState({
-      selectedAccount: 0,
-      selectedWallet: wallet.id,
-      wallets,
-    });
-    const keyring = keyringService.getKeyringForAccount(address!);
-    await walletController.saveWallets([
-      { id: wallet.id, phrase: phrase, data: keyring.serialize() },
-    ]);
-  };
+  return useCallback(
+    async (phrase: string, name?: string) => {
+      const wallet = await walletController.createNewWallet(phrase, name);
+      const address = await keyringController.newKeyring("root", phrase);
+      await updateWalletState({
+        selectedAccount: 0,
+        selectedWallet: wallet.id,
+        wallets: [...wallets, wallet],
+      });
+      const keyring = keyringService.getKeyringForAccount(address!);
+      await walletController.saveWallets([
+        { id: wallet.id, phrase: phrase, data: keyring.serialize() },
+      ]);
+    },
+    [wallets, updateWalletState, walletController]
+  );
 };
 
 export const useUpdateCurrentWallet = () => {
@@ -38,12 +45,15 @@ export const useUpdateCurrentWallet = () => {
     })
   );
 
-  return async (wallet: Partial<IWallet>) => {
-    wallets[selectedWallet!] = { ...wallets[selectedWallet!], ...wallet };
-    await updateWalletState({
-      wallets: [...wallets],
-    });
-  };
+  return useCallback(
+    async (wallet: Partial<IWallet>) => {
+      wallets[selectedWallet!] = { ...wallets[selectedWallet!], ...wallet };
+      await updateWalletState({
+        wallets: [...wallets],
+      });
+    },
+    [updateWalletState, selectedWallet, wallets]
+  );
 };
 
 export const useUpdateCurrentAccount = () => {
@@ -55,38 +65,47 @@ export const useUpdateCurrentAccount = () => {
       selectedWallet: v.selectedWallet,
     }));
 
-  return async (account: Partial<IAccount>) => {
-    wallets[selectedWallet!].accounts[selectedAccount!] = {
-      ...wallets[selectedWallet!].accounts[selectedAccount!],
-      ...account,
-    };
+  return useCallback(
+    async (account: Partial<IAccount>) => {
+      wallets[selectedWallet!].accounts[selectedAccount!] = {
+        ...wallets[selectedWallet!].accounts[selectedAccount!],
+        ...account,
+      };
 
-    await updateWalletState({
-      wallets: [...wallets],
-    });
-  };
+      await updateWalletState({
+        wallets: [...wallets],
+      });
+    },
+    [
+      updateWalletState,
+      wallets[selectedWallet!].accounts[selectedAccount!],
+      selectedAccount,
+      selectedWallet,
+    ]
+  );
 };
 
 export const useCreateNewAccount = () => {
   const updateCurrentWallet = useUpdateCurrentWallet();
-  const { currentWallet } = useWalletState((v) => ({
-    currentWallet: v.currentWallet,
-  }));
+  const currentWallet = useGetCurrentWallet();
   const { walletController } = useControllersState((v) => ({
     walletController: v.walletController,
   }));
 
-  return async (name?: string) => {
-    if (!currentWallet()) return;
-    const createdAccount = await walletController.createNewAccount(name);
-    const updatedWallet: IWallet = {
-      ...currentWallet()!,
-      accounts: [...currentWallet()!.accounts, createdAccount],
-    };
+  return useCallback(
+    async (name?: string) => {
+      if (!currentWallet) return;
+      const createdAccount = await walletController.createNewAccount(name);
+      const updatedWallet: IWallet = {
+        ...currentWallet!,
+        accounts: [...currentWallet!.accounts, createdAccount],
+      };
 
-    await updateCurrentWallet(updatedWallet);
-    await walletController.saveWallets();
-  };
+      await updateCurrentWallet(updatedWallet);
+      await walletController.saveWallets();
+    },
+    [currentWallet, updateCurrentWallet, walletController]
+  );
 };
 
 export const useSwitchWallet = () => {
@@ -98,40 +117,54 @@ export const useSwitchWallet = () => {
     walletController: v.walletController,
   }));
 
-  return async (key: number) => {
-    const wallet = wallets.find((f) => f.id === key);
-    if (!wallet) return;
-    if (!wallet.accounts[0].address) {
-      wallet.accounts = await walletController.loadAccountsData(
-        wallet.id,
-        wallet.accounts
-      );
-    }
-    wallets[key] = wallet;
-    await updateWalletState({
-      selectedWallet: key,
-      wallets: wallets,
-      selectedAccount: 0,
-    });
-  };
+  return useCallback(
+    async (key: number) => {
+      const wallet = wallets.find((f) => f.id === key);
+      if (!wallet) return;
+      if (!wallet.accounts[0].address) {
+        wallet.accounts = await walletController.loadAccountsData(
+          wallet.id,
+          wallet.accounts
+        );
+      }
+      wallets[key] = wallet;
+      await updateWalletState({
+        selectedWallet: wallet.id,
+        wallets: wallets,
+        selectedAccount: 0,
+      });
+    },
+    [wallets, updateWalletState, walletController]
+  );
 };
 
 export const useUpdateCurrentAccountBalance = () => {
-  const { currentAccount } = useWalletState((v) => ({
-    currentAccount: v.currentAccount,
-  }));
   const { apiController } = useControllersState((v) => ({
     apiController: v.apiController,
   }));
   const updateCurrentAccount = useUpdateCurrentAccount();
+  const currentAccount = useGetCurrentAccount();
 
-  return async () => {
+  return useCallback(async () => {
     const balance = await apiController.getAccountBalance(
-      currentAccount()?.address ?? ""
+      currentAccount?.address ?? ""
     );
-    if (balance === undefined || !currentAccount()) return;
+    if (balance === undefined || !currentAccount) return;
     await updateCurrentAccount({
       balance: balance / 10 ** 8,
     });
-  };
+  }, [updateCurrentAccount, currentAccount, apiController]);
+};
+
+export const useUpdateCurrentAccountTransactions = () => {
+  const { apiController, keyringController } = useControllersState((v) => ({
+    apiController: v.apiController,
+    keyringController: v.keyringController,
+  }));
+  const currentAccount = useGetCurrentAccount();
+
+  return useCallback(async () => {
+    if (!currentAccount?.address) return;
+    return await apiController.getTransactions(currentAccount.address);
+  }, [currentAccount, apiController, keyringController]);
 };

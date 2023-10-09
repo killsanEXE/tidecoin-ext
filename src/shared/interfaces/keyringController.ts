@@ -17,6 +17,13 @@ export interface IKeyringController {
     data: string;
   }): Promise<string>;
   sendTDC(data: SendTDC): Promise<string>;
-  changeAddressType(walletIndex: number, addressType: AddressType): Promise<string[]>;
-  getWalletSecret(walletKey: number, password: string): Promise<string | undefined>;
+  changeAddressType(
+    walletIndex: number,
+    addressType: AddressType
+  ): Promise<string[]>;
+  exportPublicKey(address: string): Promise<string>;
+  getWalletSecret(
+    walletKey: number,
+    password: string
+  ): Promise<string | undefined>;
 }

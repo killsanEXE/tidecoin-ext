@@ -23,37 +23,37 @@ export interface IApiController {
 }
 
 export interface ITransaction {
-  _id: string
-  chain: string
-  network: string
-  coinbase: boolean
-  mintIndex: number
-  spentTxid: string
-  mintTxid: string
-  mintHeight: number
-  spentHeight: number
-  address: string
-  script: string
-  value: number
-  confirmations: number
-  sequenceNumber: number
+  _id: string;
+  chain: string;
+  network: string;
+  coinbase: boolean;
+  mintIndex: number;
+  spentTxid: string;
+  mintTxid: string;
+  mintHeight: number;
+  spentHeight: number;
+  address: string;
+  script: string;
+  value: number;
+  confirmations: number;
+  sequenceNumber: number;
 }
 
 export interface ITransactionInfo {
-  _id: string
-  txid: string
-  network: string
-  chain: string
-  blockHeight: number
-  blockHash: string
-  blockTime: string
-  blockTimeNormalized: string
-  coinbase: boolean
-  locktime: number
-  inputCount: number
-  outputCount: number
-  size: number
-  fee: number
-  value: number
-  confirmations: number
+  _id: string;
+  txid: string;
+  network: string;
+  chain: string;
+  blockHeight: number;
+  blockHash: string;
+  blockTime: string;
+  blockTimeNormalized: string;
+  coinbase: boolean;
+  locktime: number;
+  inputCount: number;
+  outputCount: number;
+  size: number;
+  fee: number;
+  value: number;
+  confirmations: number;
 }

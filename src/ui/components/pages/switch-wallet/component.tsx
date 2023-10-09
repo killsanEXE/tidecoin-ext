@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useWalletState } from "@/ui/states/walletState";
+import { useGetCurrentWallet, useWalletState } from "@/ui/states/walletState";
+import { useState } from "react";
 import s from "./styles.module.scss";
 import cn from "classnames";
 import CheckIcon from "@/ui/components/icons/Checkicon";
@@ -11,9 +11,9 @@ import { useSwitchWallet } from "@/ui/hooks/wallet";
 import { useNavigate } from "react-router-dom";
 
 const SwitchWallet = () => {
-  const { wallets, currentWallet } = useWalletState((v) => ({
+  const currentWallet = useGetCurrentWallet();
+  const { wallets } = useWalletState((v) => ({
     wallets: v.wallets,
-    currentWallet: v.currentWallet,
   }));
   const switchWallet = useSwitchWallet();
   const [selected, setSelected] = useState<number>();
@@ -31,7 +31,7 @@ const SwitchWallet = () => {
                   switchWallet(i);
                 }}
               >
-                {wallet.id === currentWallet()?.id ? <CheckIcon /> : undefined}
+                {wallet.id === currentWallet?.id ? <CheckIcon /> : undefined}
                 {wallet.name}
               </div>
               <div className={s.walletControl}>

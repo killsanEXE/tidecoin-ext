@@ -7,20 +7,23 @@ import TagIcon from "@/ui/components/icons/TagIcon";
 import XMarkIcon from "@/ui/components/icons/XMarkIcon";
 import s from "./styles.module.scss";
 import { shortAddress } from "@/ui/utils";
-import { useWalletState } from "@/ui/states/walletState";
+import {
+  useGetCurrentAccount,
+  useGetCurrentWallet,
+  useWalletState,
+} from "@/ui/states/walletState";
 import cn from "classnames";
 import { useNavigate } from "react-router-dom";
 
 const SwitchAccount = () => {
   const [selected, setSelected] = useState<number>();
 
-  const { currentWallet, currentAccount, updateWalletState } = useWalletState(
-    (v) => ({
-      currentWallet: v.currentWallet,
-      currentAccount: v.currentAccount,
-      updateWalletState: v.updateWalletState,
-    })
-  );
+  const currentAccount = useGetCurrentAccount();
+  const currentWallet = useGetCurrentWallet();
+
+  const { updateWalletState } = useWalletState((v) => ({
+    updateWalletState: v.updateWalletState,
+  }));
 
   const navigate = useNavigate();
 
@@ -34,7 +37,7 @@ const SwitchAccount = () => {
   return (
     <div className={s.switchAccDiv}>
       <div className={s.accounts}>
-        {currentWallet()?.accounts.map((acc, i) => (
+        {currentWallet?.accounts.map((acc, i) => (
           <div className={s.mainAcc} key={i}>
             <div className={s.account}>
               <div
@@ -44,7 +47,7 @@ const SwitchAccount = () => {
                 }}
               >
                 <div className={s.name}>
-                  {currentAccount()!.address === acc.address ? (
+                  {currentAccount!.address === acc.address ? (
                     <CheckIcon />
                   ) : undefined}
                   {acc.name}
