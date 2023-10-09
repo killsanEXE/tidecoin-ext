@@ -6,6 +6,8 @@ import {
   useCreateTidecoinTxCallback,
   usePushTidecoinTxCallback,
 } from "@/ui/hooks/transactions";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Send = () => {
   const [addres, setAddres] = useState("");
@@ -13,10 +15,13 @@ const Send = () => {
   const currentAccount = useGetCurrentAccount();
   const sendTdc = useCreateTidecoinTxCallback();
   const pushTx = usePushTidecoinTxCallback();
+  const navigate = useNavigate();
 
   const send = async () => {
     const hex = await sendTdc(addres, amount * 10 ** 8, 1, true);
-    const txid = await pushTx(hex);
+    await pushTx(hex);
+    toast.success("Success!");
+    navigate("/home/wallet");
   };
 
   return (

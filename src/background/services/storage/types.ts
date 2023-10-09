@@ -7,7 +7,8 @@ interface StorageAccountItem {
 
 interface StorageWalletItem {
   name: string;
-  addressType: AddressType,
+  addressType: AddressType;
+  type: "simple" | "root";
   accounts: StorageAccountItem[];
 }
 

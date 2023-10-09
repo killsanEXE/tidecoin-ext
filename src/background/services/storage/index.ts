@@ -70,6 +70,7 @@ class StorageService {
       return {
         name: wallet.name,
         addressType: wallet.addressType,
+        type: wallet.type,
         accounts: wallet.accounts.map((account) => ({
           id: account.id,
           name: account.name ?? "",

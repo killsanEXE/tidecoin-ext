@@ -55,14 +55,16 @@ const Wallet = () => {
         >
           {currentWallet?.name ?? "wallet"}
         </button>
-        <button
-          onClick={() => {
-            navigate("/pages/switch-account");
-          }}
-          className={cn(s.change, s.btn)}
-        >
-          {currentAccount?.name}
-        </button>
+        {currentWallet?.type === "root" &&
+          <button
+            onClick={() => {
+              navigate("/pages/switch-account");
+            }}
+            className={cn(s.change, s.btn)}
+          >
+            {currentAccount?.name}
+          </button>
+        }
       </div>
 
       <div className={cn(s.accPanel, s.center)}>

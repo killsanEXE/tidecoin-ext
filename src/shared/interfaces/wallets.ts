@@ -6,6 +6,7 @@ export interface IWallet {
   accounts: IAccount[];
   name: string;
   addressType: AddressType;
+  type: "simple" | "root";
 }
 
 export interface IPrivateWallet extends IWallet {

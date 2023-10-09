@@ -30,6 +30,7 @@ class WalletController implements IWalletController {
     return {
       name: !name ? `Wallet ${walletId + 1}` : name,
       id: walletId,
+      type: walletType,
       addressType: addressType ? addressType : AddressType.P2WPKH,
       accounts: [account],
     };
