@@ -56,11 +56,15 @@ class StorageService {
     wallets: IWallet[],
     payload?: DecryptedSecrets
   ) {
+    const local = await this.getLocalValues();
+    const current = await this.getSecrets(local, password);
+
     if (payload) {
-      const encrypted = await this.getLocalValues();
-      const current = await this.getSecrets(encrypted, password);
       payload = [...(current ?? []), ...payload];
+    } else {
+      payload = current;
     }
+
     const walletsToSave = wallets.map((wallet) => {
       return {
         name: wallet.name,
@@ -106,7 +110,6 @@ class StorageService {
     if (current?.length === undefined || current.length < index) {
       throw new Error(`Failed to found wallet with id ${index}`);
     }
-    console.log(current as any)
     return current[index].phrase!;
   }
 
