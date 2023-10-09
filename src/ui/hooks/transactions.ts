@@ -88,9 +88,9 @@ export function useUpdateCurrentAccountTransactions() {
   const { apiController } = useControllersState((v) => ({
     apiController: v.apiController,
   }));
-  const { currentAccount } = useWalletState((v) => ({ currentAccount: v.currentAccount }))
+  const currentAccount = useGetCurrentAccount();
 
   return async () => {
-    return await apiController.getTransactions(currentAccount()!.address ?? "");
-  }
+    return await apiController.getTransactions(currentAccount!.address ?? "");
+  };
 }
