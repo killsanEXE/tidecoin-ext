@@ -5,6 +5,8 @@ import QRCode from "react-qr-code";
 import s from "./styles.module.scss";
 import CopyIcon from "@/ui/components/icons/CopyIcon";
 import cn from "classnames";
+import { copyToClipboard } from "@/ui/utils";
+import toast from "react-hot-toast";
 
 const Receive = () => {
   const currentAccount = useGetCurrentAccount();
@@ -19,8 +21,11 @@ const Receive = () => {
     <div className={s.receive}>
       <QRCode value={currentAccount!.address ?? ""} />
       <div className={s.accTitle}>{currentAccount!.name ?? "Account"}</div>
-      <button className={cn("btn", "primary", s.copyButton)}>
-        <CopyIcon /> Copy address
+      <button className={cn("btn", "primary", s.copyButton)} onClick={() => {
+        copyToClipboard(currentAccount!.address);
+        toast.success("Copied")
+      }}>
+        Copy address
       </button>
     </div>
   );
