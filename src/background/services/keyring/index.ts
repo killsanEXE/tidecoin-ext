@@ -50,7 +50,7 @@ class KeyringService {
     if (type === "root") {
       keyring = HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(payload));
     } else {
-      keyring = new HDSimpleKey(hexToBytes(payload));
+      keyring = HDSimpleKey.deserialize({ privateKey: payload, addressType: addressType });
     }
     keyring.addressType = addressType;
     this.keyrings.push(keyring);
