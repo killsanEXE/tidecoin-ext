@@ -8,6 +8,7 @@ import {
 import { keyringService } from "@/background/services";
 import { keyringController } from "@/background/controllers";
 import { useCallback } from "react";
+import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 
 export const useCreateNewWallet = () => {
   const { wallets, updateWalletState } = useWalletState((v) => ({
@@ -19,8 +20,8 @@ export const useCreateNewWallet = () => {
   }));
 
   return useCallback(
-    async (phrase: string, name?: string) => {
-      const wallet = await walletController.createNewWallet(phrase, name);
+    async (phrase: string, addressType?: AddressType, name?: string) => {
+      const wallet = await walletController.createNewWallet(phrase, name, addressType);
       const address = await keyringController.newKeyring("root", phrase);
       await updateWalletState({
         selectedAccount: 0,

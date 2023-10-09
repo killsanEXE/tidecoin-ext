@@ -9,6 +9,8 @@ import { useCreateNewWallet } from "@/ui/hooks/wallet";
 import CopyIcon from "@/ui/components/icons/CopyIcon";
 import cn from "classnames";
 import { copyToClipboard } from "@/ui/utils";
+import SwitchAddressType from "@/ui/components/switch-address-type";
+import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 
 const NewMnemonic = () => {
   const [step, setStep] = useState(1);
@@ -22,6 +24,7 @@ const NewMnemonic = () => {
   const [mnemonicPhrase, setMnemonicPhrase] = useState<string | undefined>(
     undefined
   );
+  const [addressType, setAddressType] = useState<AddressType>(AddressType.P2WPKH);
 
   const createNewWallet = useCreateNewWallet();
 
@@ -93,10 +96,13 @@ const NewMnemonic = () => {
         </div>
       ) : (
         <div className={cn(s.stepTwo, s.step)}>
+          <SwitchAddressType handler={(addressType) => {
+            setAddressType(addressType);
+          }} />
           <div className={s.continueWrapper}>
             <button
               onClick={async () => {
-                await createNewWallet(mnemonicPhrase!);
+                await createNewWallet(mnemonicPhrase!, addressType);
                 await updateWalletState({ vaultIsEmpty: false });
                 navigate("/home/wallet");
               }}

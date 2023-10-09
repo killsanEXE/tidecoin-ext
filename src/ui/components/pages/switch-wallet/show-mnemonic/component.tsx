@@ -9,8 +9,8 @@ import { useControllersState } from "@/ui/states/controllerState";
 const ShowMnemonic = () => {
   const [unlocked, setUnlocked] = useState(false);
   const { walletId } = useParams();
-  const { keyringController } = useControllersState((v) => ({
-    keyringController: v.keyringController
+  const { stateController } = useControllersState((v) => ({
+    stateController: v.stateController
   }))
   const [phrase, setPhrase] = useState("");
 
@@ -39,7 +39,7 @@ const ShowMnemonic = () => {
       ) : (
         <CheckPassword
           handler={async (password) => {
-            setPhrase(await keyringController.getWalletSecret(Number(walletId), password!) ?? "");
+            setPhrase(await stateController.getWalletPhrase(Number(walletId), password!) ?? "");
             setUnlocked(true);
           }}
         />

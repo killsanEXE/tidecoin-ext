@@ -106,6 +106,7 @@ class StorageService {
     if (current?.length === undefined || current.length < index) {
       throw new Error(`Failed to found wallet with id ${index}`);
     }
+    console.log(current as any)
     return current[index].phrase!;
   }
 

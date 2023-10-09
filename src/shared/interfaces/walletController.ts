@@ -1,9 +1,10 @@
 import { DecryptedSecrets } from "@/background/services/storage/types";
 import { IAccount } from "./accounts";
 import { IPrivateWallet, IWallet } from "./wallets";
+import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 
 export interface IWalletController {
-  createNewWallet(phrase: string, name?: string): Promise<IWallet>;
+  createNewWallet(phrase: string, name?: string, addressType?: AddressType): Promise<IWallet>;
   saveWallets(phrases?: DecryptedSecrets): Promise<void>;
   isVaultEmpty(): Promise<boolean>;
   importWallets(password: string): Promise<Omit<IPrivateWallet, "data">[]>;

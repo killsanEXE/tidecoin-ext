@@ -22,8 +22,4 @@ export interface IKeyringController {
     addressType: AddressType
   ): Promise<string[]>;
   exportPublicKey(address: string): Promise<string>;
-  getWalletSecret(
-    walletKey: number,
-    password: string
-  ): Promise<string | undefined>;
 }
