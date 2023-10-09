@@ -1,7 +1,15 @@
 .showPk {
-    @apply w-full h-full max-w-[350px] flex justify-center items-center break-all;
+    @apply w-full h-full p-[1rem] max-w-[350px] flex flex-col items-center break-all;
+}
+
+.showPkDiv {
+    @apply h-full flex flex-col items-center pt-[2rem] gap-[2rem];
 }
 
 .secret {
-    @apply max-w-[350px] break-all h-[50%];
+    @apply max-w-[350px] max-h-[300px] break-all h-[50%] overflow-y-scroll bg-input-bg rounded-[.5rem] p-[.5rem];
+}
+
+.copySecret {
+    @apply flex items-center justify-center gap-[1rem];
 }

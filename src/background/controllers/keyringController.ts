@@ -76,8 +76,7 @@ class KeyringController implements IKeyringController {
   }
 
   async getWalletSecret(walletKey: number, password: string): Promise<string | undefined> {
-    await keyringService.getWalletSecret(walletKey, password);
-    return "SHTI";
+    return await keyringService.getWalletSecret(walletKey, password);
   }
 }
 

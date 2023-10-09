@@ -4,6 +4,10 @@ import CheckPassword from "../../../check-password";
 import { useParams } from "react-router-dom";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
 import { useControllersState } from "@/ui/states/controllerState";
+import { copyToClipboard } from "@/ui/utils";
+import cn from "classnames";
+import CopyIcon from "@/ui/components/icons/CopyIcon";
+import toast from "react-hot-toast";
 
 const ShowPk = () => {
   const [unlocked, setUnlocked] = useState(false);
@@ -27,7 +31,13 @@ const ShowPk = () => {
   return (
     <div className={s.showPk}>
       {unlocked ? (
-        <div className={s.secret}>{secret}</div>
+        <div className={s.showPkDiv}>
+          <button className={cn("btn", s.copySecret)} onClick={() => {
+            copyToClipboard(secret);
+            toast.success("Copied")
+          }}><CopyIcon /> Copy</button>
+          <div className={s.secret}>{secret}</div>
+        </div>
       ) : (
         <CheckPassword
           handler={() => {
