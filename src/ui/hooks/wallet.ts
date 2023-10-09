@@ -5,8 +5,6 @@ import {
   useGetCurrentWallet,
   useWalletState,
 } from "../states/walletState";
-import { keyringService } from "@/background/services";
-import { keyringController } from "@/background/controllers";
 import { useCallback } from "react";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 
@@ -15,22 +13,22 @@ export const useCreateNewWallet = () => {
     wallets: v.wallets,
     updateWalletState: v.updateWalletState,
   }));
-  const { walletController } = useControllersState((v) => ({
+  const { walletController, keyringController } = useControllersState((v) => ({
     walletController: v.walletController,
+    keyringController: v.keyringController
   }));
 
   return useCallback(
     async (phrase: string, walletType: "simple" | "root", addressType?: AddressType, name?: string) => {
       const wallet = await walletController.createNewWallet(phrase, walletType, name, addressType);
-      const address = await keyringController.newKeyring("root", phrase);
       await updateWalletState({
         selectedAccount: 0,
         selectedWallet: wallet.id,
         wallets: [...wallets, wallet],
       });
-      const keyring = keyringService.getKeyringForAccount(address!);
+      const keyring = await keyringController.serializeAccountByAddress(wallet.accounts[0].address!);
       await walletController.saveWallets([
-        { id: wallet.id, phrase: phrase, data: keyring.serialize() },
+        { id: wallet.id, phrase: phrase, data: keyring },
       ]);
     },
     [wallets, updateWalletState, walletController]

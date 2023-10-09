@@ -1,5 +1,5 @@
 import { SendTDC } from "@/background/services/keyring/types";
-import { AddressType, Hex } from "test-test-test-hd-wallet/src/hd/types";
+import { AddressType, Hex, Keyring } from "test-test-test-hd-wallet/src/hd/types";
 import { Psbt } from "tidecoinjs-lib";
 import { IPrivateWallet } from ".";
 
@@ -22,4 +22,5 @@ export interface IKeyringController {
     addressType: AddressType
   ): Promise<string[]>;
   exportPublicKey(address: string): Promise<string>;
+  serializeAccountByAddress(address: string): Promise<any>;
 }

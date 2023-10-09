@@ -12,7 +12,8 @@ const RestorePrivKey = () => {
   const [privKey, setPrivKey] = useState("");
 
   const recoverWallet = async () => {
-    await createNewWallet(privKey, "simple");
+    const wallet = await createNewWallet(privKey, "simple");
+    console.log(wallet);
     navigate("/home/wallet")
   }
 
