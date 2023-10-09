@@ -13,7 +13,7 @@ class WalletController implements IWalletController {
     return values.enc === undefined;
   }
 
-  async createNewWallet(phrase: string, walletType: "simple" | "root", name?: string, addressType?: AddressType): Promise<IWallet> {
+  async createNewWallet(phrase: string, walletType: "simple" | "root", addressType?: AddressType, name?: string): Promise<IWallet> {
     const exportedWallets = storageService.walletState.wallets;
     const address = keyringService.newKeyring(walletType, phrase, addressType);
     const account: IAccount = {
@@ -31,7 +31,7 @@ class WalletController implements IWalletController {
       name: !name ? `Wallet ${walletId + 1}` : name,
       id: walletId,
       type: walletType,
-      addressType: addressType ? addressType : AddressType.P2WPKH,
+      addressType: typeof addressType === "number" ? addressType : AddressType.P2WPKH,
       accounts: [account],
     };
   }

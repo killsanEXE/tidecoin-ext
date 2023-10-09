@@ -52,7 +52,7 @@ class KeyringService {
     } else {
       keyring = HDSimpleKey.deserialize({ privateKey: payload, addressType: addressType });
     }
-    keyring.addressType = addressType ? addressType : AddressType.P2WPKH;
+    keyring.addressType = typeof addressType === 'number' ? addressType : AddressType.P2WPKH;
     this.keyrings.push(keyring);
     return keyring.getAddress(keyring.publicKey);
   }

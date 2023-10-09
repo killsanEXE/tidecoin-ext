@@ -87,6 +87,7 @@ const RestoreMnemonic = () => {
             <button
               onClick={async () => {
                 try {
+                  console.log(addressType);
                   await createNewWallet(mnemonicPhrase.join(" "), "root", addressType);
                   await walletController.saveWallets();
                 } catch (e) {
