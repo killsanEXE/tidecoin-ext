@@ -68,7 +68,6 @@ const RestoreMnemonic = () => {
               </div>
             </div>
             <div className={s.continueWrapper}>
-              <SwitchAddressType handler={(selectedAddressType) => { setAddressType(selectedAddressType) }} selectedType={addressType} />
               <button
                 className={cn(s.continue, "btn", "primary")}
                 onClick={() => {
@@ -84,18 +83,18 @@ const RestoreMnemonic = () => {
       ) : (
         <div className={cn(s.stepTwo, s.step)}>
           <div className={s.continueWrapper}>
+            <SwitchAddressType handler={(selectedAddressType) => { setAddressType(selectedAddressType) }} selectedType={addressType} />
             <button
               onClick={async () => {
                 try {
-                  console.log(addressType);
                   await createNewWallet(mnemonicPhrase.join(" "), "root", addressType);
                   await walletController.saveWallets();
+                  await updateWalletState({ vaultIsEmpty: false });
+                  navigate("/home/wallet");
                 } catch (e) {
                   toast.error("Words you entered is invalid");
                   setStep(1);
                 }
-                // updateWalletState({ vaultIsEmpty: false });
-                // navigate("/home/wallet");
               }}
               className={cn(s.continue, "btn", "primary")}
             >
