@@ -96,14 +96,15 @@ const NewMnemonic = () => {
         </div>
       ) : (
         <div className={cn(s.stepTwo, s.step)}>
-          <SwitchAddressType handler={(addressType) => {
-            setAddressType(addressType);
+          <SwitchAddressType handler={(selectedAddressType) => {
+            setAddressType(selectedAddressType);
           }} selectedType={addressType} />
           <div className={s.continueWrapper}>
             <button
               onClick={async () => {
                 await createNewWallet(mnemonicPhrase!, "root", addressType);
                 await updateWalletState({ vaultIsEmpty: false });
+                await walletController.saveWallets();
                 navigate("/home/wallet");
               }}
               className={cn(s.continue, "btn", "primary")}

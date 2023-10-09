@@ -6,6 +6,8 @@ import { useState } from "react";
 import cn from "classnames";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import SwitchAddressType from "@/ui/components/switch-address-type";
+import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 
 const RestoreMnemonic = () => {
 
@@ -13,6 +15,7 @@ const RestoreMnemonic = () => {
   const { updateWalletState } = useWalletState((v) => ({
     updateWalletState: v.updateWalletState,
   }));
+  const [addressType, setAddressType] = useState(AddressType.P2WPKH);
   const { walletController } = useControllersState((v) => ({
     walletController: v.walletController,
   }));
@@ -65,6 +68,7 @@ const RestoreMnemonic = () => {
               </div>
             </div>
             <div className={s.continueWrapper}>
+              <SwitchAddressType handler={(selectedAddressType) => { setAddressType(selectedAddressType) }} selectedType={addressType} />
               <button
                 className={cn(s.continue, "btn", "primary")}
                 onClick={() => {
@@ -83,7 +87,8 @@ const RestoreMnemonic = () => {
             <button
               onClick={async () => {
                 try {
-                  await createNewWallet(mnemonicPhrase.join(" "), "root");
+                  await createNewWallet(mnemonicPhrase.join(" "), "root", addressType);
+                  await walletController.saveWallets();
                 } catch (e) {
                   toast.error("Words you entered is invalid");
                   setStep(1);

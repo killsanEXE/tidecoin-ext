@@ -15,7 +15,7 @@ class WalletController implements IWalletController {
 
   async createNewWallet(phrase: string, walletType: "simple" | "root", name?: string, addressType?: AddressType): Promise<IWallet> {
     const exportedWallets = storageService.walletState.wallets;
-    const address = keyringService.newKeyring(walletType, phrase);
+    const address = keyringService.newKeyring(walletType, phrase, addressType);
     const account: IAccount = {
       id: 0,
       name: "Account 1",
