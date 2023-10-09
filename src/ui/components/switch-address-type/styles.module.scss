@@ -1,3 +1,11 @@
 .allTypes {
-    @apply w-full h-full flex flex-col items-center justify-center;
+    @apply w-full h-full flex flex-col items-center gap-[1rem] justify-center;
+
+    .addressType {
+        @apply w-full bg-input-bg py-[1rem] px-[.3rem] rounded-[.3rem] flex items-center gap-[.5rem];
+
+        &:hover {
+            @apply cursor-pointer;
+        }
+    }
 }

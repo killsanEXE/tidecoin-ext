@@ -54,7 +54,8 @@ class StorageService {
   async saveWallets(
     password: string,
     wallets: IWallet[],
-    payload?: DecryptedSecrets
+    payload?: DecryptedSecrets,
+    newPassword?: string
   ) {
     const local = await this.getLocalValues();
     const current = await this.getSecrets(local, password);
@@ -83,7 +84,7 @@ class StorageService {
       phrase: payload?.find((d) => d.id === i.id)?.phrase,
     }));
     const encrypted = await encryptorUtils.encrypt(
-      password,
+      newPassword ?? password,
       JSON.stringify(keyringsToSave)
     );
 

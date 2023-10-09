@@ -20,8 +20,8 @@ export const useCreateNewWallet = () => {
   }));
 
   return useCallback(
-    async (phrase: string, addressType?: AddressType, name?: string) => {
-      const wallet = await walletController.createNewWallet(phrase, name, addressType);
+    async (phrase: string, walletType: "simple" | "root", addressType?: AddressType, name?: string) => {
+      const wallet = await walletController.createNewWallet(phrase, walletType, name, addressType);
       const address = await keyringController.newKeyring("root", phrase);
       await updateWalletState({
         selectedAccount: 0,

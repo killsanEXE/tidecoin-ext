@@ -18,7 +18,7 @@ const ChangeAddrType = () => {
 
   return (
     <div className={s.changeAddrType}>
-      <SwitchAddressType
+      <SwitchAddressType selectedType={currentWallet?.addressType ?? AddressType.P2PKH}
         handler={async (type: AddressType) => {
           const addresses = await keyringController.changeAddressType(
             selectedWallet!,
@@ -26,6 +26,7 @@ const ChangeAddrType = () => {
           );
           await udpateCurrentWallet({
             ...currentWallet,
+            addressType: type,
             accounts: currentWallet?.accounts.map((f) => ({
               ...f,
               address: addresses[f.id],

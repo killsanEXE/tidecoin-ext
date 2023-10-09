@@ -14,11 +14,13 @@ const ChangePassword = () => {
     logout: v.logout,
   }));
 
+  const { updateAppState } = useAppState((v) => ({ updateAppState: v.updateAppState }))
   const { walletController } = useControllersState((v) => ({ walletController: v.walletController }))
 
   const executeChangePassword = async () => {
     if (appPassword === oldPassword && password === confirmPassword && password !== appPassword) {
-      await walletController.saveWallets();
+      await walletController.saveWallets(undefined, password);
+      await updateAppState({ password });
       logout();
     } else {
       toast.error("Try again");

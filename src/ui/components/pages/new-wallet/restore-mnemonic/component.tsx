@@ -83,7 +83,7 @@ const RestoreMnemonic = () => {
             <button
               onClick={async () => {
                 try {
-                  await createNewWallet(mnemonicPhrase.join(" "));
+                  await createNewWallet(mnemonicPhrase.join(" "), "root");
                 } catch (e) {
                   toast.error("Words you entered is invalid");
                   setStep(1);

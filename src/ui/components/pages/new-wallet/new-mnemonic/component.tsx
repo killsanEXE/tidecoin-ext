@@ -98,11 +98,11 @@ const NewMnemonic = () => {
         <div className={cn(s.stepTwo, s.step)}>
           <SwitchAddressType handler={(addressType) => {
             setAddressType(addressType);
-          }} />
+          }} selectedType={addressType} />
           <div className={s.continueWrapper}>
             <button
               onClick={async () => {
-                await createNewWallet(mnemonicPhrase!, addressType);
+                await createNewWallet(mnemonicPhrase!, "root", addressType);
                 await updateWalletState({ vaultIsEmpty: false });
                 navigate("/home/wallet");
               }}
