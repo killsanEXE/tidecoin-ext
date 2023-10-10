@@ -26,6 +26,10 @@
     }
 }
 
+.privKeyWrapper {
+    @apply w-full;
+}
+
 .secret {
     @apply max-w-[350px] max-h-[300px] break-all h-[50%] overflow-y-scroll bg-input-bg rounded-[.5rem] p-[.5rem];
 }

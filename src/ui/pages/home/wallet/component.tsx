@@ -46,9 +46,13 @@ const Wallet = () => {
 
     return () => {
       clearInterval(interval)
-
     };
   }, [udpateTransactions, updateAccountBalance, currentAccount, currentWallet, callUpdateTransactions]);
+
+  useEffect(() => {
+    updateAccountBalance();
+    udpateTransactions();
+  }, [])
 
   return (
     <div className={s.walletDiv}>
