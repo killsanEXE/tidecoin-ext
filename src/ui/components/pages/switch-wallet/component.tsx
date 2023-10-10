@@ -29,6 +29,7 @@ const SwitchWallet = () => {
                 className={s.walletInfo}
                 onClick={() => {
                   switchWallet(i);
+                  navigate("/home/wallet");
                 }}
               >
                 {wallet.id === currentWallet?.id ? <CheckIcon /> : undefined}

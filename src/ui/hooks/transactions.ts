@@ -90,7 +90,7 @@ export function useUpdateCurrentAccountTransactions() {
   }));
   const currentAccount = useGetCurrentAccount();
 
-  return async () => {
+  return useCallback(async () => {
     return await apiController.getTransactions(currentAccount!.address ?? "");
-  };
+  }, [currentAccount]);
 }

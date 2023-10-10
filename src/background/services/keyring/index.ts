@@ -136,6 +136,8 @@ class KeyringService {
   async sendTDC(data: SendTDC) {
     const account = storageService.currentAccount;
     const wallet = storageService.currentWallet;
+    console.log(data)
+    console.log(account?.address)
     if (!account || !account.address)
       throw new Error("Error when trying to get the current account");
 

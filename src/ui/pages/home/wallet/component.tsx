@@ -15,6 +15,7 @@ import { useUpdateCurrentAccountBalance } from "@/ui/hooks/wallet";
 import ReactLoading from "react-loading";
 import { ITransaction } from "@/shared/interfaces/apiController";
 import { useUpdateCurrentAccountTransactions } from "@/ui/hooks/transactions";
+import { useDebounceCall } from "@/ui/hooks/debounce";
 
 const Wallet = () => {
   const currentAccount = useGetCurrentAccount();
@@ -30,6 +31,7 @@ const Wallet = () => {
     if (receivedTransactions !== undefined)
       setTransactions(receivedTransactions);
   }, [updateAccountTransactions, setTransactions]);
+  const callUpdateTransactions = useDebounceCall(udpateTransactions, 200);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -39,10 +41,14 @@ const Wallet = () => {
 
     if (currentAccount && currentAccount.balance === undefined)
       updateAccountBalance();
-    udpateTransactions();
 
-    return () => clearInterval(interval);
-  }, []);
+    callUpdateTransactions()
+
+    return () => {
+      clearInterval(interval)
+
+    };
+  }, [udpateTransactions, updateAccountBalance, currentAccount, currentWallet, callUpdateTransactions]);
 
   return (
     <div className={s.walletDiv}>
