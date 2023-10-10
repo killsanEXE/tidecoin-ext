@@ -26,7 +26,7 @@ export const useCreateNewWallet = () => {
         selectedWallet: wallet.id,
         wallets: [...wallets, wallet],
       });
-      const keyring = await keyringController.serializeAccountByAddress(wallet.accounts[0].address!);
+      const keyring = await keyringController.serializeKeyringById(wallet.id);
       await walletController.saveWallets([
         { id: wallet.id, phrase: phrase, data: keyring },
       ]);

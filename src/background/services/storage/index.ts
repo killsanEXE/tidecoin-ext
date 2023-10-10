@@ -79,9 +79,7 @@ class StorageService {
     });
     const keyringsToSave = wallets.map((i) => ({
       id: i.id,
-      data: keyringService
-        .getKeyringForAccount(i.accounts[0].address!)
-        .serialize(),
+      data: keyringService.serializeById(i.id),
       phrase: payload?.find((d) => d.id === i.id)?.phrase,
     }));
     const encrypted = await encryptorUtils.encrypt(
