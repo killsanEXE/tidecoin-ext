@@ -28,7 +28,7 @@ export function useCreateTidecoinTxCallback() {
       feeRate: number,
       receiverToPayFee = false
     ) => {
-      if (selectedWallet !== undefined || selectedAccount !== undefined)
+      if (selectedWallet === undefined || selectedAccount === undefined)
         throw new Error("Failed to get current wallet or account");
       const fromAddress = currentAccount?.address;
       const utxos = await apiController.getUtxos(fromAddress!);

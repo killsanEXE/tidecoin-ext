@@ -135,6 +135,7 @@ class KeyringService {
 
   async sendTDC(data: SendTDC) {
     const account = storageService.currentAccount;
+    const wallet = storageService.currentWallet;
     if (!account || !account.address)
       throw new Error("Error when trying to get the current account");
 
@@ -145,7 +146,7 @@ class KeyringService {
           outputIndex: v.mintIndex,
           satoshis: v.value,
           scriptPk: v.script,
-          addressType: UTXOAddressType.P2WPKH,
+          addressType: wallet?.addressType as any as UTXOAddressType,
           address: v.address,
           ords: [],
         };

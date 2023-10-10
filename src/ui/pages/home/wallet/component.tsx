@@ -126,7 +126,7 @@ const Wallet = () => {
               className={s.transaction}
               key={index}
               onClick={() => {
-                navigate(`/pages/transaction-info/${t.spentTxid}`);
+                navigate(`/pages/transaction-info/${t.mintTxid}`);
               }}
             >
               <p className={s.value}>{t.value / 10 ** 8}</p>
