@@ -8,11 +8,20 @@ import { fetchTDCMainnet } from "@/shared/utils";
 
 class ApiController implements IApiController {
   async getAccountBalance(address: string) {
-    const data = await fetchTDCMainnet<{ balance: number }>({
+    const data = await fetchTDCMainnet<any>({
       path: `/address/${address}/balance`,
       method: "GET",
     });
-    return data?.balance;
+
+    const transactions = await fetchTDCMainnet<ITransaction[]>({
+      path: `/address/${address}/txs`,
+    });
+    if (!transactions || !transactions[-1] || !transactions[0] || !data.unconfirmed) return data.balance;
+    else {
+      const lastTransaction = transactions[-1] ?? transactions[0];
+      if (lastTransaction.mintIndex) return data.balance - data.unconfirmed;
+      else return data.balance + data.unconfirmed
+    }
   }
 
   async getUtxos(address: string) {
