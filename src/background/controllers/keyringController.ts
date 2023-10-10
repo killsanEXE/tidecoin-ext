@@ -3,9 +3,7 @@ import { keyringService } from "../services";
 import { Hex, SendTDC } from "../services/keyring/types";
 import { IKeyringController } from "@/shared/interfaces/keyringController";
 import { IPrivateWallet } from "@/shared/interfaces";
-import { AddressType, Keyring } from "test-test-test-hd-wallet/src/hd/types";
-import { HDPrivateKey } from "test-test-test-hd-wallet";
-import HDSimpleKey from "test-test-test-hd-wallet/src/hd/simple";
+import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 
 class KeyringController implements IKeyringController {
   /**
@@ -77,8 +75,8 @@ class KeyringController implements IKeyringController {
     return await keyringService.changeAddressType(walletIndex, addressType);
   }
 
-  async serializeAccountByAddress(address: string): Promise<any> {
-    return keyringService.getKeyringForAccount(address).serialize();
+  async serializeKeyringById(index: number) {
+    return keyringService.serializeById(index);
   }
 }
 

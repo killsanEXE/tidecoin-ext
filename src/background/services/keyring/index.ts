@@ -50,9 +50,13 @@ class KeyringService {
     if (type === "root") {
       keyring = HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(payload));
     } else {
-      keyring = HDSimpleKey.deserialize({ privateKey: payload, addressType: addressType });
+      keyring = HDSimpleKey.deserialize({
+        privateKey: payload,
+        addressType: addressType,
+      });
     }
-    keyring.addressType = typeof addressType === 'number' ? addressType : AddressType.P2WPKH;
+    keyring.addressType =
+      typeof addressType === "number" ? addressType : AddressType.P2WPKH;
     this.keyrings.push(keyring);
     return keyring.getAddress(keyring.publicKey);
   }
@@ -83,6 +87,10 @@ class KeyringService {
     }
 
     throw new Error("Keyring not found");
+  }
+
+  serializeById(index: number): any {
+    return this.keyrings[index].serialize();
   }
 
   signTransaction(tideTx: Psbt, address: string) {
@@ -136,8 +144,8 @@ class KeyringService {
   async sendTDC(data: SendTDC) {
     const account = storageService.currentAccount;
     const wallet = storageService.currentWallet;
-    console.log(data)
-    console.log(account?.address)
+    console.log(data);
+    console.log(account?.address);
     if (!account || !account.address)
       throw new Error("Error when trying to get the current account");
 
@@ -178,7 +186,10 @@ class KeyringService {
     return this.keyrings[index].getAccounts();
   }
 
-  async getWalletSecret(walletKey: number, password: string): Promise<string | undefined> {
+  async getWalletSecret(
+    walletKey: number,
+    password: string
+  ): Promise<string | undefined> {
     const wallets = await storageService.importWallets(password);
     if (!wallets[walletKey]) return;
     const wallet = HDPrivateKey.deserialize(wallets[walletKey].data);

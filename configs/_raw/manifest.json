@@ -27,33 +27,27 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "content-script.js"
-      ],
+      "matches": ["<all_urls>"],
+      "js": ["content-script.js"],
       "run_at": "document_start",
       "all_frames": true
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": [
-        "pageProvider.js"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
+      "resources": ["pageProvider.js"],
+      "matches": ["<all_urls>"]
     }
   ],
-  "permissions": [
-    "storage",
-    "unlimitedStorage",
-    "activeTab"
-  ],
+  "permissions": ["storage", "unlimitedStorage", "activeTab"],
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   },
-  "minimum_chrome_version": "88"
+  "minimum_chrome_version": "88",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "kieledssh@gmail.com",
+      "strict_min_version": "42.0"
+    }
+  }
 }
