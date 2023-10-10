@@ -19,23 +19,8 @@ const RestoreMnemonic = () => {
   const { walletController } = useControllersState((v) => ({
     walletController: v.walletController,
   }));
-  const [mnemonicPhrase, setMnemonicPhrase] = useState<string[]>([
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ]);
-
+  const [mnemonicPhrase, setMnemonicPhrase] = useState<string[]>(new Array(12).fill(""));
   const createNewWallet = useCreateNewWallet();
-
   const navigate = useNavigate();
 
   return (
@@ -50,7 +35,7 @@ const RestoreMnemonic = () => {
           <div className={cn(s.stepOne, s.step)}>
             <div>
               <div className={s.phrase}>
-                {mnemonicPhrase.map((word, index) => (
+                {mnemonicPhrase.map((index) => (
                   <div key={index} className={s.word}>
                     <p>{index + 1}.</p>
                     <input

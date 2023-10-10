@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
 import QRCode from "react-qr-code";
 import s from "./styles.module.scss";
-import CopyIcon from "@/ui/components/icons/CopyIcon";
 import cn from "classnames";
 import { copyToClipboard } from "@/ui/utils";
 import toast from "react-hot-toast";
