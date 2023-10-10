@@ -64,7 +64,7 @@ export default function PagesLayout() {
       {routeTitles.find((f) => f.route === currentRoute.pathname) ? (
         <div className={s.controlDiv}>
           {wallets.length <= 0 &&
-          currentRoute.pathname === "/pages/create-new-wallet" ? (
+            currentRoute.pathname === "/pages/create-new-wallet" ? (
             <p></p>
           ) : (
             <p
@@ -79,7 +79,7 @@ export default function PagesLayout() {
           <p className={s.controlElem}>
             {
               routeTitles.find((f) => f.route === currentRoute.pathname)![
-                "title"
+              "title"
               ]
             }
           </p>
@@ -92,7 +92,7 @@ export default function PagesLayout() {
               className={cn(s.controlElem, s.addNew)}
               onClick={
                 routeTitles.find((f) => f.route === currentRoute.pathname)![
-                  "action"
+                "action"
                 ]
               }
             >

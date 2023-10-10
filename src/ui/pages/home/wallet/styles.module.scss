@@ -71,7 +71,7 @@ $font_color: #f4f4f9;
 
 .transactionsDiv {
   overflow-y: scroll;
-  @apply h-full flex flex-col items-center py-[1rem];
+  @apply h-full flex flex-col items-center pt-[1rem];
 
   .transaction {
     @apply bg-hovered w-[90%] p-[.5rem] rounded-[.3rem] my-[.3rem];

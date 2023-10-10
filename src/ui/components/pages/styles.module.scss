@@ -15,3 +15,7 @@
 .contentDiv {
   @apply flex items-center justify-center;
 }
+
+.back {
+  @apply cursor-pointer select-none;
+}
