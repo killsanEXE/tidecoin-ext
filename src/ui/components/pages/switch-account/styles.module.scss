@@ -71,6 +71,9 @@
         @apply left-0;
       }
     }
-
   }
+}
+
+.copy {
+  @apply select-none cursor-pointer;
 }

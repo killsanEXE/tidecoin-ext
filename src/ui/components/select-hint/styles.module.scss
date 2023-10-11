@@ -1,0 +1,23 @@
+.input {
+  &Box {
+    @apply relative w-full cursor-default overflow-hidden rounded-lg bg-bg text-left shadow-md focus:outline-none sm:text-sm;
+  }
+
+  @apply w-full border-none p-2 text-sm leading-5 bg-input-bg text-text;
+}
+
+.options {
+  &Box {
+    @apply absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-bg py-0.5 text-base shadow-lg outline-none sm:text-sm z-10;
+  }
+
+  &NotFound {
+    @apply relative cursor-default select-none py-2 px-4 text-gray-700;
+  }
+
+  @apply relative cursor-default select-none p-2 text-text;
+
+  &Active {
+    @apply bg-input-bg text-white;
+  }
+}

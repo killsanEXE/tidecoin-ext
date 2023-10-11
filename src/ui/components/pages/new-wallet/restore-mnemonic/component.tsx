@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import SwitchAddressType from "@/ui/components/switch-address-type";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
+import SelectWithHint from "@/ui/components/select-hint/component";
+import { englishWords } from "test-test-test-hd-wallet";
 
 const RestoreMnemonic = () => {
   const [step, setStep] = useState(1);
@@ -18,8 +20,8 @@ const RestoreMnemonic = () => {
   const { walletController } = useControllersState((v) => ({
     walletController: v.walletController,
   }));
-  const [mnemonicPhrase, setMnemonicPhrase] = useState<string[]>(
-    new Array(12).fill("")
+  const [mnemonicPhrase, setMnemonicPhrase] = useState<(number | undefined)[]>(
+    new Array(12).fill(undefined)
   );
   const createNewWallet = useCreateNewWallet();
   const navigate = useNavigate();
@@ -38,14 +40,10 @@ const RestoreMnemonic = () => {
                 {mnemonicPhrase.map((value, index) => (
                   <div key={index} className={s.word}>
                     <p>{index + 1}.</p>
-                    <input
-                      type="text"
-                      className={cn(s.wordInput, "input")}
-                      value={value}
-                      onChange={(e) => {
-                        setMnemonicPhrase(
-                          mnemonicPhrase.with(index, e.target.value)
-                        );
+                    <SelectWithHint
+                      selected={value}
+                      setSelected={(v) => {
+                        setMnemonicPhrase(mnemonicPhrase.with(index, v));
                       }}
                     />
                   </div>
@@ -56,11 +54,8 @@ const RestoreMnemonic = () => {
               <button
                 className={cn(s.continue, "btn", "primary")}
                 onClick={() => {
-                  if (
-                    mnemonicPhrase.find((f) => f.trim().length <= 0) !==
-                    undefined
-                  )
-                    toast("Please insert all the words");
+                  if (mnemonicPhrase.findIndex((f) => f === undefined) !== -1)
+                    toast.error("Please insert all the words");
                   else setStep(2);
                 }}
               >
@@ -82,7 +77,7 @@ const RestoreMnemonic = () => {
               onClick={async () => {
                 try {
                   await createNewWallet(
-                    mnemonicPhrase.join(" "),
+                    mnemonicPhrase.map((i) => englishWords[i!]).join(" "),
                     "root",
                     addressType
                   );

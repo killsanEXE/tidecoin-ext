@@ -1,35 +1,35 @@
 .showMnemonic {
-    @apply w-full h-full flex justify-center items-center;
+  @apply w-full h-full flex justify-center items-center;
 
-    .phraseDiv {
-        @apply px-[2rem];
+  .phraseDiv {
+    @apply px-[2rem];
 
-        .phrase {
-            @apply bg-hovered text-[1.2rem];
-        }
-
-        .copyDiv {
-            @apply flex w-full justify-center gap-[1rem] items-center text-[1.1rem] pt-[2rem];
-        }
+    .phrase {
+      @apply bg-hovered text-[1.2rem];
     }
+
+    .copyDiv {
+      @apply flex w-full justify-center gap-[1rem] items-center text-[1.1rem] pt-[2rem] cursor-pointer select-none;
+    }
+  }
 }
 
 .phraseWrapper {
-    @apply grid grid-cols-3 text-[0.8rem];
+  @apply grid grid-cols-3 text-[0.8rem];
 }
 
 .word {
-    @apply flex justify-between items-center p-5 gap-[.5rem];
+  @apply flex justify-between items-center p-5 gap-[.5rem];
 
-    .wordWord {
-        @apply bg-panel p-[.5rem] rounded-lg w-[80%] flex justify-center;
-    }
+  .wordWord {
+    @apply bg-panel p-[.5rem] rounded-lg w-[80%] flex justify-center;
+  }
 }
 
 .privKeyWrapper {
-    @apply w-full;
+  @apply w-full;
 }
 
 .secret {
-    @apply max-w-[350px] max-h-[300px] break-all h-[50%] overflow-y-scroll bg-input-bg rounded-[.5rem] p-[.5rem];
+  @apply max-w-[350px] max-h-[300px] break-all h-[50%] overflow-y-scroll bg-input-bg rounded-[.5rem] p-[.5rem];
 }

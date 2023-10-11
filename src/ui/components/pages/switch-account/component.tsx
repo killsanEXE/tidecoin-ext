@@ -14,6 +14,7 @@ import {
 } from "@/ui/states/walletState";
 import cn from "classnames";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const SwitchAccount = () => {
   const [selected, setSelected] = useState<number>();
@@ -70,7 +71,13 @@ const SwitchAccount = () => {
                 [s.active]: selected === i,
               })}
             >
-              <div className={cn(s.accSetting, s.copy)}>
+              <div
+                className={cn(s.accSetting, s.copy)}
+                onClick={() => {
+                  navigator.clipboard.writeText(acc.address!);
+                  toast.success("Copied!");
+                }}
+              >
                 <CopyIcon />
               </div>
               <div className={s.divider}></div>
