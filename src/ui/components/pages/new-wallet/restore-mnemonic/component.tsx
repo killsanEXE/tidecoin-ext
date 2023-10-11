@@ -10,7 +10,6 @@ import SwitchAddressType from "@/ui/components/switch-address-type";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 
 const RestoreMnemonic = () => {
-
   const [step, setStep] = useState(1);
   const { updateWalletState } = useWalletState((v) => ({
     updateWalletState: v.updateWalletState,
@@ -19,7 +18,9 @@ const RestoreMnemonic = () => {
   const { walletController } = useControllersState((v) => ({
     walletController: v.walletController,
   }));
-  const [mnemonicPhrase, setMnemonicPhrase] = useState<string[]>(new Array(12).fill(""));
+  const [mnemonicPhrase, setMnemonicPhrase] = useState<string[]>(
+    new Array(12).fill("")
+  );
   const createNewWallet = useCreateNewWallet();
   const navigate = useNavigate();
 
@@ -31,21 +32,20 @@ const RestoreMnemonic = () => {
       </div>
       {step === 1 ? (
         <div className={cn(s.stepOneWrapper, s.step)}>
-
           <div className={cn(s.stepOne, s.step)}>
             <div>
               <div className={s.phrase}>
-                {mnemonicPhrase.map((index) => (
+                {mnemonicPhrase.map((value, index) => (
                   <div key={index} className={s.word}>
                     <p>{index + 1}.</p>
                     <input
                       type="text"
                       className={cn(s.wordInput, "input")}
-                      value={mnemonicPhrase[index]}
+                      value={value}
                       onChange={(e) => {
-                        const updatedMnemonicPhrase = [...mnemonicPhrase];
-                        updatedMnemonicPhrase[index] = e.target.value;
-                        setMnemonicPhrase(updatedMnemonicPhrase);
+                        setMnemonicPhrase(
+                          mnemonicPhrase.with(index, e.target.value)
+                        );
                       }}
                     />
                   </div>
@@ -56,7 +56,11 @@ const RestoreMnemonic = () => {
               <button
                 className={cn(s.continue, "btn", "primary")}
                 onClick={() => {
-                  if (mnemonicPhrase.find(f => f.trim().length <= 0) !== undefined) toast("Please insert all the words");
+                  if (
+                    mnemonicPhrase.find((f) => f.trim().length <= 0) !==
+                    undefined
+                  )
+                    toast("Please insert all the words");
                   else setStep(2);
                 }}
               >
@@ -68,11 +72,20 @@ const RestoreMnemonic = () => {
       ) : (
         <div className={cn(s.stepTwo, s.step)}>
           <div className={s.continueWrapper}>
-            <SwitchAddressType handler={(selectedAddressType) => { setAddressType(selectedAddressType) }} selectedType={addressType} />
+            <SwitchAddressType
+              handler={(selectedAddressType) => {
+                setAddressType(selectedAddressType);
+              }}
+              selectedType={addressType}
+            />
             <button
               onClick={async () => {
                 try {
-                  await createNewWallet(mnemonicPhrase.join(" "), "root", addressType);
+                  await createNewWallet(
+                    mnemonicPhrase.join(" "),
+                    "root",
+                    addressType
+                  );
                   await walletController.saveWallets();
                   await updateWalletState({ vaultIsEmpty: false });
                   navigate("/home/wallet");

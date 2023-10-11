@@ -8,7 +8,6 @@ import { Psbt, networks } from "tidecoinjs-lib";
 import { AddressType, Keyring } from "test-test-test-hd-wallet/src/hd/types";
 import { createSendTidecoin } from "tidecoin-utils";
 import HDSimpleKey from "test-test-test-hd-wallet/src/hd/simple";
-import { hexToBytes } from "@noble/hashes/utils";
 import { UTXOAddressType } from "tidecoin-utils/lib/OrdTransaction";
 
 export const KEYRING_SDK_TYPES = {
