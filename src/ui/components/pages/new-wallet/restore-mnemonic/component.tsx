@@ -80,6 +80,7 @@ const RestoreMnemonic = () => {
             <button
               onClick={async () => {
                 try {
+                  console.log(mnemonicPhrase.join(" "))
                   await createNewWallet(
                     mnemonicPhrase.join(" "),
                     "root",

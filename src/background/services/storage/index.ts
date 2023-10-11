@@ -133,6 +133,32 @@ class StorageService {
       };
     });
   }
+
+  getUniqueName(kind: "Wallet" | "Account"): string {
+    if (kind === "Wallet") {
+      const wallets = this.walletState.wallets;
+      if (wallets.length <= 0) return "Wallet 1"
+      let id = wallets[-1] ? wallets[-1].id + 1 : wallets[0].id + 1;
+      let name = `Wallet ${id}`;
+      const names = wallets.map(f => f.name);
+      while (names.includes(name)) {
+        id++;
+        name = `Wallet ${id}`;
+      }
+      return name;
+    } else {
+      const accounts = this.currentWallet?.accounts;
+      if (!accounts) return "Account 1";
+      let id = accounts[-1] ? accounts[-1].id + 1 : accounts[0].id + 1;
+      let name = `Account ${id}`;
+      const names = accounts.map(f => f.name?.trim());
+      while (names.includes(name.trim())) {
+        id++;
+        name = `Account ${id}`;
+      }
+      return name;
+    }
+  }
 }
 
 export default new StorageService();
