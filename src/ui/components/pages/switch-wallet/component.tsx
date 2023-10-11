@@ -51,7 +51,9 @@ const SwitchWallet = () => {
                 [s.active]: selected === i,
               })}
             >
-              <div className={cn(s.walletSetting, s.rename)}>
+              <div
+                className={cn(s.walletSetting, s.rename)}
+                onClick={(() => { navigate(`/pages/rename-wallet/${wallet.id}`) })}>
                 <TagIcon />
               </div>
               <div className={s.divider}></div>

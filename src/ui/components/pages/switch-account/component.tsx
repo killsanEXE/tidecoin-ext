@@ -81,7 +81,9 @@ const SwitchAccount = () => {
                 <CopyIcon />
               </div>
               <div className={s.divider}></div>
-              <div className={cn(s.accSetting, s.rename)}>
+              <div
+                className={cn(s.accSetting, s.rename)}
+                onClick={() => { navigate(`/pages/rename-account/${acc.id}`) }}>
                 <TagIcon />
               </div>
               <div className={s.divider}></div>

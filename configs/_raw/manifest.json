@@ -22,21 +22,36 @@
   "background": {
     "service_worker": "background.js"
   },
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["content-script.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content-script.js"
+      ],
       "run_at": "document_start",
       "all_frames": true
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["pageProvider.js"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "pageProvider.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ],
-  "permissions": ["storage", "unlimitedStorage", "activeTab"],
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "activeTab"
+  ],
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   },
