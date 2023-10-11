@@ -20,7 +20,7 @@ const RestoreMnemonic = () => {
   const { walletController } = useControllersState((v) => ({
     walletController: v.walletController,
   }));
-  const [mnemonicPhrase, setMnemonicPhrase] = useState<(number | undefined)[]>(
+  const [mnemonicPhrase, setMnemonicPhrase] = useState<(string | undefined)[]>(
     new Array(12).fill(undefined)
   );
   const createNewWallet = useCreateNewWallet();
@@ -43,12 +43,11 @@ const RestoreMnemonic = () => {
                     <SelectWithHint
                       selected={value}
                       setSelected={(v) => {
-                        if (typeof v === "string") {
-                          console.log(v)
-                          setMnemonicPhrase(v.split(" ").map(f => englishWords.findIndex(j => j === f)))
-                        } else {
-                          setMnemonicPhrase(mnemonicPhrase.with(index, v));
-                        }
+                        if (!v) { setMnemonicPhrase(mnemonicPhrase.with(index, v)); return; }
+                        const phrase = v.split(" ");
+                        if (phrase.length === 12)
+                          setMnemonicPhrase(phrase)
+                        else setMnemonicPhrase(mnemonicPhrase.with(index, v));
                       }}
                     />
                   </div>
@@ -81,15 +80,11 @@ const RestoreMnemonic = () => {
             <button
               onClick={async () => {
                 try {
-                  console.log("TRYING TO CREATE NEW WALLET ")
-                  const stuff = mnemonicPhrase.map((i) => englishWords[i!]).join(" ")
-                  console.log(stuff);
                   await createNewWallet(
-                    mnemonicPhrase.map((i) => englishWords[i!]).join(" "),
+                    mnemonicPhrase.join(" "),
                     "root",
                     addressType
                   );
-                  console.log('SAVING WALLETS')
                   await walletController.saveWallets();
                   await updateWalletState({ vaultIsEmpty: false });
                   navigate("/home/wallet");

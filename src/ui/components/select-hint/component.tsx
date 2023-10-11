@@ -1,13 +1,13 @@
 import { Combobox, Transition } from "@headlessui/react";
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { englishWords } from "test-test-test-hd-wallet";
 import cn from "classnames";
 
 import s from "./styles.module.scss";
 
 export interface Props {
-  selected?: number;
-  setSelected: (value: number | string) => void;
+  selected?: string;
+  setSelected: (value: string) => void;
 }
 
 const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
@@ -23,6 +23,13 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
         )
         .slice(0, 4);
 
+  const [inputValue, setInputValue] = useState<string>("");
+
+  useEffect(() => {
+    if (selected)
+      setInputValue(selected);
+  }, [selected])
+
   return (
     <Combobox value={selected} onChange={setSelected} nullable={true}>
       <div className="relative">
@@ -30,14 +37,15 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
           <Combobox.Input
             className={s.input}
             displayValue={(word: string) => word}
+
             onChange={(event) => {
               const phrase = event.target.value as string;
+              setInputValue(phrase)
               if (phrase.trim().split(" ").length === 12) {
                 setSelected(phrase.trim());
               } else setQuery(phrase)
             }}
-            value={selected}
-          />
+            value={inputValue} />
         </div>
         <Transition
           as={Fragment}
