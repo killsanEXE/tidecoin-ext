@@ -3,14 +3,16 @@ import s from "./styles.module.scss"
 import cn from "classnames";
 import toast from "react-hot-toast";
 
-const Rename = (props: { handler: (name: string) => void; title?: string, oldName?: string }) => {
+const Rename = (props: { handler: (name: string) => void; title?: string, oldName?: string, otherNames?: string[] }) => {
 
     const [name, setName] = useState(props.oldName ?? "");
 
     const rename = () => {
-        if (name.length > 8) toast.error("Maximum length is 8")
-        else if (name.trim().length <= 0) toast.error("Minimum length is 1")
-        else props.handler(name);
+        if (name.trim().length > 10) toast.error("Maximum length is 8");
+        else if (name.trim().length <= 0) toast.error("Minimum length is 1");
+        else if (props.otherNames !== undefined && props.otherNames.length > 0 && props.otherNames.includes(name.trim()))
+            toast.error("This name is already taken");
+        else props.handler(name.trim());
     }
 
     return (

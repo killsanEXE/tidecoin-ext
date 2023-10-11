@@ -36,7 +36,8 @@ const RenameAccount = () => {
 
   return (
     <div className={s.renameAccount}>
-      {account ? <Rename handler={renameAccount} oldName={account.name} /> : <ReactLoading type="spin" color="#fff" />}
+      {account ? <Rename handler={renameAccount} oldName={account.name} otherNames={currentWallet?.accounts.map(f => f.name!)} />
+        : <ReactLoading type="spin" color="#fff" />}
     </div>
   );
 };

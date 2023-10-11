@@ -7,7 +7,7 @@ import s from "./styles.module.scss";
 
 export interface Props {
   selected?: number;
-  setSelected: (value: number) => void;
+  setSelected: (value: number | string) => void;
 }
 
 const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
@@ -17,11 +17,11 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
     query === ""
       ? []
       : englishWords
-          .map((i, idx) => [i, idx] as [string, number])
-          .filter(([word, idx]) =>
-            word.startsWith(query.toLowerCase().replace(/\s+/g, ""))
-          )
-          .slice(0, 4);
+        .map((i, idx) => [i, idx] as [string, number])
+        .filter(([word, idx]) =>
+          word.startsWith(query.toLowerCase().replace(/\s+/g, ""))
+        )
+        .slice(0, 4);
 
   return (
     <Combobox value={selected} onChange={setSelected} nullable={true}>
@@ -30,7 +30,13 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
           <Combobox.Input
             className={s.input}
             displayValue={(word: string) => word}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              const phrase = event.target.value as string;
+              if (phrase.trim().split(" ").length === 12) {
+                setSelected(phrase.trim());
+              } else setQuery(phrase)
+            }}
+            value={selected}
           />
         </div>
         <Transition
@@ -55,9 +61,8 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
                   {({ selected }) => (
                     <>
                       <span
-                        className={`block truncate ${
-                          selected ? "font-medium" : "font-normal"
-                        }`}
+                        className={`block truncate ${selected ? "font-medium" : "font-normal"
+                          }`}
                       >
                         {word[0]}
                       </span>

@@ -43,7 +43,12 @@ const RestoreMnemonic = () => {
                     <SelectWithHint
                       selected={value}
                       setSelected={(v) => {
-                        setMnemonicPhrase(mnemonicPhrase.with(index, v));
+                        if (typeof v === "string") {
+                          console.log(v)
+                          setMnemonicPhrase(v.split(" ").map(f => englishWords.findIndex(j => j === f)))
+                        } else {
+                          setMnemonicPhrase(mnemonicPhrase.with(index, v));
+                        }
                       }}
                     />
                   </div>
@@ -76,11 +81,15 @@ const RestoreMnemonic = () => {
             <button
               onClick={async () => {
                 try {
+                  console.log("TRYING TO CREATE NEW WALLET ")
+                  const stuff = mnemonicPhrase.map((i) => englishWords[i!]).join(" ")
+                  console.log(stuff);
                   await createNewWallet(
                     mnemonicPhrase.map((i) => englishWords[i!]).join(" "),
                     "root",
                     addressType
                   );
+                  console.log('SAVING WALLETS')
                   await walletController.saveWallets();
                   await updateWalletState({ vaultIsEmpty: false });
                   navigate("/home/wallet");

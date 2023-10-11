@@ -33,7 +33,8 @@ const RenameWallet = () => {
 
   return (
     <div className={s.renameWallet}>
-      {wallet ? <Rename handler={renameWallet} oldName={wallet.name} /> : <ReactLoading type="spin" color="#fff" />}
+      {wallet ? <Rename handler={renameWallet} otherNames={wallets.map(f => f.name)} oldName={wallet.name} />
+        : <ReactLoading type="spin" color="#fff" />}
     </div>
   );
 };
