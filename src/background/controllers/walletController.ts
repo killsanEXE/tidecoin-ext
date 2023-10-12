@@ -6,7 +6,6 @@ import keyringService from "@/background/services/keyring";
 import { extractKeysFromObj } from "@/shared/utils";
 import { DecryptedSecrets } from "../services/storage/types";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
-import { useStoreWithEqualityFn } from "zustand/traditional";
 
 class WalletController implements IWalletController {
   async isVaultEmpty() {
@@ -14,7 +13,12 @@ class WalletController implements IWalletController {
     return values.enc === undefined;
   }
 
-  async createNewWallet(phrase: string, walletType: "simple" | "root", addressType?: AddressType, name?: string): Promise<IWallet> {
+  async createNewWallet(
+    phrase: string,
+    walletType: "simple" | "root",
+    addressType?: AddressType,
+    name?: string
+  ): Promise<IWallet> {
     const exportedWallets = storageService.walletState.wallets;
     const address = keyringService.newKeyring(walletType, phrase, addressType);
     const account: IAccount = {
@@ -32,7 +36,8 @@ class WalletController implements IWalletController {
       name: !name ? storageService.getUniqueName("Wallet") : name,
       id: walletId,
       type: walletType,
-      addressType: typeof addressType === "number" ? addressType : AddressType.P2WPKH,
+      addressType:
+        typeof addressType === "number" ? addressType : AddressType.P2WPKH,
       accounts: [account],
     };
   }
@@ -74,7 +79,9 @@ class WalletController implements IWalletController {
       ? storageService.getUniqueName("Account")
       : name;
     const addresses = keyringService.getKeyringForAccount(
-      wallet.accounts[-1] ? wallet.accounts[-1].address! : wallet.accounts[0].address!
+      wallet.accounts[-1]
+        ? wallet.accounts[-1].address!
+        : wallet.accounts[0].address!
     ).addAccounts!(1);
 
     return {
