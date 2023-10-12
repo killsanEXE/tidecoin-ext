@@ -145,7 +145,9 @@ const Wallet = () => {
                 <p className={s.value}>{t.value / 10 ** 8}</p>
                 <p className={s.address}>{shortAddress(t.address)}</p>
               </div>
-              {t.mintIndex ? <ArrowUp /> : <ArrowDown />}
+              <div className={cn(s.icon, t.mintIndex ? s.send : s.receive)}>
+                {t.mintIndex ? <ArrowUp /> : <ArrowDown />}
+              </div>
             </div>
           ))}
         </div>
