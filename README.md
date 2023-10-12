@@ -6,3 +6,8 @@ How to test extension yoursefl:
     4. In top left corner click on  "Load unpacked"
     5. Select dist/chrome folder from the react app
     6. Test
+
+
+Tasks:
+    1. Add wallet deletion
+    2. 

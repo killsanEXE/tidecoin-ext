@@ -68,7 +68,7 @@ const NewMnemonic = () => {
                     toast.success("Copied");
                   }}
                 >
-                  <CopyIcon /> Copy to ClickBoard
+                  <CopyIcon /> Copy to Clipboard
                 </div>
                 <div className={s.savePhrase}>
                   <p>I saved this phrase</p>
