@@ -2,7 +2,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import s from "./styles.module.scss";
 import cn from "classnames";
 import { useWalletState } from "@/ui/states/walletState";
-import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 
 export default function PagesLayout() {
   const routeTitles = [
@@ -72,7 +72,7 @@ export default function PagesLayout() {
                 navigate(-1);
               }}
             >
-              <ArrowLeft /> Back
+              <ChevronLeftIcon /> Back
             </p>
           )}
           <p className={s.controlElem}>
@@ -95,7 +95,7 @@ export default function PagesLayout() {
                 ]
               }
             >
-              <PlusInCircleIcon />
+              <PlusCircleIcon />
             </p>
           )}
         </div>
@@ -107,7 +107,7 @@ export default function PagesLayout() {
               navigate(-1);
             }}
           >
-            <ArrowLeft /> Back
+            <ChevronLeftIcon /> Back
           </p>
           <p className={s.controlElem}>
             {currentRoute.pathname.includes("/show") ? "Private" : ""}

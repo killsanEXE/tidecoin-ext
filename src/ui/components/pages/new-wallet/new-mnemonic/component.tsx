@@ -6,11 +6,12 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useControllersState } from "@/ui/states/controllerState";
 import { useCreateNewWallet } from "@/ui/hooks/wallet";
-import CopyIcon from "@/ui/components/icons/CopyIcon";
 import cn from "classnames";
 import { copyToClipboard } from "@/ui/utils";
 import SwitchAddressType from "@/ui/components/switch-address-type";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
+
+import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 
 const NewMnemonic = () => {
   const [step, setStep] = useState(1);
@@ -24,7 +25,9 @@ const NewMnemonic = () => {
   const [mnemonicPhrase, setMnemonicPhrase] = useState<string | undefined>(
     undefined
   );
-  const [addressType, setAddressType] = useState<AddressType>(AddressType.P2WPKH);
+  const [addressType, setAddressType] = useState<AddressType>(
+    AddressType.P2WPKH
+  );
 
   const createNewWallet = useCreateNewWallet();
 
@@ -68,7 +71,7 @@ const NewMnemonic = () => {
                     toast.success("Copied");
                   }}
                 >
-                  <CopyIcon /> Copy to Clipboard
+                  <DocumentDuplicateIcon /> Copy to Clipboard
                 </div>
                 <div className={s.savePhrase}>
                   <p>I saved this phrase</p>
@@ -96,9 +99,12 @@ const NewMnemonic = () => {
         </div>
       ) : (
         <div className={cn(s.stepTwo, s.step)}>
-          <SwitchAddressType handler={(selectedAddressType) => {
-            setAddressType(selectedAddressType);
-          }} selectedType={addressType} />
+          <SwitchAddressType
+            handler={(selectedAddressType) => {
+              setAddressType(selectedAddressType);
+            }}
+            selectedType={addressType}
+          />
           <div className={s.continueWrapper}>
             <button
               onClick={async () => {

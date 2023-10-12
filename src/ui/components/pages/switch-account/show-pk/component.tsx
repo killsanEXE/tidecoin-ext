@@ -6,7 +6,7 @@ import { useGetCurrentAccount } from "@/ui/states/walletState";
 import { useControllersState } from "@/ui/states/controllerState";
 import { copyToClipboard } from "@/ui/utils";
 import cn from "classnames";
-import CopyIcon from "@/ui/components/icons/CopyIcon";
+import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 
 const ShowPk = () => {
@@ -32,10 +32,15 @@ const ShowPk = () => {
     <div className={s.showPk}>
       {unlocked ? (
         <div className={s.showPkDiv}>
-          <button className={cn("btn", s.copySecret)} onClick={() => {
-            copyToClipboard(secret);
-            toast.success("Copied")
-          }}><CopyIcon /> Copy</button>
+          <button
+            className={cn("btn", s.copySecret)}
+            onClick={() => {
+              copyToClipboard(secret);
+              toast.success("Copied");
+            }}
+          >
+            <DocumentDuplicateIcon /> Copy
+          </button>
           <div className={s.secret}>{secret}</div>
         </div>
       ) : (

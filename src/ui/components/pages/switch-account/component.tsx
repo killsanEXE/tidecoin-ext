@@ -1,10 +1,12 @@
 import { useState } from "react";
-import CheckIcon from "@/ui/components/icons/Checkicon";
-import CopyIcon from "@/ui/components/icons/CopyIcon";
-import KeyIcon from "@/ui/components/icons/KeyIcon";
-import SmallMenuIcon from "@/ui/components/icons/SmallMenuIcon";
-import TagIcon from "@/ui/components/icons/TagIcon";
-import XMarkIcon from "@/ui/components/icons/XMarkIcon";
+import {
+  CheckIcon,
+  Bars3Icon,
+  DocumentDuplicateIcon,
+  TagIcon,
+  KeyIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import s from "./styles.module.scss";
 import { shortAddress } from "@/ui/utils";
 import {
@@ -62,7 +64,7 @@ const SwitchAccount = () => {
                     setSelected(i);
                   }}
                 >
-                  <SmallMenuIcon />
+                  <Bars3Icon />
                 </button>
               </div>
             </div>
@@ -78,12 +80,15 @@ const SwitchAccount = () => {
                   toast.success("Copied!");
                 }}
               >
-                <CopyIcon />
+                <DocumentDuplicateIcon />
               </div>
               <div className={s.divider}></div>
               <div
                 className={cn(s.accSetting, s.rename)}
-                onClick={() => { navigate(`/pages/rename-account/${acc.id}`) }}>
+                onClick={() => {
+                  navigate(`/pages/rename-account/${acc.id}`);
+                }}
+              >
                 <TagIcon />
               </div>
               <div className={s.divider}></div>

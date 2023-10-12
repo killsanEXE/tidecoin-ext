@@ -1,4 +1,4 @@
-import LinkIcon from "@/ui/components/icons/LinkIcon";
+import { LinkIcon } from "@heroicons/react/24/outline";
 import s from "./styles.module.scss";
 import { useAppState } from "@/ui/states/appState";
 import { useNavigate } from "react-router-dom";

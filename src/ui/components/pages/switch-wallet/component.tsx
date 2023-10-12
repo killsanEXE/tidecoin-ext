@@ -2,11 +2,14 @@ import { useGetCurrentWallet, useWalletState } from "@/ui/states/walletState";
 import { useState } from "react";
 import s from "./styles.module.scss";
 import cn from "classnames";
-import CheckIcon from "@/ui/components/icons/Checkicon";
-import TagIcon from "@/ui/components/icons/TagIcon";
-import KeyIcon from "@/ui/components/icons/KeyIcon";
-import XMarkIcon from "@/ui/components/icons/XMarkIcon";
-import SmallMenuIcon from "@/ui/components/icons/SmallMenuIcon";
+import {
+  CheckIcon,
+  TagIcon,
+  KeyIcon,
+  XMarkIcon,
+  Bars3Icon,
+} from "@heroicons/react/24/outline";
+
 import { useSwitchWallet } from "@/ui/hooks/wallet";
 import { useNavigate } from "react-router-dom";
 
@@ -42,7 +45,7 @@ const SwitchWallet = () => {
                     setSelected(i);
                   }}
                 >
-                  <SmallMenuIcon />
+                  <Bars3Icon />
                 </button>
               </div>
             </div>
@@ -53,7 +56,10 @@ const SwitchWallet = () => {
             >
               <div
                 className={cn(s.walletSetting, s.rename)}
-                onClick={(() => { navigate(`/pages/rename-wallet/${wallet.id}`) })}>
+                onClick={() => {
+                  navigate(`/pages/rename-wallet/${wallet.id}`);
+                }}
+              >
                 <TagIcon />
               </div>
               <div className={s.divider}></div>

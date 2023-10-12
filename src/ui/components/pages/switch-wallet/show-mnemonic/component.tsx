@@ -2,11 +2,11 @@ import CheckPassword from "@/ui/components/check-password";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import s from "./styles.module.scss";
-import CopyIcon from "@/ui/components/icons/CopyIcon";
 import { copyToClipboard } from "@/ui/utils";
 import { useControllersState } from "@/ui/states/controllerState";
 import { useWalletState } from "@/ui/states/walletState";
 import toast from "react-hot-toast";
+import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 
 const ShowMnemonic = () => {
   const [unlocked, setUnlocked] = useState(false);
@@ -42,7 +42,7 @@ const ShowMnemonic = () => {
               toast.success("Copied!");
             }}
           >
-            <CopyIcon /> Copy
+            <DocumentDuplicateIcon /> Copy
           </div>
         </div>
       ) : (

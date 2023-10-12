@@ -1,7 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import CopyIcon from "@/ui/components/icons/CopyIcon";
-import ReceiveIcon from "@/ui/components/icons/ReceiveIcon";
-import SendIcon from "@/ui/components/icons/SendIcon";
+
+import {
+  DocumentDuplicateIcon,
+  ArrowDownTrayIcon,
+  ArrowUpTrayIcon,
+  ArrowSmallUpIcon,
+  ArrowSmallDownIcon,
+} from "@heroicons/react/24/outline";
 import s from "./styles.module.scss";
 import { copyToClipboard, shortAddress } from "@/ui/utils";
 import toast from "react-hot-toast";
@@ -16,8 +21,6 @@ import ReactLoading from "react-loading";
 import { ITransaction } from "@/shared/interfaces/apiController";
 import { useUpdateCurrentAccountTransactions } from "@/ui/hooks/transactions";
 import { useDebounceCall } from "@/ui/hooks/debounce";
-import ArrowDown from "@/ui/components/icons/ArrowDown";
-import ArrowUp from "@/ui/components/icons/ArrowUp";
 
 const Wallet = () => {
   const currentAccount = useGetCurrentAccount();
@@ -44,17 +47,23 @@ const Wallet = () => {
     if (currentAccount && currentAccount.balance === undefined)
       updateAccountBalance();
 
-    callUpdateTransactions()
+    callUpdateTransactions();
 
     return () => {
-      clearInterval(interval)
+      clearInterval(interval);
     };
-  }, [udpateTransactions, updateAccountBalance, currentAccount, currentWallet, callUpdateTransactions]);
+  }, [
+    udpateTransactions,
+    updateAccountBalance,
+    currentAccount,
+    currentWallet,
+    callUpdateTransactions,
+  ]);
 
   useEffect(() => {
     updateAccountBalance();
     udpateTransactions();
-  }, [])
+  }, []);
 
   return (
     <div className={s.walletDiv}>
@@ -67,7 +76,7 @@ const Wallet = () => {
         >
           {currentWallet?.name ?? "wallet"}
         </button>
-        {currentWallet?.type === "root" &&
+        {currentWallet?.type === "root" && (
           <button
             onClick={() => {
               navigate("/pages/switch-account");
@@ -76,7 +85,7 @@ const Wallet = () => {
           >
             {currentAccount?.name}
           </button>
-        }
+        )}
       </div>
 
       <div className={cn(s.accPanel, s.center)}>
@@ -107,7 +116,7 @@ const Wallet = () => {
             });
           }}
         >
-          <CopyIcon /> {shortAddress(currentAccount?.address)}
+          <DocumentDuplicateIcon /> {shortAddress(currentAccount?.address)}
         </p>
 
         <div className={cn(s.receiveSendBtns, s.center)}>
@@ -117,7 +126,7 @@ const Wallet = () => {
             }}
             className={cn(s.btn, s.center)}
           >
-            <ReceiveIcon /> Receive
+            <ArrowDownTrayIcon /> Receive
           </button>
           <button
             onClick={() => {
@@ -125,7 +134,7 @@ const Wallet = () => {
             }}
             className={cn(s.btn, s.center)}
           >
-            <SendIcon /> Send
+            <ArrowUpTrayIcon /> Send
           </button>
         </div>
       </div>
@@ -146,7 +155,7 @@ const Wallet = () => {
                 <p className={s.address}>{shortAddress(t.address)}</p>
               </div>
               <div className={cn(s.icon, t.mintIndex ? s.send : s.receive)}>
-                {t.mintIndex ? <ArrowUp /> : <ArrowDown />}
+                {t.mintIndex ? <ArrowSmallUpIcon /> : <ArrowSmallDownIcon />}
               </div>
             </div>
           ))}
