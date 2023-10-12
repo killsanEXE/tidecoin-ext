@@ -144,9 +144,9 @@ export const useUpdateCurrentAccountBalance = () => {
   const updateCurrentAccount = useUpdateCurrentAccount();
   const currentAccount = useGetCurrentAccount();
 
-  return useCallback(async () => {
+  return useCallback(async (address?: string) => {
     const balance = await apiController.getAccountBalance(
-      currentAccount?.address ?? ""
+      address ? address : currentAccount?.address ?? ""
     );
     if (balance === undefined || !currentAccount) return;
     await updateCurrentAccount({
