@@ -14,7 +14,11 @@ const SwitchAddressType = (props: {
           props.handler(AddressType.P2WPKH);
         }}
       >
-        {props.selectedType === AddressType.P2WPKH ? <CheckIcon /> : ""}
+        {props.selectedType === AddressType.P2WPKH ? (
+          <CheckIcon className="w-8 h-8" />
+        ) : (
+          ""
+        )}
         <div className={s.infoDiv}>
           <p className={s.typeTitle}>Native Segwit (P2WPKH)</p>
           <p className={s.example}></p>
@@ -26,7 +30,11 @@ const SwitchAddressType = (props: {
           props.handler(AddressType.P2SH);
         }}
       >
-        {props.selectedType === AddressType.P2SH ? <CheckIcon /> : ""}
+        {props.selectedType === AddressType.P2SH ? (
+          <CheckIcon className="w-8 h-8" />
+        ) : (
+          ""
+        )}
         <div className={s.infoDiv}>
           <p className={s.typeTitle}>Nested Segwit (P2SH-P2WPKH)</p>
           <p className={s.example}></p>
@@ -38,7 +46,11 @@ const SwitchAddressType = (props: {
           props.handler(AddressType.P2PKH);
         }}
       >
-        {props.selectedType === AddressType.P2PKH ? <CheckIcon /> : ""}
+        {props.selectedType === AddressType.P2PKH ? (
+          <CheckIcon className="w-8 h-8" />
+        ) : (
+          ""
+        )}
         <div className={s.infoDiv}>
           <p className={s.typeTitle}>Legacy (P2PKH)</p>
           <p className={s.example}></p>

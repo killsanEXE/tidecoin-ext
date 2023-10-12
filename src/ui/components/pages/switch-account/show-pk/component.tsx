@@ -39,7 +39,7 @@ const ShowPk = () => {
               toast.success("Copied");
             }}
           >
-            <DocumentDuplicateIcon /> Copy
+            <DocumentDuplicateIcon className="w-8 h-8" /> Copy
           </button>
           <div className={s.secret}>{secret}</div>
         </div>

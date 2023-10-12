@@ -15,7 +15,7 @@ const Popup = (props: {
             props.handler(false);
           }}
         >
-          <XMarkIcon />
+          <XMarkIcon className="w-8 h-8" />
         </div>
       </div>
       <div className={s.popupContent}>

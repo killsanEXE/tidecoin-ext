@@ -18,12 +18,18 @@ const Receive = () => {
 
   return (
     <div className={s.receive}>
-      <QRCode value={currentAccount!.address ?? ""} />
+      <QRCode
+        className="p-2 rounded-xl bg-white"
+        value={currentAccount!.address ?? ""}
+      />
       <div className={s.accTitle}>{currentAccount!.name ?? "Account"}</div>
-      <button className={cn("btn", "primary", s.copyButton)} onClick={() => {
-        copyToClipboard(currentAccount!.address);
-        toast.success("Copied")
-      }}>
+      <button
+        className={cn("btn", "primary", s.copyButton)}
+        onClick={() => {
+          copyToClipboard(currentAccount!.address);
+          toast.success("Copied");
+        }}
+      >
         Copy address
       </button>
     </div>

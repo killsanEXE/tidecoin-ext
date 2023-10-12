@@ -13,7 +13,7 @@ const Nav = () => {
           navigate("/home/wallet");
         }}
       >
-        <WalletIcon />
+        <WalletIcon className="w-8 h-8" />
       </button>
       <button
         className={s.navBtn}
@@ -21,7 +21,7 @@ const Nav = () => {
           navigate("/home/settings");
         }}
       >
-        <Cog6ToothIcon />
+        <Cog6ToothIcon className="w-8 h-8" />
       </button>
     </div>
   );

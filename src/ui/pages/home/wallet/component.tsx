@@ -116,7 +116,8 @@ const Wallet = () => {
             });
           }}
         >
-          <DocumentDuplicateIcon /> {shortAddress(currentAccount?.address)}
+          <DocumentDuplicateIcon className="w-8 h-8" />{" "}
+          {shortAddress(currentAccount?.address)}
         </p>
 
         <div className={cn(s.receiveSendBtns, s.center)}>
@@ -126,7 +127,7 @@ const Wallet = () => {
             }}
             className={cn(s.btn, s.center)}
           >
-            <ArrowDownTrayIcon /> Receive
+            <ArrowDownTrayIcon className="w-8 h-8" /> Receive
           </button>
           <button
             onClick={() => {
@@ -134,7 +135,7 @@ const Wallet = () => {
             }}
             className={cn(s.btn, s.center)}
           >
-            <ArrowUpTrayIcon /> Send
+            <ArrowUpTrayIcon className="w-8 h-8" /> Send
           </button>
         </div>
       </div>
@@ -155,7 +156,11 @@ const Wallet = () => {
                 <p className={s.address}>{shortAddress(t.address)}</p>
               </div>
               <div className={cn(s.icon, t.mintIndex ? s.send : s.receive)}>
-                {t.mintIndex ? <ArrowSmallUpIcon /> : <ArrowSmallDownIcon />}
+                {t.mintIndex ? (
+                  <ArrowSmallUpIcon className="w-8 h-8" />
+                ) : (
+                  <ArrowSmallDownIcon className="w-8 h-8" />
+                )}
               </div>
             </div>
           ))}

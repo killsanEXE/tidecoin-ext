@@ -72,7 +72,7 @@ export default function PagesLayout() {
                 navigate(-1);
               }}
             >
-              <ChevronLeftIcon /> Back
+              <ChevronLeftIcon className="w-8 h-8" /> Back
             </p>
           )}
           <p className={s.controlElem}>
@@ -95,7 +95,7 @@ export default function PagesLayout() {
                 ]
               }
             >
-              <PlusCircleIcon />
+              <PlusCircleIcon className="w-8 h-8" />
             </p>
           )}
         </div>
@@ -107,7 +107,7 @@ export default function PagesLayout() {
               navigate(-1);
             }}
           >
-            <ChevronLeftIcon /> Back
+            <ChevronLeftIcon className="w-8 h-8" /> Back
           </p>
           <p className={s.controlElem}>
             {currentRoute.pathname.includes("/show") ? "Private" : ""}

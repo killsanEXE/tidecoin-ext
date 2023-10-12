@@ -35,7 +35,9 @@ const SwitchWallet = () => {
                   navigate("/home/wallet");
                 }}
               >
-                {wallet.id === currentWallet?.id ? <CheckIcon /> : undefined}
+                {wallet.id === currentWallet?.id ? (
+                  <CheckIcon className="w-8 h-8" />
+                ) : undefined}
                 {wallet.name}
               </div>
               <div className={s.walletControl}>
@@ -45,7 +47,7 @@ const SwitchWallet = () => {
                     setSelected(i);
                   }}
                 >
-                  <Bars3Icon />
+                  <Bars3Icon className="w-8 h-8" />
                 </button>
               </div>
             </div>
@@ -60,7 +62,7 @@ const SwitchWallet = () => {
                   navigate(`/pages/rename-wallet/${wallet.id}`);
                 }}
               >
-                <TagIcon />
+                <TagIcon className="w-8 h-8" />
               </div>
               <div className={s.divider}></div>
               <div
@@ -68,7 +70,7 @@ const SwitchWallet = () => {
                   navigate(`/pages/show-mnemonic/${i}`);
                 }}
               >
-                <KeyIcon />
+                <KeyIcon className="w-8 h-8" />
               </div>
               <div className={s.divider}></div>
               <div
@@ -76,7 +78,7 @@ const SwitchWallet = () => {
                   setSelected(undefined);
                 }}
               >
-                <XMarkIcon />
+                <XMarkIcon className="w-8 h-8" />
               </div>
             </div>
           </div>

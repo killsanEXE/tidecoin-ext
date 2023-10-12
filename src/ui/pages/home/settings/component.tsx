@@ -19,7 +19,7 @@ const Settings = () => {
         }}
       >
         <div className={s.cardText}>Address Type</div>
-        <LinkIcon />
+        <LinkIcon className="w-8 h-8" />
       </div>
       <div
         className={s.card}
@@ -28,11 +28,11 @@ const Settings = () => {
         }}
       >
         <div className={s.cardText}>Change Password</div>
-        <LinkIcon />
+        <LinkIcon className="w-8 h-8" />
       </div>
       <div className={s.card} onClick={logout}>
         <div className={s.cardText}>Logout</div>
-        <LinkIcon />
+        <LinkIcon className="w-8 h-8" />
       </div>
     </div>
   );
