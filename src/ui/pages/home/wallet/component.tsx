@@ -16,6 +16,8 @@ import ReactLoading from "react-loading";
 import { ITransaction } from "@/shared/interfaces/apiController";
 import { useUpdateCurrentAccountTransactions } from "@/ui/hooks/transactions";
 import { useDebounceCall } from "@/ui/hooks/debounce";
+import ArrowDown from "@/ui/components/icons/ArrowDown";
+import ArrowUp from "@/ui/components/icons/ArrowUp";
 
 const Wallet = () => {
   const currentAccount = useGetCurrentAccount();
@@ -139,8 +141,11 @@ const Wallet = () => {
                 navigate(`/pages/transaction-info/${t.mintTxid}`);
               }}
             >
-              <p className={s.value}>{t.value / 10 ** 8}</p>
-              <p className={s.address}>{shortAddress(t.address)}</p>
+              <div className={s.transactionInfo}>
+                <p className={s.value}>{t.value / 10 ** 8}</p>
+                <p className={s.address}>{shortAddress(t.address)}</p>
+              </div>
+              {t.mintIndex ? <ArrowUp /> : <ArrowDown />}
             </div>
           ))}
         </div>
