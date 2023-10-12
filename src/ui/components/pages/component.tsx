@@ -1,9 +1,8 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import s from "./styles.module.scss";
 import cn from "classnames";
-import ArrowLeft from "@/ui/components/icons/ArrowLeft";
-import PlusInCircleIcon from "@/ui/components/icons/PlusInCirlceIcon";
 import { useWalletState } from "@/ui/states/walletState";
+import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 
 export default function PagesLayout() {
   const routeTitles = [
@@ -64,7 +63,7 @@ export default function PagesLayout() {
       {routeTitles.find((f) => f.route === currentRoute.pathname) ? (
         <div className={s.controlDiv}>
           {wallets.length <= 0 &&
-            currentRoute.pathname === "/pages/create-new-wallet" ? (
+          currentRoute.pathname === "/pages/create-new-wallet" ? (
             <p></p>
           ) : (
             <p
@@ -79,7 +78,7 @@ export default function PagesLayout() {
           <p className={s.controlElem}>
             {
               routeTitles.find((f) => f.route === currentRoute.pathname)![
-              "title"
+                "title"
               ]
             }
           </p>
@@ -92,7 +91,7 @@ export default function PagesLayout() {
               className={cn(s.controlElem, s.addNew)}
               onClick={
                 routeTitles.find((f) => f.route === currentRoute.pathname)![
-                "action"
+                  "action"
                 ]
               }
             >
