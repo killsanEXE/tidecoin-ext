@@ -138,34 +138,26 @@ class StorageService {
     if (kind === "Wallet") {
       const wallets = this.walletState.wallets;
       if (wallets.length <= 0) return "Wallet 1"
-      const ids: number[] = wallets.map(f => {
-        const walletName = f.name.trim()
-        if (walletName.includes("Wallet")
-          && walletName.split(" ").length === 2) {
-          let walletId = walletName.split(" ")[1];
-          if (!Number.isNaN(Number(walletId))) {
-            return Number.parseInt(walletId);
-          } else return 0
-        } else return 0
-      });
-      const id = Math.max(...ids) + 1;
-      return `Wallet ${id}`;
+      return `Wallet ${this.getUniqueId(wallets.map(f => f.name ?? ""), "Wallet")}`;
     } else {
       const accounts = this.currentWallet?.accounts;
       if (!accounts) return "Account 1";
-      const ids: number[] = accounts.map(f => {
-        const accountName = f.name!.trim()
-        if (accountName.includes("Account")
-          && accountName.split(" ").length === 2) {
-          let accountid = accountName.split(" ")[1];
-          if (!Number.isNaN(Number(accountid))) {
-            return Number.parseInt(accountid);
-          } else return 0
-        } else return 0
-      });
-      const id = Math.max(...ids) + 1;
-      return `Account ${id}`;
+      return `Account ${this.getUniqueId(accounts.map(f => f.name ?? ""), "Account")}`;
     }
+  }
+
+  private getUniqueId(names: string[], type: "Account" | "Wallet") {
+    const ids: number[] = names.map(f => {
+      const name = f.trim()
+      if (name.includes(type)
+        && name.split(" ").length === 2) {
+        const accountid = name.split(" ")[1];
+        if (!Number.isNaN(Number(accountid))) {
+          return Number.parseInt(accountid);
+        } return 0
+      } return 0
+    });
+    return Math.max(...ids) + 1;
   }
 }
 

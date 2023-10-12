@@ -194,6 +194,18 @@ class KeyringService {
     const wallet = HDPrivateKey.deserialize(wallets[walletKey].data);
     return Mnemonic.fromEntropy((wallet as any).seed).getPhrase();
   }
+
+  async deleteWallet(id: number) {
+    this.keyrings.splice(id, 1);
+    this.keyrings.map((f, i) => ({ ...f, id: i }))
+    const wallets = storageService.walletState.wallets;
+    wallets.splice(id, 1);
+    wallets.map((f, i) => ({ ...f, id: i }))
+    storageService.updateWalletState({ wallets });
+    if (storageService.currentWallet?.id === id) storageService.updateWalletState({ selectedWallet: 0 });
+    await storageService.saveWallets(storageService.appState.password!, wallets);
+    return wallets;
+  }
 }
 
 export default new KeyringService();

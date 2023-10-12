@@ -167,3 +167,17 @@ export const useUpdateCurrentAccountTransactions = () => {
     return await apiController.getTransactions(currentAccount.address);
   }, [currentAccount, apiController, keyringController]);
 };
+
+export const useDeleteWallet = () => {
+
+  const { walletController } = useControllersState((v) => ({ walletController: v.walletController }))
+  const { updateWalletState } = useWalletState((v) => ({ updateWalletState: v.updateWalletState }))
+  const currentWallet = useGetCurrentWallet();
+
+  return useCallback(async (id: number) => {
+    await updateWalletState({
+      wallets: await walletController.deleteWallet(id),
+      selectedWallet: currentWallet?.id === id ? 0 : currentWallet?.id,
+    })
+  }, [])
+}

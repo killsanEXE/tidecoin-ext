@@ -96,6 +96,10 @@ class WalletController implements IWalletController {
     const randomSeed = crypto.getRandomValues(new Uint8Array(16));
     return new Mnemonic().getPhrase(randomSeed);
   }
+
+  async deleteWallet(id: number): Promise<IWallet[]> {
+    return await keyringService.deleteWallet(id);
+  }
 }
 
 export default new WalletController();

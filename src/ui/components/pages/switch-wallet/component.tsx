@@ -8,9 +8,10 @@ import {
   KeyIcon,
   XMarkIcon,
   Bars3Icon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
 
-import { useSwitchWallet } from "@/ui/hooks/wallet";
+import { useDeleteWallet, useSwitchWallet } from "@/ui/hooks/wallet";
 import { useNavigate } from "react-router-dom";
 
 const SwitchWallet = () => {
@@ -21,6 +22,7 @@ const SwitchWallet = () => {
   const switchWallet = useSwitchWallet();
   const [selected, setSelected] = useState<number>();
   const navigate = useNavigate();
+  const deleteWallet = useDeleteWallet();
 
   return (
     <div className={s.switchWalletDiv}>
@@ -71,6 +73,14 @@ const SwitchWallet = () => {
                 }}
               >
                 <KeyIcon className="w-8 h-8" />
+              </div>
+              <div className={s.divider}></div>
+              <div
+                onClick={() => {
+                  deleteWallet(wallet.id)
+                }}
+              >
+                <TrashIcon className="w-8 h-8" />
               </div>
               <div className={s.divider}></div>
               <div
