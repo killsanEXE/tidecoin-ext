@@ -58,7 +58,8 @@ const NewMnemonic = () => {
                 <div className={s.phrase}>
                   {mnemonicPhrase.split(" ").map((word, index) => (
                     <div key={index} className={s.word}>
-                      {index + 1}. <p className={s.wordWord}>{word}</p>
+                      <span className={s.wordIndex}>{index + 1}.</span>
+                      <p className={s.wordWord}>{word}</p>
                     </div>
                   ))}
                 </div>
@@ -75,8 +76,9 @@ const NewMnemonic = () => {
                   Clipboard
                 </div>
                 <div className={s.savePhrase}>
-                  <p>I saved this phrase</p>
+                  <label htmlFor="save-phrases">I saved this phrase</label>
                   <input
+                    id="save-phrases"
                     type="checkbox"
                     onChange={() => {
                       setSavedPhrase(!savedPhrase);

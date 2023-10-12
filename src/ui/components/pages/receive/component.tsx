@@ -18,15 +18,21 @@ const Receive = () => {
 
   return (
     <div className={s.receive}>
-      <QRCode
-        className="p-2 rounded-xl bg-white"
-        value={currentAccount!.address ?? ""}
-      />
-      <div className={s.accTitle}>{currentAccount!.name ?? "Account"}</div>
+      <div className="mb-7">
+        <div className="mb-4">
+          <QRCode
+            bgColor="#0d1b2a"
+            fgColor="white"
+            value={currentAccount?.address ?? ""}
+          />
+        </div>
+        <p className="text-center mb-2 opacity-80">{currentAccount?.address}</p>
+        <div className={s.accTitle}>{currentAccount?.name ?? "Account"}</div>
+      </div>
       <button
         className={cn("btn", "primary", s.copyButton)}
         onClick={() => {
-          copyToClipboard(currentAccount!.address);
+          copyToClipboard(currentAccount?.address);
           toast.success("Copied");
         }}
       >

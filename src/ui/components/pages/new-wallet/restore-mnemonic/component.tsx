@@ -39,14 +39,16 @@ const RestoreMnemonic = () => {
               <div className={s.phrase}>
                 {mnemonicPhrase.map((value, index) => (
                   <div key={index} className={s.word}>
-                    <p>{index + 1}.</p>
+                    <p className="w-3">{index + 1}.</p>
                     <SelectWithHint
                       selected={value}
                       setSelected={(v) => {
-                        if (!v) { setMnemonicPhrase(mnemonicPhrase.with(index, v)); return; }
+                        if (!v) {
+                          setMnemonicPhrase(mnemonicPhrase.with(index, v));
+                          return;
+                        }
                         const phrase = v.split(" ");
-                        if (phrase.length === 12)
-                          setMnemonicPhrase(phrase)
+                        if (phrase.length === 12) setMnemonicPhrase(phrase);
                         else setMnemonicPhrase(mnemonicPhrase.with(index, v));
                       }}
                     />
@@ -80,7 +82,7 @@ const RestoreMnemonic = () => {
             <button
               onClick={async () => {
                 try {
-                  console.log(mnemonicPhrase.join(" "))
+                  console.log(mnemonicPhrase.join(" "));
                   await createNewWallet(
                     mnemonicPhrase.join(" "),
                     "root",

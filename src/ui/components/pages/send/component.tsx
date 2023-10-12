@@ -30,7 +30,7 @@ const Send = () => {
         <div className="form-field">
           <span className="input-span">Address</span>
           <input
-            placeholder={currentAccount!.address}
+            placeholder={`${currentAccount!.address?.slice(0, 15)}...`}
             type="text"
             className="input"
             onChange={(e) => {
