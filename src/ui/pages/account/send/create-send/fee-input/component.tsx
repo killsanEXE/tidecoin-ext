@@ -16,6 +16,7 @@ const FeeInput = (props: {
         <input
           className="input"
           type="number"
+          step="any"
           onChange={(e) => { props.updateAmount(Number.parseFloat(e.target.value)) }}
           placeholder="0.01" />
       </div>

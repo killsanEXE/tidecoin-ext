@@ -16,14 +16,23 @@ export interface ISend {
 const Send = () => {
 
   const [transaction, setTransaction] = useState<undefined | ISend>(undefined);
+  const [txId, setTxId] = useState<string | undefined>(undefined);
 
   const createTransaction = (transaction: ISend) => { setTransaction(transaction) }
 
   return (
     <div className={s.send}>
-      {!transaction ?
-        <CreateSend createTransaction={createTransaction} /> :
-        <ConfirmSend transaction={transaction} />}
+      {!txId ?
+        <div className="w-full h-full">
+          {!transaction ?
+            <CreateSend createTransaction={createTransaction} /> :
+            <ConfirmSend transaction={transaction} updateTxId={(txId) => setTxId(txId)} />}
+        </div>
+        :
+        <div className={cn(s.finalle)}>
+
+        </div>
+      }
     </div>
   );
 };

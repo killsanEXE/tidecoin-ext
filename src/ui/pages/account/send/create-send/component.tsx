@@ -19,18 +19,29 @@ const CreateSend = (props: {
   const [includeFeeInAmount, setIncludeFeeInAmount] = useState(false);
 
   const send = async () => {
-    if (amount) {
-      toast.error("AMOUNT")
+    if (amount < 0.01) {
+      toast.error("Minimum amount is 0.01 TDC");
+    } else if (addres.trim().length <= 0) {
+      toast.error("Insert the address of receiver")
+    } else if (amount >= (currentAccount?.balance ?? 0) ||
+      (amount === currentAccount?.balance && !includeFeeInAmount)) {
+      toast.error("There's not enough money in your account");
+    } else if (feeAmount <= 1 / 10 ** 8) {
+      toast.error("Increase the fee");
     } else {
-      const hex = await sendTdc(addres, amount * 10 ** 8, feeAmount, includeFeeInAmount);
-      props.createTransaction({
-        toAddress: addres,
-        amount,
-        feeAmount,
-        includeFeeInAmount,
-        fromAddress: currentAccount?.address ?? "",
-        hex
-      })
+      try {
+        const hex = await sendTdc(addres, amount * 10 ** 8, feeAmount, includeFeeInAmount);
+        props.createTransaction({
+          toAddress: addres,
+          amount,
+          feeAmount,
+          includeFeeInAmount,
+          fromAddress: currentAccount?.address ?? "",
+          hex
+        });
+      } catch (e) {
+        toast.error("Error has occurred");
+      }
     }
 
   };
