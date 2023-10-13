@@ -1,7 +1,6 @@
 import { useGetCurrentWallet, useWalletState } from "@/ui/states/walletState";
 import { useState } from "react";
 import s from "./styles.module.scss";
-import cn from "classnames";
 import {
   CheckIcon,
   TagIcon,
@@ -13,6 +12,7 @@ import {
 
 import { useDeleteWallet, useSwitchWallet } from "@/ui/hooks/wallet";
 import { useNavigate } from "react-router-dom";
+import Menu from "@/ui/components/menu";
 
 const SwitchWallet = () => {
   const currentWallet = useGetCurrentWallet();
@@ -38,7 +38,7 @@ const SwitchWallet = () => {
                 }}
               >
                 {wallet.id === currentWallet?.id ? (
-                  <CheckIcon className="w-8 h-8" />
+                  <CheckIcon className="w-8 h-8 cursor-pointer" />
                 ) : undefined}
                 {wallet.name}
               </div>
@@ -49,48 +49,39 @@ const SwitchWallet = () => {
                     setSelected(i);
                   }}
                 >
-                  <Bars3Icon className="w-8 h-8" />
+                  <Bars3Icon className="w-8 h-8 cursor-pointer" />
                 </button>
               </div>
             </div>
-            <div
-              className={cn(s.walletSettings, s.hidden, {
-                [s.active]: selected === i,
-              })}
-            >
-              <div
-                className={cn(s.walletSetting, s.rename)}
-                onClick={() => {
-                  navigate(`/pages/rename-wallet/${wallet.id}`);
-                }}
-              >
-                <TagIcon className="w-8 h-8" />
-              </div>
-              <div className={s.divider}></div>
-              <div
-                onClick={() => {
-                  navigate(`/pages/show-mnemonic/${i}`);
-                }}
-              >
-                <KeyIcon className="w-8 h-8" />
-              </div>
-              <div className={s.divider}></div>
-              <div
-                onClick={() => {
-                  deleteWallet(wallet.id)
-                }}
-              >
-                <TrashIcon className="w-8 h-8" />
-              </div>
-              <div className={s.divider}></div>
-              <div
-                onClick={() => {
-                  setSelected(undefined);
-                }}
-              >
-                <XMarkIcon className="w-8 h-8" />
-              </div>
-            </div>
+            <Menu
+              active={selected === i}
+              items={[
+                {
+                  action: () => {
+                    navigate(`/pages/rename-wallet/${wallet.id}`);
+                  },
+                  icon: <TagIcon className="w-8 h-8" />,
+                },
+                {
+                  action: () => {
+                    navigate(`/pages/show-mnemonic/${i}`);
+                  },
+                  icon: <KeyIcon className="w-8 h-8 cursor-pointer" />,
+                },
+                {
+                  action: () => {
+                    deleteWallet(wallet.id);
+                  },
+                  icon: <TrashIcon className="w-8 h-8 cursor-pointer" />,
+                },
+                {
+                  action: () => {
+                    setSelected(undefined);
+                  },
+                  icon: <XMarkIcon className="w-8 h-8 cursor-pointer" />,
+                },
+              ]}
+            />
           </div>
         ))}
       </div>

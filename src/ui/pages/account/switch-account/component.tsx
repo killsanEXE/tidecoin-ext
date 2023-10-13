@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   CheckIcon,
   Bars3Icon,
-  DocumentDuplicateIcon,
   TagIcon,
   KeyIcon,
   XMarkIcon,
@@ -16,7 +15,8 @@ import {
 } from "@/ui/states/walletState";
 import cn from "classnames";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import CopyBtn from "@/ui/components/copy-btn";
+import Menu from "@/ui/components/menu";
 
 const SwitchAccount = () => {
   const [selected, setSelected] = useState<number>();
@@ -51,7 +51,7 @@ const SwitchAccount = () => {
               >
                 <div className={s.name}>
                   {currentAccount!.address === acc.address ? (
-                    <CheckIcon className="w-8 h-8" />
+                    <CheckIcon className="w-8 h-8 cursor-pointer" />
                   ) : undefined}
                   {acc.name}
                 </div>
@@ -64,52 +64,41 @@ const SwitchAccount = () => {
                     setSelected(i);
                   }}
                 >
-                  <Bars3Icon className="w-8 h-8" />
+                  <Bars3Icon className="w-8 h-8 cursor-pointer" />
                 </button>
               </div>
             </div>
-            <div
-              className={cn(s.accSettings, s.hidden, {
-                [s.active]: selected === i,
-              })}
-            >
-              <div
-                className={cn(s.accSetting, s.copy)}
-                onClick={() => {
-                  navigator.clipboard.writeText(acc.address!);
-                  toast.success("Copied!");
-                }}
-              >
-                <DocumentDuplicateIcon className="w-8 h-8" />
-              </div>
-              <div className={s.divider}></div>
-              <div
-                className={cn(s.accSetting, s.rename)}
-                onClick={() => {
-                  navigate(`/pages/rename-account/${acc.id}`);
-                }}
-              >
-                <TagIcon className="w-8 h-8" />
-              </div>
-              <div className={s.divider}></div>
-              <div
-                className={s.accSetting}
-                onClick={() => {
-                  navigate(`/pages/show-pk/${acc.id}`);
-                }}
-              >
-                <KeyIcon className="w-8 h-8" />
-              </div>
-              <div className={s.divider}></div>
-              <div
-                className={s.accSetting}
-                onClick={() => {
-                  setSelected(undefined);
-                }}
-              >
-                <XMarkIcon className="w-8 h-8" />
-              </div>
-            </div>
+            <Menu
+              active={selected === i}
+              items={[
+                {
+                  custom: (
+                    <CopyBtn
+                      value={acc.address}
+                      className={cn(s.accSetting, s.copy)}
+                    />
+                  ),
+                },
+                {
+                  action: () => {
+                    navigate(`/pages/rename-account/${acc.id}`);
+                  },
+                  icon: <TagIcon className="w-8 h-8" />,
+                },
+                {
+                  action: () => {
+                    navigate(`/pages/show-pk/${acc.id}`);
+                  },
+                  icon: <KeyIcon className="w-8 h-8 cursor-pointer" />,
+                },
+                {
+                  action: () => {
+                    setSelected(undefined);
+                  },
+                  icon: <XMarkIcon className="w-8 h-8 cursor-pointer" />,
+                },
+              ]}
+            />
           </div>
         ))}
       </div>

@@ -1,0 +1,11 @@
+.menu {
+  @apply flex justify-center gap-[1.6rem] items-center absolute z-10 top-0 left-full bottom-0 transition-all duration-300 w-full bg-hovered;
+}
+
+.divider {
+  @apply bg-text h-[80%] w-[1px];
+}
+
+.active {
+  @apply left-0;
+}
