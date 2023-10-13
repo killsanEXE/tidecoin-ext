@@ -63,7 +63,7 @@ const CreateSend = () => {
   };
 
   useEffect(() => {
-    if (location.state && location.state.toAddress) {
+    if (location.state !== null && (location.state.toAddress !== null || location.state.toAddress !== undefined)) {
       setAddres(location.state.toAddress);
       setAmount(location.state.amount);
       setFeeAmount(location.state.feeAmount);
@@ -77,23 +77,25 @@ const CreateSend = () => {
         <div className="form-field">
           <span className="input-span">Address</span>
           <input
-            placeholder={`${currentAccount!.address?.slice(0, 15)}...`}
+            placeholder="Address of receiver"
             type="text"
             className="input"
             onChange={(e) => {
               setAddres(e.target.value);
             }}
+            value={addres}
           />
         </div>
         <div className="form-field">
           <span className="input-span">Amount</span>
           <input
-            placeholder="0"
+            placeholder="Amount you want to send"
             type="text"
             className="input"
             onChange={(e) => {
               setAmount(Number.parseFloat(e.target.value));
             }}
+            value={amount}
           />
           <span className="input-info">
             MAX AMOUNT: {currentAccount!.balance}
@@ -103,7 +105,8 @@ const CreateSend = () => {
 
       <FeeInput updateAmount={(feeAmount) => { setFeeAmount(feeAmount) }}
         updateIncludeFeeInAmount={(include) => setIncludeFeeInAmount(include)}
-        includeFeeInAmount
+        includeFeeInAmount={includeFeeInAmount}
+        feeAmount={feeAmount}
       />
 
       <button className={cn(s.sendBtn, "btn primary")} onClick={send}>

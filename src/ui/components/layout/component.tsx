@@ -60,24 +60,24 @@ export default function PagesLayout() {
       title: "Send",
     },
     {
-      route: "transaction-info/@",
+      route: "/pages/transaction-info/@",
       title: "Transaction info",
     },
     {
-      route: "rename-account/@",
+      route: "/pages/rename-account/@",
       title: "Renaming account",
     },
     {
-      route: "rename-wallet/@",
+      route: "/pages/rename-wallet/@",
       title: "Renaming wallet",
     },
     {
       backAction: () => { navigate("/home/wallet") },
-      route: "finalle-send/@",
+      route: "/pages/finalle-send/@",
       title: "Send",
     },
     {
-      route: "create-send",
+      route: "/pages/create-send",
       title: "Send",
     },
     {
@@ -86,7 +86,7 @@ export default function PagesLayout() {
           state: currentRoute.state
         })
       },
-      route: "confirm-send",
+      route: "/pages/confirm-send",
       title: "Send",
     },
   ];

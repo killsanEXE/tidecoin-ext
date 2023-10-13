@@ -6,6 +6,7 @@ const FeeInput = (props: {
   updateAmount: (amount: number) => void;
   updateIncludeFeeInAmount: (include: boolean) => void;
   includeFeeInAmount: boolean;
+  feeAmount: number;
 }) => {
 
   const [includeFeeInAmount, setIncludeFeeInAmount] = useState(false);
@@ -19,10 +20,11 @@ const FeeInput = (props: {
           type="number"
           step="any"
           onChange={(e) => { props.updateAmount(Number.parseFloat(e.target.value)) }}
-          placeholder="0.01" />
+          placeholder="sat/Vb"
+          value={props.feeAmount} />
       </div>
       <div className={s.includeFeeInAmountDiv}>
-        <input type="checkbox" onChange={() => {
+        <input type="checkbox" checked={props.includeFeeInAmount} onChange={() => {
           props.updateIncludeFeeInAmount(!includeFeeInAmount);
           setIncludeFeeInAmount(!includeFeeInAmount);
         }} />
