@@ -1,4 +1,4 @@
-import { FC, useId } from "react";
+import { FC, Fragment, useId } from "react";
 import s from "./styles.module.scss";
 import cn from "classnames";
 
@@ -21,23 +21,19 @@ const Menu: FC<Props> = ({ items, active }) => {
       {items.map((i, index) => {
         if (!i.custom) {
           return (
-            <>
-              <div
-                key={`${prefix}${index}`}
-                onClick={i.action}
-                className="cursor-pointer"
-              >
+            <Fragment key={`${index}${prefix}`}>
+              <div onClick={i.action} className="cursor-pointer">
                 {i.icon}
               </div>
               {index !== items.length - 1 && <div className={s.divider} />}
-            </>
+            </Fragment>
           );
         } else if (i.custom) {
           return (
-            <>
+            <Fragment key={`${index}${prefix}`}>
               {i.custom}
               {index !== items.length - 1 && <div className={s.divider} />}
-            </>
+            </Fragment>
           );
         }
       })}

@@ -29,13 +29,7 @@ const NewAccount = () => {
   const createNewAcc = async ({ name }: FormType) => {
     if (name.length <= 10 && !nameAlreadyExists(name)) {
       await createNewAccount(name);
-      toast.success("Created new account", {
-        style: { borderRadius: 0 },
-        iconTheme: {
-          primary: "#ffbc42",
-          secondary: "#766c7f",
-        },
-      });
+      toast.success("Created new account");
       navigate("/home/wallet");
     } else {
       if (nameAlreadyExists(name))
