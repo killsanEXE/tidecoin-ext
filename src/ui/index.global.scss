@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Aldrich&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
 * {
   @apply m-0 p-0 outline-none;
@@ -11,7 +11,7 @@
 body {
   @apply mx-auto w-[350px] h-[600px] bg-bg text-text;
 
-  font-family: "Aldrich", sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .form {
@@ -31,7 +31,7 @@ body {
 }
 
 .btn {
-  @apply border-0 px-2 pb-1 pt-1.5 text-[1.1rem] mx-auto w-[90%] rounded-[.3rem];
+  @apply border-0 px-2 pb-1 pt-1.5 text-[1.1rem] mx-auto w-[90%] rounded-[.3rem] font-normal;
 
   &:hover {
     @apply cursor-pointer shadow-sm;
@@ -39,7 +39,7 @@ body {
 }
 
 .primary {
-  @apply bg-text text-black leading-tight;
+  @apply bg-primary text-black leading-tight;
 }
 
 .secondary {
@@ -67,8 +67,8 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: .2rem;
-  height: .2rem;
+  width: 0.2rem;
+  height: 0.2rem;
 }
 
 ::-webkit-scrollbar-track {

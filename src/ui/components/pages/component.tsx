@@ -72,10 +72,10 @@ export default function PagesLayout() {
                 navigate(-1);
               }}
             >
-              <ChevronLeftIcon className="w-8 h-8" /> Back
+              <ChevronLeftIcon className="w-8 h-8" />
             </p>
           )}
-          <p className={s.controlElem}>
+          <p className={cn(s.controlElem, s.title)}>
             {
               routeTitles.find((f) => f.route === currentRoute.pathname)![
                 "title"
@@ -107,7 +107,7 @@ export default function PagesLayout() {
               navigate(-1);
             }}
           >
-            <ChevronLeftIcon className="w-8 h-8" /> Back
+            <ChevronLeftIcon className="w-8 h-8" />
           </p>
           <p className={s.controlElem}>
             {currentRoute.pathname.includes("/show") ? "Private" : ""}

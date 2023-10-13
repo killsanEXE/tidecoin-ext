@@ -9,14 +9,13 @@ import { useControllersState } from "@/ui/states/controllerState";
 import ReactLoading from "react-loading";
 
 const RenameAccount = () => {
-
   const { accId } = useParams();
   const [account, setAccount] = useState<IAccount | undefined>(undefined);
   const currentWallet = useGetCurrentWallet();
   const updateCurrentWallet = useUpdateCurrentWallet();
   const { walletController } = useControllersState((v) => ({
-    walletController: v.walletController
-  }))
+    walletController: v.walletController,
+  }));
   const navigate = useNavigate();
 
   const renameAccount = async (renamedName: string) => {
@@ -26,18 +25,25 @@ const RenameAccount = () => {
     await updateCurrentWallet({ ...wallet });
     await walletController.saveWallets();
     navigate(-1);
-  }
+  };
 
   useEffect(() => {
     if (!account) {
-      setAccount(currentWallet?.accounts.find(f => f.id === Number(accId)))
+      setAccount(currentWallet?.accounts.find((f) => f.id === Number(accId)));
     }
-  }, [setAccount, currentWallet, accId])
+  }, [setAccount, currentWallet, accId]);
 
   return (
     <div className={s.renameAccount}>
-      {account ? <Rename handler={renameAccount} oldName={account.name} otherNames={currentWallet?.accounts.map(f => f.name!)} />
-        : <ReactLoading type="spin" color="#fff" />}
+      {account ? (
+        <Rename
+          handler={renameAccount}
+          oldName={account.name}
+          otherNames={currentWallet?.accounts.map((f) => f.name!)}
+        />
+      ) : (
+        <ReactLoading type="spin" color="#ffbc42" />
+      )}
     </div>
   );
 };

@@ -50,7 +50,7 @@ const NewMnemonic = () => {
       {step === 1 ? (
         <div className={cn(s.stepOneWrapper, s.step)}>
           {mnemonicPhrase === undefined ? (
-            <ReactLoading type="spin" color="#fff" />
+            <ReactLoading type="spin" color="#ffbc42" />
           ) : (
             <div className={cn(s.stepOne, s.step)}>
               <div>

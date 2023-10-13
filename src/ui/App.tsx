@@ -78,7 +78,7 @@ export default function App() {
       {isReady ? (
         <RouterProvider router={router} />
       ) : (
-        <ReactLoading type="spin" color="#fff" />
+        <ReactLoading type="spin" color="#ffbc42" />
       )}
       <Toaster
         position="bottom-center"

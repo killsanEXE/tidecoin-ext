@@ -19,3 +19,7 @@
 .back {
   @apply cursor-pointer select-none;
 }
+
+.title {
+  @apply absolute left-1/2 -translate-x-1/2 font-medium text-base;
+}

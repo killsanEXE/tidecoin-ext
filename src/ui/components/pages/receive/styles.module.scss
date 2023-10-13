@@ -1,11 +1,11 @@
 .receive {
-    @apply h-full pt-[2rem] gap-[1.5rem] flex flex-col;
+  @apply h-full pt-[2rem] gap-[1.5rem] flex flex-col;
 }
 
 .accTitle {
-    @apply w-full flex justify-center text-lg;
+  @apply text-lg mx-auto;
 }
 
 .copyButton {
-    @apply flex items-center justify-center w-full;
+  @apply flex items-center justify-center mx-auto py-1.5 px-3 rounded-xl;
 }

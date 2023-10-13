@@ -2,8 +2,6 @@ import { useNavigate } from "react-router-dom";
 
 import {
   DocumentDuplicateIcon,
-  ArrowDownTrayIcon,
-  ArrowUpTrayIcon,
   ArrowSmallUpIcon,
   ArrowSmallDownIcon,
 } from "@heroicons/react/24/outline";
@@ -93,7 +91,7 @@ const Wallet = () => {
           {currentAccount?.balance === undefined ? (
             <ReactLoading
               type="spin"
-              color="#fff"
+              color="#ffbc42"
               width={"2rem"}
               className="react-loading"
             />
@@ -125,17 +123,17 @@ const Wallet = () => {
             onClick={() => {
               navigate("/pages/receive");
             }}
-            className={cn(s.btn, s.center)}
+            className={cn(s.btn, s.center, "w-36")}
           >
-            <ArrowDownTrayIcon className="w-8 h-8" /> Receive
+            Receive
           </button>
           <button
             onClick={() => {
               navigate("/pages/send");
             }}
-            className={cn(s.btn, s.center)}
+            className={cn(s.btn, s.center, "w-36")}
           >
-            <ArrowUpTrayIcon className="w-8 h-8" /> Send
+            Send
           </button>
         </div>
       </div>
