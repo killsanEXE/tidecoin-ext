@@ -10,7 +10,7 @@ module.exports = {
         secondary: "#a8d0db",
         primary: "#ffbc42",
         panel: "#669bbc",
-        hovered: "#323651",
+        hovered: "#a8d0db",
         "hovered-btn": "#fd9343",
       },
     },
