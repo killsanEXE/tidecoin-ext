@@ -9,7 +9,6 @@ import { useCreateNewWallet } from "@/ui/hooks/wallet";
 import cn from "classnames";
 import SwitchAddressType from "@/ui/components/switch-address-type";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
-import CopyBtn from "@/ui/components/copy-btn";
 
 const NewMnemonic = () => {
   const [step, setStep] = useState(1);
@@ -63,7 +62,6 @@ const NewMnemonic = () => {
                 </div>
               </div>
               <div className={s.savePhraseWrapper}>
-                <CopyBtn label="Copy to Clipboard" value={mnemonicPhrase} />
                 <div className={s.savePhrase}>
                   <label htmlFor="save-phrases">I saved this phrase</label>
                   <input
@@ -78,12 +76,14 @@ const NewMnemonic = () => {
               <div className={s.continueWrapper}>
                 <button
                   className={cn(s.continue, "btn", "primary")}
-                  onClick={() => {
-                    if (!savedPhrase) toast("Save the phrase first");
-                    else setStep(2);
+                  onClick={async () => {
+                    if (!savedPhrase) {
+                      await navigator.clipboard.writeText(mnemonicPhrase);
+                      toast.success("Copied");
+                    } else setStep(2);
                   }}
                 >
-                  Continue
+                  {savedPhrase ? "Continue" : "Copy to Clipboard"}
                 </button>
               </div>
             </div>

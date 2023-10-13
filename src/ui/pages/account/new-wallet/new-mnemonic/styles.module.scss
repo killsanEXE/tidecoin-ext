@@ -3,7 +3,7 @@
 }
 
 .phrase {
-  @apply grid grid-cols-3 text-[0.8rem];
+  @apply grid grid-cols-3 text-[0.8rem] gap-0.5;
 }
 
 .stepTitle {
@@ -12,10 +12,6 @@
 
 .word {
   @apply p-[0.7rem] gap-[.5rem];
-
-  &Index {
-    @apply w-2;
-  }
 }
 
 .active {

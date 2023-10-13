@@ -38,7 +38,7 @@ const RestoreMnemonic = () => {
               <div className={s.phrase}>
                 {mnemonicPhrase.map((value, index) => (
                   <div key={index} className={s.word}>
-                    <p className="w-3">{index + 1}.</p>
+                    <p className="w-6">{index + 1}.</p>
                     <SelectWithHint
                       selected={value}
                       setSelected={(v) => {
