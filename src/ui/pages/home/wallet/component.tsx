@@ -116,7 +116,7 @@ const Wallet = () => {
           </button>
           <button
             onClick={() => {
-              navigate("/pages/send");
+              navigate("/pages/create-send");
             }}
             className={cn(s.btn, s.center, "w-36")}
           >

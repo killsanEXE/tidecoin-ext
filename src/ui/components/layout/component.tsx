@@ -71,6 +71,24 @@ export default function PagesLayout() {
       route: "rename-wallet/@",
       title: "Renaming wallet",
     },
+    {
+      backAction: () => { navigate("/home/wallet") },
+      route: "finalle-send/@",
+      title: "Send",
+    },
+    {
+      route: "create-send",
+      title: "Send",
+    },
+    {
+      backAction: () => {
+        navigate("/pages/create-send", {
+          state: currentRoute.state
+        })
+      },
+      route: "confirm-send",
+      title: "Send",
+    },
   ];
 
   const currentRoute = useLocation();
@@ -97,7 +115,10 @@ export default function PagesLayout() {
             <div
               className={cn(s.controlElem, s.back)}
               onClick={() => {
-                navigate(-1);
+                if (currentRouteTitle?.backAction)
+                  currentRouteTitle.backAction();
+                else
+                  navigate(-1);
               }}
             >
               <ChevronLeftIcon className="w-8 h-8" />

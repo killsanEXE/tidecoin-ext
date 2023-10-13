@@ -5,6 +5,7 @@ import cn from "classnames";
 const FeeInput = (props: {
   updateAmount: (amount: number) => void;
   updateIncludeFeeInAmount: (include: boolean) => void;
+  includeFeeInAmount: boolean;
 }) => {
 
   const [includeFeeInAmount, setIncludeFeeInAmount] = useState(false);
@@ -22,8 +23,8 @@ const FeeInput = (props: {
       </div>
       <div className={s.includeFeeInAmountDiv}>
         <input type="checkbox" onChange={() => {
+          props.updateIncludeFeeInAmount(!includeFeeInAmount);
           setIncludeFeeInAmount(!includeFeeInAmount);
-          props.updateIncludeFeeInAmount(includeFeeInAmount);
         }} />
         <span className={s.includeFeeSpan}>Include fee in the amount</span>
       </div>

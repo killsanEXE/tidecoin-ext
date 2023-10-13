@@ -1,10 +1,9 @@
 import { useCreateTidecoinTxCallback } from "@/ui/hooks/transactions";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import s from "./styles.module.scss";
 import cn from "classnames";
 import FeeInput from "./fee-input";
-import { ISend } from "../component";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -17,34 +16,60 @@ const CreateSend = () => {
   const [feeAmount, setFeeAmount] = useState(0);
   const [includeFeeInAmount, setIncludeFeeInAmount] = useState(false);
   const navigate = useNavigate();
-  const transaction = useLocation();
+  const location = useLocation();
 
   const send = async () => {
-    if (amount < 0.01) {
-      toast.error("Minimum amount is 0.01 TDC");
-    } else if (addres.trim().length <= 0) {
-      toast.error("Insert the address of receiver")
-    } else if (amount >= (currentAccount?.balance ?? 0) ||
-      (amount === currentAccount?.balance && !includeFeeInAmount)) {
-      toast.error("There's not enough money in your account");
-    } else if (feeAmount <= 1 / 10 ** 8) {
-      toast.error("Increase the fee");
-    } else {
-      try {
-        const hex = await sendTdc(addres, amount * 10 ** 8, feeAmount, includeFeeInAmount);
-        createTransaction({
+    // if (amount < 0.01) {
+    //   toast.error("Minimum amount is 0.01 TDC");
+    // } else if (addres.trim().length <= 0) {
+    //   toast.error("Insert the address of receiver")
+    // } else if (amount > (currentAccount?.balance ?? 0) ||
+    //   (amount === currentAccount?.balance && !includeFeeInAmount)) {
+    //   toast.error("There's not enough money in your account");
+    // } else if (feeAmount <= 1 / 10 ** 8) {
+    //   toast.error("Increase the fee");
+    // } else {
+    //   try {
+    //     const hex = await sendTdc(addres, amount * 10 ** 8, feeAmount, includeFeeInAmount);
+    //     navigate("/pages/confirm-send", {
+    //       state: {
+    //         toAddress: addres,
+    //         amount,
+    //         feeAmount,
+    //         includeFeeInAmount,
+    //         fromAddress: currentAccount?.address ?? "",
+    //         hex
+    //       }
+    //     })
+    //   } catch (e) {
+    //     toast.error("Error has occurred");
+    //   }
+    // }
+    try {
+      const hex = await sendTdc(addres, amount * 10 ** 8, feeAmount, includeFeeInAmount);
+      navigate("/pages/confirm-send", {
+        state: {
           toAddress: addres,
           amount,
           feeAmount,
           includeFeeInAmount,
           fromAddress: currentAccount?.address ?? "",
           hex
-        });
-      } catch (e) {
-        toast.error("Error has occurred");
-      }
+        }
+      })
+    } catch (e) {
+      toast.error("Error has occurred");
     }
   };
+
+  useEffect(() => {
+    if (location.state && location.state.toAddress) {
+      setAddres(location.state.toAddress);
+      setAmount(location.state.amount);
+      setFeeAmount(location.state.feeAmount);
+      setIncludeFeeInAmount(location.state.includeFeeInAmount);
+    }
+  }, [location, setAddres, setAmount, setFeeAmount, setIncludeFeeInAmount])
 
   return (
     <form className={cn("form", s.send)} onSubmit={(e) => e.preventDefault()}>
@@ -76,7 +101,10 @@ const CreateSend = () => {
         </div>
       </div>
 
-      <FeeInput updateAmount={(feeAmount) => { setFeeAmount(feeAmount) }} updateIncludeFeeInAmount={(include) => setIncludeFeeInAmount(include)} />
+      <FeeInput updateAmount={(feeAmount) => { setFeeAmount(feeAmount) }}
+        updateIncludeFeeInAmount={(include) => setIncludeFeeInAmount(include)}
+        includeFeeInAmount
+      />
 
       <button className={cn(s.sendBtn, "btn primary")} onClick={send}>
         Continue
