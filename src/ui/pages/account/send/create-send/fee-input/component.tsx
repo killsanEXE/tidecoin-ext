@@ -3,7 +3,7 @@ import s from "./styles.module.scss";
 import cn from "classnames";
 
 const FeeInput = (props: {
-  updateAmount: (amount: number) => void;
+  updateAmount: (amount: string) => void;
   updateIncludeFeeInAmount: (include: boolean) => void;
   includeFeeInAmount: boolean;
   feeAmount: number;
@@ -19,7 +19,7 @@ const FeeInput = (props: {
           className="input"
           type="number"
           step="any"
-          onChange={(e) => { props.updateAmount(Number.parseFloat(e.target.value)) }}
+          onChange={(e) => { props.updateAmount(e.target.value ? Number(e.target.value) : '') }}
           placeholder="sat/Vb"
           value={props.feeAmount} />
       </div>

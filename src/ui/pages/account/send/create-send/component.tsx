@@ -1,28 +1,41 @@
 import { useCreateTidecoinTxCallback } from "@/ui/hooks/transactions";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import s from "./styles.module.scss";
 import cn from "classnames";
-import FeeInput from "./fee-input";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+
+interface FormType {
+  address: string;
+  amount: number;
+  feeAmount: number;
+  includeFeeInAmount: boolean
+}
 
 const CreateSend = () => {
 
-  const [addres, setAddres] = useState("");
-  const [amount, setAmount] = useState(0);
   const currentAccount = useGetCurrentAccount();
   const sendTdc = useCreateTidecoinTxCallback();
-  const [feeAmount, setFeeAmount] = useState(0);
-  const [includeFeeInAmount, setIncludeFeeInAmount] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
-  const send = async () => {
+  const { register, handleSubmit, setValue } = useForm<FormType>({
+    defaultValues: {
+      address: "",
+      amount: 0,
+      feeAmount: 0,
+      includeFeeInAmount: false
+    }
+  });
+
+
+  const send = async ({ address, amount, feeAmount, includeFeeInAmount }: FormType) => {
     // if (amount < 0.01) {
     //   toast.error("Minimum amount is 0.01 TDC");
-    // } else if (addres.trim().length <= 0) {
-    //   toast.error("Insert the address of receiver")
+    // } else if (address.trim().length <= 0) {
+    //   toast.error("Insert the addresss of receiver")
     // } else if (amount > (currentAccount?.balance ?? 0) ||
     //   (amount === currentAccount?.balance && !includeFeeInAmount)) {
     //   toast.error("There's not enough money in your account");
@@ -30,14 +43,14 @@ const CreateSend = () => {
     //   toast.error("Increase the fee");
     // } else {
     //   try {
-    //     const hex = await sendTdc(addres, amount * 10 ** 8, feeAmount, includeFeeInAmount);
+    //     const hex = await sendTdc(address, amount * 10 ** 8, feeAmount, includeFeeInAmount);
     //     navigate("/pages/confirm-send", {
     //       state: {
-    //         toAddress: addres,
+    //         toAddresss: address,
     //         amount,
     //         feeAmount,
     //         includeFeeInAmount,
-    //         fromAddress: currentAccount?.address ?? "",
+    //         fromAddresss: currentAccount?.addresss ?? "",
     //         hex
     //       }
     //     })
@@ -46,10 +59,10 @@ const CreateSend = () => {
     //   }
     // }
     try {
-      const hex = await sendTdc(addres, amount * 10 ** 8, feeAmount, includeFeeInAmount);
+      const hex = await sendTdc(address, amount * 10 ** 8, feeAmount, includeFeeInAmount);
       navigate("/pages/confirm-send", {
         state: {
-          toAddress: addres,
+          toAddress: address,
           amount,
           feeAmount,
           includeFeeInAmount,
@@ -64,38 +77,30 @@ const CreateSend = () => {
 
   useEffect(() => {
     if (location.state !== null && (location.state.toAddress !== null || location.state.toAddress !== undefined)) {
-      setAddres(location.state.toAddress);
-      setAmount(location.state.amount);
-      setFeeAmount(location.state.feeAmount);
-      setIncludeFeeInAmount(location.state.includeFeeInAmount);
+      setValue("address", location.state.toAddress);
+      setValue("amount", location.state.amount);
+      setValue("feeAmount", location.state.feeAmount);
+      setValue("includeFeeInAmount", location.state.includeFeeInAmount);
     }
-  }, [location, setAddres, setAmount, setFeeAmount, setIncludeFeeInAmount])
+  }, [location.state, setValue])
 
   return (
-    <form className={cn("form", s.send)} onSubmit={(e) => e.preventDefault()}>
+    <form className={cn("form", s.send)} onSubmit={handleSubmit(send)}>
       <div className={s.inputs}>
         <div className="form-field">
           <span className="input-span">Address</span>
           <input
             placeholder="Address of receiver"
-            type="text"
             className="input"
-            onChange={(e) => {
-              setAddres(e.target.value);
-            }}
-            value={addres}
+            {...register("address")}
           />
         </div>
         <div className="form-field">
           <span className="input-span">Amount</span>
           <input
             placeholder="Amount you want to send"
-            type="text"
             className="input"
-            onChange={(e) => {
-              setAmount(Number.parseFloat(e.target.value));
-            }}
-            value={amount}
+            {...register("amount", { valueAsNumber: true })}
           />
           <span className="input-info">
             MAX AMOUNT: {currentAccount!.balance}
@@ -103,13 +108,21 @@ const CreateSend = () => {
         </div>
       </div>
 
-      <FeeInput updateAmount={(feeAmount) => { setFeeAmount(feeAmount) }}
-        updateIncludeFeeInAmount={(include) => setIncludeFeeInAmount(include)}
-        includeFeeInAmount={includeFeeInAmount}
-        feeAmount={feeAmount}
-      />
+      <div className={s.feeDiv}>
+        <div className={cn("form-field", s.amountInput)}>
+          <span className="input-span">Fee:</span>
+          <input
+            className="input"
+            placeholder="sat/Vb"
+            {...register("feeAmount", { valueAsNumber: true })} />
+        </div>
+        <div className={s.includeFeeInAmountDiv}>
+          <input type="checkbox" {...register("includeFeeInAmount")} />
+          <span className={s.includeFeeSpan}>Include fee in the amount</span>
+        </div>
+      </div>
 
-      <button className={cn(s.sendBtn, "btn primary")} onClick={send}>
+      <button type="submit" className={cn(s.sendBtn, "btn primary")}>
         Continue
       </button>
     </form>
