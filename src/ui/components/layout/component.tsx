@@ -3,6 +3,7 @@ import s from "./styles.module.scss";
 import cn from "classnames";
 import { ChevronLeftIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { useMemo } from "react";
+import { useWalletState } from "@/ui/states/walletState";
 
 export default function PagesLayout() {
   const routeTitles = [
@@ -41,7 +42,7 @@ export default function PagesLayout() {
     {
       route: "/pages/create-new-wallet",
       title: "Create New Wallet",
-      disableBack: true,
+      disableBack: (): boolean => wallets.length <= 0,
     },
     {
       route: "/pages/new-mnemonic",
@@ -93,6 +94,7 @@ export default function PagesLayout() {
 
   const currentRoute = useLocation();
   const navigate = useNavigate();
+  const { wallets } = useWalletState((v) => ({ wallets: v.wallets }))
 
   const currentRouteTitle = useMemo(
     () =>
@@ -111,7 +113,7 @@ export default function PagesLayout() {
     <div className={s.layout}>
       {
         <div className={s.controlDiv}>
-          {!currentRouteTitle?.disableBack && (
+          {(!currentRouteTitle?.disableBack || !currentRouteTitle.disableBack()) && (
             <div
               className={cn(s.controlElem, s.back)}
               onClick={() => {
