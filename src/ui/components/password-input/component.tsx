@@ -17,7 +17,7 @@ const PasswordInput = <T extends FieldValues>({
       <input
         id={name}
         {...register(name, {
-          minLength: 6,
+          minLength: 1,
           required: true,
         })}
         type="password"
