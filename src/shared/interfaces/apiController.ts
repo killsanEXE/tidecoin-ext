@@ -17,7 +17,7 @@ export interface ApiUTXO {
 export interface IApiController {
   getAccountBalance(address: string): Promise<number | undefined>;
   getUtxos(address: string): Promise<ApiUTXO[] | undefined>;
-  pushTx(rawTx: string): Promise<{ txId: string } | undefined>;
+  pushTx(rawTx: string): Promise<{ txid: string } | undefined>;
   getTransactions(address: string): Promise<ITransaction[] | undefined>;
   getTransactionInfo(txid: string): Promise<ITransactionInfo | undefined>;
 }
@@ -56,4 +56,13 @@ export interface ITransactionInfo {
   fee: number;
   value: number;
   confirmations: number;
+}
+
+export interface ISend {
+  toAddress: string;
+  fromAddress: string;
+  amount: number;
+  feeAmount: number;
+  includeFeeInAmount: boolean;
+  hex: string;
 }

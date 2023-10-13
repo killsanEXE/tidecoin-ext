@@ -6,10 +6,9 @@ import cn from "classnames";
 import FeeInput from "./fee-input";
 import { ISend } from "../component";
 import toast from "react-hot-toast";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const CreateSend = (props: {
-  createTransaction: (transaction: ISend) => void;
-}) => {
+const CreateSend = () => {
 
   const [addres, setAddres] = useState("");
   const [amount, setAmount] = useState(0);
@@ -17,6 +16,8 @@ const CreateSend = (props: {
   const sendTdc = useCreateTidecoinTxCallback();
   const [feeAmount, setFeeAmount] = useState(0);
   const [includeFeeInAmount, setIncludeFeeInAmount] = useState(false);
+  const navigate = useNavigate();
+  const transaction = useLocation();
 
   const send = async () => {
     if (amount < 0.01) {
@@ -31,7 +32,7 @@ const CreateSend = (props: {
     } else {
       try {
         const hex = await sendTdc(addres, amount * 10 ** 8, feeAmount, includeFeeInAmount);
-        props.createTransaction({
+        createTransaction({
           toAddress: addres,
           amount,
           feeAmount,
@@ -43,7 +44,6 @@ const CreateSend = (props: {
         toast.error("Error has occurred");
       }
     }
-
   };
 
   return (

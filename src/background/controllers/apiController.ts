@@ -35,7 +35,7 @@ class ApiController implements IApiController {
   }
 
   async pushTx(rawTx: string) {
-    const data = await fetchTDCMainnet<{ txId: string }>({
+    const data = await fetchTDCMainnet<{ txid: string }>({
       path: "/tx/send",
       method: "POST",
       headers: {
