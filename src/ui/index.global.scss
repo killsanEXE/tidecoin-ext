@@ -31,11 +31,7 @@ body {
 }
 
 .btn {
-  @apply border-0 px-2 pb-1 pt-1.5 text-[1.1rem] mx-auto w-[90%] rounded-[.3rem] font-normal;
-
-  &:hover {
-    @apply cursor-pointer shadow-sm;
-  }
+  @apply flex gap-1 items-center justify-center border-0 px-2 py-3 pt-1.5 text-[1.1rem] mx-auto w-[90%] rounded-[.3rem] font-normal cursor-pointer hover:shadow-sm;
 }
 
 .primary {

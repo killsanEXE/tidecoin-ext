@@ -45,14 +45,14 @@ const Receive = () => {
 
   return (
     <div className={s.receive}>
-      <div className="flex items-center flex-col">
-        <div className="p-3 rounded-xl mb-2">
-          <div ref={ref} />
-        </div>
-        <p className="text-center mb-2 opacity-80">{currentAccount?.address}</p>
+      <div className="flex items-center flex-col p-3">
+        <div ref={ref} />
       </div>
       <div className={s.accTitle}>{currentAccount?.name ?? "Account"}</div>
       <CopyBtn label="Copy address" value={currentAccount?.address} />
+      <p className="text-center mb-2 opacity-80 absolute bottom-0 left-1/2 -translate-x-1/2">
+        {currentAccount?.address}
+      </p>
     </div>
   );
 };

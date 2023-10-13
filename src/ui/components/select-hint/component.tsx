@@ -1,5 +1,5 @@
 import { Combobox, Transition } from "@headlessui/react";
-import { FC, Fragment, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useState } from "react";
 import { englishWords } from "test-test-test-hd-wallet";
 import cn from "classnames";
 
@@ -17,18 +17,11 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
     query === ""
       ? []
       : englishWords
-        .map((i, idx) => [i, idx] as [string, number])
-        .filter(([word, idx]) =>
-          word.startsWith(query.toLowerCase().replace(/\s+/g, ""))
-        )
-        .slice(0, 4);
-
-  const [inputValue, setInputValue] = useState<string>("");
-
-  useEffect(() => {
-    if (selected)
-      setInputValue(selected);
-  }, [selected])
+          .map((i, idx) => [i, idx] as [string, number])
+          .filter(([word, idx]) =>
+            word.startsWith(query.toLowerCase().replace(/\s+/g, ""))
+          )
+          .slice(0, 4);
 
   return (
     <Combobox value={selected} onChange={setSelected} nullable={true}>
@@ -37,15 +30,14 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
           <Combobox.Input
             className={s.input}
             displayValue={(word: string) => word}
-
             onChange={(event) => {
               const phrase = event.target.value as string;
-              setInputValue(phrase)
               if (phrase.trim().split(" ").length === 12) {
                 setSelected(phrase.trim());
-              } else setQuery(phrase)
+              } else setQuery(phrase);
             }}
-            value={inputValue} />
+            value={selected}
+          />
         </div>
         <Transition
           as={Fragment}
@@ -69,8 +61,9 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
                   {({ selected }) => (
                     <>
                       <span
-                        className={`block truncate ${selected ? "font-medium" : "font-normal"
-                          }`}
+                        className={`block truncate ${
+                          selected ? "font-medium" : "font-normal"
+                        }`}
                       >
                         {word[0]}
                       </span>
