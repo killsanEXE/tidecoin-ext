@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import s from "./styles.module.scss";
-import CheckPassword from "../../../check-password";
+import CheckPassword from "@/ui/components/check-password";
 import { useParams } from "react-router-dom";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
 import { useControllersState } from "@/ui/states/controllerState";

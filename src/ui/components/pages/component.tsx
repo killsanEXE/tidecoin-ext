@@ -1,16 +1,19 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import s from "./styles.module.scss";
 import cn from "classnames";
-import { useWalletState } from "@/ui/states/walletState";
 import { ChevronLeftIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
+import { useMemo } from "react";
 
 export default function PagesLayout() {
   const routeTitles = [
     {
       route: "/pages/switch-account",
       title: "Switch Account",
-      action: () => {
-        navigate("/pages/create-new-account");
+      action: {
+        icon: <PlusCircleIcon className="w-8 h-8" />,
+        cb: () => {
+          navigate("/pages/create-new-account");
+        },
       },
     },
     {
@@ -28,13 +31,17 @@ export default function PagesLayout() {
     {
       route: "/pages/switch-wallet",
       title: "Switch Wallet",
-      action: () => {
-        navigate("/pages/create-new-wallet");
+      action: {
+        icon: <PlusCircleIcon className="w-8 h-8" />,
+        cb: () => {
+          navigate("/pages/create-new-wallet");
+        },
       },
     },
     {
       route: "/pages/create-new-wallet",
       title: "Create New Wallet",
+      disableBack: true,
     },
     {
       route: "/pages/new-mnemonic",
@@ -52,69 +59,65 @@ export default function PagesLayout() {
       route: "/pages/send",
       title: "Send",
     },
+    {
+      route: "transaction-info/@",
+      title: "Transaction info",
+    },
+    {
+      route: "rename-account/@",
+      title: "Renaming account",
+    },
+    {
+      route: "rename-wallet/@",
+      title: "Renaming wallet",
+    },
   ];
 
-  const { wallets } = useWalletState((v) => ({ wallets: v.wallets }));
   const currentRoute = useLocation();
   const navigate = useNavigate();
 
+  const currentRouteTitle = useMemo(
+    () =>
+      routeTitles.find((i) => {
+        if (i.route.includes("@")) {
+          return currentRoute.pathname.includes(
+            i.route.slice(0, i.route.length - 1)
+          );
+        }
+        return currentRoute.pathname === i.route;
+      }),
+    [currentRoute]
+  );
+
   return (
     <div className={s.layout}>
-      {routeTitles.find((f) => f.route === currentRoute.pathname) ? (
+      {
         <div className={s.controlDiv}>
-          {wallets.length <= 0 &&
-          currentRoute.pathname === "/pages/create-new-wallet" ? (
-            <p></p>
-          ) : (
-            <p
+          {!currentRouteTitle?.disableBack && (
+            <div
               className={cn(s.controlElem, s.back)}
               onClick={() => {
                 navigate(-1);
               }}
             >
               <ChevronLeftIcon className="w-8 h-8" />
-            </p>
+            </div>
           )}
-          <p className={cn(s.controlElem, s.title)}>
-            {
-              routeTitles.find((f) => f.route === currentRoute.pathname)![
-                "title"
-              ]
-            }
-          </p>
-          {routeTitles.find((f) => f.route === currentRoute.pathname)![
-            "action"
-          ] === undefined ? (
-            <p className="w-[20%]"></p>
-          ) : (
-            <p
+
+          <div className={cn(s.controlElem, s.title)}>
+            {currentRouteTitle?.title}
+          </div>
+
+          {currentRouteTitle?.action && (
+            <div
               className={cn(s.controlElem, s.addNew)}
-              onClick={
-                routeTitles.find((f) => f.route === currentRoute.pathname)![
-                  "action"
-                ]
-              }
+              onClick={currentRouteTitle!.action!.cb}
             >
-              <PlusCircleIcon className="w-8 h-8" />
-            </p>
+              {currentRouteTitle.action.icon}
+            </div>
           )}
         </div>
-      ) : (
-        <div className={s.controlDiv}>
-          <p
-            className={cn(s.controlElem, s.back)}
-            onClick={() => {
-              navigate(-1);
-            }}
-          >
-            <ChevronLeftIcon className="w-8 h-8" />
-          </p>
-          <p className={s.controlElem}>
-            {currentRoute.pathname.includes("/show") ? "Private" : ""}
-          </p>
-          <p className="w-[20%]"></p>
-        </div>
-      )}
+      }
       <div className={s.contentDiv}>
         <Outlet />
       </div>

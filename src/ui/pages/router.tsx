@@ -5,24 +5,24 @@ import Wallet from "@/ui/pages/home/wallet";
 
 import Login from "@/ui/pages/account/login";
 import CreatePassword from "@/ui/pages/account/create-password";
-import CreateNewAccount from "@/ui/components/pages/new-account";
-import SwitchAccount from "@/ui/components/pages/switch-account";
+import CreateNewAccount from "@/ui/pages/account/new-account";
+import SwitchAccount from "@/ui/pages/account/switch-account";
 import PagesLayout from "@/ui/components/pages";
-import ChangePassword from "../components/pages/change-password";
-import Receive from "../components/pages/receive";
-import SwitchWallet from "../components/pages/switch-wallet";
-import NewWallet from "../components/pages/new-wallet";
-import NewMnemonic from "../components/pages/new-wallet/new-mnemonic";
-import RestoreMnemonic from "../components/pages/new-wallet/restore-mnemonic";
-import RestorePrivKey from "../components/pages/new-wallet/restore-priv-key";
+import ChangePassword from "./account/change-password";
+import Receive from "./account/receive";
+import SwitchWallet from "./account/switch-wallet";
+import NewWallet from "./account/new-wallet";
+import NewMnemonic from "./account/new-wallet/new-mnemonic";
+import RestoreMnemonic from "./account/new-wallet/restore-mnemonic";
+import RestorePrivKey from "./account/new-wallet/restore-priv-key";
 import Settings from "./home/settings";
-import ShowPk from "../components/pages/switch-account/show-pk";
-import ShowMnemonic from "../components/pages/switch-wallet/show-mnemonic";
+import ShowPk from "@/ui/pages/account/switch-account/show-pk";
+import ShowMnemonic from "./account/switch-wallet/show-mnemonic";
 import Send from "../components/pages/send";
-import ChangeAddrType from "../components/pages/change-addr-type";
-import TransactionInfo from "../components/pages/transaction-info";
-import RenameAccount from "../components/pages/switch-account/rename-account";
-import RenameWallet from "../components/pages/switch-wallet/rename-wallet";
+import ChangeAddrType from "@/ui/pages/account/change-addr-type";
+import TransactionInfo from "./account/transaction-info";
+import RenameAccount from "@/ui/pages/account/switch-account/rename-account";
+import RenameWallet from "./account/switch-wallet/rename-wallet";
 
 export const guestRouter = createHashRouter([
   {
@@ -63,8 +63,8 @@ export const authenticatedRouter = createHashRouter([
       { path: "change-addr-type", element: <ChangeAddrType /> },
       { path: "transaction-info/:txId", element: <TransactionInfo /> },
       { path: "rename-account/:accId", element: <RenameAccount /> },
-      { path: "rename-wallet/:walletId", element: <RenameWallet /> }
-    ]
+      { path: "rename-wallet/:walletId", element: <RenameWallet /> },
+    ],
   },
   { path: "*", element: <Navigate to={"/home/wallet"} /> },
 ]);

@@ -1,14 +1,21 @@
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
-import SwitchAddressType from "../../switch-address-type";
+import SwitchAddressType from "@/ui/components/switch-address-type";
 import s from "./styles.module.scss";
 import { useControllersState } from "@/ui/states/controllerState";
-import { useGetCurrentAccount, useGetCurrentWallet, useWalletState } from "@/ui/states/walletState";
-import { useUpdateCurrentAccountBalance, useUpdateCurrentWallet } from "@/ui/hooks/wallet";
+import {
+  useGetCurrentAccount,
+  useGetCurrentWallet,
+  useWalletState,
+} from "@/ui/states/walletState";
+import {
+  useUpdateCurrentAccountBalance,
+  useUpdateCurrentWallet,
+} from "@/ui/hooks/wallet";
 
 const ChangeAddrType = () => {
   const { keyringController, walletController } = useControllersState((v) => ({
     keyringController: v.keyringController,
-    walletController: v.walletController
+    walletController: v.walletController,
   }));
   const currentWallet = useGetCurrentWallet();
   const { selectedWallet } = useWalletState((v) => ({
@@ -20,7 +27,8 @@ const ChangeAddrType = () => {
 
   return (
     <div className={s.changeAddrType}>
-      <SwitchAddressType selectedType={currentWallet?.addressType ?? AddressType.P2PKH}
+      <SwitchAddressType
+        selectedType={currentWallet?.addressType ?? AddressType.P2PKH}
         handler={async (type: AddressType) => {
           const addresses = await keyringController.changeAddressType(
             selectedWallet!,
@@ -34,8 +42,10 @@ const ChangeAddrType = () => {
               address: addresses[f.id],
             })),
           });
-          await updateCurrentAccountBalance(addresses[currentAccount?.id!])
-          await walletController.saveWallets()
+          await updateCurrentAccountBalance(
+            addresses[currentAccount?.id as any as number]
+          );
+          await walletController.saveWallets();
         }}
       />
     </div>
