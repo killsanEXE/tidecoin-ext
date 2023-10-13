@@ -1,13 +1,11 @@
 import { useNavigate } from "react-router-dom";
 
 import {
-  DocumentDuplicateIcon,
   ArrowSmallUpIcon,
   ArrowSmallDownIcon,
 } from "@heroicons/react/24/outline";
 import s from "./styles.module.scss";
-import { copyToClipboard, shortAddress } from "@/ui/utils";
-import toast from "react-hot-toast";
+import { shortAddress } from "@/ui/utils";
 import {
   useGetCurrentAccount,
   useGetCurrentWallet,
@@ -19,6 +17,7 @@ import ReactLoading from "react-loading";
 import { ITransaction } from "@/shared/interfaces/apiController";
 import { useUpdateCurrentAccountTransactions } from "@/ui/hooks/transactions";
 import { useDebounceCall } from "@/ui/hooks/debounce";
+import CopyBtn from "@/ui/components/copy-btn";
 
 const Wallet = () => {
   const currentAccount = useGetCurrentAccount();
@@ -100,23 +99,11 @@ const Wallet = () => {
           )}{" "}
           TDC
         </div>
-        <p
+        <CopyBtn
           className={cn(s.accPubAddress, s.center)}
-          onClick={() => {
-            copyToClipboard(currentAccount?.address).then(() => {
-              toast.success("Copied", {
-                style: { borderRadius: 0 },
-                iconTheme: {
-                  primary: "#ffbc42",
-                  secondary: "#766c7f",
-                },
-              });
-            });
-          }}
-        >
-          <DocumentDuplicateIcon className="w-8 h-8" />{" "}
-          {shortAddress(currentAccount?.address)}
-        </p>
+          label={shortAddress(currentAccount?.address)}
+          value={currentAccount?.address}
+        />
 
         <div className={cn(s.receiveSendBtns, s.center)}>
           <button

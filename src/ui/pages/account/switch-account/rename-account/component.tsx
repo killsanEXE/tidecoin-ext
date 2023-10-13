@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import s from "./styles.module.scss";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IAccount } from "@/shared/interfaces";
 import { useGetCurrentWallet } from "@/ui/states/walletState";
 import Rename from "@/ui/components/rename";
@@ -18,14 +18,17 @@ const RenameAccount = () => {
   }));
   const navigate = useNavigate();
 
-  const renameAccount = async (renamedName: string) => {
-    const accIndex = currentWallet?.accounts.indexOf(account!);
-    const wallet = currentWallet;
-    wallet!.accounts[accIndex!].name = renamedName;
-    await updateCurrentWallet({ ...wallet });
-    await walletController.saveWallets();
-    navigate(-1);
-  };
+  const renameAccount = useCallback(
+    async (renamedName: string) => {
+      const accIndex = currentWallet?.accounts.indexOf(account!);
+      const wallet = currentWallet;
+      wallet!.accounts[accIndex!].name = renamedName;
+      await updateCurrentWallet({ ...wallet });
+      await walletController.saveWallets();
+      navigate(-1);
+    },
+    [currentWallet, updateCurrentWallet, walletController, navigate]
+  );
 
   useEffect(() => {
     if (!account) {

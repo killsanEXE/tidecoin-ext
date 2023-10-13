@@ -25,28 +25,30 @@ const ChangeAddrType = () => {
   const updateCurrentAccountBalance = useUpdateCurrentAccountBalance();
   const currentAccount = useGetCurrentAccount();
 
+  const onSwitchAddress = async (type: AddressType) => {
+    const addresses = await keyringController.changeAddressType(
+      selectedWallet!,
+      type
+    );
+    await udpateCurrentWallet({
+      ...currentWallet,
+      addressType: type,
+      accounts: currentWallet?.accounts.map((f) => ({
+        ...f,
+        address: addresses[f.id],
+      })),
+    });
+    await updateCurrentAccountBalance(
+      addresses[currentAccount?.id as any as number]
+    );
+    await walletController.saveWallets();
+  };
+
   return (
     <div className={s.changeAddrType}>
       <SwitchAddressType
         selectedType={currentWallet?.addressType ?? AddressType.P2PKH}
-        handler={async (type: AddressType) => {
-          const addresses = await keyringController.changeAddressType(
-            selectedWallet!,
-            type
-          );
-          await udpateCurrentWallet({
-            ...currentWallet,
-            addressType: type,
-            accounts: currentWallet?.accounts.map((f) => ({
-              ...f,
-              address: addresses[f.id],
-            })),
-          });
-          await updateCurrentAccountBalance(
-            addresses[currentAccount?.id as any as number]
-          );
-          await walletController.saveWallets();
-        }}
+        handler={onSwitchAddress}
       />
     </div>
   );

@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
 import QRCode from "qr-code-styling";
 import s from "./styles.module.scss";
-import cn from "classnames";
-import { copyToClipboard } from "@/ui/utils";
-import toast from "react-hot-toast";
+import CopyBtn from "@/ui/components/copy-btn";
 
 const qrCode = new QRCode({
   width: 200,
@@ -54,15 +52,7 @@ const Receive = () => {
         <p className="text-center mb-2 opacity-80">{currentAccount?.address}</p>
       </div>
       <div className={s.accTitle}>{currentAccount?.name ?? "Account"}</div>
-      <button
-        className={cn("btn primary", s.copyButton)}
-        onClick={() => {
-          copyToClipboard(currentAccount?.address);
-          toast.success("Copied");
-        }}
-      >
-        Copy address
-      </button>
+      <CopyBtn label="Copy address" value={currentAccount?.address} />
     </div>
   );
 };

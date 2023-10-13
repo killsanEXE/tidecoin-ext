@@ -1,31 +1,44 @@
 // import s from "./styles.module.scss";
 
+import PasswordInput from "@/ui/components/password-input";
 import { useCreateNewWallet } from "@/ui/hooks/wallet";
 import { useControllersState } from "@/ui/states/controllerState";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
+interface FormType {
+  privKey: string;
+}
+
 const RestorePrivKey = () => {
+  const { register, handleSubmit } = useForm<FormType>({
+    defaultValues: {
+      privKey: "",
+    },
+  });
 
   const createNewWallet = useCreateNewWallet();
   const navigate = useNavigate();
-  const { walletController } = useControllersState((v) => ({ walletController: v.walletController }))
+  const { walletController } = useControllersState((v) => ({
+    walletController: v.walletController,
+  }));
 
-  const [privKey, setPrivKey] = useState("");
-
-  const recoverWallet = async () => {
+  const recoverWallet = async ({ privKey }: FormType) => {
     await createNewWallet(privKey, "simple");
     await walletController.saveWallets();
-    navigate("/home/wallet")
-  }
+    navigate("/home/wallet");
+  };
 
   return (
-    <form className="form" onSubmit={(e) => e.preventDefault()}>
-      <div className="form-field">
-        <span className="input-span">Enter your private key</span>
-        <input className="input" onChange={(e) => { setPrivKey(e.target.value) }} type="password" />
-      </div>
-      <button className="btn primary" onClick={recoverWallet}>Recover</button>
+    <form className="form" onSubmit={handleSubmit(recoverWallet)}>
+      <PasswordInput
+        label="Enter your private key"
+        register={register}
+        name="privKey"
+      />
+      <button className="btn primary" type="submit">
+        Recover
+      </button>
     </form>
   );
 };

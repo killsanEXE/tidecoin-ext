@@ -7,11 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { useControllersState } from "@/ui/states/controllerState";
 import { useCreateNewWallet } from "@/ui/hooks/wallet";
 import cn from "classnames";
-import { copyToClipboard } from "@/ui/utils";
 import SwitchAddressType from "@/ui/components/switch-address-type";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
-
-import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import CopyBtn from "@/ui/components/copy-btn";
 
 const NewMnemonic = () => {
   const [step, setStep] = useState(1);
@@ -65,16 +63,7 @@ const NewMnemonic = () => {
                 </div>
               </div>
               <div className={s.savePhraseWrapper}>
-                <div
-                  className={s.saveToClipboard}
-                  onClick={() => {
-                    copyToClipboard(mnemonicPhrase);
-                    toast.success("Copied");
-                  }}
-                >
-                  <DocumentDuplicateIcon className="w-8 h-8" /> Copy to
-                  Clipboard
-                </div>
+                <CopyBtn label="Copy to Clipboard" value={mnemonicPhrase} />
                 <div className={s.savePhrase}>
                   <label htmlFor="save-phrases">I saved this phrase</label>
                   <input

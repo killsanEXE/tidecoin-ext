@@ -1,39 +1,51 @@
-import { useState } from "react";
 import { useAppState } from "@/ui/states/appState";
+import PasswordInput from "@/ui/components/password-input";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+
+interface FormType {
+  password: string;
+  confirmPassword: string;
+}
+
+const formFields: { name: keyof FormType; label: string }[] = [
+  {
+    label: "Password",
+    name: "password",
+  },
+  {
+    label: "Confirm password",
+    name: "confirmPassword",
+  },
+];
 
 const CreatePassword = () => {
+  const { register, handleSubmit } = useForm<FormType>({
+    defaultValues: {
+      confirmPassword: "",
+      password: "",
+    },
+  });
   const { updateAppState } = useAppState((v) => ({
     updateAppState: v.updateAppState,
   }));
 
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-
-  const createPassword = async () => {
-    if (password === passwordConfirm) {
+  const createPassword = async ({ confirmPassword, password }: FormType) => {
+    if (password === confirmPassword) {
       await updateAppState({ password: password, isUnlocked: true });
+    } else {
+      toast.error("Passwords dismatches");
     }
   };
 
   return (
-    <form className="form" onSubmit={(e) => e.preventDefault()}>
+    <form className="form" onSubmit={handleSubmit(createPassword)}>
       <p className="form-title">Create new password</p>
-      <input
-        type="password"
-        className="input"
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-      />
-      <input
-        type="password"
-        className="input"
-        onChange={(e) => {
-          setPasswordConfirm(e.target.value);
-        }}
-      />
+      {formFields.map((i) => (
+        <PasswordInput key={i.name} register={register} {...i} />
+      ))}
 
-      <button className="btn primary" onClick={createPassword}>
+      <button className="btn primary" type="submit">
         Create password
       </button>
     </form>

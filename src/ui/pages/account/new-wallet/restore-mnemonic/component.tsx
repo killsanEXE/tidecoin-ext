@@ -9,7 +9,6 @@ import toast from "react-hot-toast";
 import SwitchAddressType from "@/ui/components/switch-address-type";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 import SelectWithHint from "@/ui/components/select-hint/component";
-import { englishWords } from "test-test-test-hd-wallet";
 
 const RestoreMnemonic = () => {
   const [step, setStep] = useState(1);

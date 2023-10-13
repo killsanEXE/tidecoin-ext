@@ -1,11 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import s from "./styles.module.scss";
 import { useNavigate } from "react-router-dom";
 import { useAppState } from "@/ui/states/appState";
 import { useWalletState } from "@/ui/states/walletState";
 import { useControllersState } from "@/ui/states/controllerState";
+import { useForm } from "react-hook-form";
+
+interface FormType {
+  password: string;
+}
 
 const Login = () => {
+  const { register, handleSubmit } = useForm<FormType>({
+    defaultValues: {
+      password: "",
+    },
+  });
   const { updateAppState } = useAppState((v) => ({
     updateAppState: v.updateAppState,
   }));
@@ -14,7 +24,6 @@ const Login = () => {
     updateWalletState: v.updateWalletState,
     vaultIsEmpty: v.vaultIsEmpty,
   }));
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { walletController } = useControllersState((v) => ({
     walletController: v.walletController,
@@ -24,7 +33,7 @@ const Login = () => {
     if (vaultIsEmpty) navigate("/account/create-password");
   }, [vaultIsEmpty]);
 
-  const login = async () => {
+  const login = async ({ password }: FormType) => {
     const exportedWallets = await walletController.importWallets(password);
     exportedWallets[0].accounts = await walletController.loadAccountsData(
       0,
@@ -43,16 +52,10 @@ const Login = () => {
   };
 
   return (
-    <form className={s.form} onSubmit={(e) => e.preventDefault()}>
+    <form className={s.form} onSubmit={handleSubmit(login)}>
       <p className={s.formTitle}>Enter your password</p>
-      <input
-        type="password"
-        className="input"
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-      />
-      <button className="btn primary" onClick={login}>
+      <input type="password" className="input" {...register("password")} />
+      <button className="btn primary" type="submit">
         Login
       </button>
     </form>

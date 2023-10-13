@@ -72,7 +72,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #121420;
+  @apply bg-bg;
 }
 
 ::-webkit-scrollbar-thumb {

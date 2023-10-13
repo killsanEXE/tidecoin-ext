@@ -6,11 +6,6 @@ export function shortAddress(address?: string, len = 5) {
   return address.slice(0, len) + "..." + address.slice(address.length - len);
 }
 
-export const copyToClipboard = async (textToCopy?: string) => {
-  if (!textToCopy) return;
-  await navigator.clipboard.writeText(textToCopy);
-};
-
 export const satoshisToBTC = (amount: number) => {
   return amount / 100_000_000;
 };

@@ -4,10 +4,7 @@ import CheckPassword from "@/ui/components/check-password";
 import { useParams } from "react-router-dom";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
 import { useControllersState } from "@/ui/states/controllerState";
-import { copyToClipboard } from "@/ui/utils";
-import cn from "classnames";
-import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
-import toast from "react-hot-toast";
+import CopyBtn from "@/ui/components/copy-btn";
 
 const ShowPk = () => {
   const [unlocked, setUnlocked] = useState(false);
@@ -32,15 +29,7 @@ const ShowPk = () => {
     <div className={s.showPk}>
       {unlocked ? (
         <div className={s.showPkDiv}>
-          <button
-            className={cn("btn", s.copySecret)}
-            onClick={() => {
-              copyToClipboard(secret);
-              toast.success("Copied");
-            }}
-          >
-            <DocumentDuplicateIcon className="w-8 h-8" /> Copy
-          </button>
+          <CopyBtn label="Copy" value={secret} />
           <div className={s.secret}>{secret}</div>
         </div>
       ) : (

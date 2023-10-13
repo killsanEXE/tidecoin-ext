@@ -1,49 +1,60 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useCreateNewAccount } from "@/ui/hooks/wallet";
 import { useGetCurrentWallet } from "@/ui/states/walletState";
+import { useForm } from "react-hook-form";
+
+interface FormType {
+  name: string;
+}
 
 const NewAccount = () => {
-  const [name, setName] = useState("");
+  const { register, handleSubmit } = useForm<FormType>({
+    defaultValues: {
+      name: "",
+    },
+  });
   const navigate = useNavigate();
 
   const createNewAccount = useCreateNewAccount();
   const currentWallet = useGetCurrentWallet();
 
-  const nameAlreadyExists = (): boolean => {
-    return currentWallet?.accounts.find(f => f.name?.trim() === name.trim()) !== undefined;
-  }
+  const nameAlreadyExists = (name: string) => {
+    return (
+      currentWallet?.accounts.find((f) => f.name?.trim() === name.trim()) !==
+      undefined
+    );
+  };
 
-  const createNewAcc = async () => {
-    if (name.length <= 10 && !nameAlreadyExists()) {
+  const createNewAcc = async ({ name }: FormType) => {
+    if (name.length <= 10 && !nameAlreadyExists(name)) {
       await createNewAccount(name);
       toast.success("Created new account", {
         style: { borderRadius: 0 },
         iconTheme: {
-          primary: '#ffbc42',
-          secondary: '#766c7f'
-        }
+          primary: "#ffbc42",
+          secondary: "#766c7f",
+        },
       });
       navigate("/home/wallet");
     } else {
-      if (nameAlreadyExists()) toast.error("Name for this account is already taken")
+      if (nameAlreadyExists(name))
+        toast.error("Name for this account is already taken");
       else toast.error("Maximum name length is 8");
     }
   };
 
   return (
-    <form className="form" onSubmit={(e) => e.preventDefault()}>
+    <form className="form" onSubmit={handleSubmit(createNewAcc)}>
       <p className="form-title">Enter the name:</p>
       <input
         type="text"
-        max="8"
         className="input"
-        onChange={(e) => {
-          setName(e.target.value);
-        }}
+        {...register("name", {
+          maxLength: 14,
+        })}
       />
-      <button className="btn primary" onClick={createNewAcc}>
+      <button className="btn primary" type="submit">
         Create an account
       </button>
     </form>
