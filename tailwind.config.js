@@ -5,9 +5,9 @@ module.exports = {
     extend: {
       colors: {
         bg: "#f8f7ff",
-        "input-bg": "#a8d0db",
+        "input-bg": "#c1e1ea",
         text: "black",
-        secondary: "#a8d0db",
+        secondary: "#c1e1ea",
         primary: "#ffbc42",
         panel: "#669bbc",
         hovered: "#a8d0db",

@@ -50,7 +50,7 @@ const SwitchAccount = () => {
                 }}
               >
                 <div className={s.name}>
-                  {currentAccount!.address === acc.address ? (
+                  {currentAccount!.id === acc.id ? (
                     <CheckIcon className="w-8 h-8 cursor-pointer" />
                   ) : undefined}
                   {acc.name}
