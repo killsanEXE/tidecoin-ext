@@ -9,12 +9,7 @@ How to test extension yourself:
 
 
 Tasks:
-    1. Add wallet deletion
-    2. Add custom fee
-    3. Add send/receive identifiers to transactions
-    4. Add link from txid to explorer 
     5. Fix sending from legasy to pasbt warning 
-    6. Add confirmation screen to the transaction
     7. Save addresses that we sended tdc to and 
         suggest them next time we want to send
     8. Integrate extension in websites 

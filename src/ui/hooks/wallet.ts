@@ -195,11 +195,15 @@ export const useDeleteWallet = () => {
     updateWalletState: v.updateWalletState,
   }));
   const currentWallet = useGetCurrentWallet();
+  const currentAccount = useGetCurrentAccount();
 
   return useCallback(async (id: number) => {
+    if (currentWallet?.id === undefined) throw new Error('Unreachable')
+    const newWalletId = currentWallet.id > id ? currentWallet.id - 1 : currentWallet.id;
     await updateWalletState({
+      selectedWallet: newWalletId,
+      selectedAccount: currentWallet?.id === id ? 0 : currentAccount?.id,
       wallets: await walletController.deleteWallet(id),
-      selectedWallet: currentWallet?.id === id ? 0 : currentWallet?.id,
     });
   }, [currentWallet, walletController, updateWalletState]);
 };

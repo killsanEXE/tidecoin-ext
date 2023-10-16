@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import s from "./styles.module.scss";
 import { useEffect, useState } from "react";
 import { useControllersState } from "@/ui/states/controllerState";
@@ -27,7 +27,7 @@ const TransactionInfo = () => {
     <div className={s.transactionInfoDiv}>
       {transaction ? (
         <div className={s.transaction}>
-          <p className={s.transactionP}>TxId: {transaction.txid}</p>
+          <p className={s.transactionP}>TxId: <Link to={`https://explorer.tidecoin.org/tx/${transaction.txid}`}>{transaction.txid}</Link></p>
           <p className={s.transactionP}>
             Confirmations: {transaction.confirmations}
           </p>

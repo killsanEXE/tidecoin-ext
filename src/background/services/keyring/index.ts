@@ -196,14 +196,10 @@ class KeyringService {
   }
 
   async deleteWallet(id: number) {
-    console.log(storageService.walletState.wallets.find(f => f.id === id)?.name)
-    console.log(this.keyrings[id].getAccounts())
     this.keyrings.splice(id, 1);
-    let wallets = storageService.walletState.wallets;
+    let wallets = [...storageService.walletState.wallets];
     wallets.splice(id, 1);
     wallets = wallets.map((f, i) => ({ ...f, id: i }))
-    storageService.updateWalletState({ wallets });
-    if (storageService.currentWallet?.id === id) storageService.updateWalletState({ selectedWallet: 0 });
     await storageService.saveWallets(storageService.appState.password!, wallets);
     return wallets;
   }
