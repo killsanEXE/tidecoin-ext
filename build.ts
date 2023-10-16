@@ -24,7 +24,7 @@ const extraManifest = await readJsonFile(
   chrome ? chromeManifestPath : firefoxManifestPath
 );
 
-console.log(`Building extension for ${chrome ? "Chrome" : "Firefox"}...`);
+console.log(`\n💻 Current browser: ${chrome ? "Chrome" : "Firefox"}\n`);
 
 const buildOptions: BuildOptions = {
   entryPoints: {
@@ -73,10 +73,8 @@ const buildOptions: BuildOptions = {
 };
 
 if (Bun.argv.includes("--watch")) {
-  console.log("Watching...");
   const ctx = await context(buildOptions);
   await ctx.watch();
 } else {
   await build(buildOptions);
-  console.log("Builded successfully");
 }
