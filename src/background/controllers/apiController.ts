@@ -13,15 +13,7 @@ class ApiController implements IApiController {
       method: "GET",
     });
 
-    const transactions = await fetchTDCMainnet<ITransaction[]>({
-      path: `/address/${address}/txs`,
-    });
-    if (!transactions || (!transactions[-1] && !transactions[0]) || !data.unconfirmed) return data.balance;
-    else {
-      const lastTransaction = transactions[-1] ?? transactions[0];
-      if (lastTransaction.mintIndex) return data.balance - data.unconfirmed;
-      else return data.balance + data.unconfirmed
-    }
+    return data.balance;
   }
 
   async getUtxos(address: string) {
