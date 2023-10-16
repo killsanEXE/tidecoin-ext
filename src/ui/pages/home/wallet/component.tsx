@@ -142,9 +142,9 @@ const Wallet = () => {
               </div>
               <div className={cn(s.icon, t.mintIndex ? s.send : s.receive)}>
                 {t.mintIndex ? (
-                  <ArrowSmallUpIcon className="w-8 h-8" />
+                  <ArrowSmallUpIcon className="w-8 h-8 text-green-600" />
                 ) : (
-                  <ArrowSmallDownIcon className="w-8 h-8" />
+                  <ArrowSmallDownIcon className="w-8 h-8 text-red-600" />
                 )}
               </div>
             </div>
