@@ -18,7 +18,6 @@ import RestorePrivKey from "./account/new-wallet/restore-priv-key";
 import Settings from "./home/settings";
 import ShowPk from "@/ui/pages/account/switch-account/show-pk";
 import ShowMnemonic from "./account/switch-wallet/show-mnemonic";
-import Send from "./account/send";
 import ChangeAddrType from "@/ui/pages/account/change-addr-type";
 import TransactionInfo from "./account/transaction-info";
 import RenameAccount from "@/ui/pages/account/switch-account/rename-account";

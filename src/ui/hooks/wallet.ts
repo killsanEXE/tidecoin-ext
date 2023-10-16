@@ -15,12 +15,22 @@ export const useCreateNewWallet = () => {
   }));
   const { walletController, keyringController } = useControllersState((v) => ({
     walletController: v.walletController,
-    keyringController: v.keyringController
+    keyringController: v.keyringController,
   }));
 
   return useCallback(
-    async (phrase: string, walletType: "simple" | "root", addressType?: AddressType, name?: string) => {
-      const wallet = await walletController.createNewWallet(phrase, walletType, addressType, name);
+    async (
+      phrase: string,
+      walletType: "simple" | "root",
+      addressType?: AddressType,
+      name?: string
+    ) => {
+      const wallet = await walletController.createNewWallet(
+        phrase,
+        walletType,
+        addressType,
+        name
+      );
       await updateWalletState({
         selectedAccount: 0,
         selectedWallet: wallet.id,
@@ -85,6 +95,9 @@ export const useUpdateCurrentAccount = () => {
 };
 
 export const useCreateNewAccount = () => {
+  const { updateWalletState } = useWalletState((v) => ({
+    updateWalletState: v.updateWalletState,
+  }));
   const updateCurrentWallet = useUpdateCurrentWallet();
   const currentWallet = useGetCurrentWallet();
   const { walletController } = useControllersState((v) => ({
@@ -102,6 +115,9 @@ export const useCreateNewAccount = () => {
 
       await updateCurrentWallet(updatedWallet);
       await walletController.saveWallets();
+      updateWalletState({
+        selectedAccount: createdAccount.id,
+      });
     },
     [currentWallet, updateCurrentWallet, walletController]
   );
@@ -144,15 +160,18 @@ export const useUpdateCurrentAccountBalance = () => {
   const updateCurrentAccount = useUpdateCurrentAccount();
   const currentAccount = useGetCurrentAccount();
 
-  return useCallback(async (address?: string) => {
-    const balance = await apiController.getAccountBalance(
-      address ? address : currentAccount?.address ?? ""
-    );
-    if (balance === undefined || !currentAccount) return;
-    await updateCurrentAccount({
-      balance: balance / 10 ** 8,
-    });
-  }, [updateCurrentAccount, currentAccount, apiController]);
+  return useCallback(
+    async (address?: string) => {
+      const balance = await apiController.getAccountBalance(
+        address ? address : currentAccount?.address ?? ""
+      );
+      if (balance === undefined || !currentAccount) return;
+      await updateCurrentAccount({
+        balance: balance / 10 ** 8,
+      });
+    },
+    [updateCurrentAccount, currentAccount, apiController]
+  );
 };
 
 export const useUpdateCurrentAccountTransactions = () => {
@@ -169,15 +188,18 @@ export const useUpdateCurrentAccountTransactions = () => {
 };
 
 export const useDeleteWallet = () => {
-
-  const { walletController } = useControllersState((v) => ({ walletController: v.walletController }))
-  const { updateWalletState } = useWalletState((v) => ({ updateWalletState: v.updateWalletState }))
+  const { walletController } = useControllersState((v) => ({
+    walletController: v.walletController,
+  }));
+  const { updateWalletState } = useWalletState((v) => ({
+    updateWalletState: v.updateWalletState,
+  }));
   const currentWallet = useGetCurrentWallet();
 
   return useCallback(async (id: number) => {
     await updateWalletState({
       wallets: await walletController.deleteWallet(id),
       selectedWallet: currentWallet?.id === id ? 0 : currentWallet?.id,
-    })
-  }, [])
-}
+    });
+  }, []);
+};
