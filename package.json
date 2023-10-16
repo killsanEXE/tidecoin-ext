@@ -66,6 +66,7 @@
     "copy-webpack-plugin": "^11.0.0",
     "esbuild": "^0.19.4",
     "esbuild-plugin-copy": "^2.1.1",
+    "esbuild-plugin-manifest": "^0.6.0",
     "esbuild-plugin-svg": "^0.1.0",
     "esbuild-plugin-svgj": "^1.0.3",
     "esbuild-plugin-wasm": "^1.1.0",

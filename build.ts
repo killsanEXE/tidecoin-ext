@@ -4,13 +4,25 @@ import { copy } from "esbuild-plugin-copy";
 import stylePlugin from "esbuild-style-plugin";
 import { nodeModulesPolyfillPlugin } from "esbuild-plugins-node-modules-polyfill";
 import svgPlugin from "esbuild-svg";
+import manifestPlugin from "esbuild-plugin-manifest";
 const autoprefixer = require("autoprefixer");
 const tailwindcss = require("tailwindcss");
 
+async function readJsonFile(path: string) {
+  const file = Bun.file(path);
+  return await file.json();
+}
+
 const chrome = Bun.argv.length > 2 ? Bun.argv[2] !== "--firefox" : true;
 
+const baseManifestPath = "./configs/manifests/base.json";
 const chromeManifestPath = "./configs/manifests/chrome.json";
 const firefoxManifestPath = "./configs/manifests/firefox.json";
+
+const baseManifest = await readJsonFile(baseManifestPath);
+const extraManifest = await readJsonFile(
+  chrome ? chromeManifestPath : firefoxManifestPath
+);
 
 console.log(`Building extension for ${chrome ? "Chrome" : "Firefox"}...`);
 
@@ -42,11 +54,12 @@ const ctx = await context({
         to: ["."],
       },
     }),
-    copy({
-      assets: {
-        from: [chrome ? chromeManifestPath : firefoxManifestPath],
-        to: ["./manifest.json"],
-      },
+    manifestPlugin({
+      generate: () => ({
+        ...baseManifest,
+        ...extraManifest,
+      }),
+      hash: false,
     }),
     nodeModulesPolyfillPlugin({
       globals: {
