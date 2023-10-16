@@ -4,9 +4,15 @@ import { copy } from "esbuild-plugin-copy";
 import stylePlugin from "esbuild-style-plugin";
 import { nodeModulesPolyfillPlugin } from "esbuild-plugins-node-modules-polyfill";
 import svgPlugin from "esbuild-svg";
-
 const autoprefixer = require("autoprefixer");
 const tailwindcss = require("tailwindcss");
+
+const chrome = Bun.argv.length > 2 ? Bun.argv[2] !== "--firefox" : true;
+
+const chromeManifestPath = "./configs/manifests/chrome.json";
+const firefoxManifestPath = "./configs/manifests/firefox.json";
+
+console.log(`Building extension for ${chrome ? "Chrome" : "Firefox"}...`);
 
 const ctx = await context({
   entryPoints: {
@@ -15,7 +21,7 @@ const ctx = await context({
     pageProvider: "src/content-script/pageProvider/index.ts",
     ui: "src/ui/index.tsx",
   },
-  outdir: "dist",
+  outdir: chrome ? "dist/chrome" : "dist/firefox",
   minify: false,
   jsxDev: true,
   bundle: true,
@@ -34,6 +40,12 @@ const ctx = await context({
       assets: {
         from: ["./configs/_raw/**/*"],
         to: ["."],
+      },
+    }),
+    copy({
+      assets: {
+        from: [chrome ? chromeManifestPath : firefoxManifestPath],
+        to: ["./manifest.json"],
       },
     }),
     nodeModulesPolyfillPlugin({

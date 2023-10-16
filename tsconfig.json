@@ -8,7 +8,13 @@
     },
     "noImplicitAny": false,
     "downlevelIteration": true,
-    "types": ["chrome", "react", "react-dom", "esbuild-style-plugin"],
+    "types": [
+      "chrome",
+      "react",
+      "react-dom",
+      "esbuild-style-plugin",
+      "bun-types"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
