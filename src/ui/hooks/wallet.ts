@@ -7,6 +7,7 @@ import {
 } from "../states/walletState";
 import { useCallback } from "react";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
+import toast from "react-hot-toast";
 
 export const useCreateNewWallet = () => {
   const { wallets, updateWalletState } = useWalletState((v) => ({
@@ -196,8 +197,10 @@ export const useDeleteWallet = () => {
   }));
   const currentWallet = useGetCurrentWallet();
   const currentAccount = useGetCurrentAccount();
+  const { wallets } = useWalletState((v) => ({ wallets: v.wallets }))
 
   return useCallback(async (id: number) => {
+    if (wallets.length === 1) { toast.error("You cannot delete your last wallet"); return; }
     if (currentWallet?.id === undefined) throw new Error('Unreachable')
     const newWalletId = currentWallet.id > id ? currentWallet.id - 1 : currentWallet.id;
     await updateWalletState({

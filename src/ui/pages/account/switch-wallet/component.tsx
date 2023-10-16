@@ -71,6 +71,7 @@ const SwitchWallet = () => {
                 {
                   action: () => {
                     deleteWallet(wallet.id);
+                    setSelected(undefined);
                   },
                   icon: <TrashIcon className="w-8 h-8 cursor-pointer" />,
                 },
