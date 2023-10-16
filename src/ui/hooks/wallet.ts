@@ -201,5 +201,5 @@ export const useDeleteWallet = () => {
       wallets: await walletController.deleteWallet(id),
       selectedWallet: currentWallet?.id === id ? 0 : currentWallet?.id,
     });
-  }, []);
+  }, [currentWallet, walletController, updateWalletState]);
 };
