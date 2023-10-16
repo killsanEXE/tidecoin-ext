@@ -1,38 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "noImplicitAny": false,
-    "downlevelIteration": true,
-    "types": [
-      "chrome",
-      "react",
-      "react-dom",
-      "esbuild-style-plugin",
-      "bun-types"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
+    "target": "esnext",
+    "types": ["bun-types"],
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "Bundler",
-    "isolatedModules": false,
-    "jsx": "react-jsx",
-    "plugins": [
-      {
-        "transform": "typescript-transform-paths",
-        "afterDeclarations": true
-      }
-    ],
-    "experimentalDecorators": true
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
   },
-  "exclude": ["./node_modules"]
+  "exclude": ["./src/**/*"]
 }

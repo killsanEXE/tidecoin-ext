@@ -1,4 +1,35 @@
+import { Message } from "@/shared/utils";
+
 function injectScript() {
+  try {
+    const container = document.head || document.documentElement;
+    const scriptTag = document.createElement("script");
+    scriptTag.setAttribute("async", "false");
+    scriptTag.setAttribute("channel", "3ffsdf32f23d23d");
+    scriptTag.src = chrome.runtime.getURL("pageProvider.js");
+    container.insertBefore(scriptTag, container.children[0]);
+    container.removeChild(scriptTag);
+
+    const { BroadcastChannelMessage, PortMessage } = Message;
+
+    const pm = new PortMessage().connect();
+
+    const bcm = new BroadcastChannelMessage("3ffsdf32f23d23d").listen((data) =>
+      pm.request(data)
+    );
+
+    // background notification
+    pm.on("message", (data) => {
+      bcm.send("message", data);
+    });
+
+    document.addEventListener("beforeunload", () => {
+      bcm.dispose();
+      pm.dispose();
+    });
+  } catch (error) {
+    console.error("Unisat: Provider injection failed.", error);
+  }
 }
 
 /**
@@ -9,7 +40,7 @@ function injectScript() {
 function doctypeCheck() {
   const { doctype } = window.document;
   if (doctype) {
-    return doctype.name === 'html';
+    return doctype.name === "html";
   }
   return true;
 }
@@ -24,7 +55,7 @@ function doctypeCheck() {
  * @returns {boolean} whether or not the extension of the current document is prohibited
  */
 function suffixCheck() {
-  const prohibitedTypes = [ /\.xml$/u, /\.pdf$/u ];
+  const prohibitedTypes = [/\.xml$/u, /\.pdf$/u];
   const currentUrl = window.location.pathname;
   for (let i = 0; i < prohibitedTypes.length; i++) {
     if (prohibitedTypes[i].test(currentUrl)) {
@@ -42,7 +73,7 @@ function suffixCheck() {
 function documentElementCheck() {
   const documentElement = document.documentElement.nodeName;
   if (documentElement) {
-    return documentElement.toLowerCase() === 'html';
+    return documentElement.toLowerCase() === "html";
   }
   return true;
 }
@@ -57,8 +88,11 @@ function blockedDomainCheck() {
   const currentUrl = window.location.href;
   let currentRegex;
   for (let i = 0; i < blockedDomains.length; i++) {
-    const blockedDomain = blockedDomains[i].replace('.', '\\.');
-    currentRegex = new RegExp(`(?:https?:\\/\\/)(?:(?!${blockedDomain}).)*$`, 'u');
+    const blockedDomain = blockedDomains[i].replace(".", "\\.");
+    currentRegex = new RegExp(
+      `(?:https?:\\/\\/)(?:(?!${blockedDomain}).)*$`,
+      "u"
+    );
     if (!currentRegex.test(currentUrl)) {
       return true;
     }
@@ -76,7 +110,13 @@ function iframeCheck() {
  * @returns {boolean} {@code true} Whether the provider should be injected
  */
 function shouldInjectProvider() {
-  return doctypeCheck() && suffixCheck() && documentElementCheck() && !blockedDomainCheck() && !iframeCheck();
+  return (
+    doctypeCheck() &&
+    suffixCheck() &&
+    documentElementCheck() &&
+    !blockedDomainCheck() &&
+    !iframeCheck()
+  );
 }
 
 if (shouldInjectProvider()) {
