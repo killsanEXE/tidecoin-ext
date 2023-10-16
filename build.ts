@@ -1,4 +1,4 @@
-import { context } from "esbuild";
+import { context, build, BuildOptions } from "esbuild";
 import { wasmLoader } from "esbuild-plugin-wasm";
 import { copy } from "esbuild-plugin-copy";
 import stylePlugin from "esbuild-style-plugin";
@@ -26,7 +26,7 @@ const extraManifest = await readJsonFile(
 
 console.log(`Building extension for ${chrome ? "Chrome" : "Firefox"}...`);
 
-const ctx = await context({
+const buildOptions: BuildOptions = {
   entryPoints: {
     background: "src/background/index.ts",
     "content-script": "src/content-script/index.ts",
@@ -70,6 +70,13 @@ const ctx = await context({
       },
     }),
   ],
-});
+};
 
-await ctx.watch();
+if (Bun.argv.includes("--watch")) {
+  console.log("Watching...");
+  const ctx = await context(buildOptions);
+  await ctx.watch();
+} else {
+  await build(buildOptions);
+  console.log("Builded successfully");
+}

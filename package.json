@@ -3,11 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "webpack --config webpack.config.js",
-    "test": "react-app-rewired test",
-    "dev": "webpack --config webpack.config.js -w",
-    "eject": "react-scripts eject"
+    "dev": "bun build.ts --watch",
+    "chrome": "bun build.ts",
+    "firefox": "bun build.ts --firefox"
   },
   "eslintConfig": {
     "extends": [
