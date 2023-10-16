@@ -7,7 +7,7 @@ import { IAccount, IPrivateWallet, IWallet } from "@/shared/interfaces";
 import { DecryptedSecrets, StorageInterface } from "./types";
 import { IAppStateBase, IWalletStateBase } from "@/shared/interfaces";
 import { emptyAppState, emptyWalletState } from "./utils";
-import { keyringService } from "..";
+import { keyringService, storageService } from "..";
 
 class StorageService {
   private _walletState: IWalletStateBase;
@@ -90,6 +90,7 @@ class StorageService {
     const data: StorageInterface = {
       enc: JSON.parse(encrypted),
       cache: walletsToSave,
+      addressBook: this.appState.addressBook
     };
 
     await browserStorageLocalSet(data);
@@ -120,6 +121,8 @@ class StorageService {
   async importWallets(password: string): Promise<IPrivateWallet[]> {
     const encrypted = await this.getLocalValues();
     if (!encrypted) return [];
+
+    storageService.updateAppState({ addressBook: encrypted.addressBook });
 
     const secrets = await this.getSecrets(encrypted, password);
 

@@ -15,3 +15,5 @@ Tasks:
     8. Integrate extension in websites 
     9. Swap between tdc and doge
     10. add other cryptocurrencies to the extension
+    11. Save current wallet?
+    12. Fix rename account

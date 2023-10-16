@@ -6,6 +6,8 @@ import cn from "classnames";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useAppState } from "@/ui/states/appState";
+import { Combobox, Transition } from "@headlessui/react";
 
 interface FormType {
   address: string;
@@ -29,6 +31,8 @@ const CreateSend = () => {
       includeFeeInAmount: false
     }
   });
+
+  const { addressBook } = useAppState((v) => ({ addressBook: v.addressBook }))
 
 
   const send = async ({ address, amount, feeAmount, includeFeeInAmount }: FormType) => {
@@ -76,6 +80,7 @@ const CreateSend = () => {
   };
 
   useEffect(() => {
+    console.log(addressBook)
     if (location.state !== null && (location.state.toAddress !== null || location.state.toAddress !== undefined)) {
       setValue("address", location.state.toAddress);
       setValue("amount", location.state.amount);
@@ -89,11 +94,51 @@ const CreateSend = () => {
       <div className={s.inputs}>
         <div className="form-field">
           <span className="input-span">Address</span>
-          <input
+          {/* <input
             placeholder="Address of receiver"
             className="input"
             {...register("address")}
-          />
+          /> */}
+          <Combobox nullable={true}>
+            <div className="input">
+              <div className={s.inputBox}>
+                <Combobox.Input
+                  {...register("address")}
+                  className={s.input}
+                  displayValue={(word: string) => word}
+                />
+              </div>
+              <Transition
+                leave="transition ease-in duration-100"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <Combobox.Options className={s.optionsBox}>
+                  {addressBook.map((word) => (
+                    <Combobox.Option
+                      key={word[1]}
+                      className={({ active }) =>
+                        cn(s.options, { [s.optionsActive]: active })
+                      }
+                      value={word[0]}
+                    >
+                      {({ selected }) => (
+                        <>
+                          <span
+                            className={`block truncate ${selected ? "font-medium" : "font-normal"
+                              }`}
+                          >
+                            {word[0]}
+                          </span>
+                        </>
+                      )}
+                    </Combobox.Option>
+                  ))
+                  }
+                </Combobox.Options>
+              </Transition>
+            </div>
+          </Combobox>
         </div>
         <div className="form-field">
           <span className="input-span">Amount</span>

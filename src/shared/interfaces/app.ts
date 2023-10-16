@@ -3,6 +3,7 @@ export interface IAppStateBase {
   isUnlocked: boolean;
   vault: string[];
   password?: string;
+  addressBook: string[];
 }
 
 export interface IAppState extends IAppStateBase {

@@ -1,9 +1,10 @@
 import { usePushTidecoinTxCallback } from "@/ui/hooks/transactions";
 import s from "./styles.module.scss";
 import cn from "classnames";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ReactLoading from "react-loading";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useUpdateAddressBook } from "@/ui/hooks/app";
 
 const ConfirmSend = () => {
 
@@ -11,9 +12,11 @@ const ConfirmSend = () => {
   const pushTx = usePushTidecoinTxCallback();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const updateAddressBook = useUpdateAddressBook();
 
   const confirmSend = async () => {
     setLoading(true);
+    await updateAddressBook(location.state.toAddress);
     navigate(`/pages/finalle-send/${(await pushTx(location.state.hex))?.txid ?? ""}`);
   }
 
