@@ -204,7 +204,7 @@ export const useDeleteWallet = () => {
     if (currentWallet?.id === undefined) throw new Error('Unreachable')
     const newWalletId = currentWallet.id > id ? currentWallet.id - 1 : currentWallet.id;
     await updateWalletState({
-      selectedWallet: newWalletId,
+      selectedWallet: id === currentWallet.id ? 0 : newWalletId,
       selectedAccount: currentWallet?.id === id ? 0 : currentAccount?.id,
       wallets: await walletController.deleteWallet(id),
     });

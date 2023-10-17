@@ -14,6 +14,7 @@ import { useDeleteWallet, useSwitchWallet } from "@/ui/hooks/wallet";
 import { useNavigate } from "react-router-dom";
 import Menu from "@/ui/components/menu";
 import Popup from "@/ui/components/popup";
+import toast from "react-hot-toast";
 
 const SwitchWallet = () => {
   const currentWallet = useGetCurrentWallet();
@@ -75,16 +76,20 @@ const SwitchWallet = () => {
                 },
                 {
                   action: () => {
-                    setQuestion(`Are you sure you want to delete "${wallet.name}"?`)
-                    setHandler(() => (result) => {
-                      if (result) {
-                        deleteWallet(wallet.id);
-                        setHandler(undefined);
-                        setSelected(undefined);
-                      }
-                      setIsOpen(false);
-                    })
-                    setIsOpen(true);
+                    if (wallets.length <= 1) toast.error("You cannot delete your last wallet");
+                    else {
+
+                      setQuestion(`Are you sure you want to delete "${wallet.name}"?`)
+                      setHandler(() => (result) => {
+                        if (result) {
+                          deleteWallet(wallet.id);
+                          setHandler(undefined);
+                          setSelected(undefined);
+                        }
+                        setIsOpen(false);
+                      })
+                      setIsOpen(true);
+                    }
                   },
                   icon: <TrashIcon className="w-8 h-8 cursor-pointer" />,
                 },
