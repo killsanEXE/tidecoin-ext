@@ -16,7 +16,7 @@ export const useUpdateAddressBook = () => {
             const addresses = [...addressBook];
             if (addresses.length >= 6) addresses.splice(5, 1);
             if (addresses.includes(address.trim())) return;
-            addresses.push(address ?? "");
+            addresses.unshift(address ?? "");
             await updateAppState({ addressBook: addresses });
             await walletController.saveWallets();
         },
