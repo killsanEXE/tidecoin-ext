@@ -24,7 +24,6 @@ class WalletController implements IWalletController {
     const account: IAccount = {
       id: 0,
       name: "Account 1",
-      balance: 0,
       address,
     };
     const walletId =
@@ -87,7 +86,6 @@ class WalletController implements IWalletController {
     return {
       id: wallet.accounts[wallet.accounts.length - 1].id + 1,
       name: accName,
-      balance: 0,
       address: addresses[0],
     };
   }

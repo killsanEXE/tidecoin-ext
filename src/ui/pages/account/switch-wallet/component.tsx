@@ -28,7 +28,8 @@ const SwitchWallet = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [question, setQuestion] = useState("");
-  const [handler, setHandler] = useState<(result: boolean) => void | undefined>(undefined)
+  const [handler, setHandler] =
+    useState<(result: boolean) => void | undefined>(undefined);
 
   return (
     <div className={s.switchWalletDiv}>
@@ -40,7 +41,7 @@ const SwitchWallet = () => {
                 className={s.walletInfo}
                 onClick={() => {
                   switchWallet(i);
-                  navigate("/home/wallet");
+                  navigate("/home");
                 }}
               >
                 {wallet.id === currentWallet?.id ? (
@@ -76,10 +77,12 @@ const SwitchWallet = () => {
                 },
                 {
                   action: () => {
-                    if (wallets.length <= 1) toast.error("You cannot delete your last wallet");
+                    if (wallets.length <= 1)
+                      toast.error("You cannot delete your last wallet");
                     else {
-
-                      setQuestion(`Are you sure you want to delete "${wallet.name}"?`)
+                      setQuestion(
+                        `Are you sure you want to delete "${wallet.name}"?`
+                      );
                       setHandler(() => (result) => {
                         if (result) {
                           deleteWallet(wallet.id);
@@ -87,7 +90,7 @@ const SwitchWallet = () => {
                           setSelected(undefined);
                         }
                         setIsOpen(false);
-                      })
+                      });
                       setIsOpen(true);
                     }
                   },

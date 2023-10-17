@@ -88,7 +88,7 @@ const RestoreMnemonic = () => {
                   );
                   await walletController.saveWallets();
                   await updateWalletState({ vaultIsEmpty: false });
-                  navigate("/home/wallet");
+                  navigate("/home");
                 } catch (e) {
                   toast.error("Words you entered is invalid");
                   setStep(1);

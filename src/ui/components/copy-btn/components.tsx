@@ -20,8 +20,9 @@ const CopyBtn: FC<Props> = ({ label, value, className, ...props }) => {
         toast.success("Copied");
       }}
     >
-      <DocumentDuplicateIcon className="w-5 h-5" />
       {label && <div {...props}>{label}</div>}
+
+      <DocumentDuplicateIcon className="w-4 h-4" />
     </button>
   );
 };

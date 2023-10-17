@@ -30,7 +30,7 @@ const NewAccount = () => {
     if (name.length <= 10 && !nameAlreadyExists(name)) {
       await createNewAccount(name);
       toast.success("Created new account");
-      navigate("/home/wallet");
+      navigate("/home");
     } else {
       if (nameAlreadyExists(name))
         toast.error("Name for this account is already taken");

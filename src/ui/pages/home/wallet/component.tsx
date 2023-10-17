@@ -1,6 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
-import { ListBulletIcon } from "@heroicons/react/24/outline";
+import {
+  ListBulletIcon,
+  Cog6ToothIcon,
+  ChevronDownIcon,
+} from "@heroicons/react/24/outline";
 import s from "./styles.module.scss";
 import { shortAddress } from "@/ui/utils";
 import {
@@ -17,9 +21,12 @@ import { useDebounceCall } from "@/ui/hooks/debounce";
 import CopyBtn from "@/ui/components/copy-btn";
 
 const Wallet = () => {
-  const currentAccount = useGetCurrentAccount();
   const currentWallet = useGetCurrentWallet();
+  if (!currentWallet) return <Navigate to={"/pages/create-new-wallet"} />;
+
+  const currentAccount = useGetCurrentAccount();
   const navigate = useNavigate();
+
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
 
   const updateAccountBalance = useUpdateCurrentAccountBalance();
@@ -30,12 +37,13 @@ const Wallet = () => {
     if (receivedTransactions !== undefined)
       setTransactions(receivedTransactions);
   }, [updateAccountTransactions, setTransactions]);
+
   const callUpdateTransactions = useDebounceCall(udpateTransactions, 200);
 
   useEffect(() => {
     const interval = setInterval(() => {
       updateAccountBalance();
-      udpateTransactions();
+      callUpdateTransactions();
     }, 10000);
 
     if (currentAccount && currentAccount.balance === undefined)
@@ -47,7 +55,6 @@ const Wallet = () => {
       clearInterval(interval);
     };
   }, [
-    udpateTransactions,
     updateAccountBalance,
     currentAccount,
     currentWallet,
@@ -56,29 +63,32 @@ const Wallet = () => {
 
   return (
     <div className={s.walletDiv}>
-      <div className={s.changeWalletAccDiv}>
-        <button
+      <div className="flex justify-between mx-6 mt-2 items-center">
+        <div
+          className="flex gap-3 items-center select-none cursor-pointer"
           onClick={() => {
             navigate("/pages/switch-wallet");
           }}
-          className={cn(s.change, s.btn)}
         >
-          {currentWallet?.name ?? "wallet"}
-        </button>
-        {currentWallet?.type === "root" && (
-          <button
-            onClick={() => {
-              navigate("/pages/switch-account");
-            }}
-            className={cn(s.change, s.btn)}
-          >
-            {currentAccount?.name}
-          </button>
-        )}
+          <div className="bg-gradient-to-r from-indigo-500 to-indigo-950 rounded-full w-6 h-6 flex items-center justify-center">
+            {currentWallet.name ? currentWallet.name[0].toUpperCase() : "W"}
+          </div>
+          <div className="flex gap-2 items-center">
+            <div className={s.change}>{currentWallet?.name ?? "wallet"} </div>
+            <ChevronDownIcon className="w-3 h-3" />
+          </div>
+        </div>
+
+        <div
+          onClick={() => navigate("/pages/settings")}
+          className="cursor-pointer"
+        >
+          <Cog6ToothIcon className="w-6 h-6 hover:rotate-90 transition-transform" />
+        </div>
       </div>
 
       <div className={s.accPanel}>
-        <div className="flex gap-2">
+        <div className="flex gap-2 pb-2">
           <div className={s.balance}>
             {currentAccount?.balance === undefined ? (
               <ReactLoading
@@ -89,13 +99,19 @@ const Wallet = () => {
               />
             ) : (
               currentAccount?.balance
-            )}{" "}
-            TDC
+            )}
+            <span className="text-xl pb-0.5 text-slate-300">TDC</span>
           </div>
           <div className="text-gray-500 text-sm">~0.06$</div>
         </div>
-        <div className="flex gap-2 items-center pl-6">
-          <ListBulletIcon className={s.accountsIcon} />
+        <div className="flex gap-3 items-center px-6">
+          {currentWallet?.type === "root" && (
+            <ListBulletIcon
+              title="Switch account"
+              onClick={() => navigate("/pages/switch-account")}
+              className={s.accountsIcon}
+            />
+          )}
           <CopyBtn
             title={currentAccount?.address}
             className={cn(s.accPubAddress)}

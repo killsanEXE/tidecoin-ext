@@ -73,7 +73,9 @@ export default function PagesLayout() {
       title: "Renaming wallet",
     },
     {
-      backAction: () => { navigate("/home/wallet") },
+      backAction: () => {
+        navigate("/home");
+      },
       route: "/pages/finalle-send/@",
       title: "Send",
     },
@@ -84,17 +86,21 @@ export default function PagesLayout() {
     {
       backAction: () => {
         navigate("/pages/create-send", {
-          state: currentRoute.state
-        })
+          state: currentRoute.state,
+        });
       },
       route: "/pages/confirm-send",
       title: "Send",
+    },
+    {
+      route: "/pages/settings",
+      title: "Settings",
     },
   ];
 
   const currentRoute = useLocation();
   const navigate = useNavigate();
-  const { wallets } = useWalletState((v) => ({ wallets: v.wallets }))
+  const { wallets } = useWalletState((v) => ({ wallets: v.wallets }));
 
   const currentRouteTitle = useMemo(
     () =>
@@ -113,14 +119,14 @@ export default function PagesLayout() {
     <div className={s.layout}>
       {
         <div className={s.controlDiv}>
-          {(!currentRouteTitle?.disableBack || !currentRouteTitle.disableBack()) && (
+          {(!currentRouteTitle?.disableBack ||
+            !currentRouteTitle.disableBack()) && (
             <div
               className={cn(s.controlElem, s.back)}
               onClick={() => {
                 if (currentRouteTitle?.backAction)
                   currentRouteTitle.backAction();
-                else
-                  navigate(-1);
+                else navigate(-1);
               }}
             >
               <ChevronLeftIcon className="w-8 h-8" />

@@ -26,7 +26,7 @@ const RestorePrivKey = () => {
   const recoverWallet = async ({ privKey }: FormType) => {
     await createNewWallet(privKey, "simple");
     await walletController.saveWallets();
-    navigate("/home/wallet");
+    navigate("/home");
   };
 
   return (

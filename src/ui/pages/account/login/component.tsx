@@ -50,7 +50,7 @@ const Login = () => {
         isUnlocked: true,
         password: password,
       });
-      navigate("/home/wallet");
+      navigate("/home");
     } catch (e) {
       toast.error(e.message);
     }

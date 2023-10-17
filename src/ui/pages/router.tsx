@@ -1,6 +1,5 @@
 import { createHashRouter, Navigate } from "react-router-dom";
 
-import Layout from "@/ui/pages/home/layout";
 import Wallet from "@/ui/pages/home/wallet";
 
 import Login from "@/ui/pages/account/login";
@@ -38,18 +37,12 @@ export const guestRouter = createHashRouter([
 ]);
 
 export const authenticatedRouter = createHashRouter([
-  {
-    path: "home",
-    element: <Layout />,
-    children: [
-      { path: "wallet", element: <Wallet /> },
-      { path: "settings", element: <Settings /> },
-    ],
-  },
+  { path: "home", element: <Wallet /> },
   {
     path: "pages",
     element: <PagesLayout />,
     children: [
+      { path: "settings", element: <Settings /> },
       { path: "switch-account", element: <SwitchAccount /> },
       { path: "create-new-account", element: <CreateNewAccount /> },
       { path: "change-password", element: <ChangePassword /> },
@@ -70,5 +63,5 @@ export const authenticatedRouter = createHashRouter([
       { path: "confirm-send", element: <ConfirmSend /> },
     ],
   },
-  { path: "*", element: <Navigate to={"/home/wallet"} /> },
+  { path: "*", element: <Navigate to={"/home"} /> },
 ]);

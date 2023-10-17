@@ -40,7 +40,7 @@ const Receive = () => {
   }, [currentAccount?.address]);
 
   useEffect(() => {
-    if (currentAccount === undefined) navigate("/home/wallet");
+    if (currentAccount === undefined) navigate("/home");
   }, [currentAccount, navigate]);
 
   return (

@@ -77,6 +77,7 @@ export const useUpdateCurrentAccount = () => {
 
   return useCallback(
     async (account: Partial<IAccount>) => {
+      if (!wallets[selectedWallet!]) return;
       wallets[selectedWallet!].accounts[selectedAccount!] = {
         ...wallets[selectedWallet!].accounts[selectedAccount!],
         ...account,
@@ -88,7 +89,7 @@ export const useUpdateCurrentAccount = () => {
     },
     [
       updateWalletState,
-      wallets[selectedWallet!].accounts[selectedAccount!],
+      wallets[selectedWallet!]?.accounts[selectedAccount!],
       selectedAccount,
       selectedWallet,
     ]
@@ -197,16 +198,23 @@ export const useDeleteWallet = () => {
   }));
   const currentWallet = useGetCurrentWallet();
   const currentAccount = useGetCurrentAccount();
-  const { wallets } = useWalletState((v) => ({ wallets: v.wallets }))
+  const { wallets } = useWalletState((v) => ({ wallets: v.wallets }));
 
-  return useCallback(async (id: number) => {
-    if (wallets.length === 1) { toast.error("You cannot delete your last wallet"); return; }
-    if (currentWallet?.id === undefined) throw new Error('Unreachable')
-    const newWalletId = currentWallet.id > id ? currentWallet.id - 1 : currentWallet.id;
-    await updateWalletState({
-      selectedWallet: id === currentWallet.id ? 0 : newWalletId,
-      selectedAccount: currentWallet?.id === id ? 0 : currentAccount?.id,
-      wallets: await walletController.deleteWallet(id),
-    });
-  }, [currentWallet, walletController, updateWalletState]);
+  return useCallback(
+    async (id: number) => {
+      if (wallets.length === 1) {
+        toast.error("You cannot delete your last wallet");
+        return;
+      }
+      if (currentWallet?.id === undefined) throw new Error("Unreachable");
+      const newWalletId =
+        currentWallet.id > id ? currentWallet.id - 1 : currentWallet.id;
+      await updateWalletState({
+        selectedWallet: id === currentWallet.id ? 0 : newWalletId,
+        selectedAccount: currentWallet?.id === id ? 0 : currentAccount?.id,
+        wallets: await walletController.deleteWallet(id),
+      });
+    },
+    [currentWallet, walletController, updateWalletState]
+  );
 };

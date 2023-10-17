@@ -103,7 +103,7 @@ const NewMnemonic = () => {
                 await createNewWallet(mnemonicPhrase!, "root", addressType);
                 await updateWalletState({ vaultIsEmpty: false });
                 await walletController.saveWallets();
-                navigate("/home/wallet");
+                navigate("/home");
               }}
               className={cn(s.continue, "btn", "primary")}
             >

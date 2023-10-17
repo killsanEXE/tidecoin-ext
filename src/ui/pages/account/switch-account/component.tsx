@@ -34,7 +34,7 @@ const SwitchAccount = () => {
     updateWalletState({
       selectedAccount: id,
     });
-    navigate("/home/wallet");
+    navigate("/home");
   };
 
   return (

@@ -1,14 +1,6 @@
 .walletDiv {
   @apply w-full h-full pt-[1rem] flex flex-col justify-start;
 
-  .changeWalletAccDiv {
-    @apply flex justify-evenly h-[10vh];
-
-    .change {
-      @apply w-full text-text m-2 text-base;
-    }
-  }
-
   .accPanel {
     @apply flex flex-col mt-8 gap-4;
 
@@ -17,7 +9,7 @@
     }
 
     .balance {
-      @apply flex text-3xl gap-4 ml-6;
+      @apply flex text-3xl gap-1 ml-6 items-end;
     }
 
     .accPubAddress {
@@ -67,4 +59,8 @@
 
 .accountsIcon {
   @apply w-8 h-8 rounded-xl p-1 border border-text transition-colors hover:bg-text hover:text-bg cursor-pointer;
+}
+
+.change {
+  @apply font-medium text-sm;
 }

@@ -10,7 +10,7 @@ const Nav = () => {
       <button
         className={s.navBtn}
         onClick={() => {
-          navigate("/home/wallet");
+          navigate("/home");
         }}
       >
         <WalletIcon className="w-8 h-8" />
@@ -18,7 +18,7 @@ const Nav = () => {
       <button
         className={s.navBtn}
         onClick={() => {
-          navigate("/home/settings");
+          navigate("/pages/settings");
         }}
       >
         <Cog6ToothIcon className="w-8 h-8" />
