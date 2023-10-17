@@ -119,11 +119,13 @@ const CreateSend = () => {
               afterLeave={() => { }}
             >
               <Combobox.Options className={s.addressbookoptions}>
-                {filteredAddresses.map((address) => (
-                  <Combobox.Option className={s.addressbookoption} key={address} value={address}>
-                    {address}
-                  </Combobox.Option>
-                ))}
+                {filteredAddresses.length <= 0 ? "" :
+                  filteredAddresses.map((address) => (
+                    <Combobox.Option className={s.addressbookoption} key={address} value={address}>
+                      {address}
+                    </Combobox.Option>
+                  ))
+                }
               </Combobox.Options>
             </Transition>
           </Combobox>
