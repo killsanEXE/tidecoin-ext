@@ -1,33 +1,45 @@
-import { useState } from "react";
-import s from "./styles.module.scss"
+import { FC, useId } from "react";
+import s from "./styles.module.scss";
 import { useAppState } from "@/ui/states/appState";
 import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
 
-const CheckPassword = (props: { handler: (password?: string) => void; }) => {
+interface Props {
+  handler: (password?: string) => void;
+}
 
-    const [password, setPassword] = useState("");
-    const { appPassword } = useAppState((v) => ({ appPassword: v.password }))
+interface FormType {
+  password: string;
+}
 
-    const checkPassword = () => {
-        if (password === appPassword) props.handler(password);
-        else toast.error("Password is incorrect");
-    }
+const CheckPassword: FC<Props> = ({ handler }) => {
+  const { appPassword } = useAppState((v) => ({ appPassword: v.password }));
 
-    return (
-        <form className={s.form} onSubmit={(e) => e.preventDefault()}>
-            <p className={s.formTitle}>Enter your password</p>
-            <input
-                type="password"
-                className="input"
-                onChange={(e) => {
-                    setPassword(e.target.value);
-                }}
-            />
-            <button className="btn primary" onClick={checkPassword}>
-                Enter
-            </button>
-        </form>
-    )
+  const pwdId = useId();
+
+  const { register, handleSubmit } = useForm<FormType>();
+
+  const checkPassword = ({ password }: FormType) => {
+    if (password === appPassword) return handler(password);
+    toast.error("Incorrect password");
+  };
+
+  return (
+    <form className={s.form} onSubmit={handleSubmit(checkPassword)}>
+      <label htmlFor={pwdId} className={s.formTitle}>
+        Enter your password
+      </label>
+      <input
+        id={pwdId}
+        type="password"
+        className="input"
+        {...register("password")}
+      />
+      <button className="btn primary" type="submit">
+        Enter
+      </button>
+    </form>
+  );
 };
 
 export default CheckPassword;

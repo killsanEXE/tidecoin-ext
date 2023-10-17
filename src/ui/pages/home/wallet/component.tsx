@@ -100,6 +100,7 @@ const Wallet = () => {
           TDC
         </div>
         <CopyBtn
+          title={currentAccount?.address}
           className={cn(s.accPubAddress, s.center)}
           label={shortAddress(currentAccount?.address)}
           value={currentAccount?.address}

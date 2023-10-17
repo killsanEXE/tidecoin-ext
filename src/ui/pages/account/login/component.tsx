@@ -5,6 +5,7 @@ import { useAppState } from "@/ui/states/appState";
 import { useWalletState } from "@/ui/states/walletState";
 import { useControllersState } from "@/ui/states/controllerState";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 interface FormType {
   password: string;
@@ -34,21 +35,25 @@ const Login = () => {
   }, [vaultIsEmpty]);
 
   const login = async ({ password }: FormType) => {
-    const exportedWallets = await walletController.importWallets(password);
-    exportedWallets[0].accounts = await walletController.loadAccountsData(
-      0,
-      exportedWallets[0].accounts
-    );
-    await updateWalletState({
-      selectedAccount: 0,
-      selectedWallet: 0,
-      wallets: exportedWallets,
-    });
-    await updateAppState({
-      isUnlocked: true,
-      password: password,
-    });
-    navigate("/home/wallet");
+    try {
+      const exportedWallets = await walletController.importWallets(password);
+      exportedWallets[0].accounts = await walletController.loadAccountsData(
+        0,
+        exportedWallets[0].accounts
+      );
+      await updateWalletState({
+        selectedAccount: 0,
+        selectedWallet: 0,
+        wallets: exportedWallets,
+      });
+      await updateAppState({
+        isUnlocked: true,
+        password: password,
+      });
+      navigate("/home/wallet");
+    } catch (e) {
+      toast.error(e.message);
+    }
   };
 
   return (

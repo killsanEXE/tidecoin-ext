@@ -1,14 +1,15 @@
 import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
-import { FC } from "react";
+import { FC, HTMLAttributes } from "react";
 import toast from "react-hot-toast";
 
-interface Props {
+interface Props extends HTMLAttributes<HTMLDivElement> {
   label?: string;
   value?: string;
   className?: string;
+  title?: string;
 }
 
-const CopyBtn: FC<Props> = ({ label, value, className }) => {
+const CopyBtn: FC<Props> = ({ label, value, className, ...props }) => {
   return (
     <button
       className={className ? className : "btn primary"}
@@ -19,7 +20,7 @@ const CopyBtn: FC<Props> = ({ label, value, className }) => {
       }}
     >
       <DocumentDuplicateIcon className="w-5 h-5" />
-      {label && <div>{label}</div>}
+      {label && <div {...props}>{label}</div>}
     </button>
   );
 };
