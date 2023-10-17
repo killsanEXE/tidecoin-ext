@@ -67,13 +67,23 @@ const SwitchWallet = () => {
                   action: () => {
                     navigate(`/pages/rename-wallet/${wallet.id}`);
                   },
-                  icon: <TagIcon className="w-8 h-8" />,
+                  icon: (
+                    <TagIcon
+                      title="Rename wallet"
+                      className="w-8 h-8 cursor-pointer text-bg"
+                    />
+                  ),
                 },
                 {
                   action: () => {
                     navigate(`/pages/show-mnemonic/${i}`);
                   },
-                  icon: <KeyIcon className="w-8 h-8 cursor-pointer" />,
+                  icon: (
+                    <KeyIcon
+                      title="Show mnemonic \ private key"
+                      className="w-8 h-8 cursor-pointer text-bg"
+                    />
+                  ),
                 },
                 {
                   action: () => {
@@ -94,13 +104,23 @@ const SwitchWallet = () => {
                       setIsOpen(true);
                     }
                   },
-                  icon: <TrashIcon className="w-8 h-8 cursor-pointer" />,
+                  icon: (
+                    <TrashIcon
+                      title="Remove wallet"
+                      className="w-8 h-8 cursor-pointer text-bg"
+                    />
+                  ),
                 },
                 {
                   action: () => {
                     setSelected(undefined);
                   },
-                  icon: <XMarkIcon className="w-8 h-8 cursor-pointer" />,
+                  icon: (
+                    <XMarkIcon
+                      title="Close menu"
+                      className="w-8 h-8 cursor-pointer text-bg"
+                    />
+                  ),
                 },
               ]}
             />

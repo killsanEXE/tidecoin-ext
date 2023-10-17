@@ -19,6 +19,7 @@ import { ITransaction } from "@/shared/interfaces/apiController";
 import { useUpdateCurrentAccountTransactions } from "@/ui/hooks/transactions";
 import { useDebounceCall } from "@/ui/hooks/debounce";
 import CopyBtn from "@/ui/components/copy-btn";
+import { useControllersState } from "@/ui/states/controllerState";
 
 const Wallet = () => {
   const currentWallet = useGetCurrentWallet();
@@ -28,6 +29,7 @@ const Wallet = () => {
   const navigate = useNavigate();
 
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
+  const [currentPrice, setCurrentPrice] = useState<number | undefined>();
 
   const updateAccountBalance = useUpdateCurrentAccountBalance();
   const updateAccountTransactions = useUpdateCurrentAccountTransactions();
@@ -39,6 +41,18 @@ const Wallet = () => {
   }, [updateAccountTransactions, setTransactions]);
 
   const callUpdateTransactions = useDebounceCall(udpateTransactions, 200);
+
+  const { apiController } = useControllersState((v) => ({
+    apiController: v.apiController,
+  }));
+
+  useEffect(() => {
+    const load = async () => {
+      const data = await apiController.getTDCPrice();
+      setCurrentPrice(Number(data.data.last));
+    };
+    load();
+  }, [apiController, setCurrentPrice]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -71,7 +85,9 @@ const Wallet = () => {
           }}
         >
           <div className="bg-gradient-to-r from-indigo-500 to-indigo-950 rounded-full w-6 h-6 flex items-center justify-center">
-            {currentWallet.name ? currentWallet.name[0].toUpperCase() : "W"}
+            {currentWallet.name
+              ? currentWallet.name.split(/.*?/u)[0].toUpperCase()
+              : "W"}
           </div>
           <div className="flex gap-2 items-center">
             <div className={s.change}>{currentWallet?.name ?? "wallet"} </div>
@@ -102,7 +118,12 @@ const Wallet = () => {
             )}
             <span className="text-xl pb-0.5 text-slate-300">TDC</span>
           </div>
-          <div className="text-gray-500 text-sm">~0.06$</div>
+          {currentAccount.balance !== undefined &&
+            currentPrice !== undefined && (
+              <div className="text-gray-500 text-sm">
+                ~{(currentAccount?.balance * currentPrice).toFixed(3)}$
+              </div>
+            )}
         </div>
         <div className="flex gap-3 items-center px-6">
           {currentWallet?.type === "root" && (

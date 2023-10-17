@@ -18,6 +18,10 @@ export default function PagesLayout() {
       },
     },
     {
+      route: "/pages/change-addr-type",
+      title: "Change Address Type",
+    },
+    {
       route: "/pages/create-new-account",
       title: "Create New Account",
     },
@@ -129,7 +133,7 @@ export default function PagesLayout() {
                 else navigate(-1);
               }}
             >
-              <ChevronLeftIcon className="w-8 h-8" />
+              <ChevronLeftIcon className="w-6 h-6" />
             </div>
           )}
 

@@ -1,11 +1,15 @@
 .allTypes {
-    @apply w-full h-full flex flex-col items-center gap-[1rem] justify-center text-[1rem];
+  @apply w-full h-full flex flex-col gap-4 text-base;
 
-    .addressType {
-        @apply w-[90%] bg-input-bg py-[1rem] px-[.3rem] rounded-[.3rem] flex items-center gap-[.5rem];
+  .addressType {
+    @apply py-4 flex items-center gap-2 pl-11 cursor-pointer relative;
+  }
+}
 
-        &:hover {
-            @apply cursor-pointer;
-        }
-    }
+.icon {
+  @apply absolute left-2 top-1/2 -translate-y-1/2 w-6 h-6;
+}
+
+.selected {
+  @apply bg-text text-bg;
 }

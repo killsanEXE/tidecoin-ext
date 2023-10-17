@@ -1,11 +1,11 @@
 .settings {
-  @apply h-full w-full flex flex-col gap-6 justify-center items-center;
+  @apply h-full w-full flex flex-col gap-3 justify-center;
 }
 
 .card {
-  @apply w-10/12 flex justify-center items-center bg-panel rounded-[.3rem] cursor-pointer;
+  @apply cursor-pointer;
 
   .cardText {
-    @apply text-lg py-1;
+    @apply pl-6 text-lg py-2 hover:bg-text hover:text-bg transition-colors;
   }
 }

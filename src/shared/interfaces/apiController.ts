@@ -20,6 +20,7 @@ export interface IApiController {
   pushTx(rawTx: string): Promise<{ txid: string } | undefined>;
   getTransactions(address: string): Promise<ITransaction[] | undefined>;
   getTransactionInfo(txid: string): Promise<ITransactionInfo | undefined>;
+  getTDCPrice(): Promise<{ data: { last: string } }>;
 }
 
 export interface ITransaction {

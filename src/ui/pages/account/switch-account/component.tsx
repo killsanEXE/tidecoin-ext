@@ -64,7 +64,7 @@ const SwitchAccount = () => {
                     setSelected(i);
                   }}
                 >
-                  <Bars3Icon className="w-8 h-8 cursor-pointer" />
+                  <Bars3Icon className="w-8 h-8 cursor-pointer text-bg" />
                 </button>
               </div>
             </div>
@@ -83,19 +83,21 @@ const SwitchAccount = () => {
                   action: () => {
                     navigate(`/pages/rename-account/${acc.id}`);
                   },
-                  icon: <TagIcon className="w-8 h-8" />,
+                  icon: <TagIcon className="w-8 h-8 cursor-pointer text-bg" />,
                 },
                 {
                   action: () => {
                     navigate(`/pages/show-pk/${acc.id}`);
                   },
-                  icon: <KeyIcon className="w-8 h-8 cursor-pointer" />,
+                  icon: <KeyIcon className="w-8 h-8 cursor-pointer text-bg" />,
                 },
                 {
                   action: () => {
                     setSelected(undefined);
                   },
-                  icon: <XMarkIcon className="w-8 h-8 cursor-pointer" />,
+                  icon: (
+                    <XMarkIcon className="w-8 h-8 cursor-pointer text-bg" />
+                  ),
                 },
               ]}
             />

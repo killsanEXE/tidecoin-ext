@@ -1,5 +1,5 @@
 .receive {
-  @apply h-full pt-[2rem] gap-[1.5rem] flex flex-col justify-around mb-1;
+  @apply h-full pt-[2rem] gap-[1.5rem] flex flex-col justify-around mb-2;
 }
 
 .accTitle {
@@ -7,5 +7,9 @@
 }
 
 .copyButton {
-  @apply flex items-center justify-center mx-auto py-1.5 px-3 rounded-xl;
+  @apply flex items-center justify-center mx-auto py-1.5 px-3 bg-text text-base text-bg rounded-xl;
+
+  svg {
+    @apply hidden;
+  }
 }

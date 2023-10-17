@@ -5,7 +5,7 @@
 }
 
 .controlDiv {
-  @apply flex justify-between items-center text-[.8rem] p-[1rem];
+  @apply flex justify-between items-center text-[.8rem] px-4 py-5;
 }
 
 .controlElem {
@@ -21,7 +21,7 @@
 }
 
 .title {
-  @apply absolute left-1/2 -translate-x-1/2 font-medium text-base;
+  @apply absolute left-1/2 -translate-x-1/2 font-medium text-base whitespace-nowrap;
 }
 
 .addNew {

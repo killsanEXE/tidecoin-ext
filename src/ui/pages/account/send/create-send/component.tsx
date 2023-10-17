@@ -13,11 +13,10 @@ interface FormType {
   address: string;
   amount: number;
   feeAmount: number;
-  includeFeeInAmount: boolean
+  includeFeeInAmount: boolean;
 }
 
 const CreateSend = () => {
-
   const currentAccount = useGetCurrentAccount();
   const sendTdc = useCreateTidecoinTxCallback();
   const navigate = useNavigate();
@@ -28,14 +27,18 @@ const CreateSend = () => {
       address: "",
       amount: 0,
       feeAmount: 0,
-      includeFeeInAmount: false
-    }
+      includeFeeInAmount: false,
+    },
   });
 
-  const { addressBook } = useAppState((v) => ({ addressBook: v.addressBook }))
+  const { addressBook } = useAppState((v) => ({ addressBook: v.addressBook }));
 
-
-  const send = async ({ address, amount, feeAmount, includeFeeInAmount }: FormType) => {
+  const send = async ({
+    address,
+    amount,
+    feeAmount,
+    includeFeeInAmount,
+  }: FormType) => {
     // if (amount < 0.01) {
     //   toast.error("Minimum amount is 0.01 TDC");
     // } else if (address.trim().length <= 0) {
@@ -63,7 +66,12 @@ const CreateSend = () => {
     //   }
     // }
     try {
-      const hex = await sendTdc(address, amount * 10 ** 8, feeAmount, includeFeeInAmount);
+      const hex = await sendTdc(
+        address,
+        amount * 10 ** 8,
+        feeAmount,
+        includeFeeInAmount
+      );
       navigate("/pages/confirm-send", {
         state: {
           toAddress: address,
@@ -71,63 +79,81 @@ const CreateSend = () => {
           feeAmount,
           includeFeeInAmount,
           fromAddress: currentAccount?.address ?? "",
-          hex
-        }
-      })
+          hex,
+        },
+      });
     } catch (e) {
+      console.error(e);
       toast.error("Error has occurred");
     }
   };
 
   useEffect(() => {
-    if (location.state !== null && (location.state.toAddress !== null || location.state.toAddress !== undefined)) {
+    if (
+      location.state !== null &&
+      (location.state.toAddress !== null ||
+        location.state.toAddress !== undefined)
+    ) {
       setValue("address", location.state.toAddress);
       setValue("amount", location.state.amount);
       setValue("feeAmount", location.state.feeAmount);
       setValue("includeFeeInAmount", location.state.includeFeeInAmount);
     }
-  }, [location.state, setValue])
+  }, [location.state, setValue]);
 
   const [query, setQuery] = useState("");
   const filteredAddresses =
-    query === ''
+    query === ""
       ? addressBook
       : addressBook.filter((address) => {
-        return address.toLowerCase().includes(query.toLowerCase())
-      })
+          return address.toLowerCase().includes(query.toLowerCase());
+        });
 
   return (
     <form className={cn("form", s.send)} onSubmit={handleSubmit(send)}>
       <div className={s.inputs}>
         <div className="form-field">
           <span className="input-span">Address</span>
-          <Combobox value={getValues().address} onChange={(e) => {
-            setValue("address", e)
-            setQuery(e)
-          }}>
-            <Combobox.Input displayValue={(address: string) => address} autoComplete="off" className="input" value={getValues("address")} onChange={((e) => {
-              setValue("address", e.target.value)
-              setQuery(e.target.value)
-            })} />
-            {filteredAddresses.length <= 0 ? "" :
+          <Combobox
+            value={getValues().address}
+            onChange={(e) => {
+              setValue("address", e);
+              setQuery(e);
+            }}
+          >
+            <Combobox.Input
+              displayValue={(address: string) => address}
+              autoComplete="off"
+              className="input"
+              value={getValues("address")}
+              onChange={(e) => {
+                setValue("address", e.target.value);
+                setQuery(e.target.value);
+              }}
+            />
+            {filteredAddresses.length <= 0 ? (
+              ""
+            ) : (
               <Transition
                 as={Fragment}
                 leave="transition ease-in duration-100"
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
-                afterLeave={() => { }}
+                afterLeave={() => {}}
               >
                 <Combobox.Options className={s.addressbookoptions}>
-                  {
-                    filteredAddresses.map((address) => (
-                      <Combobox.Option className={s.addressbookoption} key={address} value={address}>
-                        {address}
-                      </Combobox.Option>
-                    ))
-                  }
+                  {filteredAddresses.map((address) => (
+                    <Combobox.Option
+                      className={s.addressbookoption}
+                      key={address}
+                      value={address}
+                    >
+                      {address}
+                    </Combobox.Option>
+                  ))}
                 </Combobox.Options>
               </Transition>
-            }
+            )}
           </Combobox>
         </div>
         <div className="form-field">
@@ -149,7 +175,8 @@ const CreateSend = () => {
           <input
             className="input"
             placeholder="sat/Vb"
-            {...register("feeAmount", { valueAsNumber: true })} />
+            {...register("feeAmount", { valueAsNumber: true })}
+          />
         </div>
         <div className={s.includeFeeInAmountDiv}>
           <input type="checkbox" {...register("includeFeeInAmount")} />

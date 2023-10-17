@@ -3,6 +3,7 @@
 /* constants pool */
 import { UTXOAddressType } from "tidecoin-utils/lib/OrdTransaction";
 import { Chain, NetworkType, RestoreWalletType } from "../types";
+import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 
 export enum CHAINS_ENUM {
   TDC = "TDC",
@@ -103,39 +104,28 @@ export const LANGS = [
 ];
 
 export const ADDRESS_TYPES: {
-  value: UTXOAddressType;
+  value: AddressType;
   label: string;
   name: string;
   hdPath: string;
-  displayIndex: number;
 }[] = [
   {
-    value: UTXOAddressType.P2PKH,
-    label: "P2PKH",
-    name: "Legacy (P2PKH)",
-    hdPath: "m/44'/0'/0'/0",
-    displayIndex: 3,
-  },
-  {
-    value: UTXOAddressType.P2WPKH,
+    value: AddressType.P2WPKH,
     label: "P2WPKH",
     name: "Native Segwit (P2WPKH)",
     hdPath: "m/84'/0'/0'/0",
-    displayIndex: 0,
   },
   {
-    value: UTXOAddressType.P2SH_P2WPKH,
+    value: AddressType.P2SH,
     label: "P2SH-P2WPKH",
     name: "Nested Segwit (P2SH-P2WPKH)",
     hdPath: "m/49'/0'/0'/0",
-    displayIndex: 1,
   },
   {
-    value: UTXOAddressType.M44_P2WPKH,
-    label: "P2WPKH",
-    name: "Native SegWit (P2WPKH)",
+    value: AddressType.P2PKH,
+    label: "P2PKH",
+    name: "Legacy (P2PKH)",
     hdPath: "m/44'/0'/0'/0",
-    displayIndex: 4,
   },
 ];
 

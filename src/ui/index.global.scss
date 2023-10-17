@@ -31,11 +31,11 @@ body {
 }
 
 .btn {
-  @apply flex gap-1 items-center justify-center border-0 px-2 py-3 pt-1.5 text-[1.1rem] mx-auto w-[90%] rounded-[.3rem] font-normal cursor-pointer hover:shadow-sm;
+  @apply flex gap-1 items-center justify-center px-2 py-3 pt-1.5 text-[1.1rem] mx-auto w-[90%] rounded-xl font-medium cursor-pointer hover:shadow-sm;
 }
 
 .primary {
-  @apply bg-primary text-black leading-tight;
+  @apply text-text border border-text transition-colors hover:bg-text hover:text-bg leading-tight;
 }
 
 .secondary {
@@ -43,7 +43,7 @@ body {
 }
 
 .input {
-  @apply border-0 p-[.5rem] text-[1.1rem] bg-input-bg text-text rounded-[.3rem];
+  @apply p-2 text-base text-text border bg-transparent border-text rounded-xl;
 }
 
 .react-loading {

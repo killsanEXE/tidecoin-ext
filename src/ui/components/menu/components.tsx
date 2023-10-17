@@ -21,20 +21,16 @@ const Menu: FC<Props> = ({ items, active }) => {
       {items.map((i, index) => {
         if (!i.custom) {
           return (
-            <Fragment key={`${index}${prefix}`}>
-              <div onClick={i.action} className="cursor-pointer">
-                {i.icon}
-              </div>
-              {index !== items.length - 1 && <div className={s.divider} />}
-            </Fragment>
+            <div
+              key={`${index}${prefix}`}
+              onClick={i.action}
+              className="cursor-pointer px-3 py-5"
+            >
+              {i.icon}
+            </div>
           );
         } else if (i.custom) {
-          return (
-            <Fragment key={`${index}${prefix}`}>
-              {i.custom}
-              {index !== items.length - 1 && <div className={s.divider} />}
-            </Fragment>
-          );
+          return <Fragment key={`${index}${prefix}`}>{i.custom}</Fragment>;
         }
       })}
     </div>

@@ -1,61 +1,31 @@
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 import s from "./styles.module.scss";
-import { CheckIcon } from "@heroicons/react/24/outline";
+import { ADDRESS_TYPES } from "@/shared/constant";
+import { FC } from "react";
+import cn from "classnames";
 
-const SwitchAddressType = (props: {
+interface Props {
   handler: (type: AddressType) => void;
   selectedType: AddressType;
-}) => {
+}
+
+const SwitchAddressType: FC<Props> = ({ handler, selectedType }) => {
   return (
     <div className={s.allTypes}>
-      <div
-        className={s.addressType}
-        onClick={() => {
-          props.handler(AddressType.P2WPKH);
-        }}
-      >
-        {props.selectedType === AddressType.P2WPKH ? (
-          <CheckIcon className="w-8 h-8" />
-        ) : (
-          ""
-        )}
-        <div className={s.infoDiv}>
-          <p className={s.typeTitle}>Native Segwit (P2WPKH)</p>
-          <p className={s.example}></p>
+      {ADDRESS_TYPES.map((i) => (
+        <div
+          key={i.value}
+          className={cn(s.addressType, {
+            [s.selected]: selectedType === i.value,
+          })}
+          onClick={() => handler(i.value)}
+        >
+          <div className={s.infoDiv}>
+            <p className={s.typeTitle}>{i.name}</p>
+            <p className={s.example}></p>
+          </div>
         </div>
-      </div>
-      <div
-        className={s.addressType}
-        onClick={() => {
-          props.handler(AddressType.P2SH);
-        }}
-      >
-        {props.selectedType === AddressType.P2SH ? (
-          <CheckIcon className="w-8 h-8" />
-        ) : (
-          ""
-        )}
-        <div className={s.infoDiv}>
-          <p className={s.typeTitle}>Nested Segwit (P2SH-P2WPKH)</p>
-          <p className={s.example}></p>
-        </div>
-      </div>
-      <div
-        className={s.addressType}
-        onClick={() => {
-          props.handler(AddressType.P2PKH);
-        }}
-      >
-        {props.selectedType === AddressType.P2PKH ? (
-          <CheckIcon className="w-8 h-8" />
-        ) : (
-          ""
-        )}
-        <div className={s.infoDiv}>
-          <p className={s.typeTitle}>Legacy (P2PKH)</p>
-          <p className={s.example}></p>
-        </div>
-      </div>
+      ))}
     </div>
   );
 };
