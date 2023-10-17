@@ -10,75 +10,61 @@
   }
 
   .accPanel {
-    @apply flex flex-col justify-start items-center mt-8 gap-4;
+    @apply flex flex-col mt-8 gap-4;
 
     * {
       @apply m-0;
     }
 
     .balance {
-      @apply flex items-center justify-center text-3xl w-full gap-4;
+      @apply flex text-3xl gap-4 ml-6;
     }
 
     .accPubAddress {
-      @apply w-full gap-2;
+      @apply gap-2 cursor-pointer flex;
 
       color: rgb(158, 158, 158);
-
-      .icon {
-        width: 1rem;
-        color: rgb(158, 158, 158);
-      }
-    }
-
-    .accPubAddress:hover {
-      cursor: pointer;
     }
 
     .receiveSendBtns {
-      width: 100%;
-      gap: 1rem;
-      padding-top: 1rem;
+      @apply w-full gap-4 pt-4;
 
       .btn {
-        @apply bg-primary text-text gap-4 text-lg pr-4 px-3 py-1.5;
+        @apply border transition-colors border-text text-text gap-4 text-lg pr-4 px-3 py-1.5 hover:bg-text hover:text-bg;
 
         .icon {
           @apply w-[1.5rem];
         }
-      }
-
-      .btn:hover {
-        @apply bg-hovered-btn transition-colors;
       }
     }
   }
 }
 
 .center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  @apply rounded-[.3rem];
+  @apply rounded-xl flex justify-center items-center;
 }
 
 .transactions {
-  @apply text-lg text-center mt-6;
+  @apply text-lg ml-6 mt-6 font-medium;
 }
 
 .transactionsDiv {
   overflow-y: scroll;
   @apply h-full flex flex-col items-center pt-[1rem];
+}
 
-  .transaction {
-    @apply flex justify-between items-center bg-hovered w-[90%] p-[.5rem] rounded-[.3rem] my-[.3rem];
-
-    &:hover {
-      @apply cursor-pointer bg-input-bg;
-    }
-  }
+.transaction {
+  @apply flex justify-between items-center w-[90%] p-[.5rem] rounded-[.3rem] my-[.3rem] cursor-pointer;
 }
 
 .noTransactions {
   @apply w-full h-full items-center flex justify-center pb-[4rem];
+}
+
+.value {
+  @apply font-medium text-lg;
+}
+
+.accountsIcon {
+  @apply w-8 h-8 rounded-xl p-1 border border-text transition-colors hover:bg-text hover:text-bg cursor-pointer;
 }

@@ -1,9 +1,9 @@
 .receive {
-  @apply h-full pt-[2rem] gap-[1.5rem] flex flex-col;
+  @apply h-full pt-[2rem] gap-[1.5rem] flex flex-col justify-around mb-1;
 }
 
 .accTitle {
-  @apply text-lg mx-auto mb-3;
+  @apply text-lg mx-auto mb-3 text-center font-medium;
 }
 
 .copyButton {

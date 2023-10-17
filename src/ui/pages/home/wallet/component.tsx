@@ -1,9 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-import {
-  ArrowSmallUpIcon,
-  ArrowSmallDownIcon,
-} from "@heroicons/react/24/outline";
+import { ListBulletIcon } from "@heroicons/react/24/outline";
 import s from "./styles.module.scss";
 import { shortAddress } from "@/ui/utils";
 import {
@@ -57,11 +54,6 @@ const Wallet = () => {
     callUpdateTransactions,
   ]);
 
-  useEffect(() => {
-    updateAccountBalance();
-    udpateTransactions();
-  }, []);
-
   return (
     <div className={s.walletDiv}>
       <div className={s.changeWalletAccDiv}>
@@ -85,26 +77,32 @@ const Wallet = () => {
         )}
       </div>
 
-      <div className={cn(s.accPanel, s.center)}>
-        <div className={cn(s.balance, s.center)}>
-          {currentAccount?.balance === undefined ? (
-            <ReactLoading
-              type="spin"
-              color="#ffbc42"
-              width={"2rem"}
-              className="react-loading"
-            />
-          ) : (
-            currentAccount?.balance
-          )}{" "}
-          TDC
+      <div className={s.accPanel}>
+        <div className="flex gap-2">
+          <div className={s.balance}>
+            {currentAccount?.balance === undefined ? (
+              <ReactLoading
+                type="spin"
+                color="#ffbc42"
+                width={"2rem"}
+                className="react-loading"
+              />
+            ) : (
+              currentAccount?.balance
+            )}{" "}
+            TDC
+          </div>
+          <div className="text-gray-500 text-sm">~0.06$</div>
         </div>
-        <CopyBtn
-          title={currentAccount?.address}
-          className={cn(s.accPubAddress, s.center)}
-          label={shortAddress(currentAccount?.address)}
-          value={currentAccount?.address}
-        />
+        <div className="flex gap-2 items-center pl-6">
+          <ListBulletIcon className={s.accountsIcon} />
+          <CopyBtn
+            title={currentAccount?.address}
+            className={cn(s.accPubAddress)}
+            label={shortAddress(currentAccount?.address, 9)}
+            value={currentAccount?.address}
+          />
+        </div>
 
         <div className={cn(s.receiveSendBtns, s.center)}>
           <button
@@ -137,16 +135,22 @@ const Wallet = () => {
                 navigate(`/pages/transaction-info/${t.mintTxid}`);
               }}
             >
-              <div className={s.transactionInfo}>
-                <p className={s.value}>{t.value / 10 ** 8}</p>
-                <p className={s.address}>{shortAddress(t.address)}</p>
+              <div className="flex gap-2 items-center">
+                <div className="rounded-full bg-gray-300 w-6 h-6 text-bg flex items-center justify-center">
+                  T
+                </div>
+                <div className={s.transactionInfo}>
+                  <div className={s.address}>{shortAddress(t.mintTxid)}</div>
+                </div>
               </div>
-              <div className={cn(s.icon, t.mintIndex ? s.send : s.receive)}>
-                {t.mintIndex ? (
-                  <ArrowSmallUpIcon className="w-8 h-8 text-red-600" />
-                ) : (
-                  <ArrowSmallDownIcon className="w-8 h-8 text-green-600" />
-                )}
+              <div
+                className={cn(s.value, {
+                  "text-green-500": !t.mintIndex,
+                  "text-red-500": t.mintIndex,
+                })}
+              >
+                {t.mintIndex ? "- " : "+ "}
+                {t.value / 10 ** 8} TDC
               </div>
             </div>
           ))}

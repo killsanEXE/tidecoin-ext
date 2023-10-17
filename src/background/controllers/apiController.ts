@@ -53,6 +53,13 @@ class ApiController implements IApiController {
       path: `/tx/${txid}`,
     });
   }
+
+  async getTDCPrice() {
+    const res = await fetch(
+      "https://api.dex-trade.com/v1/public/ticker?pair=TDCUSDT"
+    );
+    return (await res.json()) as { data: { last: string } };
+  }
 }
 
 export default new ApiController();

@@ -4,9 +4,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        bg: "#f8f7ff",
+        bg: "#1A1A1A",
         "input-bg": "#c1e1ea",
-        text: "black",
+        text: "#FDFDFD",
         secondary: "#c1e1ea",
         primary: "#ffbc42",
         panel: "#669bbc",
