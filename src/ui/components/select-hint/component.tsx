@@ -1,5 +1,5 @@
 import { Combobox, Transition } from "@headlessui/react";
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { englishWords } from "test-test-test-hd-wallet";
 import cn from "classnames";
 
@@ -17,11 +17,16 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
     query === ""
       ? []
       : englishWords
-          .map((i, idx) => [i, idx] as [string, number])
-          .filter(([word, idx]) =>
+          .filter((word) =>
             word.startsWith(query.toLowerCase().replace(/\s+/g, ""))
           )
           .slice(0, 4);
+
+  useEffect(() => {
+    if (selected?.length) {
+      setQuery(selected);
+    }
+  }, [selected, setQuery]);
 
   return (
     <Combobox value={selected} onChange={setSelected} nullable={true}>
@@ -34,9 +39,14 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
               const phrase = event.target.value as string;
               if (phrase.trim().split(" ").length === 12) {
                 setSelected(phrase.trim());
-              } else setQuery(phrase);
+              } else {
+                setQuery(phrase);
+                if (filteredWords[0] === phrase) {
+                  setSelected(phrase);
+                }
+              }
             }}
-            value={selected}
+            value={query}
           />
         </div>
         <Transition
@@ -44,7 +54,6 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
           leave="transition ease-in duration-100"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
-          afterLeave={() => setQuery("")}
         >
           <Combobox.Options className={s.optionsBox}>
             {filteredWords.length === 0 && query !== "" ? (
@@ -52,11 +61,11 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
             ) : (
               filteredWords.map((word) => (
                 <Combobox.Option
-                  key={word[1]}
+                  key={word}
                   className={({ active }) =>
                     cn(s.options, { [s.optionsActive]: active })
                   }
-                  value={word[0]}
+                  value={word}
                 >
                   {({ selected }) => (
                     <>
@@ -65,7 +74,7 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
                           selected ? "font-medium" : "font-normal"
                         }`}
                       >
-                        {word[0]}
+                        {word}
                       </span>
                     </>
                   )}
