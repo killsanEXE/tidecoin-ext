@@ -17,3 +17,13 @@
         @apply flex gap-[.3rem]
     }
 }
+
+.addressbookoptions {
+    @apply w-full bg-input-bg flex flex-col gap-[.5rem] rounded-[.3rem] justify-center items-center py-[.4rem] max-w-[319px] absolute mt-[4rem] z-10 select-none shadow-lg;
+
+    .addressbookoption {
+        &:hover {
+            @apply cursor-pointer;
+        }
+    }
+}

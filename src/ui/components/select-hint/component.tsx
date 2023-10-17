@@ -17,10 +17,10 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
     query === ""
       ? []
       : englishWords
-          .filter((word) =>
-            word.startsWith(query.toLowerCase().replace(/\s+/g, ""))
-          )
-          .slice(0, 4);
+        .filter((word) =>
+          word.startsWith(query.toLowerCase().replace(/\s+/g, ""))
+        )
+        .slice(0, 4);
 
   useEffect(() => {
     if (selected?.length) {
@@ -70,9 +70,8 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
                   {({ selected }) => (
                     <>
                       <span
-                        className={`block truncate ${
-                          selected ? "font-medium" : "font-normal"
-                        }`}
+                        className={`block truncate ${selected ? "font-medium" : "font-normal"
+                          }`}
                       >
                         {word}
                       </span>

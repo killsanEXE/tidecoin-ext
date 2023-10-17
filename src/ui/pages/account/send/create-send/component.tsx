@@ -1,6 +1,6 @@
 import { useCreateTidecoinTxCallback } from "@/ui/hooks/transactions";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
-import { useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import s from "./styles.module.scss";
 import cn from "classnames";
 import toast from "react-hot-toast";
@@ -80,7 +80,6 @@ const CreateSend = () => {
   };
 
   useEffect(() => {
-    console.log(addressBook)
     if (location.state !== null && (location.state.toAddress !== null || location.state.toAddress !== undefined)) {
       setValue("address", location.state.toAddress);
       setValue("amount", location.state.amount);
@@ -88,6 +87,14 @@ const CreateSend = () => {
       setValue("includeFeeInAmount", location.state.includeFeeInAmount);
     }
   }, [location.state, setValue])
+
+  const [query, setQuery] = useState("");
+  const filteredAddresses =
+    query === ''
+      ? addressBook
+      : addressBook.filter((address) => {
+        return address.toLowerCase().includes(query.toLowerCase())
+      })
 
   return (
     <form className={cn("form", s.send)} onSubmit={handleSubmit(send)}>
@@ -99,45 +106,26 @@ const CreateSend = () => {
             className="input"
             {...register("address")}
           /> */}
-          <Combobox nullable={true}>
-            <div className="input">
-              <div className={s.inputBox}>
-                <Combobox.Input
-                  {...register("address")}
-                  className={s.input}
-                  displayValue={(word: string) => word}
-                />
-              </div>
-              <Transition
-                leave="transition ease-in duration-100"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <Combobox.Options className={s.optionsBox}>
-                  {addressBook.map((word) => (
-                    <Combobox.Option
-                      key={word[1]}
-                      className={({ active }) =>
-                        cn(s.options, { [s.optionsActive]: active })
-                      }
-                      value={word[0]}
-                    >
-                      {({ selected }) => (
-                        <>
-                          <span
-                            className={`block truncate ${selected ? "font-medium" : "font-normal"
-                              }`}
-                          >
-                            {word[0]}
-                          </span>
-                        </>
-                      )}
-                    </Combobox.Option>
-                  ))
-                  }
-                </Combobox.Options>
-              </Transition>
-            </div>
+          <Combobox value={query}>
+            <Combobox.Input autoComplete="off" className="input" onChange={((e) => {
+              setValue("address", e.target.value)
+              setQuery(e.target.value)
+            })} />
+            <Transition
+              as={Fragment}
+              leave="transition ease-in duration-100"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+              afterLeave={() => { }}
+            >
+              <Combobox.Options className={s.addressbookoptions}>
+                {filteredAddresses.map((address) => (
+                  <Combobox.Option className={s.addressbookoption} key={address} value={address}>
+                    {address}
+                  </Combobox.Option>
+                ))}
+              </Combobox.Options>
+            </Transition>
           </Combobox>
         </div>
         <div className="form-field">
