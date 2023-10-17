@@ -23,7 +23,7 @@ const CreateSend = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { register, handleSubmit, setValue } = useForm<FormType>({
+  const { register, handleSubmit, setValue, getValues } = useForm<FormType>({
     defaultValues: {
       address: "",
       amount: 0,
@@ -101,33 +101,33 @@ const CreateSend = () => {
       <div className={s.inputs}>
         <div className="form-field">
           <span className="input-span">Address</span>
-          {/* <input
-            placeholder="Address of receiver"
-            className="input"
-            {...register("address")}
-          /> */}
-          <Combobox value={query}>
-            <Combobox.Input autoComplete="off" className="input" onChange={((e) => {
+          <Combobox value={getValues().address} onChange={(e) => {
+            setValue("address", e)
+            setQuery(e)
+          }}>
+            <Combobox.Input displayValue={(address: string) => address} autoComplete="off" className="input" value={getValues("address")} onChange={((e) => {
               setValue("address", e.target.value)
               setQuery(e.target.value)
             })} />
-            <Transition
-              as={Fragment}
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-              afterLeave={() => { }}
-            >
-              <Combobox.Options className={s.addressbookoptions}>
-                {filteredAddresses.length <= 0 ? "" :
-                  filteredAddresses.map((address) => (
-                    <Combobox.Option className={s.addressbookoption} key={address} value={address}>
-                      {address}
-                    </Combobox.Option>
-                  ))
-                }
-              </Combobox.Options>
-            </Transition>
+            {filteredAddresses.length <= 0 ? "" :
+              <Transition
+                as={Fragment}
+                leave="transition ease-in duration-100"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+                afterLeave={() => { }}
+              >
+                <Combobox.Options className={s.addressbookoptions}>
+                  {
+                    filteredAddresses.map((address) => (
+                      <Combobox.Option className={s.addressbookoption} key={address} value={address}>
+                        {address}
+                      </Combobox.Option>
+                    ))
+                  }
+                </Combobox.Options>
+              </Transition>
+            }
           </Combobox>
         </div>
         <div className="form-field">
