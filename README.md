@@ -9,11 +9,6 @@ How to test extension yourself:
 
 
 Tasks:
-    5. Fix sending from legasy to pasbt warning 
-    7. Save addresses that we sended tdc to and 
-        suggest them next time we want to send
     8. Integrate extension in websites 
     9. Swap between tdc and doge
     10. add other cryptocurrencies to the extension
-    11. Save current wallet?
-    12. Fix rename account

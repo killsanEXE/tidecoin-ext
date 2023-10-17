@@ -13,6 +13,7 @@ import {
 import { useDeleteWallet, useSwitchWallet } from "@/ui/hooks/wallet";
 import { useNavigate } from "react-router-dom";
 import Menu from "@/ui/components/menu";
+import Popup from "@/ui/components/popup";
 
 const SwitchWallet = () => {
   const currentWallet = useGetCurrentWallet();
@@ -23,6 +24,10 @@ const SwitchWallet = () => {
   const [selected, setSelected] = useState<number>();
   const navigate = useNavigate();
   const deleteWallet = useDeleteWallet();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [question, setQuestion] = useState("");
+  const [handler, setHandler] = useState<(result: boolean) => void | undefined>(undefined)
 
   return (
     <div className={s.switchWalletDiv}>
@@ -70,8 +75,16 @@ const SwitchWallet = () => {
                 },
                 {
                   action: () => {
-                    deleteWallet(wallet.id);
-                    setSelected(undefined);
+                    setQuestion(`Are you sure you want to delete "${wallet.name}"?`)
+                    setHandler(() => (result) => {
+                      if (result) {
+                        deleteWallet(wallet.id);
+                        setHandler(undefined);
+                        setSelected(undefined);
+                      }
+                      setIsOpen(false);
+                    })
+                    setIsOpen(true);
                   },
                   icon: <TrashIcon className="w-8 h-8 cursor-pointer" />,
                 },
@@ -86,6 +99,7 @@ const SwitchWallet = () => {
           </div>
         ))}
       </div>
+      <Popup isOpen={isOpen} question={question} handler={handler} />
     </div>
   );
 };
