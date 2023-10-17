@@ -1,9 +1,10 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import s from "./styles.module.scss";
 import { useEffect, useState } from "react";
 import { useControllersState } from "@/ui/states/controllerState";
 import { ITransactionInfo } from "@/shared/interfaces/apiController";
 import ReactLoading from "react-loading";
+import { browserTabsCreate } from "@/shared/utils/browser";
 
 const TransactionInfo = () => {
   const { txId } = useParams();
@@ -27,7 +28,9 @@ const TransactionInfo = () => {
     <div className={s.transactionInfoDiv}>
       {transaction ? (
         <div className={s.transaction}>
-          <p className={s.transactionP}>TxId: <Link to={`https://explorer.tidecoin.org/tx/${transaction.txid}`}>{transaction.txid}</Link></p>
+          <p className={s.transactionP}>TxId: <p onClick={() => {
+            browserTabsCreate({ url: `https://explorer.tidecoin.org/tx/${transaction.txid}` });
+          }}>{transaction.txid}</p></p>
           <p className={s.transactionP}>
             Confirmations: {transaction.confirmations}
           </p>

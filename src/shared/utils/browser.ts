@@ -32,7 +32,7 @@ export async function browserTabsQuery(params: any) {
   return await browser.tabs.query(params);
 }
 
-export async function browserTabsCreate(params: any) {
+export async function browserTabsCreate(params: chrome.tabs.CreateProperties) {
   return await browser.tabs.create(params);
 }
 

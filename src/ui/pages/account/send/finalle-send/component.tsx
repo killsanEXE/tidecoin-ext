@@ -1,4 +1,5 @@
-import { Link, useParams } from "react-router-dom";
+import { browserTabsCreate } from "@/shared/utils/browser";
+import { useParams } from "react-router-dom";
 
 const FinalleSend = () => {
 
@@ -8,7 +9,9 @@ const FinalleSend = () => {
     <div className="w-[95%] text-sm flex gap-[.3rem] flex-col items-center justify-center h-full">
       <span>TxId</span>
       <p className="bg-input-bg break-all rounded-[.3rem] w-full flex justify-center">
-        <Link to={`https://explorer.tidecoin.org/tx/${txId}`}>{txId}</Link>
+        <p onClick={() => {
+          browserTabsCreate({ url: `https://explorer.tidecoin.org/tx/${txId}` })
+        }}>{txId}</p>
       </p>
     </div>
   );
