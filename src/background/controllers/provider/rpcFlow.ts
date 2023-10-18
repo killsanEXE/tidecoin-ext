@@ -1,6 +1,6 @@
-import { keyringService, notificationService, storageService } from "@/background/services";
+import { notificationService, storageService } from "@/background/services";
 import PromiseFlow, { underline2Camelcase } from "@/background/utils";
-import { CHAINS_ENUM, EVENTS } from "@/shared/constant";
+import { EVENTS } from "@/shared/constant";
 import eventBus from "@/shared/eventBus";
 import { ethErrors } from "eth-rpc-errors";
 import providerController from "./controller"

@@ -7,7 +7,9 @@ const tabCheckin = ({
   },
   session
 }) => {
-  session.setProp({ origin, name, icon });
+  session.origin = origin;
+  session.icon = icon;
+  session.name = name;
 };
 
 const getProviderState = async (req) => {

@@ -44,7 +44,7 @@
     "reflect-metadata": "^0.1.13",
     "test-test-test-hd-wallet": "^0.3.5",
     "tidecoin-utils": "^0.0.7",
-    "tidecoinjs-lib": "^6.2.2",
+    "tidecoinjs-lib": "^6.2.3",
     "tidepair": "^0.1.0",
     "zustand": "^4.4.1"
   },

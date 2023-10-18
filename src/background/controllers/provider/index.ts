@@ -1,7 +1,7 @@
 import { ethErrors } from 'eth-rpc-errors';
 import internalMethod from './internalMethod';
 import rpcFlow from './rpcFlow';
-import { sessionService, keyringService, storageService } from '@/background/services';
+import { sessionService, storageService } from '@/background/services';
 import { tab } from '@/background/webapi';
 
 tab.on('tabRemove', (id) => {

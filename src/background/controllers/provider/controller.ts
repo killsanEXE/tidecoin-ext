@@ -23,7 +23,6 @@ class ProviderController {
     // if (!permissionService.hasPermission(origin)) {
     //   throw ethErrors.provider.unauthorized();
     // }
-
     const _account = await storageService.currentWallet.accounts[0];
     const account = _account ? _account.address : "";
     sessionService.broadcastEvent('accountsChanged', account);
@@ -46,9 +45,8 @@ class ProviderController {
     // if (!permissionService.hasPermission(origin)) {
     //   return [];
     // }
-
-    const _account = await storageService.currentWallet.accounts[0];
-    console.log(_account);
+    if (storageService.currentWallet === undefined) return undefined;
+    const _account = storageService.currentWallet.accounts[0];
     const account = _account ? _account.address : "";
     return account
   };
