@@ -73,7 +73,7 @@ browserRuntimeOnConnect((port: any) => {
       pm.send("message", { event, data });
     };
 
-    // return providerController(req);
+    return providerController(req);
   });
 
   port.onDisconnect.addListener(() => {
