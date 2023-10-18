@@ -37,7 +37,7 @@ const flowContext = flow
 
       if (!isUnlock) {
         ctx.request.requestedApproval = true;
-        await notificationService.requestApproval({ lock: true });
+        await notificationService.requestApproval({ lock: true, }, { route: "/home" });
       }
     }
 
