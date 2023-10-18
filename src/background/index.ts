@@ -10,6 +10,7 @@ import walletController from "./controllers/walletController";
 import apiController from "./controllers/apiController";
 import stateController from "./controllers/stateController";
 import { keyringController } from "./controllers";
+import { providerController } from "./controllers"
 
 const { PortMessage } = Message;
 
@@ -62,15 +63,14 @@ browserRuntimeOnConnect((port: any) => {
   }
 
   const pm = new PortMessage(port);
-  pm.listen(async (data: any) => {
+  pm.listen(async (data) => {
     const sessionId = port.sender?.tab?.id;
     const session = sessionService.getOrCreateSession(sessionId);
 
     const req = { data, session };
     // for background push to respective page
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    req.session!.pushMessage = (event, data) => {
-      pm.send("message", { event, data });
+    req.session.pushMessage = (event, data) => {
+      pm.send('message', { event, data });
     };
 
     return providerController(req);
