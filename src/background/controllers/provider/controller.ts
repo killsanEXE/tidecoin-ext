@@ -56,6 +56,11 @@ class ProviderController {
     return "TIDECOIN";
   };
 
+  @Reflect.metadata("SAFE", false)
+  connectExtension = async () => {
+
+  }
+
   // @Reflect.metadata('APPROVAL', ['SwitchNetwork', (req) => {
   //   const network = req.data.params.network;
   //   if (NETWORK_TYPES[NetworkType.MAINNET].validNames.includes(network)) {
