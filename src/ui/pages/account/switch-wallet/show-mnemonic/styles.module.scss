@@ -2,10 +2,10 @@
   @apply w-full h-full flex justify-center items-center;
 
   .phraseDiv {
-    @apply px-[2rem];
+    @apply px-6 w-full;
 
     .phrase {
-      @apply bg-hovered text-[1.2rem];
+      @apply bg-input-bg text-[1.2rem] w-full;
     }
 
     .copyDiv {
@@ -15,14 +15,14 @@
 }
 
 .phraseWrapper {
-  @apply grid grid-cols-3 text-[0.8rem];
+  @apply grid grid-cols-2 text-[0.8rem] gap-x-2 gap-y-6;
 }
 
 .word {
-  @apply flex justify-between items-center p-5 gap-[.5rem];
+  @apply flex justify-between items-center gap-[0.5rem];
 
   .wordWord {
-    @apply bg-panel p-[.5rem] rounded-lg w-[80%] flex justify-center;
+    @apply bg-input-bg p-[.5rem] rounded-lg w-[80%] flex justify-center;
   }
 }
 
@@ -32,4 +32,12 @@
 
 .secret {
   @apply max-w-[350px] max-h-[300px] break-all h-[50%] overflow-y-scroll bg-input-bg rounded-[.5rem] p-[.5rem];
+}
+
+.wordIdx {
+  @apply w-4 text-end;
+}
+
+.copyWrapper {
+  @apply flex w-full justify-center mt-10;
 }

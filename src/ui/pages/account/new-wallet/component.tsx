@@ -25,6 +25,8 @@ const NewWallet = () => {
         >
           Restore with mnemonic
         </div>
+      </div>
+      <div className={s.choiceDiv}>
         <div
           className={s.variant}
           onClick={() => {

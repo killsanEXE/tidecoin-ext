@@ -50,6 +50,10 @@
 
 .copy {
   @apply select-none cursor-pointer px-3 py-5;
+
+  &:hover svg {
+    @apply scale-110;
+  }
 }
 
 .address {

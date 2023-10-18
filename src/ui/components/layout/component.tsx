@@ -100,6 +100,10 @@ export default function PagesLayout() {
       route: "/pages/settings",
       title: "Settings",
     },
+    {
+      route: "/pages/show-mnemonic/@",
+      title: "Recovering mnemonic",
+    },
   ];
 
   const currentRoute = useLocation();

@@ -5,3 +5,15 @@
 .active {
   @apply left-0;
 }
+
+.item {
+  @apply cursor-pointer px-3 py-5;
+
+  svg {
+    @apply transition-all;
+  }
+
+  &:hover svg {
+    @apply scale-110;
+  }
+}

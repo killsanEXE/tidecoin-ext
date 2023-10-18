@@ -187,7 +187,7 @@ const Wallet = () => {
                 })}
               >
                 {t.mintIndex ? "- " : "+ "}
-                {(t.value / 10 ** 8).toFixed(4)} TDC
+                {getTransactionValue(t.mintIndex, t.value, 1)} TDC
               </div>
             </div>
           ))}
@@ -197,6 +197,13 @@ const Wallet = () => {
       )}
     </div>
   );
+};
+
+const getTransactionValue = (mintIndex: number, value: number, fee: number) => {
+  if (mintIndex) {
+    return ((value + fee) / 10 ** 8).toFixed(4);
+  }
+  return ((value - fee) / 10 ** 8).toFixed(4);
 };
 
 export default Wallet;

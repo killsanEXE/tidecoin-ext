@@ -24,7 +24,7 @@ const Menu: FC<Props> = ({ items, active }) => {
             <div
               key={`${index}${prefix}`}
               onClick={i.action}
-              className="cursor-pointer px-3 py-5"
+              className={s.item}
             >
               {i.icon}
             </div>

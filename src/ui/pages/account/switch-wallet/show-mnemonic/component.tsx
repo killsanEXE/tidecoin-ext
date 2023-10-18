@@ -24,7 +24,8 @@ const ShowMnemonic = () => {
             <div className={s.phraseWrapper}>
               {phrase.split(" ").map((word, index) => (
                 <div key={index} className={s.word}>
-                  {index + 1}. <p className={s.wordWord}>{word}</p>
+                  <span className={s.wordIdx}>{index + 1}</span>{" "}
+                  <p className={s.wordWord}>{word}</p>
                 </div>
               ))}
             </div>
@@ -33,7 +34,9 @@ const ShowMnemonic = () => {
               <div className={s.secret}>{phrase}</div>
             </div>
           )}
-          <CopyBtn label="Copy" value={phrase} />
+          <div className={s.copyWrapper}>
+            <CopyBtn label="Copy" value={phrase} />
+          </div>
         </div>
       ) : (
         <CheckPassword
