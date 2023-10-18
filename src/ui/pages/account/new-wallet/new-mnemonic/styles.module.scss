@@ -3,26 +3,22 @@
 }
 
 .phrase {
-  @apply grid grid-cols-3 text-[0.8rem] gap-0.5;
+  @apply grid grid-cols-3 text-[0.8rem] gap-x-2 gap-y-6;
 }
 
 .stepTitle {
   @apply flex justify-between w-[50%];
 }
 
-.word {
-  @apply p-[0.7rem] gap-[.5rem];
-}
-
 .active {
-  color: red;
+  @apply text-orange-600 font-medium;
 }
 
 .word {
-  @apply flex justify-between items-center;
+  @apply flex justify-between items-center gap-2;
 
   .wordWord {
-    @apply bg-panel p-[.5rem] rounded-lg w-[70px] flex justify-center;
+    @apply bg-input-bg rounded-lg flex justify-center w-full py-2;
   }
 }
 
@@ -36,11 +32,11 @@
 }
 
 .warning {
-  @apply w-full flex justify-center text-yellow-200;
+  @apply w-full flex justify-center text-yellow-200 text-opacity-70 mb-5 text-sm;
 }
 
 .step {
-  @apply h-full flex flex-col justify-between;
+  @apply h-full flex flex-col justify-between w-full;
 }
 
 .savePhraseWrapper {
@@ -49,4 +45,8 @@
 
 .savePhrase {
   @apply flex items-center gap-[1rem];
+}
+
+.wordIndex {
+  @apply w-4 text-end;
 }

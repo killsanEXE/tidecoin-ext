@@ -63,7 +63,9 @@ const NewMnemonic = () => {
               </div>
               <div className={s.savePhraseWrapper}>
                 <div className={s.savePhrase}>
-                  <label htmlFor="save-phrases">I saved this phrase</label>
+                  <label className="cursor-pointer" htmlFor="save-phrases">
+                    I saved this phrase
+                  </label>
                   <input
                     id="save-phrases"
                     type="checkbox"
