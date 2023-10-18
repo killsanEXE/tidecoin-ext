@@ -28,16 +28,33 @@ const TransactionInfo = () => {
     <div className={s.transactionInfoDiv}>
       {transaction ? (
         <div className={s.transaction}>
-          <p className={s.transactionP}>TxId: <p onClick={() => {
-            browserTabsCreate({ url: `https://explorer.tidecoin.org/tx/${transaction.txid}` });
-          }}>{transaction.txid}</p></p>
-          <p className={s.transactionP}>
-            Confirmations: {transaction.confirmations}
-          </p>
-          <p className={s.transactionP}>Fee: {transaction.fee / 10 ** 8}</p>
-          <p className={s.transactionP}>
-            Value: {transaction.value / 10 ** 8} TDC
-          </p>
+          <div className={s.group}>
+            <p className={s.transactionP}>TxId:</p>
+
+            <span>{transaction.txid}</span>
+          </div>
+          <div className={s.group}>
+            <p className={s.transactionP}>Confirmations:</p>
+            <span>{transaction.confirmations}</span>
+          </div>
+          <div className={s.group}>
+            <p className={s.transactionP}>Fee:</p>
+            <span>{transaction.fee / 10 ** 8}</span>
+          </div>
+          <div className={s.group}>
+            <p className={s.transactionP}>Value:</p>
+            <span>{transaction.value / 10 ** 8} TDC</span>
+          </div>
+          <button
+            className={s.explorerBtn}
+            onClick={() => {
+              browserTabsCreate({
+                url: `https://explorer.tidecoin.org/tx/${transaction.txid}`,
+              });
+            }}
+          >
+            Open in explorer
+          </button>
         </div>
       ) : (
         <ReactLoading type="spin" color="#fff" />

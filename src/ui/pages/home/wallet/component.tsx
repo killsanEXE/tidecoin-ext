@@ -187,7 +187,7 @@ const Wallet = () => {
                 })}
               >
                 {t.mintIndex ? "- " : "+ "}
-                {t.value / 10 ** 8} TDC
+                {(t.value / 10 ** 8).toFixed(4)} TDC
               </div>
             </div>
           ))}

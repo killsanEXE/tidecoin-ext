@@ -1,11 +1,23 @@
 .transactionInfoDiv {
-    @apply h-full w-full flex items-center justify-center break-all;
+  @apply h-full w-full flex items-center justify-center break-all px-6 pt-6;
 
-    .transaction {
-        @apply flex flex-col h-full w-full break-all;
+  .transaction {
+    @apply flex flex-col h-full w-full break-all;
+  }
+}
 
-        .transactionP {
-            @apply max-w-[350px] break-all bg-input-bg p-[.5rem] m-[1rem] rounded-[.3rem];
-        }
-    }
+.group {
+  @apply mb-4;
+
+  .transactionP {
+    @apply break-all text-sm font-light block mb-2;
+  }
+
+  span {
+    @apply text-sm block px-4 py-2 bg-input-bg rounded-xl;
+  }
+}
+
+.explorerBtn {
+  @apply px-5 py-2 rounded-xl absolute bottom-6 left-6 right-6 font-medium bg-text text-bg text-sm;
 }

@@ -5,7 +5,7 @@ module.exports = {
     extend: {
       colors: {
         bg: "#1A1A1A",
-        "input-bg": "#c1e1ea",
+        "input-bg": "#3d3d3d95",
         text: "#FDFDFD",
         secondary: "#c1e1ea",
         primary: "#ffbc42",

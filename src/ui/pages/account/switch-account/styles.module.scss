@@ -17,44 +17,14 @@
     @apply flex flex-col gap-4 pt-4 w-[95%] pb-4;
 
     .mainAcc {
-      @apply relative overflow-hidden rounded-[.3rem];
+      @apply relative overflow-hidden rounded-xl border border-text p-2;
 
       .account {
-        @apply flex p-2 justify-between;
-
-        .accInfo {
-          @apply flex flex-col gap-2 w-[90%];
-
-          .name {
-            @apply flex items-center gap-2;
-
-            .icon {
-              @apply w-[1.5rem];
-            }
-          }
-
-          .address {
-            @apply text-[.8rem];
-          }
-        }
+        @apply flex justify-between items-center;
 
         .accControl {
           .manageAccButton {
             @apply bg-transparent border-0 rounded-[50%] p-2 py-3 cursor-pointer;
-          }
-        }
-      }
-
-      .accSettings {
-        @apply flex justify-center gap-[1.6rem] items-center absolute z-10 top-0 left-full bottom-0 transition-all duration-200 w-full bg-text text-bg;
-
-        .accSetting {
-          .icon {
-            @apply w-[1.8rem];
-
-            &:hover {
-              @apply scale-110 cursor-pointer;
-            }
           }
         }
       }
@@ -66,6 +36,22 @@
   }
 }
 
+.accInfo {
+  @apply flex flex-col gap-2 w-[90%];
+
+  .name {
+    @apply flex items-center gap-2 font-medium text-base;
+
+    .icon {
+      @apply w-[1.5rem];
+    }
+  }
+}
+
 .copy {
-  @apply select-none cursor-pointer;
+  @apply select-none cursor-pointer px-3 py-5;
+}
+
+.address {
+  @apply text-[.8rem] text-gray-400;
 }

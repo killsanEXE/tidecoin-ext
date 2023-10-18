@@ -51,12 +51,12 @@ const SwitchAccount = () => {
               >
                 <div className={s.name}>
                   {currentAccount!.id === acc.id ? (
-                    <CheckIcon className="w-8 h-8 cursor-pointer" />
+                    <CheckIcon className="w-8 h-8" />
                   ) : undefined}
                   {acc.name}
                 </div>
-                <div className={s.address}>{shortAddress(acc.address)}</div>
               </div>
+              <div className={s.address}>{shortAddress(acc.address)}</div>
               <div className={s.accControl}>
                 <button
                   className={s.manageAccButton}
@@ -64,7 +64,7 @@ const SwitchAccount = () => {
                     setSelected(i);
                   }}
                 >
-                  <Bars3Icon className="w-8 h-8 cursor-pointer text-bg" />
+                  <Bars3Icon className="w-8 h-8 text-text" />
                 </button>
               </div>
             </div>
@@ -74,8 +74,10 @@ const SwitchAccount = () => {
                 {
                   custom: (
                     <CopyBtn
+                      title="Copy address"
                       value={acc.address}
-                      className={cn(s.accSetting, s.copy)}
+                      className={cn(s.copy)}
+                      iconClassName="text-bg w-8 h-8"
                     />
                   ),
                 },
@@ -83,20 +85,33 @@ const SwitchAccount = () => {
                   action: () => {
                     navigate(`/pages/rename-account/${acc.id}`);
                   },
-                  icon: <TagIcon className="w-8 h-8 cursor-pointer text-bg" />,
+                  icon: (
+                    <TagIcon
+                      title="Rename account"
+                      className="w-8 h-8 cursor-pointer text-bg"
+                    />
+                  ),
                 },
                 {
                   action: () => {
                     navigate(`/pages/show-pk/${acc.id}`);
                   },
-                  icon: <KeyIcon className="w-8 h-8 cursor-pointer text-bg" />,
+                  icon: (
+                    <KeyIcon
+                      title="Export private key"
+                      className="w-8 h-8 cursor-pointer text-bg"
+                    />
+                  ),
                 },
                 {
                   action: () => {
                     setSelected(undefined);
                   },
                   icon: (
-                    <XMarkIcon className="w-8 h-8 cursor-pointer text-bg" />
+                    <XMarkIcon
+                      title="Close menu"
+                      className="w-8 h-8 cursor-pointer text-bg"
+                    />
                   ),
                 },
               ]}

@@ -31,7 +31,7 @@ body {
 }
 
 .btn {
-  @apply flex gap-1 items-center justify-center px-2 py-3 pt-1.5 text-[1.1rem] mx-auto w-[90%] rounded-xl font-medium cursor-pointer hover:shadow-sm;
+  @apply flex gap-1 items-center justify-center px-2 py-2 text-[1.1rem] mx-auto w-[90%] rounded-xl font-medium cursor-pointer hover:shadow-sm;
 }
 
 .primary {
@@ -43,7 +43,7 @@ body {
 }
 
 .input {
-  @apply p-2 text-base text-text border bg-transparent border-text rounded-xl;
+  @apply p-2 text-base text-text bg-input-bg rounded-xl;
 }
 
 .react-loading {
