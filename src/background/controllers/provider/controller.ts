@@ -48,6 +48,7 @@ class ProviderController {
     // }
 
     const _account = await storageService.currentWallet.accounts[0];
+    console.log(_account);
     const account = _account ? _account.address : "";
     return account
   };

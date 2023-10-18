@@ -1,6 +1,4 @@
 import { ethErrors } from 'eth-rpc-errors';
-
-
 import internalMethod from './internalMethod';
 import rpcFlow from './rpcFlow';
 import { sessionService, keyringService, storageService } from '@/background/services';
@@ -19,7 +17,7 @@ export default async (req) => {
     return internalMethod[method](req);
   }
 
-  const hasVault = (await storageService.getLocalValues()).enc === undefined;
+  const hasVault = (await storageService.getLocalValues()).enc !== undefined;
   if (!hasVault) {
     throw ethErrors.provider.userRejectedRequest({
       message: 'wallet must has at least one account'

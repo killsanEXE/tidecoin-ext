@@ -1,4 +1,4 @@
-import { keyringService, notificationService } from "@/background/services";
+import { keyringService, notificationService, storageService } from "@/background/services";
 import PromiseFlow, { underline2Camelcase } from "@/background/utils";
 import { CHAINS_ENUM, EVENTS } from "@/shared/constant";
 import eventBus from "@/shared/eventBus";
@@ -33,7 +33,7 @@ const flowContext = flow
     const { mapMethod } = ctx;
     if (!Reflect.getMetadata('SAFE', providerController, mapMethod)) {
       // check lock
-      const isUnlock = keyringService.memStore.getState().isUnlocked;
+      const isUnlock = storageService.appState.isUnlocked;
 
       if (!isUnlock) {
         ctx.request.requestedApproval = true;
@@ -52,21 +52,33 @@ const flowContext = flow
       mapMethod
     } = ctx;
     if (!Reflect.getMetadata('SAFE', providerController, mapMethod)) {
-      if (!permissionService.hasPermission(origin)) {
-        ctx.request.requestedApproval = true;
-        await notificationService.requestApproval(
-          {
-            params: {
-              method: 'connect',
-              data: {},
-              session: { origin, name, icon }
-            },
-            approvalComponent: 'Connect'
+      // if (!permissionService.hasPermission(origin)) {
+      //   ctx.request.requestedApproval = true;
+      //   await notificationService.requestApproval(
+      //     {
+      //       params: {
+      //         method: 'connect',
+      //         data: {},
+      //         session: { origin, name, icon }
+      //       },
+      //       approvalComponent: 'Connect'
+      //     },
+      //     { height: windowHeight }
+      //   );
+      //   permissionService.addConnectedSite(origin, name, icon, CHAINS_ENUM.BTC);
+      // }
+      ctx.request.requestedApproval = true;
+      await notificationService.requestApproval(
+        {
+          params: {
+            method: 'connect',
+            data: {},
+            session: { origin, name, icon }
           },
-          { height: windowHeight }
-        );
-        permissionService.addConnectedSite(origin, name, icon, CHAINS_ENUM.BTC);
-      }
+          approvalComponent: 'Connect'
+        },
+        { height: windowHeight }
+      );
     }
 
     return next();
@@ -97,11 +109,11 @@ const flowContext = flow
         },
         { height: windowHeight }
       );
-      if (isSignApproval(approvalType)) {
-        permissionService.updateConnectSite(origin, { isSigned: true }, true);
-      } else {
-        permissionService.touchConnectedSite(origin);
-      }
+      // if (isSignApproval(approvalType)) {
+      // permissionService.updateConnectSite(origin, { isSigned: true }, true);
+      // } else {
+      // permissionService.touchConnectedSite(origin);
+      // }
     }
 
     return next();
