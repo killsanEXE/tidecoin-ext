@@ -1,12 +1,10 @@
-import { ethErrors } from 'eth-rpc-errors';
-import 'reflect-metadata';
+import { keyringService, notificationService } from "@/background/services";
+import PromiseFlow, { underline2Camelcase } from "@/background/utils";
+import { CHAINS_ENUM, EVENTS } from "@/shared/constant";
+import eventBus from "@/shared/eventBus";
+import { ethErrors } from "eth-rpc-errors";
+import providerController from "./controller"
 
-import { CHAINS_ENUM, EVENTS } from '@/shared/constant';
-import eventBus from '@/shared/eventBus';
-
-import providerController from './controller';
-import { keyringService } from '@/background/services';
-import PromiseFlow, { underline2Camelcase } from '@/background/utils';
 
 const isSignApproval = (type: string) => {
   const SIGN_APPROVALS = ['SignText', 'SignPsbt', 'SignTx'];

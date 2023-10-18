@@ -1,7 +1,6 @@
 import { Psbt } from "tidecoinjs-lib";
-import { keyringService, sessionService, storageService } from "../../services";
-import { TIDECOIN } from "tidecoinjs-lib/src/networks";
-
+import { sessionService, storageService } from "../../services";
+import 'reflect-metadata';
 
 function formatPsbtHex(psbtHex: string) {
   let formatData = '';
@@ -79,12 +78,12 @@ class ProviderController {
   //   return NETWORK_TYPES[networkType].name
   // }
 
-  @Reflect.metadata('SAFE', true)
-  getPublicKey = async () => {
-    const account = keyringService.keyrings[storageService.currentWallet.id];
-    console.log(account);
-    return "SHIT";
-  };
+  // @Reflect.metadata('SAFE', true)
+  // getPublicKey = async () => {
+  //   const account = keyringService.keyrings[storageService.currentWallet.id];
+  //   console.log(account);
+  //   return "SHIT";
+  // };
 
   //   @Reflect.metadata('SAFE', true)
   //   getInscriptions = async (req) => {
