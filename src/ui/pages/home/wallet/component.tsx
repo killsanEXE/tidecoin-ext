@@ -121,8 +121,9 @@ const Wallet = () => {
               <ReactLoading
                 type="spin"
                 color="#ffbc42"
-                width={"2rem"}
-                className="react-loading"
+                width={"2.5rem"}
+                height={"2rem"}
+                className="react-loading pr-2"
               />
             ) : (
               currentAccount?.balance
