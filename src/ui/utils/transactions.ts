@@ -39,7 +39,7 @@ export const getTransactionValue = (
           0
         ) /
         10 ** 8
-      );
+      ).toFixed(2);
     case TxDirection.out:
       return (
         (transaction.vin.reduce(
@@ -58,7 +58,7 @@ export const getTransactionValue = (
             0
           )) /
         10 ** 8
-      );
+      ).toFixed(2);
   }
 };
 

@@ -106,7 +106,7 @@ const CreateSend = () => {
     query === ""
       ? addressBook
       : addressBook.filter((address) => {
-          return address.toLowerCase().includes(query.toLowerCase());
+          return address.toLowerCase().startsWith(query.toLowerCase());
         });
 
   return (
@@ -124,7 +124,6 @@ const CreateSend = () => {
             value={formData.address}
             onChange={(e) => {
               setFormData((prev) => ({ ...prev, address: e }));
-              setQuery(e);
             }}
           >
             <Combobox.Input
@@ -132,9 +131,10 @@ const CreateSend = () => {
               autoComplete="off"
               className="input"
               value={formData.address}
-              onChange={(v) =>
-                setFormData((prev) => ({ ...prev, address: v.target.value }))
-              }
+              onChange={(v) => {
+                setFormData((prev) => ({ ...prev, address: v.target.value }));
+                setQuery(v.target.value);
+              }}
             />
             {filteredAddresses.length <= 0 ? (
               ""
@@ -165,15 +165,27 @@ const CreateSend = () => {
           <span className="input-span">Amount</span>
           <div className="flex gap-2 w-full">
             <input
+              type="number"
+              min={0.0000001}
+              maxLength={20}
               placeholder="Amount you want to send"
               className="input w-full"
               value={formData.amount}
-              onChange={(v) =>
+              onChange={(v) => {
                 setFormData((prev) => ({
                   ...prev,
                   amount: v.target.value.length ? v.target.value : "",
-                }))
-              }
+                }));
+                if (currentAccount.balance < Number(v.target.value)) {
+                  setIncludeFeeLocked(false);
+                } else {
+                  setIncludeFeeLocked(true);
+                  setFormData((prev) => ({
+                    ...prev,
+                    includeFeeInAmount: true,
+                  }));
+                }
+              }}
             />
             <button
               className={s.maxAmount}

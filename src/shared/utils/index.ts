@@ -31,10 +31,12 @@ interface fetchProps extends RequestInit {
   path: string;
   params?: Record<string, string>;
   error?: boolean;
+  json?: boolean;
 }
 
 export const fetchTDCMainnet = async <T>({
   path,
+  json = true,
   ...props
 }: fetchProps): Promise<T | undefined> => {
   const url = new URL(TDC_MAINNET_PATH.concat(path), TDC_API_URL);
@@ -42,6 +44,8 @@ export const fetchTDCMainnet = async <T>({
     Object.entries(props.params).forEach((v) => url.searchParams.set(...v));
   }
   const res = await fetch(url.toString(), { ...props });
+
+  if (!json) return (await res.text()) as T;
 
   return await res.json();
 };

@@ -5,8 +5,16 @@ import { useLocation } from "react-router-dom";
 import { ITransaction } from "@/shared/interfaces/apiController";
 import { getTransactionValue } from "@/ui/utils/transactions";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
+import { LinkIcon } from "@heroicons/react/24/outline";
+import { FC, useId, useState } from "react";
+import Modal from "@/ui/components/modal";
+import cn from "classnames";
+import { shortAddress } from "@/ui/utils";
+import toast from "react-hot-toast";
 
 const TransactionInfo = () => {
+  const [openModal, setOpenModal] = useState<boolean>(false);
+
   const currentAccount = useGetCurrentAccount();
 
   const {
@@ -25,7 +33,9 @@ const TransactionInfo = () => {
           </div>
           <div className={s.group}>
             <p className={s.transactionP}>Confirmations:</p>
-            <span>{lastBlock - tx.status.block_height}</span>
+            <span>
+              {tx.status.confirmed ? lastBlock - tx.status.block_height : 0}
+            </span>
           </div>
           <div className={s.group}>
             <p className={s.transactionP}>Fee:</p>
@@ -35,6 +45,11 @@ const TransactionInfo = () => {
             <p className={s.transactionP}>Value:</p>
             <span>{getTransactionValue(tx, currentAccount?.address)} TDC</span>
           </div>
+
+          <div className={s.summary} onClick={() => setOpenModal(true)}>
+            <LinkIcon className="w-4 h-4" /> Detail info
+          </div>
+
           <button
             className={s.explorerBtn}
             onClick={async () => {
@@ -46,10 +61,74 @@ const TransactionInfo = () => {
           >
             Open in explorer
           </button>
+          <Modal
+            onClose={() => setOpenModal(false)}
+            open={openModal}
+            title="Detail info"
+          >
+            <div className={s.tableContainer}>
+              <TableItem
+                label="Inputs"
+                currentAddress={currentAccount.address}
+                items={tx.vin.map((i) => ({
+                  scriptpubkey_address: i.prevout.scriptpubkey_address,
+                  value: i.prevout.value,
+                }))}
+              />
+              <TableItem
+                label="Outputs"
+                currentAddress={currentAccount.address}
+                items={tx.vout}
+              />
+            </div>
+          </Modal>
         </div>
       ) : (
         <ReactLoading type="spin" color="#fff" />
       )}
+    </div>
+  );
+};
+
+interface ITableItem {
+  items: {
+    scriptpubkey_address: string;
+    value: number;
+  }[];
+  currentAddress?: string;
+  label: string;
+}
+
+const TableItem: FC<ITableItem> = ({ items, currentAddress, label }) => {
+  const currentId = useId();
+
+  return (
+    <div className={s.table}>
+      <h3>{label}:</h3>
+      <div className={s.tableList}>
+        {items.map((i, idx) => (
+          <div key={`${currentId}${idx}`} className={s.tableGroup}>
+            <div
+              className={cn(
+                {
+                  [s.active]: i.scriptpubkey_address === currentAddress,
+                },
+                s.tableFirst
+              )}
+              onClick={() => {
+                navigator.clipboard.writeText(i.scriptpubkey_address);
+                toast.success("Copied");
+              }}
+              title={i.scriptpubkey_address}
+            >
+              {shortAddress(i.scriptpubkey_address, 12)}
+            </div>
+            <div className={s.tableSecond}>
+              {(i.value / 10 ** 8).toFixed(2)}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -238,16 +238,16 @@ const Wallet = () => {
 
 const getPercent = (lastBlock: number, currentBlock?: number) => {
   if (!currentBlock) return 0;
-  if (lastBlock - currentBlock > 3) {
+  if (lastBlock - currentBlock > 6) {
     return 100;
   }
-  return Math.floor(((lastBlock - currentBlock) / 3) * 100);
+  return Math.floor(((lastBlock - currentBlock) / 6) * 100);
 };
 
 const getConfirmationsCount = (lastBlock: number, currentBlock?: number) => {
   if (!currentBlock)
     return <div className="p-0.5 flex items-center justify-center">0</div>;
-  if (lastBlock - currentBlock < 3) {
+  if (lastBlock - currentBlock < 6) {
     return (
       <div className="p-0.5 flex items-center justify-center">
         {lastBlock - currentBlock}

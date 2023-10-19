@@ -25,29 +25,38 @@ const ConfirmSend = () => {
     }
   };
 
+  const fields = [
+    {
+      label: "To",
+      value: location.state.toAddress,
+    },
+    {
+      label: "From",
+      value: location.state.fromAddress,
+    },
+    {
+      label: "Amount",
+      value: location.state.amount + " TDC",
+    },
+    {
+      label: "Fee",
+      value: `${location.state.feeAmount} sat/Vb (${
+        location.state.includeFeeInAmount ? "included" : "not included"
+      })`,
+    },
+  ];
+
   return (
-    <div
-      className={cn(
-        s.confirmSend,
-        "w-full h-full py-[1rem] flex items-center justify-center"
-      )}
-    >
+    <div className={s.wrapper}>
       {!loading ? (
-        <div className="w-full h-full flex flex-col justify-between items-center">
-          <div
-            className={cn(
-              s.transactionInfo,
-              "w-[95%] flex flex-col items-center py-[1rem] gap-[1rem]"
-            )}
-          >
-            <p className={s.info}>To: {location.state.toAddress}</p>
-            <p className={s.info}>From: {location.state.fromAddress}</p>
-            <p className={s.info}>Amount: {location.state.amount}</p>
-            <p className={s.info}>Fee: {location.state.feeAmount}</p>
-            <p className={s.info}>
-              Fee is {location.state.includeFeeInAmount ? "" : "not"} included
-              in the amount
-            </p>
+        <div className={s.container}>
+          <div className={s.container}>
+            {fields.map((i) => (
+              <div key={i.value} className={s.item}>
+                <div className={s.label}>{i.label}:</div>
+                <div className={s.input}>{i.value}</div>
+              </div>
+            ))}
           </div>
           <button
             className={cn("btn primary", s.confirmBtn)}

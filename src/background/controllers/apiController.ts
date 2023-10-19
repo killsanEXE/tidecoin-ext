@@ -36,6 +36,7 @@ class ApiController implements IApiController {
       headers: {
         "content-type": "text/plain",
       },
+      json: false,
       body: rawTx,
     });
     return {
