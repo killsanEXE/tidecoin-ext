@@ -3,19 +3,7 @@ import { EthereumProviderError } from "eth-rpc-errors/dist/classes";
 import Events from "events";
 import { event, remove, openNotification } from "../webapi";
 import { IS_CHROME, IS_LINUX } from "@/shared/constant";
-
-interface Approval {
-  data: {
-    state: number;
-    params?: any;
-    origin?: string;
-    approvalComponent: string;
-    requestDefer?: Promise<any>;
-    approvalType: string;
-  };
-  resolve(params?: any): void;
-  reject(err: EthereumProviderError<any>): void;
-}
+import { Approval } from "@/shared/interfaces/notification";
 
 // something need user approval in window
 // should only open one window, unfocus will close the current notification

@@ -3,7 +3,7 @@ import { RouterProvider } from "react-router-dom";
 import { Router } from "@remix-run/router";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { setupKeyringProxy, setupOpenAPIProxy, setupStateProxy, setupWalletProxy } from "@/ui/utils/setup";
+import { setupKeyringProxy, setupNotificationProxy, setupOpenAPIProxy, setupStateProxy, setupWalletProxy } from "@/ui/utils/setup";
 import { useAppState } from "./states/appState";
 import { useWalletState } from "./states/walletState";
 import { guestRouter, authenticatedRouter } from "@/ui/pages/router";
@@ -32,6 +32,7 @@ export default function App() {
       const apiController = setupOpenAPIProxy();
       const stateController = setupStateProxy();
       const keyringController = setupKeyringProxy();
+      const notificationController = setupNotificationProxy();
 
       const appState = await stateController.getAppState();
       const walletState = await stateController.getWalletState();
@@ -54,6 +55,7 @@ export default function App() {
         apiController,
         stateController,
         keyringController,
+        notificationController
       });
     };
 

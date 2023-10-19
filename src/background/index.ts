@@ -8,6 +8,7 @@ import apiController from "./controllers/apiController";
 import stateController from "./controllers/stateController";
 import { keyringController } from "./controllers";
 import { providerController } from "./controllers";
+import notificationController from "./controllers/notificationController";
 
 const { PortMessage } = Message;
 
@@ -29,6 +30,8 @@ browserRuntimeOnConnect((port: any) => {
             return keyringController[data.method].apply(null, data.params);
           case "state":
             return stateController[data.method].apply(null, data.params);
+          case "notification":
+            return notificationController[data.method].apply(null, data.params);
           default:
             if (!walletController[data.method])
               throw new Error(`Method ${data.method} is not founded in the walletController`);

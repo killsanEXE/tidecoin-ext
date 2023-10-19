@@ -9,6 +9,7 @@ import { useControllersState } from "../states/controllerState";
 import { useCallback } from "react";
 import { useAppState } from "../states/appState";
 import { useWalletState } from "../states/walletState";
+import { INotificationController } from "@/shared/interfaces/notification";
 
 function setupPm() {
   const { PortMessage } = Message;
@@ -34,7 +35,7 @@ function setupPm() {
 
 const portMessageChannel = setupPm();
 
-type AvailableType = "controller" | "openapi" | "state" | "keyring";
+type AvailableType = "controller" | "openapi" | "state" | "keyring" | "notification";
 
 function setupProxy<T>(type: AvailableType): T {
   const wallet: Record<string, any> = new Proxy(
@@ -68,6 +69,10 @@ export function setupStateProxy() {
 
 export function setupKeyringProxy() {
   return setupProxy<IKeyringController>("keyring");
+}
+
+export function setupNotificationProxy() {
+  return setupProxy<INotificationController>("notification");
 }
 
 export function useSyncStorages() {
