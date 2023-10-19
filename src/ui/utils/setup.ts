@@ -85,5 +85,10 @@ export function useSyncStorages() {
 
     await updateAppState(appState);
     await updateWalletState(walletState);
+
+    return {
+      appState,
+      walletState,
+    };
   }, [stateController]);
 }
