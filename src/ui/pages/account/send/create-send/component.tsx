@@ -166,7 +166,7 @@ const CreateSend = () => {
           <div className="flex gap-2 w-full">
             <input
               type="number"
-              min={0.0000001}
+              min={0.00000001}
               maxLength={20}
               placeholder="Amount you want to send"
               className="input w-full"
@@ -174,7 +174,7 @@ const CreateSend = () => {
               onChange={(v) => {
                 setFormData((prev) => ({
                   ...prev,
-                  amount: v.target.value.length ? v.target.value : "",
+                  amount: extractAmount(v.target.value),
                 }));
                 if (currentAccount.balance < Number(v.target.value)) {
                   setIncludeFeeLocked(false);
@@ -229,6 +229,16 @@ const CreateSend = () => {
       </button>
     </form>
   );
+};
+
+const extractAmount = (value: string) => {
+  if (!value.length) return "";
+  if (value.includes(".")) {
+    if (value.split(".")[1].length > 8) {
+      return value.split(".")[0] + ".00000001";
+    }
+  }
+  return value;
 };
 
 export default CreateSend;
