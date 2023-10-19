@@ -41,8 +41,6 @@ const Login = () => {
       const exportedWallets = await walletController.importWallets(password);
       const { walletState } = await syncStorages();
       const selectedWallet = walletState.selectedWallet;
-      console.log(exportedWallets);
-      console.log(selectedWallet);
       exportedWallets[selectedWallet].accounts = await walletController.loadAccountsData(
         selectedWallet,
         exportedWallets[selectedWallet].accounts
