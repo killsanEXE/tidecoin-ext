@@ -22,6 +22,7 @@ class ProviderController {
     // if (!permissionService.hasPermission(origin)) {
     //   throw ethErrors.provider.unauthorized();
     // }
+    if (storageService.currentWallet === undefined) return undefined;
     const _account = await storageService.currentWallet.accounts[0];
     const account = _account ? _account.address : "";
     sessionService.broadcastEvent("accountsChanged", account);
@@ -96,7 +97,7 @@ class ProviderController {
   //   };
 
   //   @Reflect.metadata('SAFE', true)
-  //   getBalance = async () => {
+  //   getBalance = async () => Connect{
   //     const account = await wallet.getCurrentAccount();
   //     if (!account) return null;
   //     const balance = await wallet.getAddressBalance(account.address)

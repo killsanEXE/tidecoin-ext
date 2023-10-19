@@ -33,7 +33,7 @@ const flowContext = flow
     if (!Reflect.getMetadata("SAFE", providerController, mapMethod)) {
       if (!storageService.appState.isUnlocked) {
         ctx.request.requestedApproval = true;
-        await notificationService.requestApproval({ lock: true }, { route: "/account/login" });
+        await notificationService.requestApproval({ lock: true });
       }
     }
 
