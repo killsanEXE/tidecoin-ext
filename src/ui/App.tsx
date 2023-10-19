@@ -11,7 +11,7 @@ import { useControllersState } from "./states/controllerState";
 import { extractKeysFromObj } from "@/shared/utils";
 
 export default function App() {
-  const [router, setRouter] = useState<Router>(guestRouter);
+  const [router, setRouter] = useState<Router>(authenticatedRouter);
   const { isReady, isUnlocked, updateAppState } = useAppState((v) => ({
     isReady: v.isReady,
     isUnlocked: v.isUnlocked,

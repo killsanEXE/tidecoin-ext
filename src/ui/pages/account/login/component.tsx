@@ -7,6 +7,7 @@ import { useControllersState } from "@/ui/states/controllerState";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useSyncStorages } from "@/ui/utils/setup";
+import { isNotification } from "@/ui/utils";
 
 interface FormType {
   password: string;
@@ -27,8 +28,9 @@ const Login = () => {
     vaultIsEmpty: v.vaultIsEmpty,
   }));
   const navigate = useNavigate();
-  const { walletController } = useControllersState((v) => ({
+  const { walletController, notificationController } = useControllersState((v) => ({
     walletController: v.walletController,
+    notificationController: v.notificationController
   }));
   const syncStorages = useSyncStorages();
 
@@ -52,7 +54,16 @@ const Login = () => {
         isUnlocked: true,
         password: password,
       });
-      navigate("/home");
+
+      console.log("I AM ABOUT TO DECIDE WHERE I WILL REDIRECT YOU ")
+      if (!isNotification()) {
+        console.log("I'LL NAVIGATE YOU TO HOME PAGE")
+        navigate("/home")
+      }
+      else {
+        console.log("I'LL RESOLVE THIS CONFLICT")
+        await notificationController.resolveApproval()
+      }
     } catch (e) {
       toast.error(e.message);
     }

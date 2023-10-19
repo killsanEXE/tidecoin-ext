@@ -24,7 +24,8 @@ class PermissionService {
     }
 
     siteIsConnected(origin: string): boolean {
-        return this._sites.find(f => f.origin === origin).isConnected ?? false;
+        const site = this._sites.find(f => f.origin === origin);
+        return site ? site.isConnected : false;
     }
 
     addConnectedSite(origin: string, name: string, icon: string) {

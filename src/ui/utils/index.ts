@@ -15,23 +15,6 @@ export function tidoshisToAmount(val: number) {
   return num.div(100_000_000).toFixed(8);
 }
 
-type UiTypeCheck = {
-  isTab: boolean;
-  isNotification: boolean;
-  isPop: boolean;
-};
-
-const UI_TYPE = {
-  Tab: 'index',
-  Pop: 'popup',
-  Notification: 'notification'
-};
-
-export const getUiType = (): UiTypeCheck => {
-  const { pathname } = window.location;
-  return Object.entries(UI_TYPE).reduce((m, [key, value]) => {
-    m[`is${key}`] = pathname === `/${value}.html`;
-
-    return m;
-  }, {} as UiTypeCheck);
+export const isNotification = (): boolean => {
+  return window.location.pathname.includes("notification.html");
 };

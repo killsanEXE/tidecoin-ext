@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useControllersState } from "../states/controllerState";
+import { useEffect } from "react";
+import { isNotification } from "../utils";
 
 export const useApproval = () => {
     const navigate = useNavigate();
@@ -11,7 +13,7 @@ export const useApproval = () => {
         const approval = await notificationController.getApproval();
 
         if (approval) {
-            wallet.resolveApproval(data, forceReject);
+            await notificationController.resolveApproval(data, forceReject);
         }
         if (stay) {
             return;
@@ -22,9 +24,9 @@ export const useApproval = () => {
     };
 
     const rejectApproval = async (err?, stay = false, isInternal = false) => {
-        const approval = await getApproval();
+        const approval = await await notificationController.getApproval();
         if (approval) {
-            await wallet.rejectApproval(err, stay, isInternal);
+            await notificationController.rejectApproval(err, stay, isInternal);
         }
         if (!stay) {
             navigate('/');
@@ -32,7 +34,7 @@ export const useApproval = () => {
     };
 
     useEffect(() => {
-        if (!getUiType().isNotification) {
+        if (!isNotification()) {
             return;
         }
         window.addEventListener('beforeunload', rejectApproval);
@@ -40,5 +42,5 @@ export const useApproval = () => {
         return () => window.removeEventListener('beforeunload', rejectApproval);
     }, []);
 
-    return [getApproval, resolveApproval, rejectApproval] as const;
+    return [notificationController, resolveApproval, rejectApproval] as const;
 };

@@ -2,6 +2,8 @@ import { EthereumProviderError } from "eth-rpc-errors";
 
 export interface INotificationController {
     getApproval(): Promise<ApprovalData>;
+    rejectApproval(err?: string, stay?: boolean, isInternal?: boolean): Promise<void>
+    resolveApproval(data?: any, forceReject?: boolean): Promise<void>
 }
 
 export interface Approval {
