@@ -56,7 +56,7 @@ class ProviderController {
   };
 
   @Reflect.metadata("SAFE", false)
-  connectExtension = async () => {};
+  connectExtension = async () => { };
 
   // @Reflect.metadata('APPROVAL', ['SwitchNetwork', (req) => {
   //   const network = req.data.params.network;

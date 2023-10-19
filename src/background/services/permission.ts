@@ -1,6 +1,3 @@
-import { CHAINS_ENUM, INTERNAL_REQUEST_ORIGIN } from '@/shared/constant';
-import { max } from 'lodash';
-
 export interface ConnectedSite {
     origin: string;
     icon: string;

@@ -14,7 +14,6 @@ const windowHeight = 600;
 const flow = new PromiseFlow();
 const flowContext = flow
   .use(async (ctx, next) => {
-    // check method
     const {
       data: { method },
     } = ctx.request;
@@ -32,13 +31,9 @@ const flowContext = flow
   .use(async (ctx, next) => {
     const { mapMethod } = ctx;
     if (!Reflect.getMetadata("SAFE", providerController, mapMethod)) {
-      // check lock
-      const isUnlock = storageService.appState.isUnlocked;
-
-      if (!isUnlock) {
+      if (!storageService.appState.isUnlocked) {
         ctx.request.requestedApproval = true;
         await notificationService.requestApproval({ lock: true }, { route: "/account/login" });
-        console.log("DONE LOGIN");
       }
     }
 
