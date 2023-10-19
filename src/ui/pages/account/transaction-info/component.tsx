@@ -6,7 +6,7 @@ import { ITransaction } from "@/shared/interfaces/apiController";
 import { getTransactionValue } from "@/ui/utils/transactions";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
 import { LinkIcon } from "@heroicons/react/24/outline";
-import { FC, useId, useMemo, useState } from "react";
+import { FC, useId, useState } from "react";
 import Modal from "@/ui/components/modal";
 import cn from "classnames";
 import { shortAddress } from "@/ui/utils";
@@ -121,7 +121,7 @@ const TableItem: FC<ITableItem> = ({ items, currentAddress, label }) => {
             >
               {shortAddress(i.scriptpubkey_address, addressLength(i.value))}
             </div>
-            <div className={s.tableSecond}>~{(i.value / 10 ** 8).toFixed(2)}</div>
+            <div className={s.tableSecond}>{(i.value / 10 ** 8).toFixed(2)}</div>
           </div>
         ))}
       </div>
