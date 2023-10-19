@@ -6,7 +6,7 @@ import { ITransaction } from "@/shared/interfaces/apiController";
 import { getTransactionValue } from "@/ui/utils/transactions";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
 import { LinkIcon } from "@heroicons/react/24/outline";
-import { FC, useId, useState } from "react";
+import { FC, useId, useMemo, useState } from "react";
 import Modal from "@/ui/components/modal";
 import cn from "classnames";
 import { shortAddress } from "@/ui/utils";
@@ -41,11 +41,11 @@ const TransactionInfo = () => {
           </div>
           <div className={s.group}>
             <p className={s.transactionP}>Value:</p>
-            <span>{getTransactionValue(tx, currentAccount?.address)} TDC</span>
+            <span>{getTransactionValue(tx, currentAccount?.address, false)} TDC</span>
           </div>
 
           <div className={s.summary} onClick={() => setOpenModal(true)}>
-            <LinkIcon className="w-4 h-4" /> Detail info
+            <LinkIcon className="w-4 h-4" /> Detailed info
           </div>
 
           <button
@@ -59,7 +59,7 @@ const TransactionInfo = () => {
           >
             Open in explorer
           </button>
-          <Modal onClose={() => setOpenModal(false)} open={openModal} title="Detail info">
+          <Modal onClose={() => setOpenModal(false)} open={openModal} title="Detailed info">
             <div className={s.tableContainer}>
               <TableItem
                 label="Inputs"
@@ -92,6 +92,14 @@ interface ITableItem {
 const TableItem: FC<ITableItem> = ({ items, currentAddress, label }) => {
   const currentId = useId();
 
+  const addressLength = (value: number) => {
+    const newValue = (value / 10 ** 8).toFixed(2);
+    if (newValue.length > 7) {
+      return 9;
+    }
+    return 12;
+  };
+
   return (
     <div className={s.table}>
       <h3>{label}:</h3>
@@ -111,9 +119,9 @@ const TableItem: FC<ITableItem> = ({ items, currentAddress, label }) => {
               }}
               title={i.scriptpubkey_address}
             >
-              {shortAddress(i.scriptpubkey_address, 12)}
+              {shortAddress(i.scriptpubkey_address, addressLength(i.value))}
             </div>
-            <div className={s.tableSecond}>{(i.value / 10 ** 8).toFixed(2)}</div>
+            <div className={s.tableSecond}>~{(i.value / 10 ** 8).toFixed(2)}</div>
           </div>
         ))}
       </div>

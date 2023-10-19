@@ -129,7 +129,21 @@ class StorageService {
   }
 
   async getLocalValues() {
-    return await browserStorageLocalGet<StorageInterface>(undefined);
+    const data = await browserStorageLocalGet<StorageInterface>(undefined);
+    if (Array.isArray(data.cache)) {
+      const newData: StorageInterface = {
+        cache: {
+          addressBook: (data as any).addressBook,
+          selectedWallet: 0,
+          selectedAccount: 0,
+          wallets: data.cache,
+        },
+        enc: data.enc,
+      };
+      await browserStorageLocalSet(newData);
+      return newData;
+    }
+    return data;
   }
 
   async importWallets(password: string): Promise<IPrivateWallet[]> {
