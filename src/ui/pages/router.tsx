@@ -24,6 +24,8 @@ import RenameWallet from "./account/switch-wallet/rename-wallet";
 import FinalleSend from "./account/send/finalle-send";
 import CreateSend from "./account/send/create-send";
 import ConfirmSend from "./account/send/confirm-send";
+import Connect from "./provider/connect";
+import Sign from "./provider/sign";
 
 export const guestRouter = createHashRouter([
   {
@@ -62,6 +64,13 @@ export const authenticatedRouter = createHashRouter([
       { path: "create-send", element: <CreateSend /> },
       { path: "confirm-send", element: <ConfirmSend /> },
     ],
+  },
+  {
+    path: "provider",
+    children: [
+      { path: "connect", element: <Connect /> },
+      { path: "sign", element: <Sign /> },
+    ]
   },
   { path: "*", element: <Navigate to={"/home"} /> },
 ]);

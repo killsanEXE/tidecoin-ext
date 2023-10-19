@@ -37,7 +37,8 @@ const flowContext = flow
 
       if (!isUnlock) {
         ctx.request.requestedApproval = true;
-        await notificationService.requestApproval({ lock: true, }, { route: "/home" });
+        await notificationService.requestApproval({ lock: true, }, { route: "/account/login" });
+        console.log("DONE LOGIN")
       }
     }
 
