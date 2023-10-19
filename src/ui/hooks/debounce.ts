@@ -19,5 +19,5 @@ export function useDebounceCall(
   }, [value, delay, triggered]);
   return useCallback(() => {
     setTriggered(true);
-  }, [setTriggered]);
+  }, [setTriggered, value]);
 }

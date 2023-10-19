@@ -1,29 +1,37 @@
 .send {
-    @apply items-start w-full h-full justify-between p-[1rem];
+  @apply items-start w-full h-full p-[1rem] relative;
 }
 
 .sendBtn {
-    @apply w-full;
+  @apply absolute left-6 right-6 bottom-6;
 }
 
 .inputs {
-    @apply w-full flex flex-col justify-center items-center gap-[2rem];
+  @apply w-full flex flex-col justify-center items-center gap-[2rem];
 }
 
 .feeDiv {
-    @apply w-full flex flex-col items-start justify-start gap-[.5rem];
+  @apply w-full flex flex-col items-start justify-start gap-[.5rem];
 
-    .includeFeeInAmountDiv {
-        @apply flex gap-[.3rem]
+  .includeFeeInAmountDiv {
+    @apply flex gap-2 mt-2 select-none;
+
+    > * {
+      @apply cursor-pointer;
     }
+  }
 }
 
 .addressbookoptions {
-    @apply w-full bg-input-bg flex flex-col gap-[.5rem] rounded-[.3rem] justify-center items-center py-[.4rem] max-w-[319px] absolute mt-[4rem] z-10 select-none shadow-lg;
+  @apply w-full bg-input-bg flex flex-col gap-[.5rem] rounded-[.3rem] justify-center items-center py-[.4rem] max-w-[319px] absolute mt-[4rem] z-10 select-none shadow-lg;
 
-    .addressbookoption {
-        &:hover {
-            @apply cursor-pointer;
-        }
+  .addressbookoption {
+    &:hover {
+      @apply cursor-pointer;
     }
+  }
+}
+
+.maxAmount {
+  @apply text-xs bg-gray-700 rounded-xl px-3 py-1 cursor-pointer flex items-center justify-center;
 }

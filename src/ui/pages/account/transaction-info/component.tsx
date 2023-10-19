@@ -1,28 +1,18 @@
-import { useParams } from "react-router-dom";
 import s from "./styles.module.scss";
-import { useEffect, useState } from "react";
-import { useControllersState } from "@/ui/states/controllerState";
-import { ITransactionInfo } from "@/shared/interfaces/apiController";
 import ReactLoading from "react-loading";
 import { browserTabsCreate } from "@/shared/utils/browser";
+import { useLocation } from "react-router-dom";
+import { ITransaction } from "@/shared/interfaces/apiController";
+import { getTransactionValue } from "@/ui/utils/transactions";
+import { useGetCurrentAccount } from "@/ui/states/walletState";
 
 const TransactionInfo = () => {
-  const { txId } = useParams();
-  const { apiController } = useControllersState((v) => ({
-    apiController: v.apiController,
-  }));
+  const currentAccount = useGetCurrentAccount();
 
-  const [transaction, setTransaction] = useState<ITransactionInfo | undefined>(
-    undefined
-  );
-
-  useEffect(() => {
-    const updateTransaction = async () => {
-      setTransaction(await apiController.getTransactionInfo(txId ?? ""));
-    };
-
-    if (!transaction) updateTransaction();
-  }, [transaction, apiController]);
+  const {
+    state: { transaction, lastBlock },
+  } = useLocation();
+  const tx = transaction as ITransaction;
 
   return (
     <div className={s.transactionInfoDiv}>
@@ -31,25 +21,26 @@ const TransactionInfo = () => {
           <div className={s.group}>
             <p className={s.transactionP}>TxId:</p>
 
-            <span>{transaction.txid}</span>
+            <span>{tx.txid}</span>
           </div>
           <div className={s.group}>
             <p className={s.transactionP}>Confirmations:</p>
-            <span>{transaction.confirmations}</span>
+            <span>{lastBlock - tx.status.block_height}</span>
           </div>
           <div className={s.group}>
             <p className={s.transactionP}>Fee:</p>
-            <span>{transaction.fee / 10 ** 8}</span>
+            <span>{tx.fee / 10 ** 8} TDC</span>
           </div>
           <div className={s.group}>
             <p className={s.transactionP}>Value:</p>
-            <span>{transaction.value / 10 ** 8} TDC</span>
+            <span>{getTransactionValue(tx, currentAccount?.address)} TDC</span>
           </div>
           <button
             className={s.explorerBtn}
-            onClick={() => {
-              browserTabsCreate({
+            onClick={async () => {
+              await browserTabsCreate({
                 url: `https://explorer.tidecoin.org/tx/${transaction.txid}`,
+                active: true,
               });
             }}
           >

@@ -86,6 +86,9 @@ export default function PagesLayout() {
     {
       route: "/pages/create-send",
       title: "Send",
+      backAction: () => {
+        navigate("/home");
+      },
     },
     {
       backAction: () => {

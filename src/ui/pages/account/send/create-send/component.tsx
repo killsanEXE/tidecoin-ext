@@ -1,35 +1,33 @@
 import { useCreateTidecoinTxCallback } from "@/ui/hooks/transactions";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import s from "./styles.module.scss";
 import cn from "classnames";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import { useAppState } from "@/ui/states/appState";
 import { Combobox, Transition } from "@headlessui/react";
+import FeeInput from "./fee-input";
 
 interface FormType {
   address: string;
-  amount: number;
+  amount: string;
   feeAmount: number;
   includeFeeInAmount: boolean;
 }
 
 const CreateSend = () => {
+  const [formData, setFormData] = useState<FormType>({
+    address: "",
+    amount: "",
+    includeFeeInAmount: false,
+    feeAmount: 1,
+  });
+  const [includeFeeLocked, setIncludeFeeLocked] = useState<boolean>(false);
   const currentAccount = useGetCurrentAccount();
-  const sendTdc = useCreateTidecoinTxCallback();
+  const createTx = useCreateTidecoinTxCallback();
   const navigate = useNavigate();
   const location = useLocation();
-
-  const { register, handleSubmit, setValue, getValues } = useForm<FormType>({
-    defaultValues: {
-      address: "",
-      amount: 0,
-      feeAmount: 0,
-      includeFeeInAmount: false,
-    },
-  });
 
   const { addressBook } = useAppState((v) => ({ addressBook: v.addressBook }));
 
@@ -66,16 +64,16 @@ const CreateSend = () => {
     //   }
     // }
     try {
-      const hex = await sendTdc(
+      const hex = await createTx(
         address,
-        amount * 10 ** 8,
+        Number(amount) * 10 ** 8,
         feeAmount,
         includeFeeInAmount
       );
       navigate("/pages/confirm-send", {
         state: {
           toAddress: address,
-          amount,
+          amount: Number(amount),
           feeAmount,
           includeFeeInAmount,
           fromAddress: currentAccount?.address ?? "",
@@ -94,12 +92,14 @@ const CreateSend = () => {
       (location.state.toAddress !== null ||
         location.state.toAddress !== undefined)
     ) {
-      setValue("address", location.state.toAddress);
-      setValue("amount", location.state.amount);
-      setValue("feeAmount", location.state.feeAmount);
-      setValue("includeFeeInAmount", location.state.includeFeeInAmount);
+      setFormData({
+        address: location.state.toAddress,
+        amount: location.state.amount,
+        feeAmount: location.state.feeAmount,
+        includeFeeInAmount: location.state.includeFeeInAmount,
+      });
     }
-  }, [location.state, setValue]);
+  }, [location.state, setFormData]);
 
   const [query, setQuery] = useState("");
   const filteredAddresses =
@@ -110,14 +110,20 @@ const CreateSend = () => {
         });
 
   return (
-    <form className={cn("form", s.send)} onSubmit={handleSubmit(send)}>
+    <form
+      className={cn("form", s.send)}
+      onSubmit={(e) => {
+        e.preventDefault();
+        send(formData);
+      }}
+    >
       <div className={s.inputs}>
         <div className="form-field">
           <span className="input-span">Address</span>
           <Combobox
-            value={getValues().address}
+            value={formData.address}
             onChange={(e) => {
-              setValue("address", e);
+              setFormData((prev) => ({ ...prev, address: e }));
               setQuery(e);
             }}
           >
@@ -125,11 +131,10 @@ const CreateSend = () => {
               displayValue={(address: string) => address}
               autoComplete="off"
               className="input"
-              value={getValues("address")}
-              onChange={(e) => {
-                setValue("address", e.target.value);
-                setQuery(e.target.value);
-              }}
+              value={formData.address}
+              onChange={(v) =>
+                setFormData((prev) => ({ ...prev, address: v.target.value }))
+              }
             />
             {filteredAddresses.length <= 0 ? (
               ""
@@ -158,29 +163,52 @@ const CreateSend = () => {
         </div>
         <div className="form-field">
           <span className="input-span">Amount</span>
-          <input
-            placeholder="Amount you want to send"
-            className="input"
-            {...register("amount", { valueAsNumber: true })}
-          />
-          <span className="input-info">
-            MAX AMOUNT: {currentAccount!.balance}
-          </span>
+          <div className="flex gap-2 w-full">
+            <input
+              placeholder="Amount you want to send"
+              className="input w-full"
+              value={formData.amount}
+              onChange={(v) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  amount: v.target.value.length ? v.target.value : "",
+                }))
+              }
+            />
+            <button
+              className={s.maxAmount}
+              onClick={(e) => {
+                e.preventDefault();
+                setFormData((prev) => ({
+                  ...prev,
+                  amount: currentAccount.balance.toString(),
+                  includeFeeInAmount: true,
+                }));
+                setIncludeFeeLocked(true);
+              }}
+            >
+              MAX
+            </button>
+          </div>
         </div>
       </div>
 
       <div className={s.feeDiv}>
         <div className={cn("form-field", s.amountInput)}>
           <span className="input-span">Fee:</span>
-          <input
-            className="input"
-            placeholder="sat/Vb"
-            {...register("feeAmount", { valueAsNumber: true })}
+          <FeeInput
+            onChange={useCallback(
+              (v) => setFormData((prev) => ({ ...prev, feeAmount: v })),
+              [setFormData]
+            )}
+            onIncludeChange={useCallback(
+              (v) =>
+                setFormData((prev) => ({ ...prev, includeFeeInAmount: v })),
+              [setFormData]
+            )}
+            includeFeeValue={formData.includeFeeInAmount}
+            includeFeeLocked={includeFeeLocked}
           />
-        </div>
-        <div className={s.includeFeeInAmountDiv}>
-          <input type="checkbox" {...register("includeFeeInAmount")} />
-          <span className={s.includeFeeSpan}>Include fee in the amount</span>
         </div>
       </div>
 

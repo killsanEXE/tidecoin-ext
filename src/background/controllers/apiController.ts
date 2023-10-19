@@ -1,43 +1,46 @@
 import {
+  AccountBalanceResponse,
   ApiUTXO,
   IApiController,
   ITransaction,
-  ITransactionInfo,
 } from "@/shared/interfaces/apiController";
 import { fetchTDCMainnet } from "@/shared/utils";
 
 class ApiController implements IApiController {
   async getAccountBalance(address: string) {
-    const data = await fetchTDCMainnet<any>({
-      path: `/address/${address}/balance`,
-      method: "GET",
+    const data = await fetchTDCMainnet<AccountBalanceResponse>({
+      path: `/address/${address}`,
     });
 
-    return data.balance;
+    if (!data) return undefined;
+
+    return (
+      data.chain_stats.funded_txo_sum -
+      data.chain_stats.spent_txo_sum +
+      data.mempool_stats.funded_txo_sum -
+      data.mempool_stats.spent_txo_sum
+    );
   }
 
   async getUtxos(address: string) {
     const data = await fetchTDCMainnet<ApiUTXO[]>({
-      path: `/address/${address}`,
-      params: {
-        unspent: "true",
-      },
+      path: `/address/${address}/utxo`,
     });
     return data;
   }
 
   async pushTx(rawTx: string) {
-    const data = await fetchTDCMainnet<{ txid: string }>({
-      path: "/tx/send",
+    const data = await fetchTDCMainnet<string>({
+      path: "/tx",
       method: "POST",
       headers: {
-        "content-type": "application/json",
+        "content-type": "text/plain",
       },
-      body: JSON.stringify({
-        rawTx,
-      }),
+      body: rawTx,
     });
-    return data;
+    return {
+      txid: data,
+    };
   }
 
   async getTransactions(address: string): Promise<ITransaction[] | undefined> {
@@ -46,12 +49,12 @@ class ApiController implements IApiController {
     });
   }
 
-  async getTransactionInfo(
-    txid: string
-  ): Promise<ITransactionInfo | undefined> {
-    return await fetchTDCMainnet<ITransactionInfo>({
-      path: `/tx/${txid}`,
-    });
+  async getLastBlockTDC(): Promise<number> {
+    return Number(
+      await fetchTDCMainnet<string>({
+        path: "/blocks/tip/height",
+      })
+    );
   }
 
   async getTDCPrice() {

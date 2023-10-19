@@ -4,6 +4,7 @@ import {
   ListBulletIcon,
   Cog6ToothIcon,
   ChevronDownIcon,
+  CheckIcon,
 } from "@heroicons/react/24/outline";
 import s from "./styles.module.scss";
 import { shortAddress } from "@/ui/utils";
@@ -20,8 +21,11 @@ import { useUpdateCurrentAccountTransactions } from "@/ui/hooks/transactions";
 import { useDebounceCall } from "@/ui/hooks/debounce";
 import CopyBtn from "@/ui/components/copy-btn";
 import { useControllersState } from "@/ui/states/controllerState";
+import { getTransactionValue, isIncomeTx } from "@/ui/utils/transactions";
+import { Circle } from "rc-progress";
 
 const Wallet = () => {
+  const [lastBlock, setLastBlock] = useState<number>(0);
   const currentWallet = useGetCurrentWallet();
   if (!currentWallet) return <Navigate to={"/pages/create-new-wallet"} />;
 
@@ -38,9 +42,14 @@ const Wallet = () => {
     const receivedTransactions = await updateAccountTransactions();
     if (receivedTransactions !== undefined)
       setTransactions(receivedTransactions);
-  }, [updateAccountTransactions, setTransactions]);
+  }, [updateAccountTransactions, setTransactions, lastBlock]);
+
+  const updateLastBlock = useCallback(async () => {
+    setLastBlock(await apiController.getLastBlockTDC());
+  }, []);
 
   const callUpdateTransactions = useDebounceCall(udpateTransactions, 200);
+  const callUpdateLastBlock = useDebounceCall(updateLastBlock, 200);
 
   const { apiController } = useControllersState((v) => ({
     apiController: v.apiController,
@@ -58,12 +67,14 @@ const Wallet = () => {
     const interval = setInterval(() => {
       updateAccountBalance();
       callUpdateTransactions();
+      callUpdateLastBlock();
     }, 10000);
 
     if (currentAccount && currentAccount.balance === undefined)
       updateAccountBalance();
 
     callUpdateTransactions();
+    callUpdateLastBlock();
 
     return () => {
       clearInterval(interval);
@@ -169,25 +180,50 @@ const Wallet = () => {
               className={s.transaction}
               key={index}
               onClick={() => {
-                navigate(`/pages/transaction-info/${t.mintTxid}`);
+                navigate(`/pages/transaction-info/${t.txid}`, {
+                  state: {
+                    transaction: t,
+                    lastBlock,
+                  },
+                });
               }}
             >
-              <div className="flex gap-2 items-center">
-                <div className="rounded-full bg-gray-300 w-6 h-6 text-bg flex items-center justify-center">
-                  T
+              <div className="flex gap-3 items-center">
+                <div
+                  className={cn(
+                    "rounded-full w-6 h-6 text-bg flex items-center justify-center relative",
+                    {
+                      "bg-gradient-to-r from-emerald-300 to-emerald-600":
+                        getPercent(lastBlock, t.status.block_height) === 100,
+                      "bg-gray-400":
+                        getPercent(lastBlock, t.status.block_height) < 100,
+                    }
+                  )}
+                >
+                  <Circle
+                    className={cn("absolute -inset-1", {
+                      hidden:
+                        getPercent(lastBlock, t.status.block_height) === 100,
+                    })}
+                    percent={getPercent(lastBlock, t.status.block_height)}
+                    strokeWidth={3}
+                  />
+                  <div className="absolute inset-0">
+                    {getConfirmationsCount(lastBlock, t.status.block_height)}
+                  </div>
                 </div>
                 <div className={s.transactionInfo}>
-                  <div className={s.address}>{shortAddress(t.mintTxid)}</div>
+                  <div className={s.address}>{shortAddress(t.txid)}</div>
                 </div>
               </div>
               <div
                 className={cn(s.value, {
-                  "text-green-500": !t.mintIndex,
-                  "text-red-500": t.mintIndex,
+                  "text-green-500": isIncomeTx(t, currentAccount.address),
+                  "text-red-500": !isIncomeTx(t, currentAccount.address),
                 })}
               >
-                {t.mintIndex ? "- " : "+ "}
-                {getTransactionValue(t.mintIndex, t.value, 1)} TDC
+                {isIncomeTx(t, currentAccount.address) ? "+ " : "- "}
+                {getTransactionValue(t, currentAccount.address)} TDC
               </div>
             </div>
           ))}
@@ -199,11 +235,25 @@ const Wallet = () => {
   );
 };
 
-const getTransactionValue = (mintIndex: number, value: number, fee: number) => {
-  if (mintIndex) {
-    return ((value + fee) / 10 ** 8).toFixed(4);
+const getPercent = (lastBlock: number, currentBlock?: number) => {
+  if (!currentBlock) return 0;
+  if (lastBlock - currentBlock > 3) {
+    return 100;
   }
-  return ((value - fee) / 10 ** 8).toFixed(4);
+  return Math.floor(((lastBlock - currentBlock) / 3) * 100);
+};
+
+const getConfirmationsCount = (lastBlock: number, currentBlock?: number) => {
+  if (!currentBlock)
+    return <div className="p-0.5 flex items-center justify-center">0</div>;
+  if (lastBlock - currentBlock < 3) {
+    return (
+      <div className="p-0.5 flex items-center justify-center">
+        {lastBlock - currentBlock}
+      </div>
+    );
+  }
+  return <CheckIcon className="w-6 h-6 p-0.5" />;
 };
 
 export default Wallet;

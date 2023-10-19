@@ -9,6 +9,7 @@ import { AddressType, Keyring } from "test-test-test-hd-wallet/src/hd/types";
 import { createSendTidecoin } from "tidecoin-utils";
 import HDSimpleKey from "test-test-test-hd-wallet/src/hd/simple";
 import { UTXOAddressType } from "tidecoin-utils/lib/OrdTransaction";
+import { getScriptForAddress } from "@/ui/utils/transactions";
 
 export const KEYRING_SDK_TYPES = {
   SimpleKey,
@@ -146,15 +147,20 @@ class KeyringService {
     if (!account || !account.address)
       throw new Error("Error when trying to get the current account");
 
+    const publicKey = this.exportPublicKey(account.address);
+
     const psbt = await createSendTidecoin({
       utxos: data.utxos.map((v) => {
         return {
-          txId: v.mintTxid,
-          outputIndex: v.mintIndex,
+          txId: v.txid,
+          outputIndex: v.vout,
           satoshis: v.value,
-          scriptPk: v.script,
+          scriptPk: getScriptForAddress(
+            Buffer.from(publicKey, "hex"),
+            wallet.addressType
+          ).toString("hex"),
           addressType: wallet?.addressType as any as UTXOAddressType,
-          address: v.address,
+          address: account.address,
           ords: [],
         };
       }),
@@ -197,8 +203,11 @@ class KeyringService {
     this.keyrings.splice(id, 1);
     let wallets = [...storageService.walletState.wallets];
     wallets.splice(id, 1);
-    wallets = wallets.map((f, i) => ({ ...f, id: i }))
-    await storageService.saveWallets(storageService.appState.password!, wallets);
+    wallets = wallets.map((f, i) => ({ ...f, id: i }));
+    await storageService.saveWallets(
+      storageService.appState.password!,
+      wallets
+    );
     return wallets;
   }
 }

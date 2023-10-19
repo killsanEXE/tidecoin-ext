@@ -244,5 +244,5 @@ export const SATS_DOMAIN = ".sats";
 
 export const CHANNEL = "chrome";
 
-export const TDC_API_URL = "https://tdc.cash";
-export const TDC_MAINNET_PATH = "/api/TDC/mainnet";
+export const TDC_API_URL = "https://api.tdc.cash";
+export const TDC_MAINNET_PATH = "";

@@ -1,17 +1,15 @@
 export interface ApiUTXO {
-  _id: string;
-  chain: "TDC";
-  network: "mainnet";
-  coinbase: boolean;
-  mintIndex: number;
-  spentTxid: string;
-  mintTxid: string;
-  mintHeight: number;
-  spentHeight: number;
-  address: string;
-  script: string;
+  txid: string;
+  vout: number;
+  status: Status;
   value: number;
-  confirmations: number;
+}
+
+export interface Status {
+  confirmed: boolean;
+  block_height: number;
+  block_hash: string;
+  block_time: number;
 }
 
 export interface IApiController {
@@ -19,25 +17,78 @@ export interface IApiController {
   getUtxos(address: string): Promise<ApiUTXO[] | undefined>;
   pushTx(rawTx: string): Promise<{ txid: string } | undefined>;
   getTransactions(address: string): Promise<ITransaction[] | undefined>;
-  getTransactionInfo(txid: string): Promise<ITransactionInfo | undefined>;
   getTDCPrice(): Promise<{ data: { last: string } }>;
+  getLastBlockTDC(): Promise<number>;
+}
+
+export interface AccountBalanceResponse {
+  address: string;
+  chain_stats: ChainStats;
+  mempool_stats: MempoolStats;
+}
+
+export interface ChainStats {
+  funded_txo_count: number;
+  funded_txo_sum: number;
+  spent_txo_count: number;
+  spent_txo_sum: number;
+  tx_count: number;
+}
+
+export interface MempoolStats {
+  funded_txo_count: number;
+  funded_txo_sum: number;
+  spent_txo_count: number;
+  spent_txo_sum: number;
+  tx_count: number;
 }
 
 export interface ITransaction {
-  _id: string;
-  chain: string;
-  network: string;
-  coinbase: boolean;
-  mintIndex: number;
-  spentTxid: string;
-  mintTxid: string;
-  mintHeight: number;
-  spentHeight: number;
-  address: string;
-  script: string;
+  txid: string;
+  version: number;
+  locktime: number;
+  vin: Vin[];
+  vout: Vout[];
+  size: number;
+  weight: number;
+  sigops: number;
+  fee: number;
+  status: Status;
+}
+
+export interface Vin {
+  txid: string;
+  vout: number;
+  prevout: Prevout;
+  scriptsig: string;
+  scriptsig_asm: string;
+  witness?: string[];
+  is_coinbase: boolean;
+  sequence: number;
+  inner_redeemscript_asm?: string;
+}
+
+export interface Prevout {
+  scriptpubkey: string;
+  scriptpubkey_asm: string;
+  scriptpubkey_type: string;
+  scriptpubkey_address: string;
   value: number;
-  confirmations: number;
-  sequenceNumber: number;
+}
+
+export interface Vout {
+  scriptpubkey: string;
+  scriptpubkey_asm: string;
+  scriptpubkey_type: string;
+  scriptpubkey_address: string;
+  value: number;
+}
+
+export interface Status {
+  confirmed: boolean;
+  block_height: number;
+  block_hash: string;
+  block_time: number;
 }
 
 export interface ITransactionInfo {
