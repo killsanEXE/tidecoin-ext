@@ -12,6 +12,6 @@ export function emptyAppState(): IAppStateBase {
     isReady: false,
     isUnlocked: false,
     vault: [],
-    addressBook: []
+    addressBook: [],
   };
 }

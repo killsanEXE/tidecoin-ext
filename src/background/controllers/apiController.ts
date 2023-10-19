@@ -1,9 +1,4 @@
-import {
-  AccountBalanceResponse,
-  ApiUTXO,
-  IApiController,
-  ITransaction,
-} from "@/shared/interfaces/apiController";
+import { AccountBalanceResponse, ApiUTXO, IApiController, ITransaction } from "@/shared/interfaces/apiController";
 import { fetchTDCMainnet } from "@/shared/utils";
 
 class ApiController implements IApiController {
@@ -59,9 +54,7 @@ class ApiController implements IApiController {
   }
 
   async getTDCPrice() {
-    const res = await fetch(
-      "https://api.dex-trade.com/v1/public/ticker?pair=TDCUSDT"
-    );
+    const res = await fetch("https://api.dex-trade.com/v1/public/ticker?pair=TDCUSDT");
     return (await res.json()) as { data: { last: string } };
   }
 }

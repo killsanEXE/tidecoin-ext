@@ -21,7 +21,7 @@ class EventBus<T> {
     if (listeners) {
       this.events[type].push(func);
     } else {
-      this.events[type] = [ func ];
+      this.events[type] = [func];
     }
   };
 
@@ -30,7 +30,7 @@ class EventBus<T> {
     if (listeners) {
       this.events[type].push(fn);
     } else {
-      this.events[type] = [ fn ];
+      this.events[type] = [fn];
     }
   };
 

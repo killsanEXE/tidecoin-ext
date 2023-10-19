@@ -17,9 +17,7 @@ const ConfirmSend = () => {
     setLoading(true);
     await updateAddressBook(location.state.toAddress);
     try {
-      navigate(
-        `/pages/finalle-send/${(await pushTx(location.state.hex))?.txid ?? ""}`
-      );
+      navigate(`/pages/finalle-send/${(await pushTx(location.state.hex))?.txid ?? ""}`);
     } catch (e) {
       console.error(e);
     }
@@ -40,9 +38,7 @@ const ConfirmSend = () => {
     },
     {
       label: "Fee",
-      value: `${location.state.feeAmount} sat/Vb (${
-        location.state.includeFeeInAmount ? "included" : "not included"
-      })`,
+      value: `${location.state.feeAmount} tid/Vb (${location.state.includeFeeInAmount ? "included" : "not included"})`,
     },
   ];
 
@@ -58,10 +54,7 @@ const ConfirmSend = () => {
               </div>
             ))}
           </div>
-          <button
-            className={cn("btn primary", s.confirmBtn)}
-            onClick={confirmSend}
-          >
+          <button className={cn("btn primary", s.confirmBtn)} onClick={confirmSend}>
             Confirm
           </button>
         </div>

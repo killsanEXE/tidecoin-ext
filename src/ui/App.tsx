@@ -3,12 +3,7 @@ import { RouterProvider } from "react-router-dom";
 import { Router } from "@remix-run/router";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import {
-  setupKeyringProxy,
-  setupOpenAPIProxy,
-  setupStateProxy,
-  setupWalletProxy,
-} from "@/ui/utils/setup";
+import { setupKeyringProxy, setupOpenAPIProxy, setupStateProxy, setupWalletProxy } from "@/ui/utils/setup";
 import { useAppState } from "./states/appState";
 import { useWalletState } from "./states/walletState";
 import { guestRouter, authenticatedRouter } from "@/ui/pages/router";
@@ -40,11 +35,7 @@ export default function App() {
       const appState = await stateController.getAppState();
       const walletState = await stateController.getWalletState();
 
-      if (
-        appState.isReady &&
-        appState.isUnlocked &&
-        walletState.selectedWallet !== undefined
-      ) {
+      if (appState.isReady && appState.isUnlocked && walletState.selectedWallet !== undefined) {
         await updateWalletState(walletState);
         await updateAppState(appState);
       } else {
@@ -64,22 +55,11 @@ export default function App() {
     if (!isReady) setupApp();
     else if (isReady && isUnlocked) setRouter(authenticatedRouter);
     else setRouter(guestRouter);
-  }, [
-    isReady,
-    isUnlocked,
-    updateWalletState,
-    updateAppState,
-    router,
-    setRouter,
-  ]);
+  }, [isReady, isUnlocked, updateWalletState, updateAppState, router, setRouter]);
 
   return (
     <div className="app">
-      {isReady ? (
-        <RouterProvider router={router} />
-      ) : (
-        <ReactLoading type="spin" color="#ffbc42" />
-      )}
+      {isReady ? <RouterProvider router={router} /> : <ReactLoading type="spin" color="#ffbc42" />}
       <Toaster
         position="bottom-center"
         toastOptions={{

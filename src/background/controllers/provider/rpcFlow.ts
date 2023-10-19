@@ -3,11 +3,11 @@ import PromiseFlow, { underline2Camelcase } from "@/background/utils";
 import { EVENTS } from "@/shared/constant";
 import eventBus from "@/shared/eventBus";
 import { ethErrors } from "eth-rpc-errors";
-import providerController from "./controller"
+import providerController from "./controller";
 import { permissionService } from "@/background/services";
 
 const isSignApproval = (type: string) => {
-  const SIGN_APPROVALS = ['SignText', 'SignPsbt', 'SignTx'];
+  const SIGN_APPROVALS = ["SignText", "SignPsbt", "SignTx"];
   return SIGN_APPROVALS.includes(type);
 };
 const windowHeight = 600;
@@ -16,14 +16,14 @@ const flowContext = flow
   .use(async (ctx, next) => {
     // check method
     const {
-      data: { method }
+      data: { method },
     } = ctx.request;
     ctx.mapMethod = underline2Camelcase(method);
 
     if (!providerController[ctx.mapMethod]) {
       throw ethErrors.rpc.methodNotFound({
         message: `method [${method}] doesn't has corresponding handler`,
-        data: ctx.request.data
+        data: ctx.request.data,
       });
     }
 
@@ -31,14 +31,14 @@ const flowContext = flow
   })
   .use(async (ctx, next) => {
     const { mapMethod } = ctx;
-    if (!Reflect.getMetadata('SAFE', providerController, mapMethod)) {
+    if (!Reflect.getMetadata("SAFE", providerController, mapMethod)) {
       // check lock
       const isUnlock = storageService.appState.isUnlocked;
 
       if (!isUnlock) {
         ctx.request.requestedApproval = true;
-        await notificationService.requestApproval({ lock: true, }, { route: "/account/login" });
-        console.log("DONE LOGIN")
+        await notificationService.requestApproval({ lock: true }, { route: "/account/login" });
+        console.log("DONE LOGIN");
       }
     }
 
@@ -48,21 +48,21 @@ const flowContext = flow
     // check connect
     const {
       request: {
-        session: { origin, name, icon }
+        session: { origin, name, icon },
       },
-      mapMethod
+      mapMethod,
     } = ctx;
-    if (!Reflect.getMetadata('SAFE', providerController, mapMethod)) {
+    if (!Reflect.getMetadata("SAFE", providerController, mapMethod)) {
       if (!permissionService.siteIsConnected(origin)) {
         ctx.request.requestedApproval = true;
         await notificationService.requestApproval(
           {
             params: {
-              method: 'connect',
+              method: "connect",
               data: {},
-              session: { origin, name, icon }
+              session: { origin, name, icon },
             },
-            approvalComponent: 'Connect'
+            approvalComponent: "Connect",
           },
           { height: windowHeight }
         );
@@ -77,12 +77,12 @@ const flowContext = flow
     const {
       request: {
         data: { params, method },
-        session: { origin, name, icon }
+        session: { origin, name, icon },
       },
-      mapMethod
+      mapMethod,
     } = ctx;
     const [approvalType, condition, options = {}] =
-      Reflect.getMetadata('APPROVAL', providerController, mapMethod) || [];
+      Reflect.getMetadata("APPROVAL", providerController, mapMethod) || [];
 
     if (approvalType && (!condition || !condition(ctx.request))) {
       ctx.request.requestedApproval = true;
@@ -92,9 +92,9 @@ const flowContext = flow
           params: {
             method,
             data: params,
-            session: { origin, name, icon }
+            session: { origin, name, icon },
           },
-          origin
+          origin,
         },
         { height: windowHeight }
       );
@@ -110,16 +110,16 @@ const flowContext = flow
   .use(async (ctx) => {
     const { approvalRes, mapMethod, request } = ctx;
     // process request
-    const [approvalType] = Reflect.getMetadata('APPROVAL', providerController, mapMethod) || [];
+    const [approvalType] = Reflect.getMetadata("APPROVAL", providerController, mapMethod) || [];
 
     const { uiRequestComponent, ...rest } = approvalRes || {};
     const {
-      session: { origin }
+      session: { origin },
     } = request;
     const requestDefer = Promise.resolve(
       providerController[mapMethod]({
         ...request,
-        approvalRes
+        approvalRes,
       })
     );
 
@@ -130,8 +130,8 @@ const flowContext = flow
             method: EVENTS.SIGN_FINISHED,
             params: {
               success: true,
-              data: result
-            }
+              data: result,
+            },
           });
         }
         return result;
@@ -142,8 +142,8 @@ const flowContext = flow
             method: EVENTS.SIGN_FINISHED,
             params: {
               success: false,
-              errorMsg: JSON.stringify(e)
-            }
+              errorMsg: JSON.stringify(e),
+            },
           });
         }
       });
@@ -153,7 +153,7 @@ const flowContext = flow
         approvalComponent: uiRequestComponent,
         params: rest,
         origin,
-        approvalType
+        approvalType,
       });
       if (res.uiRequestComponent) {
         return await requestApprovalLoop(res);

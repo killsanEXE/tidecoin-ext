@@ -21,10 +21,7 @@ class KeyringController implements IKeyringController {
    * @param {string} payload Phrases string words separated by space that generated for wallet or private key hex format
    * @returns {Promise<string | undefined>} P2PWKH address of created wallet
    */
-  async newKeyring(
-    type: "simple" | "root",
-    payload: string
-  ): Promise<string | undefined> {
+  async newKeyring(type: "simple" | "root", payload: string): Promise<string | undefined> {
     return keyringService.newKeyring(type, payload);
   }
 
@@ -68,10 +65,7 @@ class KeyringController implements IKeyringController {
     return keyringService.exportPublicKey(address);
   }
 
-  async changeAddressType(
-    walletIndex: number,
-    addressType: AddressType
-  ): Promise<string[]> {
+  async changeAddressType(walletIndex: number, addressType: AddressType): Promise<string[]> {
     return await keyringService.changeAddressType(walletIndex, addressType);
   }
 

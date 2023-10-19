@@ -20,10 +20,7 @@ const NewAccount = () => {
   const currentWallet = useGetCurrentWallet();
 
   const nameAlreadyExists = (name: string) => {
-    return (
-      currentWallet?.accounts.find((f) => f.name?.trim() === name.trim()) !==
-      undefined
-    );
+    return currentWallet?.accounts.find((f) => f.name?.trim() === name.trim()) !== undefined;
   };
 
   const createNewAcc = async ({ name }: FormType) => {
@@ -32,8 +29,7 @@ const NewAccount = () => {
       toast.success("Created new account");
       navigate("/home");
     } else {
-      if (nameAlreadyExists(name))
-        toast.error("Name for this account is already taken");
+      if (nameAlreadyExists(name)) toast.error("Name for this account is already taken");
       else toast.error("Maximum name length is 8");
     }
   };

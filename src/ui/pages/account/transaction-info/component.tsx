@@ -33,9 +33,7 @@ const TransactionInfo = () => {
           </div>
           <div className={s.group}>
             <p className={s.transactionP}>Confirmations:</p>
-            <span>
-              {tx.status.confirmed ? lastBlock - tx.status.block_height : 0}
-            </span>
+            <span>{tx.status.confirmed ? lastBlock - tx.status.block_height : 0}</span>
           </div>
           <div className={s.group}>
             <p className={s.transactionP}>Fee:</p>
@@ -61,11 +59,7 @@ const TransactionInfo = () => {
           >
             Open in explorer
           </button>
-          <Modal
-            onClose={() => setOpenModal(false)}
-            open={openModal}
-            title="Detail info"
-          >
+          <Modal onClose={() => setOpenModal(false)} open={openModal} title="Detail info">
             <div className={s.tableContainer}>
               <TableItem
                 label="Inputs"
@@ -75,11 +69,7 @@ const TransactionInfo = () => {
                   value: i.prevout.value,
                 }))}
               />
-              <TableItem
-                label="Outputs"
-                currentAddress={currentAccount.address}
-                items={tx.vout}
-              />
+              <TableItem label="Outputs" currentAddress={currentAccount.address} items={tx.vout} />
             </div>
           </Modal>
         </div>
@@ -123,9 +113,7 @@ const TableItem: FC<ITableItem> = ({ items, currentAddress, label }) => {
             >
               {shortAddress(i.scriptpubkey_address, 12)}
             </div>
-            <div className={s.tableSecond}>
-              {(i.value / 10 ** 8).toFixed(2)}
-            </div>
+            <div className={s.tableSecond}>{(i.value / 10 ** 8).toFixed(2)}</div>
           </div>
         ))}
       </div>

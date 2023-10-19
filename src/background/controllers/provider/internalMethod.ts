@@ -1,11 +1,10 @@
 import { storageService } from "@/background/services";
 
-
 const tabCheckin = ({
   data: {
-    params: { origin, name, icon }
+    params: { origin, name, icon },
   },
-  session
+  session,
 }) => {
   session.origin = origin;
   session.icon = icon;
@@ -14,7 +13,7 @@ const tabCheckin = ({
 
 const getProviderState = async (req) => {
   const {
-    session: { origin }
+    session: { origin },
   } = req;
 
   const isUnlocked = storageService.appState.isUnlocked;
@@ -28,16 +27,16 @@ const getProviderState = async (req) => {
   return {
     network: "TIDECOIN",
     isUnlocked,
-    accounts
+    accounts,
   };
 };
 
 const keepAlive = () => {
-  return 'ACK_KEEP_ALIVE_MESSAGE';
+  return "ACK_KEEP_ALIVE_MESSAGE";
 };
 
 export default {
   tabCheckin,
   getProviderState,
-  keepAlive
+  keepAlive,
 };

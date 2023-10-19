@@ -2,25 +2,18 @@ import { EVENTS } from "@/shared/constant";
 import eventBus from "@/shared/eventBus";
 import { Message } from "@/shared/utils";
 import { sessionService } from "@/background/services";
-import {
-  browserRuntimeOnConnect,
-  browserRuntimeOnInstalled,
-} from "@/shared/utils/browser";
+import { browserRuntimeOnConnect, browserRuntimeOnInstalled } from "@/shared/utils/browser";
 import walletController from "./controllers/walletController";
 import apiController from "./controllers/apiController";
 import stateController from "./controllers/stateController";
 import { keyringController } from "./controllers";
-import { providerController } from "./controllers"
+import { providerController } from "./controllers";
 
 const { PortMessage } = Message;
 
 // for page provider
 browserRuntimeOnConnect((port: any) => {
-  if (
-    port.name === "popup" ||
-    port.name === "notification" ||
-    port.name === "tab"
-  ) {
+  if (port.name === "popup" || port.name === "notification" || port.name === "tab") {
     const pm = new PortMessage(port);
     pm.listen((data: any) => {
       if (!data.method) return;
@@ -38,9 +31,7 @@ browserRuntimeOnConnect((port: any) => {
             return stateController[data.method].apply(null, data.params);
           default:
             if (!walletController[data.method])
-              throw new Error(
-                `Method ${data.method} is not founded in the walletController`
-              );
+              throw new Error(`Method ${data.method} is not founded in the walletController`);
             return walletController[data.method].apply(null, data.params);
         }
       }
@@ -70,7 +61,7 @@ browserRuntimeOnConnect((port: any) => {
     const req = { data, session };
     // for background push to respective page
     req.session.pushMessage = (event, data) => {
-      pm.send('message', { event, data });
+      pm.send("message", { event, data });
     };
 
     return providerController(req);

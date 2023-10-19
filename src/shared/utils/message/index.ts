@@ -4,7 +4,7 @@ import EventEmitter from "events";
 abstract class Message extends EventEmitter {
   // avaiable id list
   // max concurrent request limit
-  private _requestIdPool = [ ...Array(500).keys() ];
+  private _requestIdPool = [...Array(500).keys()];
   protected _EVENT_PRE = "EXTENSION_WALLET_";
   protected listenCallback: any;
 

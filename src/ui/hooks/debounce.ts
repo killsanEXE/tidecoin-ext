@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-export function useDebounceCall(
-  value: () => Promise<void>,
-  delay?: number
-): () => void {
+export function useDebounceCall(value: () => Promise<void>, delay?: number): () => void {
   const [triggered, setTriggered] = useState(false);
 
   useEffect(() => {

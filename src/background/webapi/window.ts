@@ -1,45 +1,52 @@
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 
-import { IS_WINDOWS } from '@/shared/constant';
-import { browserWindowsOnFocusChanged, browserWindowsOnRemoved, browserWindowsGetCurrent, browserWindowsCreate, browserWindowsUpdate, browserWindowsRemove } from '@/shared/utils/browser';
+import { IS_WINDOWS } from "@/shared/constant";
+import {
+  browserWindowsOnFocusChanged,
+  browserWindowsOnRemoved,
+  browserWindowsGetCurrent,
+  browserWindowsCreate,
+  browserWindowsUpdate,
+  browserWindowsRemove,
+} from "@/shared/utils/browser";
 
-const event = new EventEmitter();
+export const event = new EventEmitter();
 
 browserWindowsOnFocusChanged((winId) => {
-  event.emit('windowFocusChange', winId);
+  event.emit("windowFocusChange", winId);
 });
 
 browserWindowsOnRemoved((winId) => {
-  event.emit('windowRemoved', winId);
+  event.emit("windowRemoved", winId);
 });
 
 const BROWSER_HEADER = 80;
 const WINDOW_SIZE = {
   width: 400 + (IS_WINDOWS ? 14 : 0), // idk why windows cut the width.
-  height: 600
+  height: 600,
 };
 
 const create = async ({ url, ...rest }): Promise<number | undefined> => {
   const {
     top: cTop,
     left: cLeft,
-    width
+    width,
   } = (await browserWindowsGetCurrent({
-    windowTypes: ['normal']
+    windowTypes: ["normal"],
   })) as any;
 
   const top = cTop! + BROWSER_HEADER;
   const left = cLeft! + width! - WINDOW_SIZE.width;
 
-  const win = await browserWindowsCreate({
+  const win = (await browserWindowsCreate({
     focused: true,
     url,
-    type: 'popup',
+    type: "popup",
     top,
     left,
     ...WINDOW_SIZE,
-    ...rest
-  }) as any;
+    ...rest,
+  })) as any;
 
   // shim firefox
   if (win.left !== left) {
@@ -49,18 +56,12 @@ const create = async ({ url, ...rest }): Promise<number | undefined> => {
   return win.id;
 };
 
-const remove = async (winId) => {
+export const remove = async (winId) => {
   return browserWindowsRemove(winId);
 };
 
-const openNotification = ({ route = '', ...rest } = {}): Promise<number | undefined> => {
+export const openNotification = ({ route = "", ...rest } = {}): Promise<number | undefined> => {
   const url = `notification.html${route && `#${route}`}`;
 
   return create({ url, ...rest });
-};
-
-export default {
-  openNotification,
-  event,
-  remove
 };

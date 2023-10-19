@@ -1,31 +1,30 @@
 import { Psbt } from "tidecoinjs-lib";
 import { sessionService, storageService } from "../../services";
-import 'reflect-metadata';
+import "reflect-metadata";
 
 function formatPsbtHex(psbtHex: string) {
-  let formatData = '';
+  let formatData = "";
   try {
-    if (!(/^[0-9a-fA-F]+$/.test(psbtHex))) {
-      formatData = Psbt.fromBase64(psbtHex).toHex()
+    if (!/^[0-9a-fA-F]+$/.test(psbtHex)) {
+      formatData = Psbt.fromBase64(psbtHex).toHex();
     } else {
       Psbt.fromHex(psbtHex);
       formatData = psbtHex;
     }
   } catch (e) {
-    throw new Error('invalid psbt')
+    throw new Error("invalid psbt");
   }
   return formatData;
 }
 
 class ProviderController {
-
   requestAccounts = async ({ session: { origin } }) => {
     // if (!permissionService.hasPermission(origin)) {
     //   throw ethErrors.provider.unauthorized();
     // }
     const _account = await storageService.currentWallet.accounts[0];
     const account = _account ? _account.address : "";
-    sessionService.broadcastEvent('accountsChanged', account);
+    sessionService.broadcastEvent("accountsChanged", account);
     // const connectSite = permissionService.getConnectedSite(origin);
     // if (connectSite) {
     //   const network = wallet.getNetworkName()
@@ -37,10 +36,10 @@ class ProviderController {
     //     origin
     //   );
     // }
-    return account
+    return account;
   };
 
-  @Reflect.metadata('SAFE', true)
+  @Reflect.metadata("SAFE", true)
   getAccounts = async ({ session: { origin } }) => {
     // if (!permissionService.hasPermission(origin)) {
     //   return [];
@@ -48,18 +47,16 @@ class ProviderController {
     if (storageService.currentWallet === undefined) return undefined;
     const _account = storageService.currentWallet.accounts[0];
     const account = _account ? _account.address : "";
-    return account
+    return account;
   };
 
-  @Reflect.metadata('SAFE', true)
+  @Reflect.metadata("SAFE", true)
   getNetwork = async () => {
     return "TIDECOIN";
   };
 
   @Reflect.metadata("SAFE", false)
-  connectExtension = async () => {
-
-  }
+  connectExtension = async () => {};
 
   // @Reflect.metadata('APPROVAL', ['SwitchNetwork', (req) => {
   //   const network = req.data.params.network;
@@ -187,7 +184,6 @@ class ProviderController {
   //     }
   //     return result;
   //   }
-
 
   //   @Reflect.metadata('SAFE', true)
   //   pushPsbt = async ({ data: { params: { psbtHex } } }) => {

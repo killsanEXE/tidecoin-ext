@@ -21,11 +21,7 @@ const Menu: FC<Props> = ({ items, active }) => {
       {items.map((i, index) => {
         if (!i.custom) {
           return (
-            <div
-              key={`${index}${prefix}`}
-              onClick={i.action}
-              className={s.item}
-            >
+            <div key={`${index}${prefix}`} onClick={i.action} className={s.item}>
               {i.icon}
             </div>
           );

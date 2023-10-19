@@ -5,7 +5,7 @@ const checkLoaded = (callback) => {
     // some error happen?
     return;
   }
-  if (document.readyState === 'complete') {
+  if (document.readyState === "complete") {
     callback();
     return true;
   } else {

@@ -1,8 +1,8 @@
-import { ethErrors } from 'eth-rpc-errors';
-import { EthereumProviderError } from 'eth-rpc-errors/dist/classes';
-import Events from 'events';
-import { winMgr } from '../webapi';
-import { IS_CHROME, IS_LINUX } from '@/shared/constant';
+import { ethErrors } from "eth-rpc-errors";
+import { EthereumProviderError } from "eth-rpc-errors/dist/classes";
+import Events from "events";
+import { event, remove, openNotification } from "../webapi";
+import { IS_CHROME, IS_LINUX } from "@/shared/constant";
 
 interface Approval {
   data: {
@@ -27,14 +27,14 @@ class NotificationService extends Events {
   constructor() {
     super();
 
-    winMgr.event.on('windowRemoved', (winId: number) => {
+    event.on("windowRemoved", (winId: number) => {
       if (winId === this.notifiWindowId) {
         this.notifiWindowId = 0;
         this.rejectApproval();
       }
     });
 
-    winMgr.event.on('windowFocusChange', (winId: number) => {
+    event.on("windowFocusChange", (winId: number) => {
       if (this.notifiWindowId && winId !== this.notifiWindowId) {
         if (IS_CHROME && winId === chrome.windows.WINDOW_ID_NONE && IS_LINUX) {
           // Wired issue: When notification popuped, will focus to -1 first then focus on notification
@@ -49,12 +49,12 @@ class NotificationService extends Events {
 
   resolveApproval = (data?: any, forceReject = false) => {
     if (forceReject) {
-      this.approval?.reject(new EthereumProviderError(4001, 'User Cancel'));
+      this.approval?.reject(new EthereumProviderError(4001, "User Cancel"));
     } else {
       this.approval?.resolve(data);
     }
     this.approval = null;
-    this.emit('resolve', data);
+    this.emit("resolve", data);
   };
 
   rejectApproval = async (err?: string, stay = false, isInternal = false) => {
@@ -66,7 +66,7 @@ class NotificationService extends Events {
     }
 
     await this.clear(stay);
-    this.emit('reject', err);
+    this.emit("reject", err);
   };
 
   // currently it only support one approval at the same time
@@ -81,7 +81,7 @@ class NotificationService extends Events {
       this.approval = {
         data,
         resolve,
-        reject
+        reject,
       };
 
       this.openNotification(winProps);
@@ -91,7 +91,7 @@ class NotificationService extends Events {
   clear = async (stay = false) => {
     this.approval = null;
     if (this.notifiWindowId && !stay) {
-      await winMgr.remove(this.notifiWindowId);
+      await remove(this.notifiWindowId);
       this.notifiWindowId = 0;
     }
   };
@@ -108,10 +108,10 @@ class NotificationService extends Events {
     // if (this.isLocked) return;
     // this.lock();
     if (this.notifiWindowId) {
-      winMgr.remove(this.notifiWindowId);
+      remove(this.notifiWindowId);
       this.notifiWindowId = 0;
     }
-    winMgr.openNotification(winProps).then((winId) => {
+    openNotification(winProps).then((winId) => {
       this.notifiWindowId = winId!;
     });
   };

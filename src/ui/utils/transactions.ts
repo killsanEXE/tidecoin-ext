@@ -7,16 +7,9 @@ export enum TxDirection {
   in = 1,
 }
 
-export const getTxDirection = (
-  transaction: ITransaction,
-  targetAddress: string
-): TxDirection => {
-  const includesIn = transaction.vin
-    .map((i) => i.prevout.scriptpubkey_address)
-    .includes(targetAddress);
-  const includesOut = transaction.vout
-    .map((i) => i.scriptpubkey_address)
-    .includes(targetAddress);
+export const getTxDirection = (transaction: ITransaction, targetAddress: string): TxDirection => {
+  const includesIn = transaction.vin.map((i) => i.prevout.scriptpubkey_address).includes(targetAddress);
+  const includesOut = transaction.vout.map((i) => i.scriptpubkey_address).includes(targetAddress);
   if (includesIn && includesOut) {
     return TxDirection.out;
   } else if (includesIn) {
@@ -25,36 +18,23 @@ export const getTxDirection = (
   return TxDirection.in;
 };
 
-export const getTransactionValue = (
-  transaction: ITransaction,
-  targetAddress: string
-) => {
+export const getTransactionValue = (transaction: ITransaction, targetAddress: string) => {
   const direction = getTxDirection(transaction, targetAddress);
   switch (direction) {
     case TxDirection.in:
       return (
-        transaction.vout.reduce(
-          (acc, cur) =>
-            cur.scriptpubkey_address === targetAddress ? acc + cur.value : acc,
-          0
-        ) /
+        transaction.vout.reduce((acc, cur) => (cur.scriptpubkey_address === targetAddress ? acc + cur.value : acc), 0) /
         10 ** 8
       ).toFixed(2);
     case TxDirection.out:
       return (
         (transaction.vin.reduce(
-          (acc, cur) =>
-            cur.prevout.scriptpubkey_address === targetAddress
-              ? acc + cur.prevout.value
-              : acc,
+          (acc, cur) => (cur.prevout.scriptpubkey_address === targetAddress ? acc + cur.prevout.value : acc),
           0
         ) +
           transaction.fee -
           transaction.vout.reduce(
-            (acc, cur) =>
-              cur.scriptpubkey_address === targetAddress
-                ? cur.value + acc
-                : acc,
+            (acc, cur) => (cur.scriptpubkey_address === targetAddress ? cur.value + acc : acc),
             0
           )) /
         10 ** 8
@@ -62,18 +42,12 @@ export const getTransactionValue = (
   }
 };
 
-export const isIncomeTx = (
-  transaction: ITransaction,
-  targetAddress: string
-) => {
+export const isIncomeTx = (transaction: ITransaction, targetAddress: string) => {
   const direction = getTxDirection(transaction, targetAddress);
   return direction === TxDirection.in;
 };
 
-export const getScriptForAddress = (
-  publicKey: Uint8Array,
-  addressType: AddressType
-) => {
+export const getScriptForAddress = (publicKey: Uint8Array, addressType: AddressType) => {
   switch (addressType) {
     case AddressType.P2WPKH:
       return payments.p2wpkh({ pubkey: Buffer.from(publicKey) }).output;

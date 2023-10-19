@@ -10,23 +10,18 @@ interface Props {
   includeFeeLocked: boolean;
 }
 
-const FeeInput: FC<Props> = ({
-  onChange,
-  onIncludeChange,
-  includeFeeValue,
-  includeFeeLocked,
-}) => {
+const FeeInput: FC<Props> = ({ onChange, onIncludeChange, includeFeeValue, includeFeeLocked }) => {
   const [selected, setSelected] = useState<1 | 2 | 3>(1);
 
   const cards = [
     {
       title: "Slow",
-      description: "1 sat/Vb",
+      description: "1 tid/Vb",
       value: 1,
     },
     {
       title: "Fast",
-      description: "2 sat/Vb",
+      description: "2 tid/Vb",
       value: 2,
     },
     {
@@ -51,17 +46,13 @@ const FeeInput: FC<Props> = ({
             onClick={() => setSelected(i.value as typeof selected)}
           >
             <div className={s.title}>{i.title}</div>
-            {i.description ? (
-              <div className={s.description}>{i.description}</div>
-            ) : (
-              ""
-            )}
+            {i.description ? <div className={s.description}>{i.description}</div> : ""}
           </div>
         ))}
       </div>
       <input
         className={cn("input", { hidden: selected !== 3 })}
-        placeholder="sat/Vb"
+        placeholder="tid/Vb"
         onChange={(e) => onChange(Number(e.target.value))}
       />
       <Switch.Group>
@@ -85,9 +76,7 @@ const FeeInput: FC<Props> = ({
             pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
             />
           </Switch>
-          <Switch.Label className="mr-4 cursor-pointer">
-            Include fee in the amount
-          </Switch.Label>
+          <Switch.Label className="mr-4 cursor-pointer">Include fee in the amount</Switch.Label>
         </div>
       </Switch.Group>
     </div>

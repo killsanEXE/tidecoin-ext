@@ -51,13 +51,13 @@ const buildOptions: BuildOptions = {
     ui: "src/ui/index.tsx",
   },
   outdir: chrome ? "dist/chrome" : "dist/firefox",
-  minify: false,
-  jsxDev: true,
+  minify: true,
   bundle: true,
   logLevel: "info",
   plugins: [
     svgPlugin({
       typescript: true,
+      svgo: true,
     }),
     stylePlugin({
       postcss: {

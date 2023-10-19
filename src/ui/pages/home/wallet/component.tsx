@@ -1,17 +1,9 @@
 import { Navigate, useNavigate } from "react-router-dom";
 
-import {
-  ListBulletIcon,
-  Cog6ToothIcon,
-  ChevronDownIcon,
-  CheckIcon,
-} from "@heroicons/react/24/outline";
+import { ListBulletIcon, Cog6ToothIcon, ChevronDownIcon, CheckIcon } from "@heroicons/react/24/outline";
 import s from "./styles.module.scss";
 import { shortAddress } from "@/ui/utils";
-import {
-  useGetCurrentAccount,
-  useGetCurrentWallet,
-} from "@/ui/states/walletState";
+import { useGetCurrentAccount, useGetCurrentWallet } from "@/ui/states/walletState";
 import cn from "classnames";
 import { useCallback, useEffect, useState } from "react";
 import { useUpdateCurrentAccountBalance } from "@/ui/hooks/wallet";
@@ -40,8 +32,7 @@ const Wallet = () => {
 
   const udpateTransactions = useCallback(async () => {
     const receivedTransactions = await updateAccountTransactions();
-    if (receivedTransactions !== undefined)
-      setTransactions(receivedTransactions);
+    if (receivedTransactions !== undefined) setTransactions(receivedTransactions);
   }, [updateAccountTransactions, setTransactions, lastBlock]);
 
   const updateLastBlock = useCallback(async () => {
@@ -70,8 +61,7 @@ const Wallet = () => {
       callUpdateLastBlock();
     }, 10000);
 
-    if (currentAccount && currentAccount.balance === undefined)
-      updateAccountBalance();
+    if (currentAccount && currentAccount.balance === undefined) updateAccountBalance();
 
     callUpdateTransactions();
     callUpdateLastBlock();
@@ -79,12 +69,7 @@ const Wallet = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [
-    updateAccountBalance,
-    currentAccount,
-    currentWallet,
-    callUpdateTransactions,
-  ]);
+  }, [updateAccountBalance, currentAccount, currentWallet, callUpdateTransactions]);
 
   return (
     <div className={s.walletDiv}>
@@ -96,9 +81,7 @@ const Wallet = () => {
           }}
         >
           <div className="bg-gradient-to-r from-indigo-500 to-indigo-950 rounded-full w-6 h-6 flex items-center justify-center">
-            {currentWallet.name
-              ? currentWallet.name.split(/.*?/u)[0].toUpperCase()
-              : "W"}
+            {currentWallet.name ? currentWallet.name.split(/.*?/u)[0].toUpperCase() : "W"}
           </div>
           <div className="flex gap-2 items-center">
             <div className={s.change}>{currentWallet?.name ?? "wallet"} </div>
@@ -106,10 +89,7 @@ const Wallet = () => {
           </div>
         </div>
 
-        <div
-          onClick={() => navigate("/pages/settings")}
-          className="cursor-pointer"
-        >
+        <div onClick={() => navigate("/pages/settings")} className="cursor-pointer">
           <Cog6ToothIcon className="w-6 h-6 hover:rotate-90 transition-transform" />
         </div>
       </div>
@@ -130,12 +110,9 @@ const Wallet = () => {
             )}
             <span className="text-xl pb-0.5 text-slate-300">TDC</span>
           </div>
-          {currentAccount.balance !== undefined &&
-            currentPrice !== undefined && (
-              <div className="text-gray-500 text-sm">
-                ~{(currentAccount?.balance * currentPrice).toFixed(3)}$
-              </div>
-            )}
+          {currentAccount.balance !== undefined && currentPrice !== undefined && (
+            <div className="text-gray-500 text-sm">~{(currentAccount?.balance * currentPrice).toFixed(3)}$</div>
+          )}
         </div>
         <div className="flex gap-3 items-center px-6">
           {currentWallet?.type === "root" && (
@@ -191,27 +168,20 @@ const Wallet = () => {
             >
               <div className="flex gap-3 items-center">
                 <div
-                  className={cn(
-                    "rounded-full w-6 h-6 text-bg flex items-center justify-center relative",
-                    {
-                      "bg-gradient-to-r from-emerald-300 to-emerald-600":
-                        getPercent(lastBlock, t.status.block_height) === 100,
-                      "bg-gray-400":
-                        getPercent(lastBlock, t.status.block_height) < 100,
-                    }
-                  )}
+                  className={cn("rounded-full w-6 h-6 text-bg flex items-center justify-center relative", {
+                    "bg-gradient-to-r from-emerald-300 to-emerald-600":
+                      getPercent(lastBlock, t.status.block_height) === 100,
+                    "bg-gray-400": getPercent(lastBlock, t.status.block_height) < 100,
+                  })}
                 >
                   <Circle
                     className={cn("absolute -inset-1", {
-                      hidden:
-                        getPercent(lastBlock, t.status.block_height) === 100,
+                      hidden: getPercent(lastBlock, t.status.block_height) === 100,
                     })}
                     percent={getPercent(lastBlock, t.status.block_height)}
                     strokeWidth={3}
                   />
-                  <div className="absolute inset-0">
-                    {getConfirmationsCount(lastBlock, t.status.block_height)}
-                  </div>
+                  <div className="absolute inset-0">{getConfirmationsCount(lastBlock, t.status.block_height)}</div>
                 </div>
                 <div className={s.transactionInfo}>
                   <div className={s.address}>{shortAddress(t.txid)}</div>
@@ -245,14 +215,9 @@ const getPercent = (lastBlock: number, currentBlock?: number) => {
 };
 
 const getConfirmationsCount = (lastBlock: number, currentBlock?: number) => {
-  if (!currentBlock)
-    return <div className="p-0.5 flex items-center justify-center">0</div>;
+  if (!currentBlock) return <div className="p-0.5 flex items-center justify-center">0</div>;
   if (lastBlock - currentBlock < 6) {
-    return (
-      <div className="p-0.5 flex items-center justify-center">
-        {lastBlock - currentBlock}
-      </div>
-    );
+    return <div className="p-0.5 flex items-center justify-center">{lastBlock - currentBlock}</div>;
   }
   return <CheckIcon className="w-6 h-6 p-0.5" />;
 };

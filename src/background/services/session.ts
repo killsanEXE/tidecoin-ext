@@ -3,7 +3,7 @@ interface ISession {
   icon: string;
   name: string;
 
-  pushMessage?: <T>(event: string, data: T) => void
+  pushMessage?: <T>(event: string, data: T) => void;
 }
 
 class Session implements ISession {
@@ -74,4 +74,4 @@ class SessionMap {
   }
 }
 
-export default new SessionMap()
+export default new SessionMap();

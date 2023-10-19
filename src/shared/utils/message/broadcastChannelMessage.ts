@@ -6,7 +6,7 @@ export default class BroadcastChannelMessage extends Message {
   constructor(name?: string) {
     super();
     if (!name) {
-      throw new Error('the broadcastChannel name is missing');
+      throw new Error("the broadcastChannel name is missing");
     }
 
     this._channel = new BroadcastChannel(name);
@@ -14,9 +14,9 @@ export default class BroadcastChannelMessage extends Message {
 
   connect = () => {
     this._channel.onmessage = ({ data: { type, data } }) => {
-      if (type === 'message') {
-        this.emit('message', data);
-      } else if (type === 'response') {
+      if (type === "message") {
+        this.emit("message", data);
+      } else if (type === "response") {
         this.onResponse(data);
       }
     };
@@ -28,7 +28,7 @@ export default class BroadcastChannelMessage extends Message {
     this.listenCallback = listenCallback;
 
     this._channel.onmessage = ({ data: { type, data } }) => {
-      if (type === 'request') {
+      if (type === "request") {
         this.onRequest(data);
       }
     };
@@ -39,7 +39,7 @@ export default class BroadcastChannelMessage extends Message {
   send = (type: string, data: any) => {
     this._channel.postMessage({
       type,
-      data
+      data,
     });
   };
 

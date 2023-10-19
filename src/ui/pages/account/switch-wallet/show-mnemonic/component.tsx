@@ -24,8 +24,7 @@ const ShowMnemonic = () => {
             <div className={s.phraseWrapper}>
               {phrase.split(" ").map((word, index) => (
                 <div key={index} className={s.word}>
-                  <span className={s.wordIdx}>{index + 1}</span>{" "}
-                  <p className={s.wordWord}>{word}</p>
+                  <span className={s.wordIdx}>{index + 1}</span> <p className={s.wordWord}>{word}</p>
                 </div>
               ))}
             </div>
@@ -41,12 +40,7 @@ const ShowMnemonic = () => {
       ) : (
         <CheckPassword
           handler={async (password) => {
-            setPhrase(
-              (await stateController.getWalletPhrase(
-                Number(walletId),
-                password!
-              )) ?? ""
-            );
+            setPhrase((await stateController.getWalletPhrase(Number(walletId), password!)) ?? "");
             setWalletType(wallets[Number(walletId)].type);
             setUnlocked(true);
           }}

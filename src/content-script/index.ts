@@ -14,9 +14,7 @@ function injectScript() {
 
     const pm = new PortMessage().connect();
 
-    const bcm = new BroadcastChannelMessage("3ffsdf32f23d23d").listen((data) =>
-      pm.request(data)
-    );
+    const bcm = new BroadcastChannelMessage("3ffsdf32f23d23d").listen((data) => pm.request(data));
 
     // background notification
     pm.on("message", (data) => {
@@ -89,10 +87,7 @@ function blockedDomainCheck() {
   let currentRegex;
   for (let i = 0; i < blockedDomains.length; i++) {
     const blockedDomain = blockedDomains[i].replace(".", "\\.");
-    currentRegex = new RegExp(
-      `(?:https?:\\/\\/)(?:(?!${blockedDomain}).)*$`,
-      "u"
-    );
+    currentRegex = new RegExp(`(?:https?:\\/\\/)(?:(?!${blockedDomain}).)*$`, "u");
     if (!currentRegex.test(currentUrl)) {
       return true;
     }
@@ -110,13 +105,7 @@ function iframeCheck() {
  * @returns {boolean} {@code true} Whether the provider should be injected
  */
 function shouldInjectProvider() {
-  return (
-    doctypeCheck() &&
-    suffixCheck() &&
-    documentElementCheck() &&
-    !blockedDomainCheck() &&
-    !iframeCheck()
-  );
+  return doctypeCheck() && suffixCheck() && documentElementCheck() && !blockedDomainCheck() && !iframeCheck();
 }
 
 if (shouldInjectProvider()) {

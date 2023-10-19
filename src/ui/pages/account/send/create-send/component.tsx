@@ -31,12 +31,7 @@ const CreateSend = () => {
 
   const { addressBook } = useAppState((v) => ({ addressBook: v.addressBook }));
 
-  const send = async ({
-    address,
-    amount,
-    feeAmount,
-    includeFeeInAmount,
-  }: FormType) => {
+  const send = async ({ address, amount, feeAmount, includeFeeInAmount }: FormType) => {
     // if (amount < 0.01) {
     //   toast.error("Minimum amount is 0.01 TDC");
     // } else if (address.trim().length <= 0) {
@@ -64,12 +59,7 @@ const CreateSend = () => {
     //   }
     // }
     try {
-      const hex = await createTx(
-        address,
-        Number(amount) * 10 ** 8,
-        feeAmount,
-        includeFeeInAmount
-      );
+      const hex = await createTx(address, Number(amount) * 10 ** 8, feeAmount, includeFeeInAmount);
       navigate("/pages/confirm-send", {
         state: {
           toAddress: address,
@@ -87,11 +77,7 @@ const CreateSend = () => {
   };
 
   useEffect(() => {
-    if (
-      location.state !== null &&
-      (location.state.toAddress !== null ||
-        location.state.toAddress !== undefined)
-    ) {
+    if (location.state !== null && (location.state.toAddress !== null || location.state.toAddress !== undefined)) {
       setFormData({
         address: location.state.toAddress,
         amount: location.state.amount,
@@ -148,11 +134,7 @@ const CreateSend = () => {
               >
                 <Combobox.Options className={s.addressbookoptions}>
                   {filteredAddresses.map((address) => (
-                    <Combobox.Option
-                      className={s.addressbookoption}
-                      key={address}
-                      value={address}
-                    >
+                    <Combobox.Option className={s.addressbookoption} key={address} value={address}>
                       {address}
                     </Combobox.Option>
                   ))}
@@ -176,7 +158,7 @@ const CreateSend = () => {
                   ...prev,
                   amount: extractAmount(v.target.value),
                 }));
-                if (currentAccount.balance < Number(v.target.value)) {
+                if (currentAccount.balance > Number(v.target.value)) {
                   setIncludeFeeLocked(false);
                 } else {
                   setIncludeFeeLocked(true);
@@ -209,13 +191,9 @@ const CreateSend = () => {
         <div className={cn("form-field", s.amountInput)}>
           <span className="input-span">Fee:</span>
           <FeeInput
-            onChange={useCallback(
-              (v) => setFormData((prev) => ({ ...prev, feeAmount: v })),
-              [setFormData]
-            )}
+            onChange={useCallback((v) => setFormData((prev) => ({ ...prev, feeAmount: v })), [setFormData])}
             onIncludeChange={useCallback(
-              (v) =>
-                setFormData((prev) => ({ ...prev, includeFeeInAmount: v })),
+              (v) => setFormData((prev) => ({ ...prev, includeFeeInAmount: v })),
               [setFormData]
             )}
             includeFeeValue={formData.includeFeeInAmount}
@@ -235,7 +213,7 @@ const extractAmount = (value: string) => {
   if (!value.length) return "";
   if (value.includes(".")) {
     if (value.split(".")[1].length > 8) {
-      return value.split(".")[0] + ".00000001";
+      return value.split(".")[0] + `.${value.split(".")[1].slice(0, 8)}`;
     }
   }
   return value;

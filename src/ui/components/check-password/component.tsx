@@ -29,12 +29,7 @@ const CheckPassword: FC<Props> = ({ handler }) => {
       <label htmlFor={pwdId} className={s.formTitle}>
         Enter your password
       </label>
-      <input
-        id={pwdId}
-        type="password"
-        className="input"
-        {...register("password")}
-      />
+      <input id={pwdId} type="password" className="input" {...register("password")} />
       <button className="btn primary" type="submit">
         Enter
       </button>

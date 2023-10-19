@@ -2,7 +2,7 @@ import { browserStorageLocalGet, browserStorageLocalSet } from "@/shared/utils/b
 
 let cacheMap;
 
-const get = async (prop?) => {
+export const get = async (prop?) => {
   if (cacheMap) {
     return cacheMap.get(prop);
   }
@@ -13,25 +13,19 @@ const get = async (prop?) => {
   return prop ? result[prop] : result;
 };
 
-const set = async (prop, value): Promise<void> => {
+export const set = async (prop, value): Promise<void> => {
   await browserStorageLocalSet({ [prop]: value });
   cacheMap.set(prop, value);
 };
 
-const byteInUse = async (): Promise<number> => {
+export const byteInUse = async (): Promise<number> => {
   return new Promise((resolve, reject) => {
     if (chrome) {
       chrome.storage.local.getBytesInUse((value) => {
         resolve(value);
       });
     } else {
-      reject('ByteInUse only works in Chrome');
+      reject("ByteInUse only works in Chrome");
     }
   });
-};
-
-export default {
-  get,
-  set,
-  byteInUse
 };

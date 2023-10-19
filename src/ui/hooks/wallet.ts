@@ -1,10 +1,6 @@
 import { IAccount, IWallet } from "@/shared/interfaces";
 import { useControllersState } from "../states/controllerState";
-import {
-  useGetCurrentAccount,
-  useGetCurrentWallet,
-  useWalletState,
-} from "../states/walletState";
+import { useGetCurrentAccount, useGetCurrentWallet, useWalletState } from "../states/walletState";
 import { useCallback } from "react";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 import toast from "react-hot-toast";
@@ -20,40 +16,26 @@ export const useCreateNewWallet = () => {
   }));
 
   return useCallback(
-    async (
-      phrase: string,
-      walletType: "simple" | "root",
-      addressType?: AddressType,
-      name?: string
-    ) => {
-      const wallet = await walletController.createNewWallet(
-        phrase,
-        walletType,
-        addressType,
-        name
-      );
+    async (phrase: string, walletType: "simple" | "root", addressType?: AddressType, name?: string) => {
+      const wallet = await walletController.createNewWallet(phrase, walletType, addressType, name);
       await updateWalletState({
         selectedAccount: 0,
         selectedWallet: wallet.id,
         wallets: [...wallets, wallet],
       });
       const keyring = await keyringController.serializeKeyringById(wallet.id);
-      await walletController.saveWallets([
-        { id: wallet.id, phrase: phrase, data: keyring },
-      ]);
+      await walletController.saveWallets([{ id: wallet.id, phrase: phrase, data: keyring }]);
     },
     [wallets, updateWalletState, walletController]
   );
 };
 
 export const useUpdateCurrentWallet = () => {
-  const { updateWalletState, selectedWallet, wallets } = useWalletState(
-    (v) => ({
-      updateWalletState: v.updateWalletState,
-      selectedWallet: v.selectedWallet,
-      wallets: v.wallets,
-    })
-  );
+  const { updateWalletState, selectedWallet, wallets } = useWalletState((v) => ({
+    updateWalletState: v.updateWalletState,
+    selectedWallet: v.selectedWallet,
+    wallets: v.wallets,
+  }));
 
   return useCallback(
     async (wallet: Partial<IWallet>) => {
@@ -67,13 +49,12 @@ export const useUpdateCurrentWallet = () => {
 };
 
 export const useUpdateCurrentAccount = () => {
-  const { updateWalletState, wallets, selectedAccount, selectedWallet } =
-    useWalletState((v) => ({
-      updateWalletState: v.updateWalletState,
-      wallets: v.wallets,
-      selectedAccount: v.selectedAccount,
-      selectedWallet: v.selectedWallet,
-    }));
+  const { updateWalletState, wallets, selectedAccount, selectedWallet } = useWalletState((v) => ({
+    updateWalletState: v.updateWalletState,
+    wallets: v.wallets,
+    selectedAccount: v.selectedAccount,
+    selectedWallet: v.selectedWallet,
+  }));
 
   return useCallback(
     async (account: Partial<IAccount>) => {
@@ -87,12 +68,7 @@ export const useUpdateCurrentAccount = () => {
         wallets: [...wallets],
       });
     },
-    [
-      updateWalletState,
-      wallets[selectedWallet!]?.accounts[selectedAccount!],
-      selectedAccount,
-      selectedWallet,
-    ]
+    [updateWalletState, wallets[selectedWallet!]?.accounts[selectedAccount!], selectedAccount, selectedWallet]
   );
 };
 
@@ -139,10 +115,7 @@ export const useSwitchWallet = () => {
       const wallet = wallets.find((f) => f.id === key);
       if (!wallet) return;
       if (!wallet.accounts[0].address) {
-        wallet.accounts = await walletController.loadAccountsData(
-          wallet.id,
-          wallet.accounts
-        );
+        wallet.accounts = await walletController.loadAccountsData(wallet.id, wallet.accounts);
       }
       wallets[key] = wallet;
       await updateWalletState({
@@ -164,9 +137,7 @@ export const useUpdateCurrentAccountBalance = () => {
 
   return useCallback(
     async (address?: string) => {
-      const balance = await apiController.getAccountBalance(
-        address ? address : currentAccount?.address ?? ""
-      );
+      const balance = await apiController.getAccountBalance(address ? address : currentAccount?.address ?? "");
       if (balance === undefined || !currentAccount) return;
       await updateCurrentAccount({
         balance: balance / 10 ** 8,
@@ -207,8 +178,7 @@ export const useDeleteWallet = () => {
         return;
       }
       if (currentWallet?.id === undefined) throw new Error("Unreachable");
-      const newWalletId =
-        currentWallet.id > id ? currentWallet.id - 1 : currentWallet.id;
+      const newWalletId = currentWallet.id > id ? currentWallet.id - 1 : currentWallet.id;
       await updateWalletState({
         selectedWallet: id === currentWallet.id ? 0 : newWalletId,
         selectedAccount: currentWallet?.id === id ? 0 : currentAccount?.id,

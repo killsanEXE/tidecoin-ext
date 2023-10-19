@@ -17,9 +17,7 @@ const ShowPk = () => {
 
   useEffect(() => {
     const load = async () => {
-      setSecret(
-        await keyringController.exportAccount(currentAccount?.address ?? "")
-      );
+      setSecret(await keyringController.exportAccount(currentAccount?.address ?? ""));
     };
 
     load();

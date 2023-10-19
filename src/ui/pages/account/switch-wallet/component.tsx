@@ -1,14 +1,7 @@
 import { useGetCurrentWallet, useWalletState } from "@/ui/states/walletState";
 import { useState } from "react";
 import s from "./styles.module.scss";
-import {
-  CheckIcon,
-  TagIcon,
-  KeyIcon,
-  XMarkIcon,
-  Bars3Icon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
+import { CheckIcon, TagIcon, KeyIcon, XMarkIcon, Bars3Icon, TrashIcon } from "@heroicons/react/24/outline";
 
 import { useDeleteWallet, useSwitchWallet } from "@/ui/hooks/wallet";
 import { useNavigate } from "react-router-dom";
@@ -28,8 +21,7 @@ const SwitchWallet = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [question, setQuestion] = useState("");
-  const [handler, setHandler] =
-    useState<(result: boolean) => void | undefined>(undefined);
+  const [handler, setHandler] = useState<(result: boolean) => void | undefined>(undefined);
 
   return (
     <div className={s.switchWalletDiv}>
@@ -44,9 +36,7 @@ const SwitchWallet = () => {
                   navigate("/home");
                 }}
               >
-                {wallet.id === currentWallet?.id ? (
-                  <CheckIcon className="w-8 h-8 cursor-pointer" />
-                ) : undefined}
+                {wallet.id === currentWallet?.id ? <CheckIcon className="w-8 h-8 cursor-pointer" /> : undefined}
                 {wallet.name}
               </div>
               <div className={s.walletControl}>
@@ -67,32 +57,19 @@ const SwitchWallet = () => {
                   action: () => {
                     navigate(`/pages/rename-wallet/${wallet.id}`);
                   },
-                  icon: (
-                    <TagIcon
-                      title="Rename wallet"
-                      className="w-8 h-8 cursor-pointer text-bg"
-                    />
-                  ),
+                  icon: <TagIcon title="Rename wallet" className="w-8 h-8 cursor-pointer text-bg" />,
                 },
                 {
                   action: () => {
                     navigate(`/pages/show-mnemonic/${i}`);
                   },
-                  icon: (
-                    <KeyIcon
-                      title="Show mnemonic \ private key"
-                      className="w-8 h-8 cursor-pointer text-bg"
-                    />
-                  ),
+                  icon: <KeyIcon title="Show mnemonic \ private key" className="w-8 h-8 cursor-pointer text-bg" />,
                 },
                 {
                   action: () => {
-                    if (wallets.length <= 1)
-                      toast.error("You cannot delete your last wallet");
+                    if (wallets.length <= 1) toast.error("You cannot delete your last wallet");
                     else {
-                      setQuestion(
-                        `Are you sure you want to delete "${wallet.name}"?`
-                      );
+                      setQuestion(`Are you sure you want to delete "${wallet.name}"?`);
                       setHandler(() => (result) => {
                         if (result) {
                           deleteWallet(wallet.id);
@@ -104,23 +81,13 @@ const SwitchWallet = () => {
                       setIsOpen(true);
                     }
                   },
-                  icon: (
-                    <TrashIcon
-                      title="Remove wallet"
-                      className="w-8 h-8 cursor-pointer text-bg"
-                    />
-                  ),
+                  icon: <TrashIcon title="Remove wallet" className="w-8 h-8 cursor-pointer text-bg" />,
                 },
                 {
                   action: () => {
                     setSelected(undefined);
                   },
-                  icon: (
-                    <XMarkIcon
-                      title="Close menu"
-                      className="w-8 h-8 cursor-pointer text-bg"
-                    />
-                  ),
+                  icon: <XMarkIcon title="Close menu" className="w-8 h-8 cursor-pointer text-bg" />,
                 },
               ]}
             />

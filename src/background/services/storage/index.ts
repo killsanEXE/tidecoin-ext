@@ -1,7 +1,4 @@
-import {
-  browserStorageLocalGet,
-  browserStorageLocalSet,
-} from "@/shared/utils/browser";
+import { browserStorageLocalGet, browserStorageLocalSet } from "@/shared/utils/browser";
 import * as encryptorUtils from "@metamask/browser-passworder";
 import { IAccount, IPrivateWallet, IWallet } from "@/shared/interfaces";
 import { DecryptedSecrets, StorageInterface } from "./types";
@@ -33,30 +30,36 @@ class StorageService {
   }
 
   get currentAccount(): IAccount | undefined {
-    if (
-      this._walletState.selectedWallet === undefined ||
-      this._walletState.selectedAccount === undefined
-    )
+    if (this._walletState.selectedWallet === undefined || this._walletState.selectedAccount === undefined)
       return undefined;
-    return this._walletState.wallets[this._walletState.selectedWallet].accounts[
-      this._walletState.selectedAccount!
-    ];
+    return this._walletState.wallets[this._walletState.selectedWallet].accounts[this._walletState.selectedAccount!];
   }
 
   updateWalletState(state: Partial<IWalletStateBase>) {
     this._walletState = { ...this._walletState, ...state };
   }
 
-  updateAppState(state: Partial<IAppStateBase>) {
+  async updateAppState(state: Partial<IAppStateBase>) {
     this._appState = { ...this._appState, ...state };
+    if (state.selectedAccount !== undefined || state.selectedWallet !== undefined || state.addressBook !== undefined) {
+      const localState = await this.getLocalValues();
+      const cache: StorageInterface["cache"] = {
+        ...localState.cache,
+      };
+      if (state.selectedAccount !== undefined) cache.selectedAccount = state.selectedAccount;
+      if (state.selectedWallet !== undefined) cache.selectedWallet = state.selectedWallet;
+      if (state.addressBook !== undefined) cache.addressBook = state.addressBook;
+
+      const payload: StorageInterface = {
+        cache: cache,
+        enc: localState.enc,
+      };
+
+      await browserStorageLocalSet(payload);
+    }
   }
 
-  async saveWallets(
-    password: string,
-    wallets: IWallet[],
-    payload?: DecryptedSecrets,
-    newPassword?: string
-  ) {
+  async saveWallets(password: string, wallets: IWallet[], payload?: DecryptedSecrets, newPassword?: string) {
     const local = await this.getLocalValues();
     const current = await this.getSecrets(local, password);
 
@@ -82,15 +85,15 @@ class StorageService {
       data: keyringService.serializeById(i.id),
       phrase: payload?.find((d) => d.id === i.id)?.phrase,
     }));
-    const encrypted = await encryptorUtils.encrypt(
-      newPassword ?? password,
-      JSON.stringify(keyringsToSave)
-    );
+    const encrypted = await encryptorUtils.encrypt(newPassword ?? password, JSON.stringify(keyringsToSave));
 
     const data: StorageInterface = {
       enc: JSON.parse(encrypted),
-      cache: walletsToSave,
-      addressBook: this.appState.addressBook
+      cache: {
+        ...local.cache,
+        wallets: walletsToSave,
+        addressBook: this.appState.addressBook,
+      },
     };
 
     await browserStorageLocalSet(data);
@@ -98,10 +101,7 @@ class StorageService {
 
   private async getSecrets(encrypted: StorageInterface, password: string) {
     if (!encrypted.enc) return undefined;
-    const loaded = (await encryptorUtils.decrypt(
-      password,
-      JSON.stringify(encrypted.enc)
-    )) as string | undefined;
+    const loaded = (await encryptorUtils.decrypt(password, JSON.stringify(encrypted.enc))) as string | undefined;
     return JSON.parse(loaded!) as DecryptedSecrets | undefined;
   }
 
@@ -122,11 +122,15 @@ class StorageService {
     const encrypted = await this.getLocalValues();
     if (!encrypted) return [];
 
-    storageService.updateAppState({ addressBook: encrypted.addressBook });
+    await storageService.updateAppState({
+      addressBook: encrypted.cache.addressBook,
+      selectedAccount: encrypted.cache.selectedAccount,
+      selectedWallet: encrypted.cache.selectedWallet,
+    });
 
     const secrets = await this.getSecrets(encrypted, password);
 
-    return encrypted.cache.map((i, index: number) => {
+    return encrypted.cache.wallets.map((i, index: number) => {
       const current = secrets?.find((i) => i.id === index);
       return {
         ...i,
@@ -140,25 +144,32 @@ class StorageService {
   getUniqueName(kind: "Wallet" | "Account"): string {
     if (kind === "Wallet") {
       const wallets = this.walletState.wallets;
-      if (wallets.length <= 0) return "Wallet 1"
-      return `Wallet ${this.getUniqueId(wallets.map(f => f.name ?? ""), "Wallet")}`;
+      if (wallets.length <= 0) return "Wallet 1";
+      return `Wallet ${this.getUniqueId(
+        wallets.map((f) => f.name ?? ""),
+        "Wallet"
+      )}`;
     } else {
       const accounts = this.currentWallet?.accounts;
       if (!accounts) return "Account 1";
-      return `Account ${this.getUniqueId(accounts.map(f => f.name ?? ""), "Account")}`;
+      return `Account ${this.getUniqueId(
+        accounts.map((f) => f.name ?? ""),
+        "Account"
+      )}`;
     }
   }
 
   private getUniqueId(names: string[], type: "Account" | "Wallet") {
-    const ids: number[] = names.map(f => {
-      const name = f.trim()
-      if (name.includes(type)
-        && name.split(" ").length === 2) {
+    const ids: number[] = names.map((f) => {
+      const name = f.trim();
+      if (name.includes(type) && name.split(" ").length === 2) {
         const accountid = name.split(" ")[1];
         if (!Number.isNaN(Number(accountid))) {
           return Number.parseInt(accountid);
-        } return 0
-      } return 0
+        }
+        return 0;
+      }
+      return 0;
     });
     return Math.max(...ids) + 1;
   }

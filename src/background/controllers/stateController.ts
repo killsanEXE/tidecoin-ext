@@ -1,14 +1,10 @@
-import {
-  IAppStateBase,
-  IWalletState,
-  IWalletStateBase,
-} from "@/shared/interfaces";
+import { IAppStateBase, IWalletState, IWalletStateBase } from "@/shared/interfaces";
 import { IStateController } from "@/shared/interfaces/stateController";
 import { storageService } from "../services";
 
 class StateController implements IStateController {
   async updateAppState(state: Partial<IAppStateBase>): Promise<void> {
-    storageService.updateAppState(state);
+    await storageService.updateAppState(state);
   }
 
   async updateWalletState(state: Partial<IWalletState>): Promise<void> {

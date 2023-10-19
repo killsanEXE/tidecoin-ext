@@ -34,11 +34,7 @@ interface fetchProps extends RequestInit {
   json?: boolean;
 }
 
-export const fetchTDCMainnet = async <T>({
-  path,
-  json = true,
-  ...props
-}: fetchProps): Promise<T | undefined> => {
+export const fetchTDCMainnet = async <T>({ path, json = true, ...props }: fetchProps): Promise<T | undefined> => {
   const url = new URL(TDC_MAINNET_PATH.concat(path), TDC_API_URL);
   if (props.params) {
     Object.entries(props.params).forEach((v) => url.searchParams.set(...v));
@@ -50,14 +46,9 @@ export const fetchTDCMainnet = async <T>({
   return await res.json();
 };
 
-export const extractKeysFromObj = <
-  T extends Record<string, any>,
-  K extends keyof T
->(
+export const extractKeysFromObj = <T extends Record<string, any>, K extends keyof T>(
   obj: T,
   keysToExtract: K[]
 ): Omit<T, K> => {
-  return Object.fromEntries(
-    Object.entries(obj).filter(([k, _v]) => !keysToExtract.includes(k as K))
-  ) as Omit<T, K>;
+  return Object.fromEntries(Object.entries(obj).filter(([k, _v]) => !keysToExtract.includes(k as K))) as Omit<T, K>;
 };

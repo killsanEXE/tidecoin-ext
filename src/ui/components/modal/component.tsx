@@ -14,12 +14,7 @@ const Modal: FC<Props> = ({ title, children, open, onClose }) => {
 
   return (
     <Transition appear show={open} as={Fragment}>
-      <Dialog
-        as="div"
-        className="relative z-30"
-        onClose={onClose}
-        initialFocus={closeRef}
-      >
+      <Dialog as="div" className="relative z-30" onClose={onClose} initialFocus={closeRef}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -44,10 +39,7 @@ const Modal: FC<Props> = ({ title, children, open, onClose }) => {
               leaveTo="opacity-0 translate-y-full"
             >
               <Dialog.Panel className="relative w-full max-w-md transform overflow-hidden rounded-t-2xl bg-bg px-3 py-5 text-left align-middle shadow-xl transition-all">
-                <Dialog.Title
-                  as="h3"
-                  className="text-lg font-medium leading-6 text-text text-center"
-                >
+                <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-text text-center">
                   {title}
                 </Dialog.Title>
                 <XMarkIcon

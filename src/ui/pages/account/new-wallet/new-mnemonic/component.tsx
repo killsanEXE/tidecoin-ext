@@ -19,12 +19,8 @@ const NewMnemonic = () => {
   const { walletController } = useControllersState((v) => ({
     walletController: v.walletController,
   }));
-  const [mnemonicPhrase, setMnemonicPhrase] = useState<string | undefined>(
-    undefined
-  );
-  const [addressType, setAddressType] = useState<AddressType>(
-    AddressType.P2WPKH
-  );
+  const [mnemonicPhrase, setMnemonicPhrase] = useState<string | undefined>(undefined);
+  const [addressType, setAddressType] = useState<AddressType>(AddressType.P2WPKH);
 
   const createNewWallet = useCreateNewWallet();
 

@@ -41,11 +41,7 @@ class KeyringService {
     return wallets;
   }
 
-  newKeyring(
-    type: "simple" | "root",
-    payload: string,
-    addressType: AddressType = AddressType.P2WPKH
-  ) {
+  newKeyring(type: "simple" | "root", payload: string, addressType: AddressType = AddressType.P2WPKH) {
     let keyring: HDPrivateKey | HDSimpleKey;
     if (type === "root") {
       keyring = HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(payload));
@@ -55,8 +51,7 @@ class KeyringService {
         addressType: addressType,
       });
     }
-    keyring.addressType =
-      typeof addressType === "number" ? addressType : AddressType.P2WPKH;
+    keyring.addressType = typeof addressType === "number" ? addressType : AddressType.P2WPKH;
     this.keyrings.push(keyring);
     return keyring.getAddress(keyring.publicKey);
   }
@@ -118,11 +113,7 @@ class KeyringService {
 
     const randomSeed = crypto.getRandomValues(new Uint8Array(48));
 
-    return keyring.signPersonalMessage(
-      msgParams.from,
-      msgParams.data,
-      randomSeed
-    );
+    return keyring.signPersonalMessage(msgParams.from, msgParams.data, randomSeed);
   }
 
   private async _signTransactionMultisig() {
@@ -144,8 +135,7 @@ class KeyringService {
   async sendTDC(data: SendTDC) {
     const account = storageService.currentAccount;
     const wallet = storageService.currentWallet;
-    if (!account || !account.address)
-      throw new Error("Error when trying to get the current account");
+    if (!account || !account.address) throw new Error("Error when trying to get the current account");
 
     const publicKey = this.exportPublicKey(account.address);
 
@@ -155,10 +145,7 @@ class KeyringService {
           txId: v.txid,
           outputIndex: v.vout,
           satoshis: v.value,
-          scriptPk: getScriptForAddress(
-            Buffer.from(publicKey, "hex"),
-            wallet.addressType
-          ).toString("hex"),
+          scriptPk: getScriptForAddress(Buffer.from(publicKey, "hex"), wallet.addressType).toString("hex"),
           addressType: wallet?.addressType as any as UTXOAddressType,
           address: account.address,
           ords: [],
@@ -181,22 +168,9 @@ class KeyringService {
     return psbt.toHex();
   }
 
-  async changeAddressType(
-    index: number,
-    addressType: AddressType
-  ): Promise<string[]> {
+  async changeAddressType(index: number, addressType: AddressType): Promise<string[]> {
     this.keyrings[index].addressType = addressType;
     return this.keyrings[index].getAccounts();
-  }
-
-  async getWalletSecret(
-    walletKey: number,
-    password: string
-  ): Promise<string | undefined> {
-    const wallets = await storageService.importWallets(password);
-    if (!wallets[walletKey]) return;
-    const wallet = HDPrivateKey.deserialize(wallets[walletKey].data);
-    return Mnemonic.fromEntropy((wallet as any).seed).getPhrase();
   }
 
   async deleteWallet(id: number) {
@@ -204,10 +178,7 @@ class KeyringService {
     let wallets = [...storageService.walletState.wallets];
     wallets.splice(id, 1);
     wallets = wallets.map((f, i) => ({ ...f, id: i }));
-    await storageService.saveWallets(
-      storageService.appState.password!,
-      wallets
-    );
+    await storageService.saveWallets(storageService.appState.password!, wallets);
     return wallets;
   }
 }

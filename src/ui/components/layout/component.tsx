@@ -117,9 +117,7 @@ export default function PagesLayout() {
     () =>
       routeTitles.find((i) => {
         if (i.route.includes("@")) {
-          return currentRoute.pathname.includes(
-            i.route.slice(0, i.route.length - 1)
-          );
+          return currentRoute.pathname.includes(i.route.slice(0, i.route.length - 1));
         }
         return currentRoute.pathname === i.route;
       }),
@@ -130,13 +128,11 @@ export default function PagesLayout() {
     <div className={s.layout}>
       {
         <div className={s.controlDiv}>
-          {(!currentRouteTitle?.disableBack ||
-            !currentRouteTitle.disableBack()) && (
+          {(!currentRouteTitle?.disableBack || !currentRouteTitle.disableBack()) && (
             <div
               className={cn(s.controlElem, s.back)}
               onClick={() => {
-                if (currentRouteTitle?.backAction)
-                  currentRouteTitle.backAction();
+                if (currentRouteTitle?.backAction) currentRouteTitle.backAction();
                 else navigate(-1);
               }}
             >
@@ -144,15 +140,10 @@ export default function PagesLayout() {
             </div>
           )}
 
-          <div className={cn(s.controlElem, s.title)}>
-            {currentRouteTitle?.title}
-          </div>
+          <div className={cn(s.controlElem, s.title)}>{currentRouteTitle?.title}</div>
 
           {currentRouteTitle?.action && (
-            <div
-              className={cn(s.controlElem, s.addNew)}
-              onClick={currentRouteTitle!.action!.cb}
-            >
+            <div className={cn(s.controlElem, s.addNew)} onClick={currentRouteTitle!.action!.cb}>
               {currentRouteTitle.action.icon}
             </div>
           )}

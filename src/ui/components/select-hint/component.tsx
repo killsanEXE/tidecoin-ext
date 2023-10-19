@@ -16,11 +16,7 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
   const filteredWords =
     query === ""
       ? []
-      : englishWords
-        .filter((word) =>
-          word.startsWith(query.toLowerCase().replace(/\s+/g, ""))
-        )
-        .slice(0, 4);
+      : englishWords.filter((word) => word.startsWith(query.toLowerCase().replace(/\s+/g, ""))).slice(0, 4);
 
   useEffect(() => {
     if (selected?.length) {
@@ -49,12 +45,7 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
             value={query}
           />
         </div>
-        <Transition
-          as={Fragment}
-          leave="transition ease-in duration-100"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
+        <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
           <Combobox.Options className={s.optionsBox}>
             {filteredWords.length === 0 && query !== "" ? (
               <div className={s.optionsNotFound}>Nothing found.</div>
@@ -62,19 +53,12 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
               filteredWords.map((word) => (
                 <Combobox.Option
                   key={word}
-                  className={({ active }) =>
-                    cn(s.options, { [s.optionsActive]: active })
-                  }
+                  className={({ active }) => cn(s.options, { [s.optionsActive]: active })}
                   value={word}
                 >
                   {({ selected }) => (
                     <>
-                      <span
-                        className={`block truncate ${selected ? "font-medium" : "font-normal"
-                          }`}
-                      >
-                        {word}
-                      </span>
+                      <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>{word}</span>
                     </>
                   )}
                 </Combobox.Option>

@@ -71,9 +71,7 @@ if (IS_CHROME) {
   }
 }
 
-export const IS_AFTER_CHROME91 = IS_CHROME
-  ? chromeVersion && chromeVersion >= 91
-  : false;
+export const IS_AFTER_CHROME91 = IS_CHROME ? chromeVersion && chromeVersion >= 91 : false;
 
 export const GAS_LEVEL_TEXT = {
   slow: "Standard",
@@ -147,11 +145,7 @@ export const RESTORE_WALLETS: {
   {
     value: RestoreWalletType.SPARROW,
     name: "Sparrow Wallet",
-    addressTypes: [
-      UTXOAddressType.P2PKH,
-      UTXOAddressType.P2WPKH,
-      UTXOAddressType.P2SH_P2WPKH,
-    ],
+    addressTypes: [UTXOAddressType.P2PKH, UTXOAddressType.P2WPKH, UTXOAddressType.P2SH_P2WPKH],
   },
   {
     value: RestoreWalletType.XVERSE,

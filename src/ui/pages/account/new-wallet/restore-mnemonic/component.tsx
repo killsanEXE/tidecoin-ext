@@ -19,9 +19,7 @@ const RestoreMnemonic = () => {
   const { walletController } = useControllersState((v) => ({
     walletController: v.walletController,
   }));
-  const [mnemonicPhrase, setMnemonicPhrase] = useState<(string | undefined)[]>(
-    new Array(12).fill("")
-  );
+  const [mnemonicPhrase, setMnemonicPhrase] = useState<(string | undefined)[]>(new Array(12).fill(""));
   const createNewWallet = useCreateNewWallet();
   const navigate = useNavigate();
 
@@ -81,11 +79,7 @@ const RestoreMnemonic = () => {
             <button
               onClick={async () => {
                 try {
-                  await createNewWallet(
-                    mnemonicPhrase.join(" "),
-                    "root",
-                    addressType
-                  );
+                  await createNewWallet(mnemonicPhrase.join(" "), "root", addressType);
                   await walletController.saveWallets();
                   await updateWalletState({ vaultIsEmpty: false });
                   navigate("/home");

@@ -62,10 +62,7 @@ export class TidecoinProvider extends EventEmitter {
   }
 
   initialize = async () => {
-    document.addEventListener(
-      "visibilitychange",
-      this._requestPromiseCheckVisibility
-    );
+    document.addEventListener("visibilitychange", this._requestPromiseCheckVisibility);
 
     this._bcm.connect().on("message", this._handleBackgroundMessage);
     domReadyCall(() => {
@@ -74,10 +71,7 @@ export class TidecoinProvider extends EventEmitter {
         ($('head > link[rel~="icon"]') as HTMLLinkElement)?.href ||
         ($('head > meta[itemprop="image"]') as HTMLMetaElement)?.content;
 
-      const name =
-        document.title ||
-        ($('head > meta[name="title"]') as HTMLMetaElement)?.content ||
-        origin;
+      const name = document.title || ($('head > meta[name="title"]') as HTMLMetaElement)?.content || origin;
 
       this._bcm.request({
         method: "tabCheckin",
@@ -230,11 +224,7 @@ export class TidecoinProvider extends EventEmitter {
     });
   };
 
-  sendBitcoin = async (
-    toAddress: string,
-    satoshis: number,
-    options?: { feeRate: number }
-  ) => {
+  sendBitcoin = async (toAddress: string, satoshis: number, options?: { feeRate: number }) => {
     return this._request({
       method: "sendBitcoin",
       params: {
@@ -246,11 +236,7 @@ export class TidecoinProvider extends EventEmitter {
     });
   };
 
-  sendInscription = async (
-    toAddress: string,
-    inscriptionId: string,
-    options?: { feeRate: number }
-  ) => {
+  sendInscription = async (toAddress: string, inscriptionId: string, options?: { feeRate: number }) => {
     return this._request({
       method: "sendInscription",
       params: {

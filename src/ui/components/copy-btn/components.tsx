@@ -12,14 +12,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   title?: string;
 }
 
-const CopyBtn: FC<Props> = ({
-  label,
-  value,
-  className,
-  iconClassName,
-  title,
-  ...props
-}) => {
+const CopyBtn: FC<Props> = ({ label, value, className, iconClassName, title, ...props }) => {
   return (
     <button
       title={title}

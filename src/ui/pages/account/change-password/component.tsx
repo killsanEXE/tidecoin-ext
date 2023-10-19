@@ -46,16 +46,8 @@ const ChangePassword = () => {
     walletController: v.walletController,
   }));
 
-  const executeChangePassword = async ({
-    confirmPassword,
-    oldPassword,
-    password,
-  }: FormType) => {
-    if (
-      appPassword === oldPassword &&
-      password === confirmPassword &&
-      password !== appPassword
-    ) {
+  const executeChangePassword = async ({ confirmPassword, oldPassword, password }: FormType) => {
+    if (appPassword === oldPassword && password === confirmPassword && password !== appPassword) {
       await walletController.saveWallets(undefined, password);
       await updateAppState({ password });
       logout();

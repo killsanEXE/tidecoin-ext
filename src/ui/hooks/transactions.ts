@@ -1,9 +1,5 @@
 import { useCallback } from "react";
-import {
-  useGetCurrentAccount,
-  useGetCurrentWallet,
-  useWalletState,
-} from "../states/walletState";
+import { useGetCurrentAccount, useGetCurrentWallet, useWalletState } from "../states/walletState";
 import { useControllersState } from "../states/controllerState";
 import { tidoshisToAmount } from "../utils";
 import { Psbt } from "tidecoinjs-lib";
@@ -22,20 +18,12 @@ export function useCreateTidecoinTxCallback() {
   }));
 
   return useCallback(
-    async (
-      toAddress: Hex,
-      toAmount: number,
-      feeRate: number,
-      receiverToPayFee = false
-    ) => {
+    async (toAddress: Hex, toAmount: number, feeRate: number, receiverToPayFee = false) => {
       if (selectedWallet === undefined || selectedAccount === undefined)
         throw new Error("Failed to get current wallet or account");
       const fromAddress = currentAccount?.address;
       const utxos = await apiController.getUtxos(fromAddress!);
-      const safeBalance = (utxos ?? []).reduce(
-        (pre, cur) => pre + cur.value,
-        0
-      );
+      const safeBalance = (utxos ?? []).reduce((pre, cur) => pre + cur.value, 0);
       if (safeBalance < toAmount) {
         throw new Error(
           `Insufficient balance. Non-Inscription balance (${tidoshisToAmount(
@@ -55,14 +43,7 @@ export function useCreateTidecoinTxCallback() {
       const rawtx = psbt.extractTransaction().toHex();
       return rawtx;
     },
-    [
-      currentWallet,
-      apiController,
-      currentAccount,
-      selectedAccount,
-      selectedWallet,
-      keyringController,
-    ]
+    [currentWallet, apiController, currentAccount, selectedAccount, selectedWallet, keyringController]
   );
 }
 

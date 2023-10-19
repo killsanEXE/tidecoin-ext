@@ -51,11 +51,7 @@ const Receive = () => {
         </div>
         <div className={s.accTitle}>{currentAccount?.name ?? "Account"}</div>
       </div>
-      <CopyBtn
-        label="Copy address"
-        value={currentAccount?.address}
-        className={s.copyButton}
-      />
+      <CopyBtn label="Copy address" value={currentAccount?.address} className={s.copyButton} />
       <p className="text-center mb-2 opacity-80 absolute bottom-0 left-1/2 -translate-x-1/2">
         {currentAccount?.address}
       </p>

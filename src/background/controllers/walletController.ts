@@ -26,17 +26,13 @@ class WalletController implements IWalletController {
       name: "Account 1",
       address,
     };
-    const walletId =
-      exportedWallets.length > 0
-        ? exportedWallets[exportedWallets.length - 1].id + 1
-        : 0;
+    const walletId = exportedWallets.length > 0 ? exportedWallets[exportedWallets.length - 1].id + 1 : 0;
 
     return {
       name: !name ? storageService.getUniqueName("Wallet") : name,
       id: walletId,
       type: walletType,
-      addressType:
-        typeof addressType === "number" ? addressType : AddressType.P2WPKH,
+      addressType: typeof addressType === "number" ? addressType : AddressType.P2WPKH,
       accounts: [account],
     };
   }
@@ -55,13 +51,8 @@ class WalletController implements IWalletController {
     return wallets.map((i) => extractKeysFromObj(i, ["data"]));
   }
 
-  async loadAccountsData(
-    walletId: number,
-    accounts: IAccount[]
-  ): Promise<IAccount[]> {
-    const wallet = keyringService.keyrings[walletId] as
-      | HDPrivateKey
-      | SimpleKey;
+  async loadAccountsData(walletId: number, accounts: IAccount[]): Promise<IAccount[]> {
+    const wallet = keyringService.keyrings[walletId] as HDPrivateKey | SimpleKey;
 
     const addresses = wallet.getAccounts();
 
@@ -74,13 +65,9 @@ class WalletController implements IWalletController {
   async createNewAccount(name?: string): Promise<IAccount> {
     const wallet = storageService.currentWallet;
     if (!wallet) return {} as any;
-    const accName = !name?.length
-      ? storageService.getUniqueName("Account")
-      : name;
+    const accName = !name?.length ? storageService.getUniqueName("Account") : name;
     const addresses = keyringService.getKeyringForAccount(
-      wallet.accounts[-1]
-        ? wallet.accounts[-1].address!
-        : wallet.accounts[0].address!
+      wallet.accounts[-1] ? wallet.accounts[-1].address! : wallet.accounts[0].address!
     ).addAccounts!(1);
 
     return {

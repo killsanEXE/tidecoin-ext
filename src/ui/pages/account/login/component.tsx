@@ -37,10 +37,7 @@ const Login = () => {
   const login = async ({ password }: FormType) => {
     try {
       const exportedWallets = await walletController.importWallets(password);
-      exportedWallets[0].accounts = await walletController.loadAccountsData(
-        0,
-        exportedWallets[0].accounts
-      );
+      exportedWallets[0].accounts = await walletController.loadAccountsData(0, exportedWallets[0].accounts);
       await updateWalletState({
         selectedAccount: 0,
         selectedWallet: 0,

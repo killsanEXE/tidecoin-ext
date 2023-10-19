@@ -8,6 +8,8 @@ export const useAppState = create<IAppState>()((set) => ({
   vault: [],
   addressBook: [],
   password: undefined,
+  selectedAccount: undefined,
+  selectedWallet: undefined,
   updateAppState: async (app: Partial<IAppState>) => {
     const proxy = setupStateProxy();
     await proxy.updateAppState(app);
