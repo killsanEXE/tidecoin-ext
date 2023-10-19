@@ -1,15 +1,11 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "types": [
-      "bun-types"
-    ],
+    "types": ["bun-types"],
     "esModuleInterop": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "experimentalDecorators": true
   },
-  "exclude": [
-    "./src/**/*"
-  ]
+  "exclude": ["./src/**/*", "./node_modules/**/*"]
 }

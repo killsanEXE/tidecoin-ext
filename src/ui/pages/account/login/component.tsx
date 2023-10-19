@@ -6,6 +6,7 @@ import { useWalletState } from "@/ui/states/walletState";
 import { useControllersState } from "@/ui/states/controllerState";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useSyncStorages } from "@/ui/utils/setup";
 
 interface FormType {
   password: string;
@@ -29,6 +30,7 @@ const Login = () => {
   const { walletController } = useControllersState((v) => ({
     walletController: v.walletController,
   }));
+  const syncStorages = useSyncStorages();
 
   useEffect(() => {
     if (vaultIsEmpty) navigate("/account/create-password");
@@ -37,10 +39,9 @@ const Login = () => {
   const login = async ({ password }: FormType) => {
     try {
       const exportedWallets = await walletController.importWallets(password);
+      await syncStorages();
       exportedWallets[0].accounts = await walletController.loadAccountsData(0, exportedWallets[0].accounts);
       await updateWalletState({
-        selectedAccount: 0,
-        selectedWallet: 0,
         wallets: exportedWallets,
       });
       await updateAppState({

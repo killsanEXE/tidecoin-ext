@@ -35,20 +35,34 @@ class StorageService {
     return this._walletState.wallets[this._walletState.selectedWallet].accounts[this._walletState.selectedAccount!];
   }
 
-  updateWalletState(state: Partial<IWalletStateBase>) {
+  async updateWalletState(state: Partial<IWalletStateBase>) {
     this._walletState = { ...this._walletState, ...state };
-  }
 
-  async updateAppState(state: Partial<IAppStateBase>) {
-    this._appState = { ...this._appState, ...state };
-    if (state.selectedAccount !== undefined || state.selectedWallet !== undefined || state.addressBook !== undefined) {
+    if (state.selectedAccount !== undefined || state.selectedWallet !== undefined) {
       const localState = await this.getLocalValues();
       const cache: StorageInterface["cache"] = {
         ...localState.cache,
       };
       if (state.selectedAccount !== undefined) cache.selectedAccount = state.selectedAccount;
       if (state.selectedWallet !== undefined) cache.selectedWallet = state.selectedWallet;
-      if (state.addressBook !== undefined) cache.addressBook = state.addressBook;
+
+      const payload: StorageInterface = {
+        cache,
+        enc: localState.enc,
+      };
+
+      await browserStorageLocalSet(payload);
+    }
+  }
+
+  async updateAppState(state: Partial<IAppStateBase>) {
+    this._appState = { ...this._appState, ...state };
+    if (state.addressBook !== undefined) {
+      const localState = await this.getLocalValues();
+      const cache: StorageInterface["cache"] = {
+        ...localState.cache,
+        addressBook: state.addressBook,
+      };
 
       const payload: StorageInterface = {
         cache: cache,
@@ -124,6 +138,9 @@ class StorageService {
 
     await storageService.updateAppState({
       addressBook: encrypted.cache.addressBook,
+    });
+
+    await storageService.updateWalletState({
       selectedAccount: encrypted.cache.selectedAccount,
       selectedWallet: encrypted.cache.selectedWallet,
     });

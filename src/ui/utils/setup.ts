@@ -5,6 +5,10 @@ import { IWalletController } from "@/shared/interfaces";
 import { IApiController } from "@/shared/interfaces/apiController";
 import { IStateController } from "@/shared/interfaces/stateController";
 import { IKeyringController } from "@/shared/interfaces/keyringController";
+import { useControllersState } from "../states/controllerState";
+import { useCallback } from "react";
+import { useAppState } from "../states/appState";
+import { useWalletState } from "../states/walletState";
 
 function setupPm() {
   const { PortMessage } = Message;
@@ -64,4 +68,22 @@ export function setupStateProxy() {
 
 export function setupKeyringProxy() {
   return setupProxy<IKeyringController>("keyring");
+}
+
+export function useSyncStorages() {
+  const { stateController } = useControllersState((v) => ({ stateController: v.stateController }));
+  const { updateAppState } = useAppState((v) => ({
+    updateAppState: v.updateAppState,
+  }));
+  const { updateWalletState } = useWalletState((v) => ({
+    updateWalletState: v.updateWalletState,
+  }));
+
+  return useCallback(async () => {
+    const appState = await stateController.getAppState();
+    const walletState = await stateController.getWalletState();
+
+    await updateAppState(appState);
+    await updateWalletState(walletState);
+  }, [stateController]);
 }

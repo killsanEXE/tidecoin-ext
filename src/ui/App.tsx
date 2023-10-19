@@ -8,6 +8,7 @@ import { useAppState } from "./states/appState";
 import { useWalletState } from "./states/walletState";
 import { guestRouter, authenticatedRouter } from "@/ui/pages/router";
 import { useControllersState } from "./states/controllerState";
+import { extractKeysFromObj } from "@/shared/utils";
 
 export default function App() {
   const [router, setRouter] = useState<Router>(guestRouter);
@@ -41,8 +42,12 @@ export default function App() {
       } else {
         await updateWalletState({
           vaultIsEmpty: await walletController.isVaultEmpty(),
+          ...extractKeysFromObj(walletState, ["vaultIsEmpty", "wallets"]),
         });
-        await updateAppState({ isReady: true });
+        await updateAppState({
+          isReady: true,
+          ...extractKeysFromObj(appState, ["isReady", "isUnlocked", "password", "vault"]),
+        });
       }
       updateControllers({
         walletController,

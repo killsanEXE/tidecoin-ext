@@ -4,8 +4,6 @@ export interface IAppStateBase {
   vault: string[];
   password?: string;
   addressBook: string[];
-  selectedWallet?: number;
-  selectedAccount?: number;
 }
 
 export interface IAppState extends IAppStateBase {

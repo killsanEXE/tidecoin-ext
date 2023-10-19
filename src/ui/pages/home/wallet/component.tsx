@@ -19,7 +19,7 @@ import { Circle } from "rc-progress";
 const Wallet = () => {
   const [lastBlock, setLastBlock] = useState<number>(0);
   const currentWallet = useGetCurrentWallet();
-  if (!currentWallet) return <Navigate to={"/pages/create-new-wallet"} />;
+  if (currentWallet === undefined) return <Navigate to={"/pages/create-new-wallet"} />;
 
   const currentAccount = useGetCurrentAccount();
   const navigate = useNavigate();

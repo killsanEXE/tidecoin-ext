@@ -8,7 +8,7 @@ class StateController implements IStateController {
   }
 
   async updateWalletState(state: Partial<IWalletState>): Promise<void> {
-    storageService.updateWalletState(state);
+    await storageService.updateWalletState(state);
   }
 
   async getWalletPhrase(index: number, password: string): Promise<string> {
