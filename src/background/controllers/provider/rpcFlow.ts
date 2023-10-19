@@ -4,7 +4,7 @@ import { EVENTS } from "@/shared/constant";
 import eventBus from "@/shared/eventBus";
 import { ethErrors } from "eth-rpc-errors";
 import providerController from "./controller"
-
+import { permissionService } from "@/background/services";
 
 const isSignApproval = (type: string) => {
   const SIGN_APPROVALS = ['SignText', 'SignPsbt', 'SignTx'];
@@ -52,33 +52,21 @@ const flowContext = flow
       mapMethod
     } = ctx;
     if (!Reflect.getMetadata('SAFE', providerController, mapMethod)) {
-      // if (!permissionService.hasPermission(origin)) {
-      //   ctx.request.requestedApproval = true;
-      //   await notificationService.requestApproval(
-      //     {
-      //       params: {
-      //         method: 'connect',
-      //         data: {},
-      //         session: { origin, name, icon }
-      //       },
-      //       approvalComponent: 'Connect'
-      //     },
-      //     { height: windowHeight }
-      //   );
-      //   permissionService.addConnectedSite(origin, name, icon, CHAINS_ENUM.BTC);
-      // }
-      ctx.request.requestedApproval = true;
-      await notificationService.requestApproval(
-        {
-          params: {
-            method: 'connect',
-            data: {},
-            session: { origin, name, icon }
+      if (!permissionService.siteIsConnected(origin)) {
+        ctx.request.requestedApproval = true;
+        await notificationService.requestApproval(
+          {
+            params: {
+              method: 'connect',
+              data: {},
+              session: { origin, name, icon }
+            },
+            approvalComponent: 'Connect'
           },
-          approvalComponent: 'Connect'
-        },
-        { height: windowHeight }
-      );
+          { height: windowHeight }
+        );
+        permissionService.addConnectedSite(origin, name, icon);
+      }
     }
 
     return next();
