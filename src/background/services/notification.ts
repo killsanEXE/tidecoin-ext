@@ -43,6 +43,7 @@ class NotificationService extends Events {
     }
     this.approval = null;
     this.emit("resolve", data);
+    this.clear();
   };
 
   rejectApproval = async (err?: string, stay = false, isInternal = false) => {
