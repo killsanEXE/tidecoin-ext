@@ -6,8 +6,8 @@ import { CheckIcon, TagIcon, KeyIcon, XMarkIcon, Bars3Icon, TrashIcon } from "@h
 import { useDeleteWallet, useSwitchWallet } from "@/ui/hooks/wallet";
 import { useNavigate } from "react-router-dom";
 import Menu from "@/ui/components/menu";
-import Popup from "@/ui/components/popup";
 import toast from "react-hot-toast";
+import Modal from "@/ui/components/modal";
 
 const SwitchWallet = () => {
   const currentWallet = useGetCurrentWallet();
@@ -19,9 +19,7 @@ const SwitchWallet = () => {
   const navigate = useNavigate();
   const deleteWallet = useDeleteWallet();
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [question, setQuestion] = useState("");
-  const [handler, setHandler] = useState<(result: boolean) => void | undefined>(undefined);
+  const [deleteWalletId, setDeleteWalletId] = useState<number>();
 
   return (
     <div className={s.switchWalletDiv}>
@@ -68,18 +66,7 @@ const SwitchWallet = () => {
                 {
                   action: () => {
                     if (wallets.length <= 1) toast.error("You cannot delete your last wallet");
-                    else {
-                      setQuestion(`Are you sure you want to delete "${wallet.name}"?`);
-                      setHandler(() => (result) => {
-                        if (result) {
-                          deleteWallet(wallet.id);
-                          setHandler(undefined);
-                          setSelected(undefined);
-                        }
-                        setIsOpen(false);
-                      });
-                      setIsOpen(true);
-                    }
+                    setDeleteWalletId(i);
                   },
                   icon: <TrashIcon title="Remove wallet" className="w-8 h-8 cursor-pointer text-bg" />,
                 },
@@ -94,7 +81,28 @@ const SwitchWallet = () => {
           </div>
         ))}
       </div>
-      <Popup isOpen={isOpen} question={question} handler={handler} />
+      <Modal onClose={() => setDeleteWalletId(undefined)} open={deleteWalletId !== undefined} title={"Confirmation"}>
+        <div className="text-base text-text py-7 px-4">
+          <div>Are you sure you want to delete?</div>
+          <span className="text-teal-200 block text-center mt-4">
+            {deleteWalletId !== undefined ? wallets[deleteWalletId].name : ""}
+          </span>
+        </div>
+        <div className="flex justify-center gap-4">
+          <button
+            className="btn hover:bg-red-500"
+            onClick={() => {
+              deleteWallet(wallets[deleteWalletId].id);
+              setSelected(undefined);
+            }}
+          >
+            Yes
+          </button>
+          <button className="btn hover:bg-text hover:text-bg" onClick={() => setDeleteWalletId(undefined)}>
+            No
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };

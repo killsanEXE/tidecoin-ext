@@ -5,13 +5,19 @@ const NewWallet = () => {
   return (
     <div className={s.choice}>
       <div className={s.choiceDiv}>
-        <Link to="/pages/new-mnemonic">Create with mnemonic (12 words)</Link>
+        <Link to="/pages/new-mnemonic" className={s.variant}>
+          Create with mnemonic (12 words)
+        </Link>
       </div>
       <div className={s.choiceDiv}>
-        <Link to="/pages/restore-mnemonic">Restore with mnemonic</Link>
+        <Link to="/pages/restore-mnemonic" className={s.variant}>
+          Restore with mnemonic
+        </Link>
       </div>
       <div className={s.choiceDiv}>
-        <Link to="/pages/restore-priv-key">Restore with private key</Link>
+        <Link to="/pages/restore-priv-key" className={s.variant}>
+          Restore with private key
+        </Link>
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
 .allTypes {
-  @apply w-full h-full flex flex-col gap-4 text-base;
+  @apply w-full h-full flex flex-col gap-4 justify-center;
 
   .addressType {
-    @apply py-4 flex items-center gap-2 pl-11 cursor-pointer relative;
+    @apply py-4 pl-4 flex items-center gap-2 cursor-pointer relative text-base;
   }
 }
 

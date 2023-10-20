@@ -1,15 +1,11 @@
 .choice {
-  @apply w-full h-full flex flex-col items-center justify-center text-[1rem] gap-6;
+  @apply w-full h-full flex flex-col items-center justify-center text-base gap-2;
 
   .choiceDiv {
     @apply w-full flex justify-center flex-col items-center;
 
     .variant {
-      @apply border border-text transition-colors hover:bg-text hover:text-bg px-5 py-2 w-[90%] flex justify-center rounded-xl;
-
-      &:hover {
-        @apply cursor-pointer;
-      }
+      @apply border-none transition-colors hover:bg-text hover:text-bg pl-5 py-4 flex justify-center cursor-pointer w-full;
     }
   }
 }
