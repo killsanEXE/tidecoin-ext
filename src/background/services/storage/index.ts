@@ -5,6 +5,7 @@ import { DecryptedSecrets, StorageInterface } from "./types";
 import { IAppStateBase, IWalletStateBase } from "@/shared/interfaces";
 import { emptyAppState, emptyWalletState } from "./utils";
 import { keyringService, storageService } from "..";
+import { excludeKeysFromObj } from "@/shared/utils";
 
 class StorageService {
   private _walletState: IWalletStateBase;
@@ -57,12 +58,14 @@ class StorageService {
 
   async updateAppState(state: Partial<IAppStateBase>) {
     this._appState = { ...this._appState, ...state };
-    if (state.addressBook !== undefined) {
+    if (state.addressBook !== undefined || state.pendingWallet !== undefined) {
       const localState = await this.getLocalValues();
       const cache: StorageInterface["cache"] = {
         ...localState.cache,
-        addressBook: state.addressBook,
       };
+
+      if (state.addressBook !== undefined) cache.addressBook = state.addressBook;
+      if (state.pendingWallet !== undefined) cache.pendingWallet = state.pendingWallet;
 
       const payload: StorageInterface = {
         cache: cache,
@@ -71,6 +74,20 @@ class StorageService {
 
       await browserStorageLocalSet(payload);
     }
+  }
+
+  async clearPendingWallet() {
+    const localState = await this.getLocalValues();
+    const newCache: StorageInterface = {
+      cache: excludeKeysFromObj(localState.cache, ["pendingWallet"]),
+      enc: localState.enc,
+    };
+    await browserStorageLocalSet(newCache);
+  }
+
+  async getPengingWallet() {
+    const localState = await this.getLocalValues();
+    return localState.cache.pendingWallet;
   }
 
   async saveWallets(password: string, wallets: IWallet[], payload?: DecryptedSecrets, newPassword?: string) {

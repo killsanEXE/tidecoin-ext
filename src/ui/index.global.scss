@@ -41,6 +41,10 @@ input[type="number"] {
 
 .btn {
   @apply flex gap-1 items-center justify-center px-2 py-2 text-[1.1rem] mx-auto w-[90%] rounded-xl font-medium cursor-pointer hover:shadow-sm;
+
+  &:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
 }
 
 .primary {

@@ -1,44 +1,67 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import s from "./styles.module.scss";
 import { useWalletState } from "@/ui/states/walletState";
 import ReactLoading from "react-loading";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useControllersState } from "@/ui/states/controllerState";
 import { useCreateNewWallet } from "@/ui/hooks/wallet";
 import cn from "classnames";
 import SwitchAddressType from "@/ui/components/switch-address-type";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
+import { useAppState } from "@/ui/states/appState";
+import CopyBtn from "@/ui/components/copy-btn";
 
 const NewMnemonic = () => {
+  const location = useLocation();
+
   const [step, setStep] = useState(1);
   const [savedPhrase, setSavedPhrase] = useState(false);
   const { updateWalletState } = useWalletState((v) => ({
     updateWalletState: v.updateWalletState,
   }));
-  const { walletController } = useControllersState((v) => ({
+  const { updateAppState } = useAppState((v) => ({ updateAppState: v.updateAppState }));
+  const { walletController, stateController } = useControllersState((v) => ({
     walletController: v.walletController,
+    stateController: v.stateController,
   }));
   const [mnemonicPhrase, setMnemonicPhrase] = useState<string | undefined>(undefined);
   const [addressType, setAddressType] = useState<AddressType>(AddressType.P2WPKH);
 
   const createNewWallet = useCreateNewWallet();
 
+  const init = useCallback(async () => {
+    if (location.state?.pending) {
+      return setMnemonicPhrase(location.state.pending);
+    }
+
+    const phrase = await walletController.generateMnemonicPhrase();
+    updateAppState({
+      pendingWallet: phrase,
+    });
+    setMnemonicPhrase(phrase);
+  }, [walletController.generateMnemonicPhrase, setMnemonicPhrase, stateController.getPendingWallet, updateAppState]);
+
   useEffect(() => {
-    const setPhrase = async () => {
-      setMnemonicPhrase(await walletController.generateMnemonicPhrase());
-    };
     if (mnemonicPhrase) return;
-    setPhrase();
-  }, [mnemonicPhrase, setMnemonicPhrase, walletController]);
+    init();
+  }, [mnemonicPhrase, init]);
 
   const navigate = useNavigate();
+
+  const onCreate = async () => {
+    await createNewWallet(mnemonicPhrase!, "root", addressType);
+    await updateWalletState({ vaultIsEmpty: false });
+    await walletController.saveWallets();
+    await stateController.clearPendingWallet();
+    navigate("/home");
+  };
 
   return (
     <div className={s.newMnemonic}>
       <div className={s.stepTitle}>
-        <p className={step === 1 ? s.active : ""}>Step 1</p>
-        <p className={step === 2 ? s.active : ""}>Step 2</p>
+        <p className={cn({ [s.active]: step === 1 })}>Step 1</p>
+        <p className={cn({ [s.active]: step === 2 })}>Step 2</p>
       </div>
       {step === 1 ? (
         <div className={cn(s.stepOneWrapper, s.step)}>
@@ -58,6 +81,7 @@ const NewMnemonic = () => {
                 </div>
               </div>
               <div className={s.savePhraseWrapper}>
+                <CopyBtn label="Copy" value={mnemonicPhrase} className="mx-auto flex items-center gap-1" />
                 <div className={s.savePhrase}>
                   <label className="cursor-pointer" htmlFor="save-phrases">
                     I saved this phrase
@@ -66,22 +90,14 @@ const NewMnemonic = () => {
                     id="save-phrases"
                     type="checkbox"
                     onChange={() => {
-                      setSavedPhrase(!savedPhrase);
+                      setSavedPhrase((prev) => !prev);
                     }}
                   />
                 </div>
               </div>
               <div className={s.continueWrapper}>
-                <button
-                  className={cn(s.continue, "btn", "primary")}
-                  onClick={async () => {
-                    if (!savedPhrase) {
-                      await navigator.clipboard.writeText(mnemonicPhrase);
-                      toast.success("Copied");
-                    } else setStep(2);
-                  }}
-                >
-                  {savedPhrase ? "Continue" : "Copy to Clipboard"}
+                <button className="btn primary" onClick={() => setStep(2)} disabled={!savedPhrase}>
+                  Continue
                 </button>
               </div>
             </div>
@@ -96,15 +112,7 @@ const NewMnemonic = () => {
             selectedType={addressType}
           />
           <div className={s.continueWrapper}>
-            <button
-              onClick={async () => {
-                await createNewWallet(mnemonicPhrase!, "root", addressType);
-                await updateWalletState({ vaultIsEmpty: false });
-                await walletController.saveWallets();
-                navigate("/home");
-              }}
-              className={cn(s.continue, "btn", "primary")}
-            >
+            <button onClick={onCreate} className={cn(s.continue, "btn", "primary")}>
               Continue
             </button>
           </div>

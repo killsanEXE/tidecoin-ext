@@ -3,7 +3,7 @@ import type { IAccount, IWallet, IWalletController } from "@/shared/interfaces";
 import { HDPrivateKey, SimpleKey } from "test-test-test-hd-wallet";
 import Mnemonic from "test-test-test-hd-wallet/src/hd/mnemonic";
 import keyringService from "@/background/services/keyring";
-import { extractKeysFromObj } from "@/shared/utils";
+import { excludeKeysFromObj } from "@/shared/utils";
 import { DecryptedSecrets } from "../services/storage/types";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 
@@ -48,7 +48,7 @@ class WalletController implements IWalletController {
 
   async importWallets(password: string) {
     const wallets = await keyringService.init(password);
-    return wallets.map((i) => extractKeysFromObj(i, ["data"]));
+    return wallets.map((i) => excludeKeysFromObj(i, ["data"]));
   }
 
   async loadAccountsData(walletId: number, accounts: IAccount[]): Promise<IAccount[]> {

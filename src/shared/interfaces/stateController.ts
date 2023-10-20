@@ -6,4 +6,6 @@ export interface IStateController {
   getAppState(): Promise<IAppStateBase>;
   getWalletState(): Promise<IWalletStateBase>;
   getWalletPhrase(index: number, password: string): Promise<string>;
+  clearPendingWallet(): Promise<void>;
+  getPendingWallet(): Promise<string | undefined>;
 }

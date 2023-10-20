@@ -4,8 +4,12 @@ import cn from "classnames";
 import { ChevronLeftIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { useMemo } from "react";
 import { useWalletState } from "@/ui/states/walletState";
+import { useControllersState } from "@/ui/states/controllerState";
 
 export default function PagesLayout() {
+  const { stateController } = useControllersState((v) => ({
+    stateController: v.stateController,
+  }));
   const routeTitles = [
     {
       route: "/pages/switch-account",
@@ -47,6 +51,12 @@ export default function PagesLayout() {
     {
       route: "/pages/new-mnemonic",
       title: "Create New Wallet",
+      backAction: async () => {
+        if (await stateController.getPendingWallet()) {
+          await stateController.clearPendingWallet();
+        }
+        navigate(-1);
+      },
     },
     {
       route: "/pages/restore-mnemonic",

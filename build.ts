@@ -19,9 +19,7 @@ const chromeManifestPath = "./configs/manifests/chrome.json";
 const firefoxManifestPath = "./configs/manifests/firefox.json";
 
 const baseManifest = await readJsonFile(baseManifestPath);
-const extraManifest = await readJsonFile(
-  chrome ? chromeManifestPath : firefoxManifestPath
-);
+const extraManifest = await readJsonFile(chrome ? chromeManifestPath : firefoxManifestPath);
 
 function mergeManifests(): Plugin {
   return {
@@ -33,9 +31,7 @@ function mergeManifests(): Plugin {
       };
       build.onEnd(() => {
         const path = build.initialOptions.outdir + "/manifest.json";
-        Bun.write(path, JSON.stringify(content, undefined, 2)).catch((err) =>
-          console.error(err)
-        );
+        Bun.write(path, JSON.stringify(content, undefined, 2)).catch((err) => console.error(err));
       });
     },
   };
@@ -51,7 +47,7 @@ const buildOptions: BuildOptions = {
     ui: "src/ui/index.tsx",
   },
   outdir: chrome ? "dist/chrome" : "dist/firefox",
-  minify: true,
+  minify: false,
   bundle: true,
   logLevel: "info",
   plugins: [

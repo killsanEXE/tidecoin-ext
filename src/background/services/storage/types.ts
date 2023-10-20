@@ -21,5 +21,6 @@ export interface StorageInterface {
     addressBook: string[];
     selectedWallet?: number;
     selectedAccount?: number;
+    pendingWallet?: string;
   };
 }

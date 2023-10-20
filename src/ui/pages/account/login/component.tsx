@@ -30,7 +30,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { walletController, notificationController } = useControllersState((v) => ({
     walletController: v.walletController,
-    notificationController: v.notificationController
+    notificationController: v.notificationController,
   }));
   const syncStorages = useSyncStorages();
 
@@ -55,8 +55,8 @@ const Login = () => {
         password: password,
       });
 
-      if (!isNotification()) navigate("/home")
-      else await notificationController.resolveApproval()
+      if (!isNotification()) navigate("/home");
+      else await notificationController.resolveApproval();
     } catch (e) {
       toast.error(e.message);
     }

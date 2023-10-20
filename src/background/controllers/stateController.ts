@@ -11,6 +11,14 @@ class StateController implements IStateController {
     await storageService.updateWalletState(state);
   }
 
+  async clearPendingWallet(): Promise<void> {
+    await storageService.clearPendingWallet();
+  }
+
+  async getPendingWallet(): Promise<string | undefined> {
+    return await storageService.getPengingWallet();
+  }
+
   async getWalletPhrase(index: number, password: string): Promise<string> {
     return await storageService.getWalletPhrase(index, password);
   }

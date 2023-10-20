@@ -82,9 +82,9 @@ const SwitchWallet = () => {
         ))}
       </div>
       <Modal onClose={() => setDeleteWalletId(undefined)} open={deleteWalletId !== undefined} title={"Confirmation"}>
-        <div className="text-base text-text py-7 px-4">
-          <div>Are you sure you want to delete?</div>
-          <span className="text-teal-200 block text-center mt-4">
+        <div className="text-base text-text py-5 px-4 flex flex-col items-center">
+          <div className="text-center text-sm">Are you sure you want to delete?</div>
+          <span className="text-teal-200 block text-center mt-5">
             {deleteWalletId !== undefined ? wallets[deleteWalletId].name : ""}
           </span>
         </div>

@@ -46,7 +46,7 @@ export const fetchTDCMainnet = async <T>({ path, json = true, ...props }: fetchP
   return await res.json();
 };
 
-export const extractKeysFromObj = <T extends Record<string, any>, K extends keyof T>(
+export const excludeKeysFromObj = <T extends Record<string, any>, K extends keyof T>(
   obj: T,
   keysToExtract: K[]
 ): Omit<T, K> => {

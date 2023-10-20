@@ -1,16 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import s from "./styles.module.scss";
-import { useCallback, useEffect, useState } from "react";
-import { IAccount } from "@/shared/interfaces";
+import { useCallback } from "react";
 import { useGetCurrentWallet } from "@/ui/states/walletState";
 import Rename from "@/ui/components/rename";
 import { useUpdateCurrentWallet } from "@/ui/hooks/wallet";
 import { useControllersState } from "@/ui/states/controllerState";
-import ReactLoading from "react-loading";
 
 const RenameAccount = () => {
   const { accId } = useParams();
-  const [account, setAccount] = useState<IAccount | undefined>(undefined);
   const currentWallet = useGetCurrentWallet();
   const updateCurrentWallet = useUpdateCurrentWallet();
   const { walletController } = useControllersState((v) => ({
@@ -20,35 +17,27 @@ const RenameAccount = () => {
 
   const renameAccount = useCallback(
     async (renamedName: string) => {
-      const accIndex = currentWallet?.accounts.indexOf(account!);
-      const wallet = currentWallet;
-      wallet!.accounts[accIndex!].name = renamedName;
-      await updateCurrentWallet({ ...wallet });
+      currentWallet.accounts[accId].name = renamedName;
+      await updateCurrentWallet(currentWallet);
       await walletController.saveWallets();
-      navigate(-1);
+      navigate("/home");
     },
     [currentWallet, updateCurrentWallet, walletController, navigate]
   );
 
-  useEffect(() => {
-    if (!account) {
-      setAccount(currentWallet?.accounts.find((f) => f.id === Number(accId)));
-    }
-  }, [setAccount, currentWallet, accId]);
-
-  return (
-    <div className={s.renameAccount}>
-      {account ? (
+  if (Number(accId) >= 0) {
+    return (
+      <div className={s.renameAccount}>
         <Rename
           handler={renameAccount}
-          oldName={account.name}
+          oldName={currentWallet.accounts[accId].name}
           otherNames={currentWallet?.accounts.map((f) => f.name!)}
         />
-      ) : (
-        <ReactLoading type="spin" color="#ffbc42" />
-      )}
-    </div>
-  );
+      </div>
+    );
+  }
+
+  return <div>Error</div>;
 };
 
 export default RenameAccount;

@@ -1,4 +1,4 @@
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 import { ListBulletIcon, Cog6ToothIcon, ChevronDownIcon, CheckIcon } from "@heroicons/react/24/outline";
 import s from "./styles.module.scss";
@@ -17,6 +17,7 @@ import { getTransactionValue, isIncomeTx } from "@/ui/utils/transactions";
 import { Circle } from "rc-progress";
 
 const Wallet = () => {
+  const navigate = useNavigate();
   const [lastBlock, setLastBlock] = useState<number>(0);
   const currentWallet = useGetCurrentWallet();
   if (currentWallet === undefined) return <Navigate to={"/pages/create-new-wallet"} />;
@@ -41,8 +42,9 @@ const Wallet = () => {
   const callUpdateTransactions = useDebounceCall(udpateTransactions, 200);
   const callUpdateLastBlock = useDebounceCall(updateLastBlock, 200);
 
-  const { apiController } = useControllersState((v) => ({
+  const { apiController, stateController } = useControllersState((v) => ({
     apiController: v.apiController,
+    stateController: v.stateController,
   }));
 
   useEffect(() => {
@@ -69,6 +71,19 @@ const Wallet = () => {
       clearInterval(interval);
     };
   }, [updateAccountBalance, currentAccount, currentWallet, callUpdateTransactions]);
+
+  useEffect(() => {
+    (async () => {
+      const pending = await stateController.getPendingWallet();
+      if (pending) {
+        navigate("/pages/new-mnemonic", {
+          state: {
+            pending,
+          },
+        });
+      }
+    })();
+  }, [stateController]);
 
   return (
     <div className={s.walletDiv}>
