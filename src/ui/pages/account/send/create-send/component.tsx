@@ -1,6 +1,6 @@
 import { useCreateTidecoinTxCallback } from "@/ui/hooks/transactions";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState, MouseEvent } from "react";
 import s from "./styles.module.scss";
 import cn from "classnames";
 import toast from "react-hot-toast";
@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAppState } from "@/ui/states/appState";
 import { Combobox, Transition } from "@headlessui/react";
 import FeeInput from "./fee-input";
+import { BookOpenIcon } from "@heroicons/react/24/solid";
 
 interface FormType {
   address: string;
@@ -32,32 +33,15 @@ const CreateSend = () => {
   const { addressBook } = useAppState((v) => ({ addressBook: v.addressBook }));
 
   const send = async ({ address, amount, feeAmount, includeFeeInAmount }: FormType) => {
-    // if (amount < 0.01) {
-    //   toast.error("Minimum amount is 0.01 TDC");
-    // } else if (address.trim().length <= 0) {
-    //   toast.error("Insert the addresss of receiver")
-    // } else if (amount > (currentAccount?.balance ?? 0) ||
-    //   (amount === currentAccount?.balance && !includeFeeInAmount)) {
-    //   toast.error("There's not enough money in your account");
-    // } else if (feeAmount <= 1 / 10 ** 8) {
-    //   toast.error("Increase the fee");
-    // } else {
-    //   try {
-    //     const hex = await sendTdc(address, amount * 10 ** 8, feeAmount, includeFeeInAmount);
-    //     navigate("/pages/confirm-send", {
-    //       state: {
-    //         toAddresss: address,
-    //         amount,
-    //         feeAmount,
-    //         includeFeeInAmount,
-    //         fromAddresss: currentAccount?.addresss ?? "",
-    //         hex
-    //       }
-    //     })
-    //   } catch (e) {
-    //     toast.error("Error has occurred");
-    //   }
-    // }
+    if (Number(amount) < 0.01) {
+      return toast.error("Minimum amount is 0.01 TDC");
+    } else if (address.trim().length <= 0) {
+      return toast.error("Insert the addresss of receiver");
+    } else if (Number(amount) > (currentAccount?.balance ?? 0)) {
+      return toast.error("There's not enough money in your account");
+    } else if (feeAmount <= 1 / 10 ** 8) {
+      return toast.error("Increase the fee");
+    }
     try {
       const hex = await createTx(address, Number(amount) * 10 ** 8, feeAmount, includeFeeInAmount);
       navigate("/pages/confirm-send", {
@@ -95,6 +79,10 @@ const CreateSend = () => {
           return address.toLowerCase().startsWith(query.toLowerCase());
         });
 
+  const onOpenAddressBook = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <form
       className={cn("form", s.send)}
@@ -106,42 +94,47 @@ const CreateSend = () => {
       <div className={s.inputs}>
         <div className="form-field">
           <span className="input-span">Address</span>
-          <Combobox
-            value={formData.address}
-            onChange={(e) => {
-              setFormData((prev) => ({ ...prev, address: e }));
-            }}
-          >
-            <Combobox.Input
-              displayValue={(address: string) => address}
-              autoComplete="off"
-              className="input"
+          <div className="flex gap-2">
+            <Combobox
               value={formData.address}
-              onChange={(v) => {
-                setFormData((prev) => ({ ...prev, address: v.target.value }));
-                setQuery(v.target.value);
+              onChange={(e) => {
+                setFormData((prev) => ({ ...prev, address: e }));
               }}
-            />
-            {filteredAddresses.length <= 0 ? (
-              ""
-            ) : (
-              <Transition
-                as={Fragment}
-                leave="transition ease-in duration-100"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-                afterLeave={() => {}}
-              >
-                <Combobox.Options className={s.addressbookoptions}>
-                  {filteredAddresses.map((address) => (
-                    <Combobox.Option className={s.addressbookoption} key={address} value={address}>
-                      {address}
-                    </Combobox.Option>
-                  ))}
-                </Combobox.Options>
-              </Transition>
-            )}
-          </Combobox>
+            >
+              <Combobox.Input
+                displayValue={(address: string) => address}
+                autoComplete="off"
+                className="input w-full"
+                value={formData.address}
+                onChange={(v) => {
+                  setFormData((prev) => ({ ...prev, address: v.target.value }));
+                  setQuery(v.target.value);
+                }}
+              />
+              {filteredAddresses.length <= 0 ? (
+                ""
+              ) : (
+                <Transition
+                  as={Fragment}
+                  leave="transition ease-in duration-100"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                  afterLeave={() => {}}
+                >
+                  <Combobox.Options className={s.addressbookoptions}>
+                    {filteredAddresses.map((address) => (
+                      <Combobox.Option className={s.addressbookoption} key={address} value={address}>
+                        {address}
+                      </Combobox.Option>
+                    ))}
+                  </Combobox.Options>
+                </Transition>
+              )}
+            </Combobox>
+            <button className="bg-input-bg px-2 rounded-xl" title="Address book" onClick={onOpenAddressBook}>
+              <BookOpenIcon className="w-5 h-5" />
+            </button>
+          </div>
         </div>
         <div className="form-field">
           <span className="input-span">Amount</span>

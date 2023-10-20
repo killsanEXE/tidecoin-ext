@@ -77,6 +77,7 @@ class StorageService {
   }
 
   async clearPendingWallet() {
+    this._appState = excludeKeysFromObj(this._appState, ["pendingWallet"]);
     const localState = await this.getLocalValues();
     const newCache: StorageInterface = {
       cache: excludeKeysFromObj(localState.cache, ["pendingWallet"]),

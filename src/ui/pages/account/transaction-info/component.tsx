@@ -45,7 +45,7 @@ const TransactionInfo = () => {
           </div>
 
           <div className={s.summary} onClick={() => setOpenModal(true)}>
-            <LinkIcon className="w-4 h-4" /> Detailed info
+            <LinkIcon className="w-4 h-4" /> Details
           </div>
 
           <button
@@ -59,7 +59,7 @@ const TransactionInfo = () => {
           >
             Open in explorer
           </button>
-          <Modal onClose={() => setOpenModal(false)} open={openModal} title="Detailed info">
+          <Modal onClose={() => setOpenModal(false)} open={openModal} title="Detais">
             <div className={s.tableContainer}>
               <TableItem
                 label="Inputs"

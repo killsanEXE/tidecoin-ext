@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import s from "./styles.module.scss";
 import { useWalletState } from "@/ui/states/walletState";
 import ReactLoading from "react-loading";
-import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useControllersState } from "@/ui/states/controllerState";
 import { useCreateNewWallet } from "@/ui/hooks/wallet";
@@ -36,7 +35,7 @@ const NewMnemonic = () => {
     }
 
     const phrase = await walletController.generateMnemonicPhrase();
-    updateAppState({
+    await updateAppState({
       pendingWallet: phrase,
     });
     setMnemonicPhrase(phrase);

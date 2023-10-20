@@ -39,6 +39,14 @@ export default function App() {
     const keyringController = setupKeyringProxy();
     const notificationController = setupNotificationProxy();
 
+    updateControllers({
+      walletController,
+      apiController,
+      stateController,
+      keyringController,
+      notificationController,
+    });
+
     const appState = await stateController.getAppState();
     const walletState = await stateController.getWalletState();
 
@@ -55,13 +63,6 @@ export default function App() {
         ...excludeKeysFromObj(appState, ["isReady", "isUnlocked", "password", "vault"]),
       });
     }
-    updateControllers({
-      walletController,
-      apiController,
-      stateController,
-      keyringController,
-      notificationController,
-    });
   }, [updateWalletState, updateAppState, updateControllers]);
 
   useEffect(() => {
