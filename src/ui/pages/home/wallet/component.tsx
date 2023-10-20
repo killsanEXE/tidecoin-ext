@@ -20,6 +20,7 @@ const Wallet = () => {
   const navigate = useNavigate();
   const [lastBlock, setLastBlock] = useState<number>(0);
   const currentWallet = useGetCurrentWallet();
+
   if (currentWallet === undefined) return <Navigate to={"/pages/create-new-wallet"} />;
 
   const currentAccount = useGetCurrentAccount();
