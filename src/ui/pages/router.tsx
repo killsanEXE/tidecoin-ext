@@ -70,7 +70,7 @@ export const authenticatedRouter = createHashRouter([
     children: [
       { path: "connect", element: <Connect /> },
       { path: "sign", element: <Sign /> },
-    ]
+    ],
   },
   { path: "*", element: <Navigate to={"/home"} /> },
 ]);

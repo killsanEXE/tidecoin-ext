@@ -1,4 +1,4 @@
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 import { ListBulletIcon, Cog6ToothIcon, ChevronDownIcon, CheckIcon } from "@heroicons/react/24/outline";
 import s from "./styles.module.scss";
@@ -22,7 +22,6 @@ const Wallet = () => {
   if (currentWallet === undefined) return <Navigate to={"/pages/create-new-wallet"} />;
 
   const currentAccount = useGetCurrentAccount();
-  const navigate = useNavigate();
 
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
   const [currentPrice, setCurrentPrice] = useState<number | undefined>();
@@ -74,12 +73,7 @@ const Wallet = () => {
   return (
     <div className={s.walletDiv}>
       <div className="flex justify-between mx-6 mt-2 items-center">
-        <div
-          className="flex gap-3 items-center select-none cursor-pointer"
-          onClick={() => {
-            navigate("/pages/switch-wallet");
-          }}
-        >
+        <Link className="flex gap-3 items-center select-none cursor-pointer" to={"/pages/switch-wallet"}>
           <div className="bg-gradient-to-r from-indigo-500 to-indigo-950 rounded-full w-6 h-6 flex items-center justify-center">
             {currentWallet.name ? currentWallet.name.split(/.*?/u)[0].toUpperCase() : "W"}
           </div>
@@ -87,11 +81,11 @@ const Wallet = () => {
             <div className={s.change}>{currentWallet?.name ?? "wallet"} </div>
             <ChevronDownIcon className="w-3 h-3" />
           </div>
-        </div>
+        </Link>
 
-        <div onClick={() => navigate("/pages/settings")} className="cursor-pointer">
+        <Link to={"/pages/settings"} className="cursor-pointer">
           <Cog6ToothIcon className="w-6 h-6 hover:rotate-90 transition-transform" />
-        </div>
+        </Link>
       </div>
 
       <div className={s.accPanel}>
@@ -116,11 +110,9 @@ const Wallet = () => {
         </div>
         <div className="flex gap-3 items-center px-6">
           {currentWallet?.type === "root" && (
-            <ListBulletIcon
-              title="Switch account"
-              onClick={() => navigate("/pages/switch-account")}
-              className={s.accountsIcon}
-            />
+            <Link to={"/pages/switch-account"}>
+              <ListBulletIcon title="Switch account" className={s.accountsIcon} />
+            </Link>
           )}
           <CopyBtn
             title={currentAccount?.address}
@@ -131,22 +123,12 @@ const Wallet = () => {
         </div>
 
         <div className={cn(s.receiveSendBtns, s.center)}>
-          <button
-            onClick={() => {
-              navigate("/pages/receive");
-            }}
-            className={cn(s.btn, s.center, "w-36")}
-          >
+          <Link to={"/pages/receive"} className={cn(s.btn, s.center, "w-36")}>
             Receive
-          </button>
-          <button
-            onClick={() => {
-              navigate("/pages/create-send");
-            }}
-            className={cn(s.btn, s.center, "w-36")}
-          >
+          </Link>
+          <Link to={"/pages/create-send"} className={cn(s.btn, s.center, "w-36")}>
             Send
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -154,16 +136,13 @@ const Wallet = () => {
       {transactions.length > 0 ? (
         <div className={s.transactionsDiv}>
           {transactions.map((t, index) => (
-            <div
+            <Link
               className={s.transaction}
               key={index}
-              onClick={() => {
-                navigate(`/pages/transaction-info/${t.txid}`, {
-                  state: {
-                    transaction: t,
-                    lastBlock,
-                  },
-                });
+              to={`/pages/transaction-info/${t.txid}`}
+              state={{
+                transaction: t,
+                lastBlock,
               }}
             >
               <div className="flex gap-3 items-center">
@@ -196,7 +175,7 @@ const Wallet = () => {
                 {isIncomeTx(t, currentAccount.address) ? "+ " : "- "}
                 {getTransactionValue(t, currentAccount.address)} TDC
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       ) : (

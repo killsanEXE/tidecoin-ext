@@ -1,40 +1,17 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import s from "./styles.module.scss";
 
 const NewWallet = () => {
-  const navigate = useNavigate();
-
   return (
     <div className={s.choice}>
       <div className={s.choiceDiv}>
-        <div
-          className={s.variant}
-          onClick={() => {
-            navigate("/pages/new-mnemonic");
-          }}
-        >
-          Create with mnemonic (12 words)
-        </div>
+        <Link to="/pages/new-mnemonic">Create with mnemonic (12 words)</Link>
       </div>
       <div className={s.choiceDiv}>
-        <div
-          className={s.variant}
-          onClick={() => {
-            navigate("/pages/restore-mnemonic");
-          }}
-        >
-          Restore with mnemonic
-        </div>
+        <Link to="/pages/restore-mnemonic">Restore with mnemonic</Link>
       </div>
       <div className={s.choiceDiv}>
-        <div
-          className={s.variant}
-          onClick={() => {
-            navigate("/pages/restore-priv-key");
-          }}
-        >
-          Restore with private key
-        </div>
+        <Link to="/pages/restore-priv-key">Restore with private key</Link>
       </div>
     </div>
   );

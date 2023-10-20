@@ -1,4 +1,4 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import s from "./styles.module.scss";
 import cn from "classnames";
 import { ChevronLeftIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
@@ -12,9 +12,7 @@ export default function PagesLayout() {
       title: "Switch Account",
       action: {
         icon: <PlusCircleIcon className="w-8 h-8" />,
-        cb: () => {
-          navigate("/pages/create-new-account");
-        },
+        link: "/pages/create-new-account",
       },
     },
     {
@@ -38,9 +36,7 @@ export default function PagesLayout() {
       title: "Switch Wallet",
       action: {
         icon: <PlusCircleIcon className="w-8 h-8" />,
-        cb: () => {
-          navigate("/pages/create-new-wallet");
-        },
+        link: "/pages/create-new-wallet",
       },
     },
     {
@@ -143,9 +139,9 @@ export default function PagesLayout() {
           <div className={cn(s.controlElem, s.title)}>{currentRouteTitle?.title}</div>
 
           {currentRouteTitle?.action && (
-            <div className={cn(s.controlElem, s.addNew)} onClick={currentRouteTitle!.action!.cb}>
+            <Link className={cn(s.controlElem, s.addNew)} to={currentRouteTitle.action.link}>
               {currentRouteTitle.action.icon}
-            </div>
+            </Link>
           )}
         </div>
       }

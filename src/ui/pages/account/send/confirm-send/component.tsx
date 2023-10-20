@@ -5,6 +5,7 @@ import { useState } from "react";
 import ReactLoading from "react-loading";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useUpdateAddressBook } from "@/ui/hooks/app";
+import toast from "react-hot-toast";
 
 const ConfirmSend = () => {
   const location = useLocation();
@@ -19,6 +20,7 @@ const ConfirmSend = () => {
     try {
       navigate(`/pages/finalle-send/${(await pushTx(location.state.hex))?.txid ?? ""}`);
     } catch (e) {
+      toast.error(e);
       console.error(e);
     }
   };
