@@ -12,11 +12,10 @@ export const useUpdateAddressBook = () => {
   }));
 
   return useCallback(async (address?: string) => {
-    const addresses = [...addressBook];
-    if (addresses.length >= 6) addresses.splice(5, 1);
-    if (addresses.includes(address.trim())) return;
-    addresses.unshift(address ?? "");
-    await updateAppState({ addressBook: addresses });
+    if (addressBook.length >= 6) addressBook.splice(5, 1);
+    if (addressBook.includes(address.trim())) return;
+    addressBook.unshift(address.trim() ?? "");
+    await updateAppState({ addressBook: addressBook });
     await walletController.saveWallets();
   }, []);
 };

@@ -23,12 +23,10 @@
 }
 
 .addressbookoptions {
-  @apply w-full bg-input-bg flex flex-col gap-[.5rem] rounded-[.3rem] justify-center items-center py-[.4rem] max-w-[319px] absolute mt-[4rem] z-10 select-none shadow-lg;
+  @apply absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-input-bg py-1 text-sm outline-none;
 
   .addressbookoption {
-    &:hover {
-      @apply cursor-pointer;
-    }
+    @apply cursor-pointer pl-2;
   }
 }
 

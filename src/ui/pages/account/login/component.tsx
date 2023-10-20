@@ -64,7 +64,7 @@ const Login = () => {
 
   return (
     <form className={s.form} onSubmit={handleSubmit(login)}>
-      <p className={s.formTitle}>Enter your password</p>
+      <p className={s.formTitle}>Password</p>
       <input type="password" className="input" {...register("password")} />
       <button className="btn primary" type="submit">
         Login

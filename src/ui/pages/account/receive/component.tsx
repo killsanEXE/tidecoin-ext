@@ -9,7 +9,7 @@ const qrCode = new QRCode({
   width: 250,
   height: 250,
   type: "canvas",
-  image: "https://svgshare.com/i/ybo.svg",
+  image: "/qr.svg",
   dotsOptions: {
     color: "#FDFDFD",
     type: "extra-rounded",

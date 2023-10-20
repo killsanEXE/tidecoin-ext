@@ -84,7 +84,7 @@ const RestoreMnemonic = () => {
                   await updateWalletState({ vaultIsEmpty: false });
                   navigate("/home");
                 } catch (e) {
-                  toast.error("Words you entered is invalid");
+                  toast.error("Words are invalid");
                   setStep(1);
                 }
               }}

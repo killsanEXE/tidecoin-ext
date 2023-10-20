@@ -31,7 +31,7 @@ const RestorePrivKey = () => {
 
   return (
     <form className="form" onSubmit={handleSubmit(recoverWallet)}>
-      <PasswordInput label="Enter your private key" register={register} name="privKey" />
+      <PasswordInput label="Private key" register={register} name="privKey" />
       <button className="btn primary" type="submit">
         Recover
       </button>

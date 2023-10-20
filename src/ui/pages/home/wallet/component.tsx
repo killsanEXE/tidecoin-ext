@@ -163,9 +163,9 @@ const Wallet = () => {
               <div className="flex gap-3 items-center">
                 <div
                   className={cn("rounded-full w-6 h-6 text-bg flex items-center justify-center relative", {
-                    "bg-gradient-to-r from-emerald-300 to-emerald-600":
+                    "bg-gradient-to-r from-green-400 to-emerald-600":
                       getPercent(lastBlock, t.status.block_height) === 100,
-                    "bg-gray-400": getPercent(lastBlock, t.status.block_height) < 100,
+                    "bg-gradient-to-r from-gray-200 to-gray-500": getPercent(lastBlock, t.status.block_height) < 100,
                   })}
                 >
                   <Circle
@@ -209,9 +209,9 @@ const getPercent = (lastBlock: number, currentBlock?: number) => {
 };
 
 const getConfirmationsCount = (lastBlock: number, currentBlock?: number) => {
-  if (!currentBlock) return <div className="p-0.5 flex items-center justify-center">0</div>;
+  if (!currentBlock) return <div className="p-0.5 flex items-center justify-center leading-[159%]">0</div>;
   if (lastBlock - currentBlock < 6) {
-    return <div className="p-0.5 flex items-center justify-center">{lastBlock - currentBlock}</div>;
+    return <div className="p-0.5 flex items-center justify-center leading-[159%]">{lastBlock - currentBlock}</div>;
   }
   return <CheckIcon className="w-6 h-6 p-0.5" />;
 };

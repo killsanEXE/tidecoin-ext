@@ -27,7 +27,7 @@ const CheckPassword: FC<Props> = ({ handler }) => {
   return (
     <form className={s.form} onSubmit={handleSubmit(checkPassword)}>
       <label htmlFor={pwdId} className={s.formTitle}>
-        Enter your password
+        Password
       </label>
       <input id={pwdId} type="password" className="input" {...register("password")} />
       <button className="btn primary" type="submit">

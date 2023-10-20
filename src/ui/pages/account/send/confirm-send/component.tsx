@@ -4,7 +4,6 @@ import cn from "classnames";
 import { useState } from "react";
 import ReactLoading from "react-loading";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useUpdateAddressBook } from "@/ui/hooks/app";
 import toast from "react-hot-toast";
 
 const ConfirmSend = () => {
@@ -12,11 +11,9 @@ const ConfirmSend = () => {
   const pushTx = usePushTidecoinTxCallback();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const updateAddressBook = useUpdateAddressBook();
 
   const confirmSend = async () => {
     setLoading(true);
-    await updateAddressBook(location.state.toAddress);
     try {
       navigate(`/pages/finalle-send/${(await pushTx(location.state.hex))?.txid ?? ""}`);
     } catch (e) {
