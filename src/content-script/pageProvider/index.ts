@@ -238,15 +238,14 @@ export class TidecoinProvider extends EventEmitter {
   //   });
   // };
 
-  // signMessage = async (text: string, type: string) => {
-  //   return this._request({
-  //     method: "signMessage",
-  //     params: {
-  //       text,
-  //       type,
-  //     },
-  //   });
-  // };
+  signMessage = async (text: string) => {
+    return this._request({
+      method: "signMessage",
+      params: {
+        text,
+      },
+    });
+  };
 
   // sendBitcoin = async (toAddress: string, satoshis: number, options?: { feeRate: number }) => {
   //   return this._request({

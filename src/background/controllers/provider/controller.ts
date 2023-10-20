@@ -1,5 +1,5 @@
 import { Psbt } from "tidecoinjs-lib";
-import { sessionService, storageService } from "../../services";
+import { keyringService, sessionService, storageService } from "../../services";
 import "reflect-metadata";
 import { AccountBalanceResponse } from "@/shared/interfaces/apiController";
 import { fetchTDCMainnet } from "@/shared/utils";
@@ -134,6 +134,16 @@ class ProviderController {
     const _account = storageService.currentWallet.accounts[0];
     const account = _account ? _account.address : "";
     return account;
+  }
+
+  @Reflect.metadata("APPROVAL", ["SignText", (req) => {
+    // console.log(req);
+  }])
+  signMessage = async ({ data: { params: { text } } }) => {
+    const account = storageService.currentAccount;
+    if (!account || !account.address) return;
+    const message = keyringService.signMessage({ from: account.address, data: text })
+    return message;
   }
 
   //   @Reflect.metadata('APPROVAL', ['SignPsbt', (req) => {

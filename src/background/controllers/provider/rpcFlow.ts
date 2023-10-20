@@ -90,12 +90,12 @@ const flowContext = flow
           },
           origin,
         },
-        { height: windowHeight }
+        { height: windowHeight, route: "/provider/sign" }
       );
       // if (isSignApproval(approvalType)) {
-      // permissionService.updateConnectSite(origin, { isSigned: true }, true);
+      //   permissionService.updateConnectSite(origin, { isSigned: true }, true);
       // } else {
-      // permissionService.touchConnectedSite(origin);
+      //   permissionService.touchConnectedSite(origin);
       // }
     }
     return next();
