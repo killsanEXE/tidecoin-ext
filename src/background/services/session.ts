@@ -62,15 +62,15 @@ class SessionMap {
       sessions = sessions.filter((session) => session.origin === origin);
     }
 
-    // sessions.forEach((session) => {
-    //   try {
-    //     session.pushMessage(ev, data);
-    //   } catch (e) {
-    //     if (this.sessionMap.has(session.key)) {
-    //       this.deleteSession(session.key);
-    //     }
-    //   }
-    // });
+    sessions.forEach((session) => {
+      try {
+        session.pushMessage(ev, data);
+      } catch (e) {
+        if (this.sessionMap.has(session.key)) {
+          this.deleteSession(session.key);
+        }
+      }
+    });
   }
 }
 

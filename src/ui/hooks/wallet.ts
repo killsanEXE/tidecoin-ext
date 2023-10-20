@@ -4,6 +4,7 @@ import { useGetCurrentAccount, useGetCurrentWallet, useWalletState } from "../st
 import { useCallback } from "react";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export const useCreateNewWallet = () => {
   const { wallets, updateWalletState } = useWalletState((v) => ({
@@ -106,8 +107,9 @@ export const useSwitchWallet = () => {
     wallets: v.wallets,
     updateWalletState: v.updateWalletState,
   }));
-  const { walletController } = useControllersState((v) => ({
+  const { walletController, notificationController } = useControllersState((v) => ({
     walletController: v.walletController,
+    notificationController: v.notificationController
   }));
 
   return useCallback(
@@ -123,10 +125,30 @@ export const useSwitchWallet = () => {
         wallets: wallets,
         selectedAccount: 0,
       });
+      await notificationController.changedAccount();
     },
     [wallets, updateWalletState, walletController]
   );
 };
+
+export const useSwitchAccount = () => {
+  const { updateWalletState } = useWalletState((v) => ({
+    updateWalletState: v.updateWalletState,
+  }));
+  const navigate = useNavigate();
+  const { notificationController } = useControllersState((v) => ({
+    notificationController: v.notificationController
+  }))
+
+  return useCallback(async (id: number) => {
+    updateWalletState({
+      selectedAccount: id,
+    });
+
+    navigate("/home");
+    await notificationController.changedAccount();
+  }, [updateWalletState, navigate])
+}
 
 export const useUpdateCurrentAccountBalance = () => {
   const { apiController } = useControllersState((v) => ({

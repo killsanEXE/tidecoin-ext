@@ -1,5 +1,5 @@
 import { ApprovalData, INotificationController } from "@/shared/interfaces/notification";
-import { notificationService } from "../services";
+import { notificationService, permissionService, sessionService, storageService } from "../services";
 
 class NotificationController implements INotificationController {
     async getApproval(): Promise<ApprovalData> {
@@ -12,6 +12,11 @@ class NotificationController implements INotificationController {
 
     async resolveApproval(data?: any, forceReject = false): Promise<void> {
         notificationService.resolveApproval(data, forceReject)
+    }
+
+    async changedAccount() {
+        permissionService.disconnectSites();
+        sessionService.broadcastEvent("accountsChanged", storageService.currentAccount);
     }
 }
 

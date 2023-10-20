@@ -2,11 +2,12 @@ import { useState } from "react";
 import { CheckIcon, Bars3Icon, TagIcon, KeyIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import s from "./styles.module.scss";
 import { shortAddress } from "@/ui/utils";
-import { useGetCurrentAccount, useGetCurrentWallet, useWalletState } from "@/ui/states/walletState";
+import { useGetCurrentAccount, useGetCurrentWallet } from "@/ui/states/walletState";
 import cn from "classnames";
-import { useNavigate } from "react-router-dom";
 import CopyBtn from "@/ui/components/copy-btn";
 import Menu from "@/ui/components/menu";
+import { useSwitchAccount } from "@/ui/hooks/wallet";
+import { useNavigate } from "react-router-dom";
 
 const SwitchAccount = () => {
   const [selected, setSelected] = useState<number>();
@@ -14,18 +15,8 @@ const SwitchAccount = () => {
   const currentAccount = useGetCurrentAccount();
   const currentWallet = useGetCurrentWallet();
 
-  const { updateWalletState } = useWalletState((v) => ({
-    updateWalletState: v.updateWalletState,
-  }));
-
+  const switchAccount = useSwitchAccount();
   const navigate = useNavigate();
-
-  const switchAccount = (id: number) => {
-    updateWalletState({
-      selectedAccount: id,
-    });
-    navigate("/home");
-  };
 
   return (
     <div className={s.switchAccDiv}>

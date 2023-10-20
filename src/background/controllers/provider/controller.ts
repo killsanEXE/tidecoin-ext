@@ -3,6 +3,7 @@ import { sessionService, storageService } from "../../services";
 import "reflect-metadata";
 import { AccountBalanceResponse } from "@/shared/interfaces/apiController";
 import { fetchTDCMainnet } from "@/shared/utils";
+import permission from "@/background/services/permission";
 
 function formatPsbtHex(psbtHex: string) {
   let formatData = "";
@@ -20,7 +21,7 @@ function formatPsbtHex(psbtHex: string) {
 }
 
 class ProviderController {
-  requestAccounts = async ({ session: { origin } }) => {
+  connect = async () => {
     // if (!permissionService.hasPermission(origin)) {
     //   throw ethErrors.provider.unauthorized();
     // }
@@ -43,7 +44,7 @@ class ProviderController {
   };
 
   @Reflect.metadata("SAFE", true)
-  getAccounts = async ({ session: { origin } }) => {
+  getAccounts = async () => {
     // if (!permissionService.hasPermission(origin)) {
     //   return [];
     // }
@@ -82,7 +83,6 @@ class ProviderController {
   // @Reflect.metadata('SAFE', true)
   // getPublicKey = async () => {
   //   const account = keyringService.keyrings[storageService.currentWallet.id];
-  //   console.log(account);
   //   return "SHIT";
   // };
 
@@ -95,8 +95,9 @@ class ProviderController {
   //     return { list, total };
   //   };
 
-  // @Reflect.metadata('SAFE', true)
-  getBalance = async () => {
+  @Reflect.metadata('SAFE', true)
+  getBalance = async ({ session: { origin } }) => {
+    if (!permission.siteIsConnected(origin)) return undefined;
     const account = storageService.currentAccount;
     if (!account) return null;
     const data = await fetchTDCMainnet<AccountBalanceResponse>({
@@ -113,10 +114,26 @@ class ProviderController {
     );
   };
 
-  getAccountName = async () => {
+  @Reflect.metadata("SAFE", true)
+  getAccountName = async ({ session: { origin } }) => {
+    if (!permission.siteIsConnected(origin)) return undefined;
     const account = storageService.currentAccount;
     if (!account) return null;
     return account.name;
+  }
+
+  @Reflect.metadata("SAFE", true)
+  isConnected = async ({ session: { origin } }) => {
+    return permission.siteIsConnected(origin);
+  }
+
+  @Reflect.metadata("SAFE", true)
+  getAccount = async ({ session: { origin } }) => {
+    if (!permission.siteIsConnected(origin)) return undefined;
+    if (storageService.currentWallet === undefined) return undefined;
+    const _account = storageService.currentWallet.accounts[0];
+    const account = _account ? _account.address : "";
+    return account;
   }
 
   //   @Reflect.metadata('APPROVAL', ['SignPsbt', (req) => {

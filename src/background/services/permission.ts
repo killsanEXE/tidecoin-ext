@@ -38,6 +38,12 @@ class PermissionService {
         })
         else this._sites[this._sites.indexOf(alreadyConnectedSite)].isConnected = true;
     }
+
+    disconnectSites() {
+        for (const site of this._sites) {
+            site.isConnected = false;
+        }
+    }
 }
 
 export default new PermissionService();

@@ -165,9 +165,9 @@ export class TidecoinProvider extends EventEmitter {
   };
 
   // public methods
-  requestAccounts = async () => {
+  connect = async () => {
     return this._request({
-      method: "requestAccounts",
+      method: "connect",
     });
   };
 
@@ -180,6 +180,18 @@ export class TidecoinProvider extends EventEmitter {
   getAccountName = async () => {
     return this._request({
       method: "getAccountName",
+    });
+  }
+
+  isConnected = async () => {
+    return this._request({
+      method: "isConnected",
+    });
+  }
+
+  getAccount = async () => {
+    return this._request({
+      method: "getAccount",
     });
   }
 
