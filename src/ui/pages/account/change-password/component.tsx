@@ -58,7 +58,7 @@ const ChangePassword = () => {
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit(executeChangePassword)}>
+    <form className="form px-6" onSubmit={handleSubmit(executeChangePassword)}>
       {formFields.map((i) => (
         <PasswordInput key={i.name} register={register} {...i} />
       ))}
