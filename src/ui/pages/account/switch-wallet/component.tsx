@@ -66,7 +66,7 @@ const SwitchWallet = () => {
                 {
                   action: () => {
                     if (wallets.length <= 1) toast.error("You cannot delete your last wallet");
-                    setDeleteWalletId(i);
+                    else setDeleteWalletId(i);
                   },
                   icon: <TrashIcon title="Remove wallet" className="w-8 h-8 cursor-pointer text-bg" />,
                 },
@@ -94,6 +94,7 @@ const SwitchWallet = () => {
             onClick={() => {
               deleteWallet(wallets[deleteWalletId].id);
               setSelected(undefined);
+              setDeleteWalletId(undefined);
             }}
           >
             Yes

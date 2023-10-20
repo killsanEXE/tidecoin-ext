@@ -171,143 +171,155 @@ export class TidecoinProvider extends EventEmitter {
     });
   };
 
-  getNetwork = async () => {
-    return this._request({
-      method: "getNetwork",
-    });
-  };
-
-  switchNetwork = async (network: string) => {
-    return this._request({
-      method: "switchNetwork",
-      params: {
-        network,
-      },
-    });
-  };
-
-  getAccounts = async () => {
-    return this._request({
-      method: "getAccounts",
-    });
-  };
-
-  getPublicKey = async () => {
-    return this._request({
-      method: "getPublicKey",
-    });
-  };
-
   getBalance = async () => {
     return this._request({
       method: "getBalance",
     });
-  };
+  }
 
-  getInscriptions = async (cursor = 0, size = 20) => {
+  getAccountName = async () => {
     return this._request({
-      method: "getInscriptions",
-      params: {
-        cursor,
-        size,
-      },
+      method: "getAccountName",
     });
-  };
+  }
 
-  signMessage = async (text: string, type: string) => {
-    return this._request({
-      method: "signMessage",
-      params: {
-        text,
-        type,
-      },
-    });
-  };
-
-  sendBitcoin = async (toAddress: string, satoshis: number, options?: { feeRate: number }) => {
-    return this._request({
-      method: "sendBitcoin",
-      params: {
-        toAddress,
-        satoshis,
-        feeRate: options?.feeRate,
-        type: TxType.SEND_BITCOIN,
-      },
-    });
-  };
-
-  sendInscription = async (toAddress: string, inscriptionId: string, options?: { feeRate: number }) => {
-    return this._request({
-      method: "sendInscription",
-      params: {
-        toAddress,
-        inscriptionId,
-        feeRate: options?.feeRate,
-        type: TxType.SEND_INSCRIPTION,
-      },
-    });
-  };
-
-  // signTx = async (rawtx: string) => {
+  // getNetwork = async () => {
   //   return this._request({
-  //     method: 'signTx',
-  //     params: {
-  //       rawtx
-  //     }
+  //     method: "getNetwork",
   //   });
   // };
 
-  /**
-   * push transaction
-   */
-  pushTx = async (rawtx: string) => {
-    return this._request({
-      method: "pushTx",
-      params: {
-        rawtx,
-      },
-    });
-  };
+  // switchNetwork = async (network: string) => {
+  //   return this._request({
+  //     method: "switchNetwork",
+  //     params: {
+  //       network,
+  //     },
+  //   });
+  // };
 
-  signPsbt = async (psbtHex: string, options?: any) => {
-    return this._request({
-      method: "signPsbt",
-      params: {
-        psbtHex,
-        type: TxType.SIGN_TX,
-        options,
-      },
-    });
-  };
+  // getAccounts = async () => {
+  //   return this._request({
+  //     method: "getAccounts",
+  //   });
+  // };
 
-  signPsbts = async (psbtHexs: string[], options?: any[]) => {
-    return this._request({
-      method: "multiSignPsbt",
-      params: {
-        psbtHexs,
-        options,
-      },
-    });
-  };
+  // getPublicKey = async () => {
+  //   return this._request({
+  //     method: "getPublicKey",
+  //   });
+  // };
 
-  pushPsbt = async (psbtHex: string) => {
-    return this._request({
-      method: "pushPsbt",
-      params: {
-        psbtHex,
-      },
-    });
-  };
+  // getBalance = async () => {
+  //   return this._request({
+  //     method: "getBalance",
+  //   });
+  // };
 
-  inscribeTransfer = async (ticker: string, amount: string) => {
-    return this._request({
-      method: "inscribeTransfer",
-      params: {
-        ticker,
-        amount,
-      },
-    });
-  };
+  // getInscriptions = async (cursor = 0, size = 20) => {
+  //   return this._request({
+  //     method: "getInscriptions",
+  //     params: {
+  //       cursor,
+  //       size,
+  //     },
+  //   });
+  // };
+
+  // signMessage = async (text: string, type: string) => {
+  //   return this._request({
+  //     method: "signMessage",
+  //     params: {
+  //       text,
+  //       type,
+  //     },
+  //   });
+  // };
+
+  // sendBitcoin = async (toAddress: string, satoshis: number, options?: { feeRate: number }) => {
+  //   return this._request({
+  //     method: "sendBitcoin",
+  //     params: {
+  //       toAddress,
+  //       satoshis,
+  //       feeRate: options?.feeRate,
+  //       type: TxType.SEND_BITCOIN,
+  //     },
+  //   });
+  // };
+
+  // sendInscription = async (toAddress: string, inscriptionId: string, options?: { feeRate: number }) => {
+  //   return this._request({
+  //     method: "sendInscription",
+  //     params: {
+  //       toAddress,
+  //       inscriptionId,
+  //       feeRate: options?.feeRate,
+  //       type: TxType.SEND_INSCRIPTION,
+  //     },
+  //   });
+  // };
+
+  // // signTx = async (rawtx: string) => {
+  // //   return this._request({
+  // //     method: 'signTx',
+  // //     params: {
+  // //       rawtx
+  // //     }
+  // //   });
+  // // };
+
+  // /**
+  //  * push transaction
+  //  */
+  // pushTx = async (rawtx: string) => {
+  //   return this._request({
+  //     method: "pushTx",
+  //     params: {
+  //       rawtx,
+  //     },
+  //   });
+  // };
+
+  // signPsbt = async (psbtHex: string, options?: any) => {
+  //   return this._request({
+  //     method: "signPsbt",
+  //     params: {
+  //       psbtHex,
+  //       type: TxType.SIGN_TX,
+  //       options,
+  //     },
+  //   });
+  // };
+
+  // signPsbts = async (psbtHexs: string[], options?: any[]) => {
+  //   return this._request({
+  //     method: "multiSignPsbt",
+  //     params: {
+  //       psbtHexs,
+  //       options,
+  //     },
+  //   });
+  // };
+
+  // pushPsbt = async (psbtHex: string) => {
+  //   return this._request({
+  //     method: "pushPsbt",
+  //     params: {
+  //       psbtHex,
+  //     },
+  //   });
+  // };
+
+  // inscribeTransfer = async (ticker: string, amount: string) => {
+  //   return this._request({
+  //     method: "inscribeTransfer",
+  //     params: {
+  //       ticker,
+  //       amount,
+  //     },
+  //   });
+  // };
 }
 
 declare global {

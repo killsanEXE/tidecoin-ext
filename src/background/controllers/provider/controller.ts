@@ -1,6 +1,8 @@
 import { Psbt } from "tidecoinjs-lib";
 import { sessionService, storageService } from "../../services";
 import "reflect-metadata";
+import { AccountBalanceResponse } from "@/shared/interfaces/apiController";
+import { fetchTDCMainnet } from "@/shared/utils";
 
 function formatPsbtHex(psbtHex: string) {
   let formatData = "";
@@ -22,7 +24,6 @@ class ProviderController {
     // if (!permissionService.hasPermission(origin)) {
     //   throw ethErrors.provider.unauthorized();
     // }
-    console.log("START OF REQUEST ACCCOUNTS")
     if (storageService.currentWallet === undefined) return undefined;
     const _account = await storageService.currentWallet.accounts[0];
     const account = _account ? _account.address : "";
@@ -56,9 +57,6 @@ class ProviderController {
   getNetwork = async () => {
     return "TIDECOIN";
   };
-
-  @Reflect.metadata("SAFE", false)
-  connectExtension = async () => { };
 
   // @Reflect.metadata('APPROVAL', ['SwitchNetwork', (req) => {
   //   const network = req.data.params.network;
@@ -97,17 +95,29 @@ class ProviderController {
   //     return { list, total };
   //   };
 
-  //   @Reflect.metadata('SAFE', true)
-  //   getBalance = async () => Connect{
-  //     const account = await wallet.getCurrentAccount();
-  //     if (!account) return null;
-  //     const balance = await wallet.getAddressBalance(account.address)
-  //     return {
-  //       confirmed: amountToSatoshis(balance.confirm_amount),
-  //       unconfirmed: amountToSatoshis(balance.pending_amount),
-  //       total: amountToSatoshis(balance.amount)
-  //     };
-  //   };
+  // @Reflect.metadata('SAFE', true)
+  getBalance = async () => {
+    const account = storageService.currentAccount;
+    if (!account) return null;
+    const data = await fetchTDCMainnet<AccountBalanceResponse>({
+      path: `/address/${account.address}`,
+    });
+
+    if (!data) return undefined;
+
+    return (
+      (data.chain_stats.funded_txo_sum -
+        data.chain_stats.spent_txo_sum +
+        data.mempool_stats.funded_txo_sum -
+        data.mempool_stats.spent_txo_sum) / 10 ** 8
+    );
+  };
+
+  getAccountName = async () => {
+    const account = storageService.currentAccount;
+    if (!account) return null;
+    return account.name;
+  }
 
   //   @Reflect.metadata('APPROVAL', ['SignPsbt', (req) => {
   //     const { data: { params: { toAddress, satoshis } } } = req;
