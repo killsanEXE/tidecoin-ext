@@ -57,9 +57,8 @@ const flowContext = flow
               data: {},
               session: { origin, name, icon },
             },
-            approvalComponent: "Connect",
           },
-          { height: windowHeight }
+          { height: windowHeight, route: "/provider/connect" }
         );
         permissionService.addConnectedSite(origin, name, icon);
       }
@@ -99,7 +98,6 @@ const flowContext = flow
       // permissionService.touchConnectedSite(origin);
       // }
     }
-
     return next();
   })
   .use(async (ctx) => {

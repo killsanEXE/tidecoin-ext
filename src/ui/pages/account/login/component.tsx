@@ -55,15 +55,8 @@ const Login = () => {
         password: password,
       });
 
-      console.log("I AM ABOUT TO DECIDE WHERE I WILL REDIRECT YOU ")
-      if (!isNotification()) {
-        console.log("I'LL NAVIGATE YOU TO HOME PAGE")
-        navigate("/home")
-      }
-      else {
-        console.log("I'LL RESOLVE THIS CONFLICT")
-        await notificationController.resolveApproval()
-      }
+      if (!isNotification()) navigate("/home")
+      else await notificationController.resolveApproval()
     } catch (e) {
       toast.error(e.message);
     }

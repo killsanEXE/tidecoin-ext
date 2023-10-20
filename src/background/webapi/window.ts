@@ -61,7 +61,7 @@ export const remove = async (winId) => {
 };
 
 export const openNotification = ({ route = "", ...rest } = {}): Promise<number | undefined> => {
-  const url = `notification.html#/provider/connect`;
+  const url = `notification.html#${route}`;
 
   return create({ url, ...rest });
 };

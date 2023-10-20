@@ -22,6 +22,7 @@ class ProviderController {
     // if (!permissionService.hasPermission(origin)) {
     //   throw ethErrors.provider.unauthorized();
     // }
+    console.log("START OF REQUEST ACCCOUNTS")
     if (storageService.currentWallet === undefined) return undefined;
     const _account = await storageService.currentWallet.accounts[0];
     const account = _account ? _account.address : "";
