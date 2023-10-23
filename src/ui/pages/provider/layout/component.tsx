@@ -11,7 +11,7 @@ interface Props {
 }
 
 const Layout: FC<Props> = ({ children, documentTitle, resolveBtnClassName, resolveBtnText }) => {
-  const [origin, setOrigin] = useState<string>();
+  const [origin, setOrigin] = useState<string>("test");
 
   const { notificationController } = useControllersState((v) => ({
     notificationController: v.notificationController,

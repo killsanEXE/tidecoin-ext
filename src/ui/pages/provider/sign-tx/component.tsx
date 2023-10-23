@@ -43,11 +43,11 @@ const SignTransaction = () => {
     >
       <>
         <KeyIcon className="w-10 h-10 text-yellow-500" />
-        <h4 className="text-xl font-medium">Sign transaction</h4>
-        <div className="flex flex-col gap-3">
+        <h4 className="text-xl font-medium mb-6">Sign transaction</h4>
+        <div className="flex flex-col gap-4 w-full">
           {fields.map((i) => (
             <div key={i.label}>
-              <label>{i.label}</label>
+              <label className="mb-2 block text-gray-300 pl-2">{i.label}</label>
               <div className="bg-input-bg rounded-xl px-5 py-2">{i.value}</div>
             </div>
           ))}
