@@ -47,6 +47,7 @@ const flowContext = flow
       },
       mapMethod,
     } = ctx;
+
     if (!Reflect.getMetadata("SAFE", providerController, mapMethod)) {
       if (!permissionService.siteIsConnected(origin)) {
         ctx.request.requestedApproval = true;

@@ -26,7 +26,7 @@ function injectScript() {
       pm.dispose();
     });
   } catch (error) {
-    console.error("Unisat: Provider injection failed.", error);
+    console.error("Tidecoin: Provider injection failed.", error);
   }
 }
 
