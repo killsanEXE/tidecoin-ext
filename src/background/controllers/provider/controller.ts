@@ -171,6 +171,19 @@ class ProviderController {
     return psbt.extractTransaction().toHex();
   }
 
+
+  @Reflect.metadata("APPROVAL", ["SignTx", (req) => {
+    // console.log(req);
+  }])
+  signTx = async ({ data: { params: { hex } } }) => {
+    const account = storageService.currentAccount;
+    if (!account) return;
+    const psbt = Psbt.fromHex(hex);
+    const keyring = keyringService.getKeyringForAccount(account.address);
+    keyring.signTransaction(psbt, keyringService.formatOptionsToSignInputs(psbt));
+    return psbt.toHex();
+  }
+
   //   @Reflect.metadata('APPROVAL', ['SignPsbt', (req) => {
   //     const { data: { params: { toAddress, satoshis } } } = req;
 

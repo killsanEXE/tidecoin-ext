@@ -4,12 +4,14 @@ import { KeyringServiceError } from "./consts";
 import { Hex, Json, SendTDC } from "./types";
 import { SimpleKey, HDPrivateKey, Mnemonic } from "test-test-test-hd-wallet";
 import { storageService } from "@/background/services";
-import { Psbt, networks } from "tidecoinjs-lib";
-import { AddressType, Keyring } from "test-test-test-hd-wallet/src/hd/types";
+import { Psbt, Transaction, networks } from "tidecoinjs-lib";
+import { AddressType, Keyring, TideInput } from "test-test-test-hd-wallet/src/hd/types";
 import { createSendTidecoin } from "tidecoin-utils";
 import HDSimpleKey from "test-test-test-hd-wallet/src/hd/simple";
 import { UTXOAddressType } from "tidecoin-utils/lib/OrdTransaction";
 import { getScriptForAddress } from "@/ui/utils/transactions";
+import { ToSignInput } from "@/shared/types";
+import { fromOutputScript } from "tidecoinjs-lib/src/address";
 
 export const KEYRING_SDK_TYPES = {
   SimpleKey,
@@ -181,6 +183,40 @@ class KeyringService {
     await storageService.saveWallets(storageService.appState.password!, wallets);
     return wallets;
   }
+
+  formatOptionsToSignInputs = (_psbt: string | Psbt) => {
+    const account = storageService.currentAccount;
+    if (!account) throw null;
+
+    const toSignInputs: TideInput[] = [];
+
+    const psbt =
+      typeof _psbt === 'string'
+        ? Psbt.fromHex(_psbt as string, { network: networks.TIDECOIN })
+        : (_psbt as Psbt);
+    psbt.data.inputs.forEach((v, index) => {
+      let script: any = null;
+      if (v.witnessUtxo) {
+        script = v.witnessUtxo.script;
+      } else if (v.nonWitnessUtxo) {
+        const tx = Transaction.fromBuffer(v.nonWitnessUtxo);
+        const output = tx.outs[psbt.txInputs[index].index];
+        script = output.script;
+      }
+      const isSigned = v.finalScriptSig || v.finalScriptWitness;
+      if (script && !isSigned) {
+        const address = fromOutputScript(script, networks.TIDECOIN);
+        if (account.address === address) {
+          toSignInputs.push({
+            index,
+            address: account.address,
+            sighashTypes: v.sighashType ? [v.sighashType] : undefined
+          });
+        }
+      }
+    });
+    return toSignInputs;
+  };
 }
 
 export default new KeyringService();
