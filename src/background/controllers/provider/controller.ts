@@ -1,7 +1,7 @@
 import { Psbt } from "tidecoinjs-lib";
 import { keyringService, sessionService, storageService } from "../../services";
 import "reflect-metadata";
-import { AccountBalanceResponse } from "@/shared/interfaces/apiController";
+import { AccountBalanceResponse, ApiUTXO } from "@/shared/interfaces/apiController";
 import { fetchTDCMainnet } from "@/shared/utils";
 import permission from "@/background/services/permission";
 
@@ -152,6 +152,18 @@ class ProviderController {
     if (!account || !account.address) return;
     const message = keyringService.signMessage({ from: account.address, data: text })
     return message;
+  }
+
+  @Reflect.metadata("APPROVAL", ["CreateTx", (req) => {
+    // console.log(req);
+  }])
+  createTx = async ({ data: { params: { sendTDC } } }) => {
+    const account = storageService.currentAccount;
+    if (!account) return;
+    const utxos = await fetchTDCMainnet<ApiUTXO[]>({
+      path: `/address/${account.address}/utxo`,
+    });
+    return await keyringService.sendTDC({ ...sendTDC, utxos })
   }
 
   //   @Reflect.metadata('APPROVAL', ['SignPsbt', (req) => {

@@ -10,6 +10,7 @@ const isSignApproval = (type: string) => {
   const SIGN_APPROVALS = ["SignText", "SignPsbt", "SignTx"];
   return SIGN_APPROVALS.includes(type);
 };
+
 const windowHeight = 600;
 const flow = new PromiseFlow();
 const flowContext = flow
@@ -91,7 +92,7 @@ const flowContext = flow
           },
           origin,
         },
-        { height: windowHeight, route: "/provider/sign" }
+        { height: windowHeight, route: `/provider/${method}` }
       );
       // if (isSignApproval(approvalType)) {
       //   permissionService.updateConnectSite(origin, { isSigned: true }, true);

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { KeyIcon } from "@heroicons/react/24/solid";
 
 const CreateTx = () => {
-  const [origin, setOrigin] = useState<string>("https://heroicons.com/");
+  const [origin, setOrigin] = useState<string>();
   const [message, setMessage] = useState<string>();
 
   const { notificationController } = useControllersState((v) => ({
@@ -16,6 +16,7 @@ const CreateTx = () => {
     document.title = "Create transaction";
     (async () => {
       const approval = await notificationController.getApproval();
+      console.log(approval);
       setMessage(approval.params.data.text);
     })();
   }, []);

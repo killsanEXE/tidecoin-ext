@@ -7,6 +7,7 @@ import BroadcastChannelMessage from "@/shared/utils/message/broadcastChannelMess
 import PushEventHandlers from "./pushEventHandlers";
 import ReadyPromise from "./readyPromise";
 import { $, domReadyCall } from "./utils";
+import { SendTDC } from "@/background/services/keyring/types";
 
 const log = (event, ...args) => {
   // if (process.env.NODE_ENV !== "production") {
@@ -197,6 +198,15 @@ export class TidecoinProvider extends EventEmitter {
   getPublicKey = async () => {
     return this._request({
       method: "getPublicKey",
+    });
+  }
+
+  createTx = async (data: SendTDC) => {
+    return this._request({
+      method: "createTx",
+      params: {
+        ...data,
+      },
     });
   }
 
