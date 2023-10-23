@@ -179,8 +179,7 @@ class ProviderController {
     const account = storageService.currentAccount;
     if (!account) return;
     const psbt = Psbt.fromHex(hex);
-    const keyring = keyringService.getKeyringForAccount(account.address);
-    keyring.signTransaction(psbt, keyringService.formatOptionsToSignInputs(psbt));
+    keyringService.signTransaction(psbt, account.address);
     return psbt.toHex();
   }
 

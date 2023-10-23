@@ -16,9 +16,11 @@ const SignTransaction = () => {
   useEffect(() => {
     (async () => {
       const approval = await notificationController.getApproval();
-      setPsbt(Psbt.fromHex(approval.params.data as SignTransactionProps));
+      setPsbt(Psbt.fromHex(approval.params.data.hex as SignTransactionProps));
     })();
   }, []);
+
+  if (!psbt) return <></>
 
   const fields = [
     {
@@ -31,7 +33,8 @@ const SignTransaction = () => {
     },
     {
       label: "Fee",
-      value: `${psbt.getFee() / 10 ** 8} TDC`,
+      // value: `${psbt.getFee() / 10 ** 8} TDC`,
+      value: `${1} TDC`,
     },
   ];
 
