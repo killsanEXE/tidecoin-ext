@@ -6,9 +6,10 @@ import { useGetCurrentAccount, useGetCurrentWallet, useWalletState } from "@/ui/
 import { useUpdateCurrentAccountBalance, useUpdateCurrentWallet } from "@/ui/hooks/wallet";
 
 const ChangeAddrType = () => {
-  const { keyringController, walletController } = useControllersState((v) => ({
+  const { keyringController, walletController, notificationController } = useControllersState((v) => ({
     keyringController: v.keyringController,
     walletController: v.walletController,
+    notificationController: v.notificationController
   }));
   const currentWallet = useGetCurrentWallet();
   const { selectedWallet } = useWalletState((v) => ({
@@ -29,6 +30,7 @@ const ChangeAddrType = () => {
       })),
     });
     await updateCurrentAccountBalance(addresses[currentAccount?.id as any as number]);
+    await notificationController.changedAccount();
     await walletController.saveWallets();
   };
 
