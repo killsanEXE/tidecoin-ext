@@ -93,7 +93,7 @@ const Wallet = () => {
         className="fixed top-0 left-0 z-10"
         onClick={() =>
           openNotification({
-            route: "/provider/sign",
+            route: "/provider/connect",
           })
         }
       >
