@@ -5,17 +5,17 @@ import ReactLoading from "react-loading";
 import { FingerPrintIcon } from "@heroicons/react/24/solid";
 
 const Connect = () => {
-  const [origin, setOrigin] = useState<string>("https://heroicons.com/");
+  const [origin, setOrigin] = useState<string>();
 
   const { notificationController } = useControllersState((v) => ({
     notificationController: v.notificationController,
   }));
 
   useEffect(() => {
-    document.title = "Signing message";
+    document.title = "Connect to tidecoin";
     (async () => {
       const approval = await notificationController.getApproval();
-      setOrigin(approval.origin);
+      setOrigin(approval.params.session.origin);
     })();
   }, []);
 

@@ -13,11 +13,23 @@ export interface Approval {
     reject(err: EthereumProviderError<any>): void;
 }
 
+export interface Session {
+    origin: string
+    name: string
+}
+
 export interface ApprovalData {
     state: number;
-    params?: any;
+    params?: Params;
     origin?: string;
     approvalComponent: string;
+    session: Session;
     requestDefer?: Promise<any>;
     approvalType: string;
+}
+
+export interface Params {
+    method: string
+    data: any
+    session: Session
 }

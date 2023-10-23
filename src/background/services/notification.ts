@@ -3,7 +3,7 @@ import { EthereumProviderError } from "eth-rpc-errors/dist/classes";
 import Events from "events";
 import { event, remove, openNotification } from "../webapi";
 import { IS_CHROME, IS_LINUX } from "@/shared/constant";
-import { Approval } from "@/shared/interfaces/notification";
+import { Approval, ApprovalData } from "@/shared/interfaces/notification";
 
 // something need user approval in window
 // should only open one window, unfocus will close the current notification
@@ -33,7 +33,7 @@ class NotificationService extends Events {
     });
   }
 
-  getApproval = () => this.approval?.data;
+  getApproval = (): ApprovalData => { return { ...this.approval.data } };
 
   resolveApproval = (data?: any, forceReject = false) => {
     if (forceReject) {

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { KeyIcon } from "@heroicons/react/24/solid";
 
 const Sign = () => {
-  const [origin, setOrigin] = useState<string>("https://heroicons.com/");
+  const [origin, setOrigin] = useState<string>();
   const [message, setMessage] = useState<string>();
 
   const { notificationController } = useControllersState((v) => ({
@@ -17,6 +17,7 @@ const Sign = () => {
     (async () => {
       const approval = await notificationController.getApproval();
       setMessage(approval.params.data.text);
+      setOrigin(approval.params.session.origin);
     })();
   }, []);
 
@@ -30,7 +31,7 @@ const Sign = () => {
         <h4 className="text-xl font-medium">Sign request</h4>
         <div className="text-sm text-gray-400">You are signing</div>
         <div className="p-2 bg-input-bg rounded-xl max-h-full">
-          <div className="break-all max-h-60 overflow-y-auto px-1">{"fDSJf89SYDFs8df7gs".repeat(70)}</div>
+          <div className="break-all max-h-60 overflow-y-auto px-1">{message}</div>
         </div>
       </div>
       <div className={s.btnContainer}>

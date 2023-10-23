@@ -38,8 +38,6 @@ const create = async ({ url, ...rest }): Promise<number | undefined> => {
   const top = cTop! + BROWSER_HEADER;
   const left = cLeft! + width! - WINDOW_SIZE.width;
 
-  console.log(WINDOW_SIZE);
-
   const win = await browserWindowsCreate({
     focused: true,
     url,
