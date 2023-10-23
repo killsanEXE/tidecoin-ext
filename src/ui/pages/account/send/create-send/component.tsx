@@ -53,7 +53,7 @@ const CreateSend = () => {
       return toast.error("Increase the fee");
     }
     try {
-      const hex = await createTx(address, Number(amount) * 10 ** 8, feeAmount, includeFeeInAmount);
+      const { fee, rawtx } = await createTx(address, Number(amount) * 10 ** 8, feeAmount, includeFeeInAmount);
 
       if (isSaveAddress) {
         await updateAddressBook(address);
@@ -62,10 +62,10 @@ const CreateSend = () => {
         state: {
           toAddress: address,
           amount: Number(amount),
-          feeAmount,
           includeFeeInAmount,
           fromAddress: currentAccount?.address ?? "",
-          hex,
+          feeAmount: fee,
+          hex: rawtx,
         },
       });
     } catch (e) {

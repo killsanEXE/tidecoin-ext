@@ -37,7 +37,9 @@ const ConfirmSend = () => {
     },
     {
       label: "Fee",
-      value: `${location.state.feeAmount} tid/Vb (${location.state.includeFeeInAmount ? "included" : "not included"})`,
+      value: `${location.state.feeAmount / 10 ** 8} TDC (${
+        location.state.includeFeeInAmount ? "included" : "not included"
+      })`,
     },
   ];
 

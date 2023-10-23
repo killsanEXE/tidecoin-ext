@@ -15,7 +15,6 @@ import CopyBtn from "@/ui/components/copy-btn";
 import { useControllersState } from "@/ui/states/controllerState";
 import { getTransactionValue, isIncomeTx } from "@/ui/utils/transactions";
 import { Circle } from "rc-progress";
-import { openNotification } from "@/background/webapi";
 
 const Wallet = () => {
   const navigate = useNavigate();
@@ -89,16 +88,6 @@ const Wallet = () => {
 
   return (
     <div className={s.walletDiv}>
-      <button
-        className="fixed top-0 left-0 z-10"
-        onClick={() =>
-          openNotification({
-            route: "/provider/connect",
-          })
-        }
-      >
-        OPEN SHIT
-      </button>
       <div className="flex justify-between mx-6 mt-2 items-center">
         <Link className="flex gap-3 items-center select-none cursor-pointer" to={"/pages/switch-wallet"}>
           <div className="bg-gradient-to-r from-indigo-500 to-indigo-950 rounded-full w-6 h-6 flex items-center justify-center">
