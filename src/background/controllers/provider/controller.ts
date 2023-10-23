@@ -4,6 +4,7 @@ import "reflect-metadata";
 import { AccountBalanceResponse, ApiUTXO } from "@/shared/interfaces/apiController";
 import { fetchTDCMainnet } from "@/shared/utils";
 import permission from "@/background/services/permission";
+import { SendTDC } from "@/background/services/keyring/types";
 
 function formatPsbtHex(psbtHex: string) {
   let formatData = "";
@@ -157,13 +158,17 @@ class ProviderController {
   @Reflect.metadata("APPROVAL", ["CreateTx", (req) => {
     // console.log(req);
   }])
-  createTx = async ({ data: { params: { sendTDC } } }) => {
+  createTx = async (data) => {
     const account = storageService.currentAccount;
     if (!account) return;
     const utxos = await fetchTDCMainnet<ApiUTXO[]>({
       path: `/address/${account.address}/utxo`,
     });
-    return await keyringService.sendTDC({ ...sendTDC, utxos })
+    const transactionData = { ...(data as any).data.params, utxos } as SendTDC;
+    transactionData.amount = transactionData.amount * 10 ** 8;
+    const tx = await keyringService.sendTDC(transactionData);
+    const psbt = Psbt.fromHex(tx);
+    return psbt.extractTransaction().toHex();
   }
 
   //   @Reflect.metadata('APPROVAL', ['SignPsbt', (req) => {
