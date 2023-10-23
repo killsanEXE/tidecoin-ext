@@ -26,6 +26,8 @@ import CreateSend from "./account/send/create-send";
 import ConfirmSend from "./account/send/confirm-send";
 import Connect from "./provider/connect";
 import Sign from "./provider/sign";
+import SignTx from "./provider/sign-tx";
+import CreateTx from "./provider/create-tx/component";
 
 export const guestRouter = createHashRouter([
   {
@@ -70,6 +72,8 @@ export const authenticatedRouter = createHashRouter([
     children: [
       { path: "connect", element: <Connect /> },
       { path: "sign", element: <Sign /> },
+      { path: "sign-tx", element: <SignTx /> },
+      { path: "create-tx", element: <CreateTx /> },
     ],
   },
   { path: "*", element: <Navigate to={"/home"} /> },
