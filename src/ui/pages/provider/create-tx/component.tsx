@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 
 import { KeyIcon } from "@heroicons/react/24/solid";
 import Layout from "../layout";
-import { Psbt } from "tidecoinjs-lib";
+import { CreateTxProps } from "@/shared/interfaces/notification";
 
 const CreateTx = () => {
-  const [psbt, setPsbt] = useState<Psbt>();
+  const [psbt, setPsbt] = useState<CreateTxProps>();
 
   const { notificationController } = useControllersState((v) => ({
     notificationController: v.notificationController,
@@ -19,18 +19,20 @@ const CreateTx = () => {
     })();
   }, []);
 
+  if (!psbt) return <></>;
+
   const fields = [
     {
       label: "Address",
-      value: psbt.txOutputs[0].address,
+      value: psbt.to,
     },
     {
       label: "Amount",
-      value: `${psbt.txOutputs[0].value / 10 ** 8} TDC`,
+      value: `${psbt.amount} TDC`,
     },
     {
-      label: "Fee",
-      value: `${psbt.getFee() / 10 ** 8} TDC`,
+      label: "Fee Rate",
+      value: `${psbt.feeRate} tid/Vb`,
     },
   ];
 

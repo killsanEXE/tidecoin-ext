@@ -35,8 +35,10 @@ export interface Params {
 }
 
 export type SignTransactionProps = string;
-export interface CreateTransaction {
-  address: string;
-  amount: number;
-  feeRate: number;
+
+export interface CreateTxProps {
+  to: string
+  amount: number
+  feeRate: number
+  receiverToPayFee: boolean
 }
