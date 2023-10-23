@@ -136,6 +136,14 @@ class ProviderController {
     return account;
   }
 
+  @Reflect.metadata("SAFE", true)
+  getPublicKey = async ({ session: { origin } }) => {
+    if (!permission.siteIsConnected(origin)) return undefined;
+    const _account = storageService.currentWallet.accounts[0];
+    if (!_account) return undefined;
+    return keyringService.exportPublicKey(_account.address)
+  }
+
   @Reflect.metadata("APPROVAL", ["SignText", (req) => {
     // console.log(req);
   }])

@@ -2,7 +2,6 @@
 import { ethErrors, serializeError } from "eth-rpc-errors";
 import { EventEmitter } from "events";
 
-import { TxType } from "@/shared/types";
 import BroadcastChannelMessage from "@/shared/utils/message/broadcastChannelMessage";
 
 import PushEventHandlers from "./pushEventHandlers";
@@ -192,6 +191,12 @@ export class TidecoinProvider extends EventEmitter {
   getAccount = async () => {
     return this._request({
       method: "getAccount",
+    });
+  }
+
+  getPublicKey = async () => {
+    return this._request({
+      method: "getPublicKey",
     });
   }
 
