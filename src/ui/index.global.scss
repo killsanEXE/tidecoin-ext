@@ -64,7 +64,7 @@ input[type="number"] {
 }
 
 .app {
-  @apply w-full h-full min-h-screen flex justify-center items-center;
+  @apply h-full min-h-screen flex justify-center items-center w-full;
 
   .main-route {
     @apply w-full flex justify-center;

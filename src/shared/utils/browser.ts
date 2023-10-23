@@ -4,11 +4,11 @@ export async function browserWindowsGetCurrent(params?: any) {
   return await browser.windows.getCurrent(params);
 }
 
-export async function browserWindowsCreate(params?: any) {
+export async function browserWindowsCreate(params?: chrome.windows.CreateData): Promise<chrome.windows.Window> {
   return await browser.windows.create(params);
 }
 
-export async function browserWindowsUpdate(windowId: number, updateInfo: any) {
+export async function browserWindowsUpdate(windowId: number, updateInfo: chrome.windows.UpdateInfo) {
   return await browser.windows.update(windowId, updateInfo);
 }
 

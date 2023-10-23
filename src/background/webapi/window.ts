@@ -12,11 +12,11 @@ import {
 
 export const event = new EventEmitter();
 
-browserWindowsOnFocusChanged((winId) => {
+browserWindowsOnFocusChanged((winId: number) => {
   event.emit("windowFocusChange", winId);
 });
 
-browserWindowsOnRemoved((winId) => {
+browserWindowsOnRemoved((winId: number) => {
   event.emit("windowRemoved", winId);
 });
 
@@ -38,7 +38,9 @@ const create = async ({ url, ...rest }): Promise<number | undefined> => {
   const top = cTop! + BROWSER_HEADER;
   const left = cLeft! + width! - WINDOW_SIZE.width;
 
-  const win = (await browserWindowsCreate({
+  console.log(WINDOW_SIZE);
+
+  const win = await browserWindowsCreate({
     focused: true,
     url,
     type: "popup",
@@ -46,7 +48,7 @@ const create = async ({ url, ...rest }): Promise<number | undefined> => {
     left,
     ...WINDOW_SIZE,
     ...rest,
-  })) as any;
+  });
 
   // shim firefox
   if (win.left !== left) {
@@ -56,7 +58,7 @@ const create = async ({ url, ...rest }): Promise<number | undefined> => {
   return win.id;
 };
 
-export const remove = async (winId) => {
+export const remove = async (winId: number) => {
   return browserWindowsRemove(winId);
 };
 
