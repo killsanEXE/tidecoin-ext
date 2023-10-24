@@ -1,7 +1,7 @@
 import { Psbt } from "tidecoinjs-lib";
 import { keyringService, sessionService, storageService } from "../../services";
 import "reflect-metadata";
-import { AccountBalanceResponse, ApiUTXO } from "@/shared/interfaces/apiController";
+import { AccountBalanceResponse, ApiUTXO } from "@/shared/interfaces/api";
 import { fetchTDCMainnet } from "@/shared/utils";
 import permission from "@/background/services/permission";
 import { SendTDC } from "@/background/services/keyring/types";
@@ -96,7 +96,7 @@ class ProviderController {
   //     return { list, total };
   //   };
 
-  @Reflect.metadata('SAFE', true)
+  @Reflect.metadata("SAFE", true)
   getBalance = async ({ session: { origin } }) => {
     if (!permission.siteIsConnected(origin)) return undefined;
     const account = storageService.currentAccount;
@@ -111,7 +111,8 @@ class ProviderController {
       (data.chain_stats.funded_txo_sum -
         data.chain_stats.spent_txo_sum +
         data.mempool_stats.funded_txo_sum -
-        data.mempool_stats.spent_txo_sum) / 10 ** 8
+        data.mempool_stats.spent_txo_sum) /
+      10 ** 8
     );
   };
 
@@ -121,12 +122,12 @@ class ProviderController {
     const account = storageService.currentAccount;
     if (!account) return null;
     return account.name;
-  }
+  };
 
   @Reflect.metadata("SAFE", true)
   isConnected = async ({ session: { origin } }) => {
     return permission.siteIsConnected(origin);
-  }
+  };
 
   @Reflect.metadata("SAFE", true)
   getAccount = async ({ session: { origin } }) => {
@@ -135,29 +136,39 @@ class ProviderController {
     const _account = storageService.currentWallet.accounts[0];
     const account = _account ? _account.address : "";
     return account;
-  }
+  };
 
   @Reflect.metadata("SAFE", true)
   getPublicKey = async ({ session: { origin } }) => {
     if (!permission.siteIsConnected(origin)) return undefined;
     const _account = storageService.currentWallet.accounts[0];
     if (!_account) return undefined;
-    return keyringService.exportPublicKey(_account.address)
-  }
+    return keyringService.exportPublicKey(_account.address);
+  };
 
-  @Reflect.metadata("APPROVAL", ["SignText", (req) => {
-    // console.log(req);
-  }])
-  signMessage = async ({ data: { params: { text } } }) => {
+  @Reflect.metadata("APPROVAL", [
+    "SignText",
+    (req) => {
+      // console.log(req);
+    },
+  ])
+  signMessage = async ({
+    data: {
+      params: { text },
+    },
+  }) => {
     const account = storageService.currentAccount;
     if (!account || !account.address) return;
-    const message = keyringService.signMessage({ from: account.address, data: text })
+    const message = keyringService.signMessage({ from: account.address, data: text });
     return message;
-  }
+  };
 
-  @Reflect.metadata("APPROVAL", ["CreateTx", (req) => {
-    // console.log(req);
-  }])
+  @Reflect.metadata("APPROVAL", [
+    "CreateTx",
+    (req) => {
+      // console.log(req);
+    },
+  ])
   createTx = async (data) => {
     const account = storageService.currentAccount;
     if (!account) return;
@@ -169,19 +180,25 @@ class ProviderController {
     const tx = await keyringService.sendTDC(transactionData);
     const psbt = Psbt.fromHex(tx);
     return psbt.extractTransaction().toHex();
-  }
+  };
 
-
-  @Reflect.metadata("APPROVAL", ["SignTx", (req) => {
-    // console.log(req);
-  }])
-  signTx = async ({ data: { params: { hex } } }) => {
+  @Reflect.metadata("APPROVAL", [
+    "SignTx",
+    (req) => {
+      // console.log(req);
+    },
+  ])
+  signTx = async ({
+    data: {
+      params: { hex },
+    },
+  }) => {
     const account = storageService.currentAccount;
     if (!account) return;
     const psbt = Psbt.fromHex(hex);
     keyringService.signTransaction(psbt, account.address);
     return psbt.toHex();
-  }
+  };
 
   //   @Reflect.metadata('APPROVAL', ['SignPsbt', (req) => {
   //     const { data: { params: { toAddress, satoshis } } } = req;

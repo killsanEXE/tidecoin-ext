@@ -37,8 +37,17 @@ export interface Params {
 export type SignTransactionProps = string;
 
 export interface CreateTxProps {
-  to: string
-  amount: number
-  feeRate: number
-  receiverToPayFee: boolean
+  to: string;
+  amount: number;
+  feeRate: number;
+  receiverToPayFee: boolean;
 }
+export interface CreateTransaction {
+  address: string;
+  amount: number;
+  feeRate: number;
+}
+
+type NotificationDefault = Partial<Omit<chrome.windows.CreateData, "url">>;
+export type CreateNotificationProps = NotificationDefault & { url: string };
+export type OpenNotificationProps = NotificationDefault & { route: string };

@@ -2,7 +2,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 
 import { ListBulletIcon, Cog6ToothIcon, ChevronDownIcon, CheckIcon } from "@heroicons/react/24/outline";
 import s from "./styles.module.scss";
-import { shortAddress } from "@/ui/utils";
+import { shortAddress } from "@/shared/utils/transactions";
 import { useGetCurrentAccount, useGetCurrentWallet } from "@/ui/states/walletState";
 import cn from "classnames";
 import { useCallback, useEffect, useState } from "react";
@@ -13,7 +13,7 @@ import { useUpdateCurrentAccountTransactions } from "@/ui/hooks/transactions";
 import { useDebounceCall } from "@/ui/hooks/debounce";
 import CopyBtn from "@/ui/components/copy-btn";
 import { useControllersState } from "@/ui/states/controllerState";
-import { getTransactionValue, isIncomeTx } from "@/ui/utils/transactions";
+import { getTransactionValue, isIncomeTx } from "@/shared/utils/transactions";
 import { Circle } from "rc-progress";
 
 const Wallet = () => {

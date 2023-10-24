@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useGetCurrentAccount, useGetCurrentWallet, useWalletState } from "../states/walletState";
 import { useControllersState } from "../states/controllerState";
-import { tidoshisToAmount } from "../utils";
+import { tidoshisToAmount } from "@/shared/utils/transactions";
 import { Psbt } from "tidecoinjs-lib";
 import { Hex } from "@/background/services/keyring/types";
 

@@ -1,9 +1,21 @@
 import { Psbt } from "tidecoinjs-lib";
 import { keyringService } from "../services";
 import { Hex, SendTDC } from "../services/keyring/types";
-import { IKeyringController } from "@/shared/interfaces/keyringController";
 import { IPrivateWallet } from "@/shared/interfaces";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
+
+export interface IKeyringController {
+  init(password: string): Promise<IPrivateWallet[]>;
+  newKeyring(type: "simple" | "root", payload: string): Promise<string | undefined>;
+  exportAccount(address: Hex): Promise<string>;
+  signTransaction(tideTx: Psbt, address: string): Promise<void>;
+  signMessage(msgParams: { from: string; data: string }): Promise<string>;
+  signPersonalMessage(msgParams: { from: string; data: string }): Promise<string>;
+  sendTDC(data: SendTDC): Promise<string>;
+  changeAddressType(walletIndex: number, addressType: AddressType): Promise<string[]>;
+  exportPublicKey(address: string): Promise<string>;
+  serializeKeyringById(index: number): Promise<any>;
+}
 
 class KeyringController implements IKeyringController {
   /**

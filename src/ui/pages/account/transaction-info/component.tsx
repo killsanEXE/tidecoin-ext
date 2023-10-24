@@ -3,13 +3,13 @@ import ReactLoading from "react-loading";
 import { browserTabsCreate } from "@/shared/utils/browser";
 import { useLocation } from "react-router-dom";
 import { ITransaction } from "@/shared/interfaces/apiController";
-import { getTransactionValue } from "@/ui/utils/transactions";
+import { getTransactionValue } from "@/shared/utils/transactions";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
 import { LinkIcon } from "@heroicons/react/24/outline";
 import { FC, useId, useState } from "react";
 import Modal from "@/ui/components/modal";
 import cn from "classnames";
-import { shortAddress } from "@/ui/utils";
+import { shortAddress } from "@/shared/utils/transactions";
 import toast from "react-hot-toast";
 
 const TransactionInfo = () => {

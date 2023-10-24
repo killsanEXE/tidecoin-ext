@@ -12,15 +12,6 @@ export interface Status {
   block_time: number;
 }
 
-export interface IApiController {
-  getAccountBalance(address: string): Promise<number | undefined>;
-  getUtxos(address: string): Promise<ApiUTXO[] | undefined>;
-  pushTx(rawTx: string): Promise<{ txid: string } | undefined>;
-  getTransactions(address: string): Promise<ITransaction[] | undefined>;
-  getTDCPrice(): Promise<{ data: { last: string } }>;
-  getLastBlockTDC(): Promise<number>;
-}
-
 export interface AccountBalanceResponse {
   address: string;
   chain_stats: ChainStats;

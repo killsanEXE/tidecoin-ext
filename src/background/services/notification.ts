@@ -3,7 +3,7 @@ import { EthereumProviderError } from "eth-rpc-errors/dist/classes";
 import Events from "events";
 import { event, remove, openNotification } from "../webapi";
 import { IS_CHROME, IS_LINUX } from "@/shared/constant";
-import { Approval, ApprovalData } from "@/shared/interfaces/notification";
+import { Approval, ApprovalData, OpenNotificationProps } from "@/shared/interfaces/notification";
 
 // something need user approval in window
 // should only open one window, unfocus will close the current notification
@@ -33,7 +33,9 @@ class NotificationService extends Events {
     });
   }
 
-  getApproval = (): ApprovalData => { return { ...this.approval.data } };
+  getApproval = (): ApprovalData => {
+    return { ...this.approval.data };
+  };
 
   resolveApproval = (data?: any, forceReject = false) => {
     if (forceReject) {
@@ -59,7 +61,7 @@ class NotificationService extends Events {
   };
 
   // currently it only support one approval at the same time
-  requestApproval = async (data, winProps?): Promise<any> => {
+  requestApproval = async (data?: any, winProps?: OpenNotificationProps): Promise<any> => {
     // if (preferenceService.getPopupOpen()) {
     //   this.approval = null;
     //   throw ethErrors.provider.userRejectedRequest('please request after user close current popup');
@@ -93,16 +95,15 @@ class NotificationService extends Events {
     this.isLocked = true;
   };
 
-  openNotification = (winProps) => {
+  openNotification = async (winProps: OpenNotificationProps) => {
     // if (this.isLocked) return;
     // this.lock();
     if (this.notifiWindowId) {
       remove(this.notifiWindowId);
       this.notifiWindowId = 0;
     }
-    openNotification(winProps).then((winId) => {
-      this.notifiWindowId = winId!;
-    });
+    const winId = await openNotification(winProps);
+    this.notifiWindowId = winId!;
   };
 }
 

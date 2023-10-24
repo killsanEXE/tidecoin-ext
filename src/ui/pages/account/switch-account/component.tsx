@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CheckIcon, Bars3Icon, TagIcon, KeyIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import s from "./styles.module.scss";
-import { shortAddress } from "@/ui/utils";
+import { shortAddress } from "@/shared/utils/transactions";
 import { useGetCurrentAccount, useGetCurrentWallet } from "@/ui/states/walletState";
 import cn from "classnames";
 import CopyBtn from "@/ui/components/copy-btn";

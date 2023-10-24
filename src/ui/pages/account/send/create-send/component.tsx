@@ -11,7 +11,7 @@ import FeeInput from "./fee-input";
 import { BookOpenIcon, MinusCircleIcon } from "@heroicons/react/24/solid";
 import Modal from "@/ui/components/modal";
 import Switch from "@/ui/components/switch";
-import { shortAddress } from "@/ui/utils";
+import { shortAddress } from "@/shared/utils/transactions";
 import { useUpdateAddressBook } from "@/ui/hooks/app";
 
 interface FormType {

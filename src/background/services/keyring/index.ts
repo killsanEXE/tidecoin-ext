@@ -9,8 +9,7 @@ import { AddressType, Keyring, TideInput } from "test-test-test-hd-wallet/src/hd
 import { createSendTidecoin } from "tidecoin-utils";
 import HDSimpleKey from "test-test-test-hd-wallet/src/hd/simple";
 import { UTXOAddressType } from "tidecoin-utils/lib/OrdTransaction";
-import { getScriptForAddress } from "@/ui/utils/transactions";
-import { ToSignInput } from "@/shared/types";
+import { getScriptForAddress } from "@/shared/utils/transactions";
 import { fromOutputScript } from "tidecoinjs-lib/src/address";
 
 export const KEYRING_SDK_TYPES = {
@@ -191,9 +190,7 @@ class KeyringService {
     const toSignInputs: TideInput[] = [];
 
     const psbt =
-      typeof _psbt === 'string'
-        ? Psbt.fromHex(_psbt as string, { network: networks.TIDECOIN })
-        : (_psbt as Psbt);
+      typeof _psbt === "string" ? Psbt.fromHex(_psbt as string, { network: networks.TIDECOIN }) : (_psbt as Psbt);
     psbt.data.inputs.forEach((v, index) => {
       let script: any = null;
       if (v.witnessUtxo) {
@@ -210,7 +207,7 @@ class KeyringService {
           toSignInputs.push({
             index,
             address: account.address,
-            sighashTypes: v.sighashType ? [v.sighashType] : undefined
+            sighashTypes: v.sighashType ? [v.sighashType] : undefined,
           });
         }
       }

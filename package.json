@@ -56,6 +56,7 @@
     "@types/big.js": "^6.2.0",
     "@types/chrome": "^0.0.244",
     "@types/jest": "^27.5.2",
+    "@types/koa-compose": "^3.2.7",
     "@types/node": "^16.18.46",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",

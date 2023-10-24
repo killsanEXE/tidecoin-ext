@@ -14,11 +14,11 @@ export const wait = (fn: () => void, ms = 1000) => {
 };
 
 export default class PromiseFlow {
-  private _tasks: ((args: any) => void)[] = [];
+  private _tasks: compose.Middleware<any>[] = [];
   _context: any = {};
   requestedApproval = false;
 
-  use(fn): PromiseFlow {
+  use(fn: compose.Middleware<any>): PromiseFlow {
     if (typeof fn !== "function") {
       throw new Error("promise need function to handle");
     }

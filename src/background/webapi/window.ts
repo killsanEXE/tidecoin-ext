@@ -9,6 +9,7 @@ import {
   browserWindowsUpdate,
   browserWindowsRemove,
 } from "@/shared/utils/browser";
+import { CreateNotificationProps, OpenNotificationProps } from "@/shared/interfaces/notification";
 
 export const event = new EventEmitter();
 
@@ -26,7 +27,7 @@ const WINDOW_SIZE = {
   height: 600,
 };
 
-const create = async ({ url, ...rest }): Promise<number | undefined> => {
+const create = async ({ url, ...rest }: CreateNotificationProps): Promise<number | undefined> => {
   const {
     top: cTop,
     left: cLeft,
@@ -60,7 +61,9 @@ export const remove = async (winId: number) => {
   return browserWindowsRemove(winId);
 };
 
-export const openNotification = ({ route = "", ...rest } = {}): Promise<number | undefined> => {
+export const openNotification = async (
+  { route, ...rest }: OpenNotificationProps = { route: "" }
+): Promise<number | undefined> => {
   const url = `notification.html#${route}`;
 
   return create({ url, ...rest });
