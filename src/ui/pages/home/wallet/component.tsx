@@ -10,7 +10,6 @@ import { useUpdateCurrentAccountBalance } from "@/ui/hooks/wallet";
 import ReactLoading from "react-loading";
 import { ITransaction } from "@/shared/interfaces/api";
 import { useUpdateCurrentAccountTransactions } from "@/ui/hooks/transactions";
-import { useDebounceCall } from "@/ui/hooks/debounce";
 import CopyBtn from "@/ui/components/copy-btn";
 import { useControllersState } from "@/ui/states/controllerState";
 import { getTransactionValue, isIncomeTx } from "@/shared/utils/transactions";
@@ -45,10 +44,6 @@ const Wallet = () => {
     setLastBlock(await apiController.getLastBlockTDC());
   }, [apiController, setLastBlock]);
 
-  const callUpdateTransactions = useDebounceCall(udpateTransactions, 200);
-  const callUpdateLastBlock = useDebounceCall(updateLastBlock, 200);
-  const callUpdateAccountBalance = useDebounceCall(updateAccountBalance, 200);
-
   useEffect(() => {
     (async () => {
       const data = await apiController.getTDCPrice();
@@ -58,21 +53,23 @@ const Wallet = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      callUpdateAccountBalance();
-      callUpdateTransactions();
-      callUpdateLastBlock();
-    }, 10000);
-
-    if (currentAccount) {
-      callUpdateAccountBalance();
-      callUpdateTransactions();
-      callUpdateLastBlock();
-    }
+      updateAccountBalance();
+      udpateTransactions();
+      updateLastBlock();
+    }, 5000);
 
     return () => {
       clearInterval(interval);
     };
-  }, [callUpdateAccountBalance, currentAccount, callUpdateTransactions, callUpdateLastBlock]);
+  }, [updateAccountBalance, udpateTransactions, updateLastBlock]);
+
+  useEffect(() => {
+    if (currentAccount && currentAccount.balance === undefined) {
+      updateAccountBalance();
+      udpateTransactions();
+      updateLastBlock();
+    }
+  }, [updateAccountBalance, udpateTransactions, updateLastBlock, currentAccount]);
 
   useEffect(() => {
     (async () => {
