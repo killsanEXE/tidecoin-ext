@@ -1,4 +1,4 @@
-import { ApiUTXO } from "@/shared/interfaces/apiController";
+import { ApiUTXO } from "@/shared/interfaces/api";
 import * as encryptorUtils from "@metamask/browser-passworder";
 
 export type Json = any;

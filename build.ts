@@ -12,7 +12,7 @@ async function readJsonFile(path: string) {
   return await file.json();
 }
 
-const chrome = Bun.argv.length > 2 ? Bun.argv[2] !== "--firefox" : true;
+const chrome = !Bun.argv.includes("--firefox");
 
 const baseManifestPath = "./configs/manifests/base.json";
 const chromeManifestPath = "./configs/manifests/chrome.json";
@@ -79,7 +79,7 @@ const buildOptions: BuildOptions = {
   ],
 };
 
-if (Bun.argv.includes("--watch")) {
+if (Bun.argv.includes("--watch") || Bun.argv.includes("-w")) {
   const ctx = await context(buildOptions);
   await ctx.watch();
 } else {

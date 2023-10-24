@@ -1,4 +1,4 @@
-import { ITransaction } from "@/shared/interfaces/apiController";
+import { ITransaction } from "@/shared/interfaces/api";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 import { payments } from "tidecoinjs-lib";
 import Big from "big.js";

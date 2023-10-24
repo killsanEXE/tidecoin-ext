@@ -2,7 +2,7 @@ import s from "./styles.module.scss";
 import ReactLoading from "react-loading";
 import { browserTabsCreate } from "@/shared/utils/browser";
 import { useLocation } from "react-router-dom";
-import { ITransaction } from "@/shared/interfaces/apiController";
+import { ITransaction } from "@/shared/interfaces/api";
 import { getTransactionValue } from "@/shared/utils/transactions";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
 import { LinkIcon } from "@heroicons/react/24/outline";

@@ -1,6 +1,6 @@
+import { IApiController } from "@/background/controllers/apiController";
+import { IKeyringController } from "@/background/controllers/keyringController";
 import { IWalletController } from "@/shared/interfaces";
-import { IApiController } from "@/shared/interfaces/apiController";
-import { IKeyringController } from "@/shared/interfaces/keyringController";
 import { INotificationController } from "@/shared/interfaces/notification";
 import { IStateController } from "@/shared/interfaces/stateController";
 import { create } from "zustand";

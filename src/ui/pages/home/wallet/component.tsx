@@ -8,7 +8,7 @@ import cn from "classnames";
 import { useCallback, useEffect, useState } from "react";
 import { useUpdateCurrentAccountBalance } from "@/ui/hooks/wallet";
 import ReactLoading from "react-loading";
-import { ITransaction } from "@/shared/interfaces/apiController";
+import { ITransaction } from "@/shared/interfaces/api";
 import { useUpdateCurrentAccountTransactions } from "@/ui/hooks/transactions";
 import { useDebounceCall } from "@/ui/hooks/debounce";
 import CopyBtn from "@/ui/components/copy-btn";

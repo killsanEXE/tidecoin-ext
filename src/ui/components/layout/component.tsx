@@ -133,7 +133,7 @@ export default function PagesLayout() {
   return (
     <div className={s.layout}>
       {
-        <div className={s.controlDiv}>
+        <div className={s.header}>
           {(!currentRouteTitle?.disableBack || !currentRouteTitle.disableBack()) && (
             <div
               className={cn(s.controlElem, s.back)}
