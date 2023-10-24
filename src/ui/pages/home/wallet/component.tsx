@@ -23,6 +23,11 @@ const Wallet = () => {
 
   if (currentWallet === undefined) return <Navigate to={"/pages/create-new-wallet"} />;
 
+  const { apiController, stateController } = useControllersState((v) => ({
+    apiController: v.apiController,
+    stateController: v.stateController,
+  }));
+
   const currentAccount = useGetCurrentAccount();
 
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
@@ -34,44 +39,40 @@ const Wallet = () => {
   const udpateTransactions = useCallback(async () => {
     const receivedTransactions = await updateAccountTransactions();
     if (receivedTransactions !== undefined) setTransactions(receivedTransactions);
-  }, [updateAccountTransactions, setTransactions, lastBlock]);
+  }, [updateAccountTransactions, setTransactions]);
 
   const updateLastBlock = useCallback(async () => {
     setLastBlock(await apiController.getLastBlockTDC());
-  }, []);
+  }, [apiController, setLastBlock]);
 
   const callUpdateTransactions = useDebounceCall(udpateTransactions, 200);
   const callUpdateLastBlock = useDebounceCall(updateLastBlock, 200);
-
-  const { apiController, stateController } = useControllersState((v) => ({
-    apiController: v.apiController,
-    stateController: v.stateController,
-  }));
+  const callUpdateAccountBalance = useDebounceCall(updateAccountBalance, 200);
 
   useEffect(() => {
-    const load = async () => {
+    (async () => {
       const data = await apiController.getTDCPrice();
       setCurrentPrice(Number(data.data.last));
-    };
-    load();
+    })();
   }, [apiController, setCurrentPrice]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      updateAccountBalance();
+      callUpdateAccountBalance();
       callUpdateTransactions();
       callUpdateLastBlock();
     }, 10000);
 
-    if (currentAccount && currentAccount.balance === undefined) updateAccountBalance();
-
-    callUpdateTransactions();
-    callUpdateLastBlock();
+    if (currentAccount) {
+      callUpdateAccountBalance();
+      callUpdateTransactions();
+      callUpdateLastBlock();
+    }
 
     return () => {
       clearInterval(interval);
     };
-  }, [updateAccountBalance, currentAccount, currentWallet, callUpdateTransactions]);
+  }, [callUpdateAccountBalance, currentAccount, callUpdateTransactions, callUpdateLastBlock]);
 
   useEffect(() => {
     (async () => {
@@ -84,7 +85,7 @@ const Wallet = () => {
         });
       }
     })();
-  }, [stateController]);
+  }, [stateController.getPendingWallet, navigate]);
 
   return (
     <div className={s.walletDiv}>

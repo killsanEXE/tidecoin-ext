@@ -1,6 +1,7 @@
 {
   "short_name": "Tidecoin",
-  "version": "1.6",
+  "author": "Tidecoin",
+  "version": "0.0.5",
   "manifest_version": 3,
   "name": "Tidecoin",
   "icons": {

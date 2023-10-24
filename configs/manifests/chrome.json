@@ -2,8 +2,5 @@
   "background": {
     "service_worker": "background.js"
   },
-  "chrome_url_overrides": {
-    "newtab": "index.html"
-  },
-  "minimum_chrome_version": "88"
+  "minimum_chrome_version": "99"
 }

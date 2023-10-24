@@ -29,6 +29,11 @@ function mergeManifests(): Plugin {
         ...baseManifest,
         ...extraManifest,
       };
+      if (Bun.argv.includes("--watch") && !Bun.argv.includes("--firefox")) {
+        content.chrome_url_overrides = {
+          newtab: "index.html",
+        };
+      }
       build.onEnd(() => {
         const path = build.initialOptions.outdir + "/manifest.json";
         Bun.write(path, JSON.stringify(content, undefined, 2)).catch((err) => console.error(err));
