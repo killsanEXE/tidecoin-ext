@@ -72,14 +72,17 @@ export default function App() {
   }, [isReady, isUnlocked, updateWalletState, updateAppState, router, setRouter]);
 
   return (
-    <div className="app">
-      {isReady ? <RouterProvider router={router} /> : <ReactLoading type="spin" color="#ffbc42" />}
-      <Toaster
-        position="bottom-center"
-        toastOptions={{
-          className: "toast",
-        }}
-      />
+    <div>
+      <div className="uppercase text-center hidden md:block font-medium text-xl mb-6">Tidecoin</div>
+      <div className="app">
+        {isReady ? <RouterProvider router={router} /> : <ReactLoading type="spin" color="#ffbc42" />}
+        <Toaster
+          position="bottom-center"
+          toastOptions={{
+            className: "toast",
+          }}
+        />
+      </div>
     </div>
   );
 }

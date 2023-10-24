@@ -1,5 +1,5 @@
 .transactionInfoDiv {
-  @apply h-full w-full flex items-center justify-center break-all px-6 pt-6;
+  @apply h-full w-full flex items-center justify-center break-all px-6 pt-6 flex-col;
 
   .transaction {
     @apply flex flex-col w-full break-all h-full;
@@ -19,7 +19,7 @@
 }
 
 .explorerBtn {
-  @apply px-5 py-2 rounded-xl absolute bottom-6 left-6 right-6 font-medium bg-text text-bg text-sm;
+  @apply px-5 py-2 rounded-xl font-medium bg-text text-bg text-sm mb-6;
 }
 
 .summary {

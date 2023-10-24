@@ -66,10 +66,12 @@ const Wallet = () => {
   useEffect(() => {
     if (currentAccount && currentAccount.balance === undefined) {
       updateAccountBalance();
+    }
+    if (lastBlock !== undefined) {
       udpateTransactions();
       updateLastBlock();
     }
-  }, [updateAccountBalance, udpateTransactions, updateLastBlock, currentAccount]);
+  }, [updateAccountBalance, udpateTransactions, updateLastBlock, currentAccount, lastBlock]);
 
   useEffect(() => {
     (async () => {

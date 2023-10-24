@@ -25,29 +25,44 @@ const TransactionInfo = () => {
   return (
     <div className={s.transactionInfoDiv}>
       {transaction ? (
-        <div className={s.transaction}>
-          <div className={s.group}>
-            <p className={s.transactionP}>TxId:</p>
+        <>
+          <div className={s.transaction}>
+            <div className={s.group}>
+              <p className={s.transactionP}>TxId:</p>
 
-            <span>{tx.txid}</span>
-          </div>
-          <div className={s.group}>
-            <p className={s.transactionP}>Confirmations:</p>
-            <span>{tx.status.confirmed ? lastBlock - tx.status.block_height : 0}</span>
-          </div>
-          <div className={s.group}>
-            <p className={s.transactionP}>Fee:</p>
-            <span>{tx.fee / 10 ** 8} TDC</span>
-          </div>
-          <div className={s.group}>
-            <p className={s.transactionP}>Value:</p>
-            <span>{getTransactionValue(tx, currentAccount?.address, false)} TDC</span>
-          </div>
+              <span>{tx.txid}</span>
+            </div>
+            <div className={s.group}>
+              <p className={s.transactionP}>Confirmations:</p>
+              <span>{tx.status.confirmed ? lastBlock - tx.status.block_height : 0}</span>
+            </div>
+            <div className={s.group}>
+              <p className={s.transactionP}>Fee:</p>
+              <span>{tx.fee / 10 ** 8} TDC</span>
+            </div>
+            <div className={s.group}>
+              <p className={s.transactionP}>Value:</p>
+              <span>{getTransactionValue(tx, currentAccount?.address, false)} TDC</span>
+            </div>
 
-          <div className={s.summary} onClick={() => setOpenModal(true)}>
-            <LinkIcon className="w-4 h-4" /> Details
-          </div>
+            <div className={s.summary} onClick={() => setOpenModal(true)}>
+              <LinkIcon className="w-4 h-4" /> Details
+            </div>
 
+            <Modal onClose={() => setOpenModal(false)} open={openModal} title="Detais">
+              <div className={s.tableContainer}>
+                <TableItem
+                  label="Inputs"
+                  currentAddress={currentAccount.address}
+                  items={tx.vin.map((i) => ({
+                    scriptpubkey_address: i.prevout.scriptpubkey_address,
+                    value: i.prevout.value,
+                  }))}
+                />
+                <TableItem label="Outputs" currentAddress={currentAccount.address} items={tx.vout} />
+              </div>
+            </Modal>
+          </div>
           <button
             className={s.explorerBtn}
             onClick={async () => {
@@ -59,20 +74,7 @@ const TransactionInfo = () => {
           >
             Open in explorer
           </button>
-          <Modal onClose={() => setOpenModal(false)} open={openModal} title="Detais">
-            <div className={s.tableContainer}>
-              <TableItem
-                label="Inputs"
-                currentAddress={currentAccount.address}
-                items={tx.vin.map((i) => ({
-                  scriptpubkey_address: i.prevout.scriptpubkey_address,
-                  value: i.prevout.value,
-                }))}
-              />
-              <TableItem label="Outputs" currentAddress={currentAccount.address} items={tx.vout} />
-            </div>
-          </Modal>
-        </div>
+        </>
       ) : (
         <ReactLoading type="spin" color="#fff" />
       )}

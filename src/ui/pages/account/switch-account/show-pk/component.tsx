@@ -27,8 +27,10 @@ const ShowPk = () => {
     <div className={s.showPk}>
       {unlocked ? (
         <div className={s.showPkDiv}>
+          <div className={s.secretContainer}>
+            <div className={s.secret}>{secret}</div>
+          </div>
           <CopyBtn label="Copy" value={secret} />
-          <div className={s.secret}>{secret}</div>
         </div>
       ) : (
         <CheckPassword

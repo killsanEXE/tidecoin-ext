@@ -28,17 +28,17 @@ const Modal: FC<Props> = ({ title, children, open, onClose }) => {
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center text-center">
+          <div className="flex min-h-full items-end justify-center text-center md:items-start">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300 transform"
-              enterFrom="opacity-0 translate-y-full"
-              enterTo="opacity-100 translate-y-0"
+              enterFrom="opacity-0 translate-y-full md:translate-y-0"
+              enterTo="opacity-100 translate-y-0 md:translate-y-full"
               leave="ease-in duration-200 transform"
-              leaveFrom="opacity-100 translate-y-0"
-              leaveTo="opacity-0 translate-y-full"
+              leaveFrom="opacity-100 translate-y-0 md:translate-y-full"
+              leaveTo="opacity-0 translate-y-full md:translate-y-0"
             >
-              <Dialog.Panel className="relative w-full max-w-md transform overflow-hidden rounded-t-2xl bg-bg px-3 py-5 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="relative w-full max-w-md transform overflow-hidden rounded-t-2xl bg-bg px-3 py-5 text-left align-middle shadow-xl transition-all md:rounded-2xl md:p-5">
                 <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-text text-center">
                   {title}
                 </Dialog.Title>

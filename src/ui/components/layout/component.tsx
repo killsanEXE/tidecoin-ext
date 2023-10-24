@@ -113,6 +113,10 @@ export default function PagesLayout() {
       route: "/pages/show-mnemonic/@",
       title: "Recovering mnemonic",
     },
+    {
+      route: "/pages/show-pk/@",
+      title: "Recovering private key",
+    },
   ];
 
   const currentRoute = useLocation();

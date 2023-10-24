@@ -9,7 +9,7 @@
 }
 
 body {
-  @apply mx-auto w-[350px] h-[600px] bg-bg text-text;
+  @apply mx-auto bg-bg text-text md:max-w-2xl md:py-6 min-w-[350px];
 
   font-family: "Montserrat", sans-serif;
 }
@@ -56,7 +56,7 @@ input[type="number"] {
 }
 
 .input {
-  @apply p-2 text-base text-text bg-input-bg rounded-xl;
+  @apply p-2 text-base text-text bg-input-bg rounded-xl md:bg-bg;
 }
 
 .react-loading {
@@ -64,7 +64,7 @@ input[type="number"] {
 }
 
 .app {
-  @apply h-full min-h-screen flex justify-center items-center w-full;
+  @apply h-full min-h-screen flex justify-center items-center w-full md:bg-input-bg md:rounded-2xl md:overflow-hidden md:min-h-max md:pb-6;
 
   .main-route {
     @apply w-full flex justify-center;

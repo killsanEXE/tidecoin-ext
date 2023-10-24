@@ -1,6 +1,6 @@
 import { useCreateTidecoinTxCallback } from "@/ui/hooks/transactions";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
-import { Fragment, useCallback, useEffect, useState, ChangeEventHandler, MouseEventHandler } from "react";
+import { Fragment, useCallback, useEffect, useState, ChangeEventHandler, MouseEventHandler, useId } from "react";
 import s from "./styles.module.scss";
 import cn from "classnames";
 import toast from "react-hot-toast";
@@ -22,6 +22,8 @@ interface FormType {
 }
 
 const CreateSend = () => {
+  const formId = useId();
+
   const [isOpenModal, setOpenModal] = useState<boolean>(false);
   const [isSaveAddress, setIsSaveAddress] = useState<boolean>(false);
   const [formData, setFormData] = useState<FormType>({
@@ -125,133 +127,136 @@ const CreateSend = () => {
   };
 
   return (
-    <form
-      className={cn("form", s.send)}
-      onSubmit={(e) => {
-        e.preventDefault();
-        send(formData);
-      }}
-    >
-      <div className={s.inputs}>
-        <div className="form-field">
-          <span className="input-span">Address</span>
-          <div className="flex gap-2">
-            <Combobox
-              value={formData.address}
-              onChange={(e) => {
-                setFormData((prev) => ({ ...prev, address: e }));
-              }}
-            >
-              <div className="relative w-full">
-                <Combobox.Input
-                  displayValue={(address: string) => address}
-                  autoComplete="off"
-                  className="input w-full"
-                  value={formData.address}
-                  onChange={(v) => {
-                    setFormData((prev) => ({ ...prev, address: v.target.value }));
-                    setQuery(v.target.value);
-                  }}
-                />
-                {filteredAddresses.length <= 0 ? (
-                  ""
-                ) : (
-                  <Transition
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                    afterLeave={() => {}}
-                  >
-                    <Combobox.Options className={s.addressbookoptions}>
-                      {filteredAddresses.map((address) => (
-                        <Combobox.Option className={s.addressbookoption} key={address} value={address}>
-                          {shortAddress(address, 14)}
-                        </Combobox.Option>
-                      ))}
-                    </Combobox.Options>
-                  </Transition>
-                )}
-              </div>
-            </Combobox>
-            <button className="bg-input-bg px-2 rounded-xl" title="Address book" onClick={onOpenAddressBook}>
-              <BookOpenIcon className="w-5 h-5" />
-            </button>
+    <div className="flex flex-col h-full justify-between w-full">
+      <form
+        id={formId}
+        className={cn("form", s.send)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          send(formData);
+        }}
+      >
+        <div className={s.inputs}>
+          <div className="form-field">
+            <span className="input-span">Address</span>
+            <div className="flex gap-2">
+              <Combobox
+                value={formData.address}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, address: e }));
+                }}
+              >
+                <div className="relative w-full">
+                  <Combobox.Input
+                    displayValue={(address: string) => address}
+                    autoComplete="off"
+                    className="input w-full"
+                    value={formData.address}
+                    onChange={(v) => {
+                      setFormData((prev) => ({ ...prev, address: v.target.value }));
+                      setQuery(v.target.value);
+                    }}
+                  />
+                  {filteredAddresses.length <= 0 ? (
+                    ""
+                  ) : (
+                    <Transition
+                      as={Fragment}
+                      leave="transition ease-in duration-100"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
+                      afterLeave={() => {}}
+                    >
+                      <Combobox.Options className={s.addressbookoptions}>
+                        {filteredAddresses.map((address) => (
+                          <Combobox.Option className={s.addressbookoption} key={address} value={address}>
+                            {shortAddress(address, 14)}
+                          </Combobox.Option>
+                        ))}
+                      </Combobox.Options>
+                    </Transition>
+                  )}
+                </div>
+              </Combobox>
+              <button className="bg-input-bg px-2 rounded-xl" title="Address book" onClick={onOpenAddressBook}>
+                <BookOpenIcon className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+          <div className="form-field">
+            <span className="input-span">Amount</span>
+            <div className="flex gap-2 w-full">
+              <input
+                type="number"
+                placeholder="Amount to send"
+                className="input w-full"
+                value={formData.amount}
+                onChange={onAmountChange}
+              />
+              <button className={s.maxAmount} onClick={onMaxClick}>
+                MAX
+              </button>
+            </div>
           </div>
         </div>
-        <div className="form-field">
-          <span className="input-span">Amount</span>
-          <div className="flex gap-2 w-full">
-            <input
-              type="number"
-              placeholder="Amount to send"
-              className="input w-full"
-              value={formData.amount}
-              onChange={onAmountChange}
-            />
-            <button className={s.maxAmount} onClick={onMaxClick}>
-              MAX
-            </button>
-          </div>
-        </div>
-      </div>
 
-      <div className={s.feeDiv}>
-        <div className={cn("form-field", s.amountInput)}>
-          <span className="input-span">Fee:</span>
-          <FeeInput
-            onChange={useCallback((v) => setFormData((prev) => ({ ...prev, feeAmount: v })), [setFormData])}
-            onIncludeChange={useCallback(
-              (v) => setFormData((prev) => ({ ...prev, includeFeeInAmount: v })),
-              [setFormData]
-            )}
-            includeFeeValue={formData.includeFeeInAmount}
-            includeFeeLocked={includeFeeLocked}
+        <div className={s.feeDiv}>
+          <div className={cn("form-field", s.amountInput)}>
+            <span className="input-span">Fee:</span>
+            <FeeInput
+              onChange={useCallback((v) => setFormData((prev) => ({ ...prev, feeAmount: v })), [setFormData])}
+              onIncludeChange={useCallback(
+                (v) => setFormData((prev) => ({ ...prev, includeFeeInAmount: v })),
+                [setFormData]
+              )}
+              includeFeeValue={formData.includeFeeInAmount}
+              includeFeeLocked={includeFeeLocked}
+            />
+          </div>
+
+          <Switch
+            label="Save address for the next payments"
+            value={isSaveAddress}
+            onChange={setIsSaveAddress}
+            locked={false}
           />
         </div>
 
-        <Switch
-          label="Save address for the next payments"
-          value={isSaveAddress}
-          onChange={setIsSaveAddress}
-          locked={false}
-        />
-      </div>
-
-      <button type="submit" className={cn("btn primary", s.sendBtn)}>
-        Continue
-      </button>
-
-      <Modal onClose={() => setOpenModal(false)} open={isOpenModal} title="Address book">
-        {!addressBook.length && <div className="pt-8 text-base">No any addresses here</div>}
-        <div className="flex flex-col gap-3 mt-6">
-          {addressBook.map((i, idx) => (
-            <div
-              key={`ab-${idx}`}
-              className="cursor-pointer flex gap-1"
-              onClick={() => {
-                setOpenModal(false);
-                setFormData((prev) => ({ ...prev, address: i }));
-              }}
-            >
-              <div className="px-4 py-2 rounded-xl bg-input-bg select-none hover:bg-gray-500 transition-colors">
-                {shortAddress(i, 17)}
-              </div>
+        <Modal onClose={() => setOpenModal(false)} open={isOpenModal} title="Address book">
+          {!addressBook.length && <div className="pt-8 text-base">No any addresses here</div>}
+          <div className="flex flex-col gap-3 mt-6">
+            {addressBook.map((i, idx) => (
               <div
-                className="p-2 rounded-xl bg-input-bg hover:bg-red-500 transition-colors"
-                onClick={async () => {
-                  await updateAppState({
-                    addressBook: addressBook.filter((d) => d !== i),
-                  });
+                key={`ab-${idx}`}
+                className="cursor-pointer flex gap-1"
+                onClick={() => {
+                  setOpenModal(false);
+                  setFormData((prev) => ({ ...prev, address: i }));
                 }}
               >
-                <MinusCircleIcon className="w-5 h-5" />
+                <div className="px-4 py-2 rounded-xl bg-input-bg select-none hover:bg-gray-500 transition-colors">
+                  {shortAddress(i, 17)}
+                </div>
+                <div
+                  className="p-2 rounded-xl bg-input-bg hover:bg-red-500 transition-colors"
+                  onClick={async () => {
+                    await updateAppState({
+                      addressBook: addressBook.filter((d) => d !== i),
+                    });
+                  }}
+                >
+                  <MinusCircleIcon className="w-5 h-5" />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </Modal>
-    </form>
+            ))}
+          </div>
+        </Modal>
+      </form>
+
+      <button type="submit" className={"btn primary m-6 md:mb-3"} form={formId}>
+        Continue
+      </button>
+    </div>
   );
 };
 
