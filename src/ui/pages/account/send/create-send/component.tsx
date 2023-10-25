@@ -84,6 +84,7 @@ const CreateSend = () => {
         feeAmount: location.state.feeAmount,
         includeFeeInAmount: location.state.includeFeeInAmount,
       });
+      if (currentAccount.balance >= location.state.amount) setIncludeFeeLocked(true);
     }
   }, [location.state, setFormData]);
 
@@ -92,8 +93,8 @@ const CreateSend = () => {
     query === ""
       ? addressBook
       : addressBook.filter((address) => {
-          return address.toLowerCase().startsWith(query.toLowerCase());
-        });
+        return address.toLowerCase().startsWith(query.toLowerCase());
+      });
 
   const onOpenAddressBook: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -165,7 +166,7 @@ const CreateSend = () => {
                       leave="transition ease-in duration-100"
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
-                      afterLeave={() => {}}
+                      afterLeave={() => { }}
                     >
                       <Combobox.Options className={s.addressbookoptions}>
                         {filteredAddresses.map((address) => (
