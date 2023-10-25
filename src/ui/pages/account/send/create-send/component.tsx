@@ -19,6 +19,7 @@ interface FormType {
   amount: string;
   feeAmount: number;
   includeFeeInAmount: boolean;
+  inputedFee?: number;
 }
 
 const CreateSend = () => {
@@ -81,10 +82,10 @@ const CreateSend = () => {
       setFormData({
         address: location.state.toAddress,
         amount: location.state.amount,
-        feeAmount: location.state.feeAmount,
+        feeAmount: location.state.inputedFee,
         includeFeeInAmount: location.state.includeFeeInAmount,
       });
-      if (currentAccount.balance >= location.state.amount) setIncludeFeeLocked(true);
+      if (currentAccount.balance <= location.state.amount) setIncludeFeeLocked(true);
     }
   }, [location.state, setFormData]);
 
@@ -205,7 +206,7 @@ const CreateSend = () => {
           <div className={cn("form-field", s.amountInput)}>
             <span className="input-span">Fee:</span>
             <FeeInput
-              onChange={useCallback((v) => setFormData((prev) => ({ ...prev, feeAmount: v })), [setFormData])}
+              onChange={useCallback((v) => setFormData((prev) => ({ ...prev, feeAmount: v, inputedFee: v })), [setFormData])}
               onIncludeChange={useCallback(
                 (v) => setFormData((prev) => ({ ...prev, includeFeeInAmount: v })),
                 [setFormData]
