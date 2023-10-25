@@ -9,7 +9,7 @@
 }
 
 body {
-  @apply mx-auto bg-bg text-text md:max-w-2xl md:py-6 min-w-[350px];
+  @apply mx-auto bg-bg text-text md:max-w-2xl md:py-6 min-w-[350px] min-h-[600px];
 
   font-family: "Montserrat", sans-serif;
 }
@@ -40,7 +40,7 @@ input[type="number"] {
 }
 
 .btn {
-  @apply px-2 py-2 text-sm rounded-xl font-medium cursor-pointer shadow-sm text-center;
+  @apply px-7 py-2 text-sm rounded-xl font-medium cursor-pointer shadow-sm text-center;
 
   &:disabled {
     @apply cursor-not-allowed opacity-50;
