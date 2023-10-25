@@ -1,61 +1,43 @@
 .switchAccDiv {
   @apply flex justify-items-start flex-col items-center w-full h-full;
+}
 
-  .controlDiv {
-    @apply h-[10vh] flex justify-between w-[90%] items-center;
+.accounts {
+  @apply flex flex-col gap-4 p-4 w-full;
+}
 
-    .controlElem {
-      @apply text-text flex items-center justify-between;
-    }
+.mainAcc {
+  @apply relative overflow-hidden rounded-xl border border-text p-2;
+}
 
-    .addNew:hover {
-      @apply cursor-pointer;
-    }
-  }
+.account {
+  @apply flex justify-between items-center;
+}
 
-  .accounts {
-    @apply flex flex-col gap-4 pt-4 w-[95%] pb-4;
+.manageAccButton {
+  @apply bg-transparent border-0 rounded-full p-2 py-3 cursor-pointer;
+}
 
-    .mainAcc {
-      @apply relative overflow-hidden rounded-xl border border-text p-2;
-
-      .account {
-        @apply flex justify-between items-center;
-
-        .accControl {
-          .manageAccButton {
-            @apply bg-transparent border-0 rounded-[50%] p-2 py-3 cursor-pointer;
-          }
-        }
-      }
-
-      .active {
-        @apply left-0;
-      }
-    }
-  }
+.active {
+  @apply left-0;
 }
 
 .accInfo {
-  @apply flex flex-col gap-2 w-[90%];
+  @apply flex flex-col gap-2 w-full;
+}
 
-  .name {
-    @apply flex items-center gap-2 font-medium text-base;
+.name {
+  @apply flex items-center gap-2 font-medium text-base;
+}
 
-    .icon {
-      @apply w-[1.5rem];
-    }
-  }
+.icon {
+  @apply w-6;
 }
 
 .copy {
-  @apply select-none cursor-pointer px-3 py-5;
-
-  &:hover svg {
-    @apply scale-110;
-  }
+  @apply select-none cursor-pointer px-3 py-5 hover:scale-110;
 }
 
 .address {
-  @apply text-[.8rem] text-gray-400;
+  @apply text-sm text-gray-400;
 }

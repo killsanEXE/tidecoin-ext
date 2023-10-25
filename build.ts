@@ -28,6 +28,7 @@ function mergeManifests(): Plugin {
       const content = {
         ...baseManifest,
         ...extraManifest,
+        version: process.env.npm_package_version,
       };
       if (Bun.argv.includes("--watch") && !Bun.argv.includes("--firefox")) {
         content.chrome_url_overrides = {
@@ -42,7 +43,11 @@ function mergeManifests(): Plugin {
   };
 }
 
-console.log(`\n💻 Current browser: ${chrome ? "Chrome" : "Firefox"}\n`);
+console.log(
+  `🔨 Building extension... \n` +
+    `💻 Current browser: ${chrome ? "Chrome" : "Firefox"}\n` +
+    `💡 Current version: ${process.env.npm_package_version}`
+);
 
 const buildOptions: BuildOptions = {
   entryPoints: {

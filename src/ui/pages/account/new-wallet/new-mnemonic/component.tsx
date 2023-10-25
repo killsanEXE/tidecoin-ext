@@ -69,7 +69,9 @@ const NewMnemonic = () => {
           ) : (
             <div className={cn(s.stepOne, s.step)}>
               <div>
-                <p className={s.warning}>Please save these words somewhere</p>
+                <p className={s.warning}>
+                  If you lose these words, you will never be able to recover your lost account
+                </p>
                 <div className={s.phrase}>
                   {mnemonicPhrase.split(" ").map((word, index) => (
                     <div key={index} className={s.word}>

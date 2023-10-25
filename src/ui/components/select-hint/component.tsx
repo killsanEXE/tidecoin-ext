@@ -26,7 +26,7 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
 
   return (
     <Combobox value={selected} onChange={setSelected} nullable={true}>
-      <div className="relative">
+      <div className="relative w-full">
         <div className={s.inputBox}>
           <Combobox.Input
             className={s.input}

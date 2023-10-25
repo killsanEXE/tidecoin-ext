@@ -7,11 +7,11 @@
 }
 
 .inputs {
-  @apply w-full flex flex-col justify-center items-center gap-[2rem];
+  @apply w-full flex flex-col justify-center items-center gap-8;
 }
 
 .feeDiv {
-  @apply w-full flex flex-col items-start justify-start gap-[.5rem];
+  @apply w-full flex flex-col items-start justify-start gap-2;
 
   .includeFeeInAmountDiv {
     @apply flex gap-2 mt-2 select-none;

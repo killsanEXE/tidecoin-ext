@@ -32,7 +32,7 @@ const SwitchComponent: FC<Props> = ({ locked, onChange, value, label }) => {
             pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
           />
         </Switch>
-        <Switch.Label className="mr-4 cursor-pointer">{label}</Switch.Label>
+        <Switch.Label className="mr-4 cursor-pointer text-xs">{label}</Switch.Label>
       </div>
     </Switch.Group>
   );

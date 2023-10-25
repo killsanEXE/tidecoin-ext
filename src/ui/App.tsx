@@ -73,13 +73,19 @@ export default function App() {
 
   return (
     <div>
-      <div className="uppercase text-center hidden md:block font-medium text-xl mb-6">Tidecoin</div>
+      <div className="uppercase text-center hidden md:block font-medium text-xl mb-6 select-none">Tidecoin</div>
       <div className="app">
         {isReady ? <RouterProvider router={router} /> : <ReactLoading type="spin" color="#ffbc42" />}
         <Toaster
-          position="bottom-center"
+          position="top-center"
           toastOptions={{
             className: "toast",
+            success: {
+              duration: 900,
+            },
+            error: {
+              duration: 4000,
+            },
           }}
         />
       </div>

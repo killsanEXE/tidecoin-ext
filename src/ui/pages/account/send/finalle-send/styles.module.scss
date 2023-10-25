@@ -1,11 +1,11 @@
 .send {
-    @apply items-start w-full h-full justify-between p-[1rem];
+  @apply items-start w-full h-full justify-between p-4;
 }
 
 .sendBtn {
-    @apply w-full;
+  @apply w-full;
 }
 
 .inputs {
-    @apply w-full flex flex-col justify-center items-center gap-[2rem];
+  @apply w-full flex flex-col justify-center items-center gap-8;
 }

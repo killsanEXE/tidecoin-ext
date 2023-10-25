@@ -5,7 +5,7 @@
     @apply w-full flex justify-center flex-col items-center;
 
     .variant {
-      @apply border-none transition-colors hover:bg-text hover:text-bg pl-5 py-4 flex justify-center cursor-pointer w-full;
+      @apply border-none transition-colors hover:bg-text hover:text-bg pl-5 py-4 cursor-pointer w-full;
     }
   }
 }

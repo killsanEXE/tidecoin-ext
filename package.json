@@ -1,11 +1,13 @@
 {
   "name": "tidecoin-extension",
-  "version": "0.1.0",
+  "version": "0.0.8",
   "private": true,
   "scripts": {
     "dev": "bun build.ts --watch",
+    "fire": "bun build.ts --watch --firefox",
     "chrome": "bun build.ts",
-    "firefox": "bun build.ts --firefox"
+    "firefox": "bun build.ts --firefox",
+    "both": "rm -rf dist && bun build.ts --firefox && bun build.ts"
   },
   "eslintConfig": {
     "extends": [

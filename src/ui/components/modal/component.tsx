@@ -1,20 +1,22 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { FC, Fragment, ReactNode, useRef } from "react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import cn from "classnames";
 
 interface Props {
   title: string;
   children: ReactNode;
   open: boolean;
   onClose: () => void;
+  className?: string;
 }
 
-const Modal: FC<Props> = ({ title, children, open, onClose }) => {
+const Modal: FC<Props> = ({ title, children, open, onClose, className }) => {
   const closeRef = useRef(null);
 
   return (
     <Transition appear show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-30" onClose={onClose} initialFocus={closeRef}>
+      <Dialog as="div" className={cn("relative z-30", className)} onClose={onClose} initialFocus={closeRef}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"

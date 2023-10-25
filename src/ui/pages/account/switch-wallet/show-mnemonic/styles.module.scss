@@ -5,24 +5,24 @@
     @apply px-6 w-full md:mt-10;
 
     .phrase {
-      @apply bg-input-bg text-[1.2rem] w-full;
+      @apply bg-input-bg text-xl w-full;
     }
 
     .copyDiv {
-      @apply flex w-full justify-center gap-[1rem] items-center text-[1.1rem] pt-[2rem] cursor-pointer select-none;
+      @apply flex w-full justify-center gap-4 items-center text-lg pt-8 cursor-pointer select-none;
     }
   }
 }
 
 .phraseWrapper {
-  @apply grid grid-cols-2 text-[0.8rem] gap-x-2 gap-y-6;
+  @apply grid grid-cols-2 text-sm gap-x-2 gap-y-6;
 }
 
 .word {
-  @apply flex justify-between items-center gap-[0.5rem];
+  @apply flex justify-between items-center gap-2;
 
   .wordWord {
-    @apply bg-input-bg p-[.5rem] rounded-lg w-[80%] flex justify-center;
+    @apply bg-input-bg p-2 rounded-lg w-4/5 flex justify-center;
   }
 }
 
@@ -31,7 +31,7 @@
 }
 
 .secret {
-  @apply break-all h-1/2 overflow-y-scroll bg-input-bg rounded-[.5rem] p-[.5rem];
+  @apply break-all h-1/2 overflow-y-scroll bg-input-bg rounded-lg p-2;
 }
 
 .wordIdx {

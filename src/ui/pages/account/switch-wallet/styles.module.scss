@@ -3,7 +3,7 @@
 }
 
 .wallets {
-  @apply flex flex-col gap-4 pt-4 w-[95%] pb-4;
+  @apply flex flex-col gap-4 pt-4 p-4 w-full;
 }
 
 .mainWallet {
@@ -15,7 +15,7 @@
 }
 
 .walletInfo {
-  @apply flex items-center gap-2 w-[90%] font-medium text-base cursor-pointer;
+  @apply flex items-center gap-2 w-full font-medium text-base cursor-pointer;
 }
 
 .wallet {

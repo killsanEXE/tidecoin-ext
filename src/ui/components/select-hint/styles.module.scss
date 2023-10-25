@@ -1,6 +1,6 @@
 .input {
   &Box {
-    @apply relative w-full cursor-default overflow-hidden rounded-lg bg-bg text-left shadow-md focus:outline-none sm:text-sm;
+    @apply relative w-full cursor-default overflow-hidden rounded-lg bg-input-bg text-left shadow-md focus:outline-none sm:text-sm;
   }
 
   @apply w-full border-none p-2 text-sm leading-5 bg-input-bg text-text;
