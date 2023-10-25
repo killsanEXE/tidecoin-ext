@@ -49,7 +49,7 @@ const TransactionInfo = () => {
               <LinkIcon className="w-4 h-4" /> Details
             </div>
 
-            <Modal onClose={() => setOpenModal(false)} open={openModal} title="Detais">
+            <Modal onClose={() => setOpenModal(false)} open={openModal} title="Details">
               <div className={s.tableContainer}>
                 <TableItem
                   label="Inputs"

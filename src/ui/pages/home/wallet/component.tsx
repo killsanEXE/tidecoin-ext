@@ -130,12 +130,16 @@ const Wallet = () => {
               <ListBulletIcon title="Switch account" className={s.accountsIcon} />
             </Link>
           )}
-          <CopyBtn
-            title={currentAccount?.address}
-            className={cn(s.accPubAddress)}
-            label={shortAddress(currentAccount?.address, 9)}
-            value={currentAccount?.address}
-          />
+          <div>
+            <p>{currentAccount.name}</p>
+            <CopyBtn
+              title={currentAccount?.address}
+              className={cn(s.accPubAddress)}
+              label={shortAddress(currentAccount?.address, 9)}
+              value={currentAccount?.address}
+            />
+          </div>
+
         </div>
 
         <div className={cn(s.receiveSendBtns, s.center)}>
