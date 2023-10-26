@@ -20,8 +20,6 @@ const Wallet = () => {
   const [lastBlock, setLastBlock] = useState<number>(0);
   const currentWallet = useGetCurrentWallet();
 
-  if (currentWallet === undefined) return <Navigate to={"/pages/create-new-wallet"} />;
-
   const { apiController, stateController } = useControllersState((v) => ({
     apiController: v.apiController,
     stateController: v.stateController,
@@ -84,7 +82,9 @@ const Wallet = () => {
         });
       }
     })();
-  }, [stateController.getPendingWallet, navigate]);
+  }, [stateController, navigate]);
+
+  if (currentWallet === undefined) return <Navigate to={"/pages/create-new-wallet"} />;
 
   return (
     <div className={s.walletDiv}>
@@ -139,7 +139,6 @@ const Wallet = () => {
               value={currentAccount?.address}
             />
           </div>
-
         </div>
 
         <div className={cn(s.receiveSendBtns, s.center)}>

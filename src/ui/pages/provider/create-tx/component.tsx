@@ -17,7 +17,7 @@ const CreateTx = () => {
       const approval = await notificationController.getApproval();
       setPsbt(approval.params.data);
     })();
-  }, []);
+  }, [notificationController]);
 
   if (!psbt) return <></>;
 

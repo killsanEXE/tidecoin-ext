@@ -1,44 +1,53 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useId } from "react";
 import s from "./styles.module.scss";
 import cn from "classnames";
 import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
 
 interface Props {
   handler: (name: string) => void;
   title?: string;
   oldName?: string;
-  otherNames?: string[];
 }
 
-const Rename: FC<Props> = ({ handler, oldName, otherNames, title }) => {
-  const [name, setName] = useState(oldName ?? "");
+const Rename: FC<Props> = ({ handler, title }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ name: string }>({
+    defaultValues: {
+      name: "",
+    },
+  });
+  const renameId = useId();
 
-  const onRename = () => {
-    if (name.trim().length > 10) toast.error("Maximum length is 8");
-    else if (name.trim().length <= 0) toast.error("Minimum length is 1");
-    else if (otherNames !== undefined && otherNames.length > 0 && otherNames.includes(name.trim()))
-      toast.error("This name is already taken");
-    else handler(name.trim());
+  const onRename = ({ name }: { name: string }) => {
+    handler(name.trim());
   };
 
+  useEffect(() => {
+    toast.error(errors.name.message);
+  }, [errors]);
+
   return (
-    <form className={cn(s.form, "form")} onSubmit={(e) => e.preventDefault()}>
+    <form className={cn(s.form, "form")} onSubmit={handleSubmit(onRename)}>
       <p className={cn(s.formTitle, "form-title")}>{title !== undefined ? title : "Enter new name"}</p>
       <div className="form-field">
-        <span className="input-span">{title}</span>
+        <label htmlFor={renameId} className="input-span">
+          {title}
+        </label>
         <input
-          type="text"
+          id={renameId}
           className="input"
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-          max="8"
-          value={name}
+          {...register("name", {
+            minLength: 2,
+            maxLength: 16,
+            required: true,
+          })}
         />
       </div>
-      <button className="btn primary" onClick={onRename}>
-        Enter
-      </button>
+      <button className="btn primary">Enter</button>
     </form>
   );
 };

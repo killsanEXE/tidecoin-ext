@@ -23,7 +23,7 @@ const Layout: FC<Props> = ({ children, documentTitle, resolveBtnClassName, resol
       const approval = await notificationController.getApproval();
       setOrigin(approval.params.session.origin);
     })();
-  }, []);
+  }, [documentTitle, notificationController]);
 
   if (!origin) {
     return (
@@ -43,15 +43,15 @@ const Layout: FC<Props> = ({ children, documentTitle, resolveBtnClassName, resol
 
   return (
     <div className={s.container}>
-      <div className="flex justify-center w-full mt-4">
-        <div className="px-5 py-2 rounded-xl bg-input-bg text-gray-300">{origin}</div>
+      <div className={s.originWrapper}>
+        <div className={s.origin}>{origin}</div>
       </div>
       <div className={s.content}>{children}</div>
       <div className={s.btnContainer}>
         <button className={resolveBtnClassName} onClick={onResolve}>
           {resolveBtnText ?? "Resolve"}
         </button>
-        <button className="bg-bg border border-text hover:bg-red-500 hover:border-red-500" onClick={onReject}>
+        <button className={s.reject} onClick={onReject}>
           Reject
         </button>
       </div>

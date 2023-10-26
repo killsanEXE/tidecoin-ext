@@ -21,6 +21,12 @@ const SwitchWallet = () => {
 
   const [deleteWalletId, setDeleteWalletId] = useState<number>();
 
+  const onDelete = async () => {
+    await deleteWallet(wallets[deleteWalletId].id);
+    setSelected(undefined);
+    setDeleteWalletId(undefined);
+  };
+
   return (
     <div className={s.switchWalletDiv}>
       <div className={s.wallets}>
@@ -89,14 +95,7 @@ const SwitchWallet = () => {
           </span>
         </div>
         <div className="flex justify-center gap-4">
-          <button
-            className="btn hover:bg-red-500"
-            onClick={() => {
-              deleteWallet(wallets[deleteWalletId].id);
-              setSelected(undefined);
-              setDeleteWalletId(undefined);
-            }}
-          >
+          <button className="btn hover:bg-red-500" onClick={onDelete}>
             Yes
           </button>
           <button className="btn hover:bg-text hover:text-bg" onClick={() => setDeleteWalletId(undefined)}>

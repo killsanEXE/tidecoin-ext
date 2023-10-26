@@ -8,13 +8,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAppState } from "@/ui/states/appState";
 import { Combobox, Transition } from "@headlessui/react";
 import FeeInput from "./fee-input";
-import { BookOpenIcon, MinusCircleIcon } from "@heroicons/react/24/solid";
-import Modal from "@/ui/components/modal";
+import { BookOpenIcon } from "@heroicons/react/24/solid";
 import Switch from "@/ui/components/switch";
 import { shortAddress } from "@/shared/utils/transactions";
 import { useUpdateAddressBook } from "@/ui/hooks/app";
+import AddressBookModal from "./address-book/component";
 
-interface FormType {
+export interface FormType {
   address: string;
   amount: string;
   feeAmount: number;
@@ -40,19 +40,21 @@ const CreateSend = () => {
   const location = useLocation();
   const updateAddressBook = useUpdateAddressBook();
 
-  const { addressBook, updateAppState } = useAppState((v) => ({
+  const { addressBook } = useAppState((v) => ({
     addressBook: v.addressBook,
-    updateAppState: v.updateAppState,
   }));
 
   const send = async ({ address, amount, feeAmount, includeFeeInAmount }: FormType) => {
     if (Number(amount) < 0.01) {
       return toast.error("Minimum amount is 0.01 TDC");
-    } else if (address.trim().length <= 0) {
+    }
+    if (address.trim().length <= 0) {
       return toast.error("Insert the addresss of receiver");
-    } else if (Number(amount) > (currentAccount?.balance ?? 0)) {
+    }
+    if (Number(amount) > (currentAccount?.balance ?? 0)) {
       return toast.error("There's not enough money in your account");
-    } else if (feeAmount <= 1 / 10 ** 8) {
+    }
+    if (feeAmount <= 1 / 10 ** 8) {
       return toast.error("Increase the fee");
     }
     try {
@@ -78,7 +80,7 @@ const CreateSend = () => {
   };
 
   useEffect(() => {
-    if (location.state !== null && (location.state.toAddress !== null || location.state.toAddress !== undefined)) {
+    if (location.state && location.state.toAddress) {
       setFormData({
         address: location.state.toAddress,
         amount: location.state.amount,
@@ -87,15 +89,15 @@ const CreateSend = () => {
       });
       if (currentAccount.balance <= location.state.amount) setIncludeFeeLocked(true);
     }
-  }, [location.state, setFormData]);
+  }, [location.state, setFormData, currentAccount.balance]);
 
   const [query, setQuery] = useState("");
   const filteredAddresses =
     query === ""
       ? addressBook
       : addressBook.filter((address) => {
-        return address.toLowerCase().startsWith(query.toLowerCase());
-      });
+          return address.toLowerCase().startsWith(query.toLowerCase());
+        });
 
   const onOpenAddressBook: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -167,7 +169,7 @@ const CreateSend = () => {
                       leave="transition ease-in duration-100"
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
-                      afterLeave={() => { }}
+                      afterLeave={() => {}}
                     >
                       <Combobox.Options className={s.addressbookoptions}>
                         {filteredAddresses.map((address) => (
@@ -206,7 +208,10 @@ const CreateSend = () => {
           <div className={cn("form-field", s.amountInput)}>
             <span className="input-span">Fee:</span>
             <FeeInput
-              onChange={useCallback((v) => setFormData((prev) => ({ ...prev, feeAmount: v, inputedFee: v })), [setFormData])}
+              onChange={useCallback(
+                (v) => setFormData((prev) => ({ ...prev, feeAmount: v, inputedFee: v })),
+                [setFormData]
+              )}
               onIncludeChange={useCallback(
                 (v) => setFormData((prev) => ({ ...prev, includeFeeInAmount: v })),
                 [setFormData]
@@ -223,37 +228,9 @@ const CreateSend = () => {
             locked={false}
           />
         </div>
-
-        <Modal onClose={() => setOpenModal(false)} open={isOpenModal} title="Address book">
-          {!addressBook.length && <div className="pt-8 text-base">No any addresses here</div>}
-          <div className="flex flex-col gap-3 mt-6">
-            {addressBook.map((i, idx) => (
-              <div
-                key={`ab-${idx}`}
-                className="cursor-pointer flex gap-1"
-                onClick={() => {
-                  setOpenModal(false);
-                  setFormData((prev) => ({ ...prev, address: i }));
-                }}
-              >
-                <div className="px-4 py-2 rounded-xl bg-input-bg select-none hover:bg-gray-500 transition-colors">
-                  {shortAddress(i, 17)}
-                </div>
-                <div
-                  className="p-2 rounded-xl bg-input-bg hover:bg-red-500 transition-colors"
-                  onClick={async () => {
-                    await updateAppState({
-                      addressBook: addressBook.filter((d) => d !== i),
-                    });
-                  }}
-                >
-                  <MinusCircleIcon className="w-5 h-5" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </Modal>
       </form>
+
+      <AddressBookModal isOpen={isOpenModal} onClose={() => setOpenModal(false)} setFormData={setFormData} />
 
       <button type="submit" className={"btn primary m-6 md:mb-3"} form={formId}>
         Continue

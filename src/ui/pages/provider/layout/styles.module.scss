@@ -13,3 +13,15 @@
     @apply py-2 font-medium text-sm rounded-xl w-full transition-colors;
   }
 }
+
+.reject {
+  @apply bg-bg border border-text hover:bg-red-500 hover:border-red-500;
+}
+
+.origin {
+  @apply px-5 py-2 rounded-xl bg-input-bg text-gray-300;
+
+  &Wrapper {
+    @apply flex justify-center w-full mt-4;
+  }
+}

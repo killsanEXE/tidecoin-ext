@@ -16,7 +16,7 @@ const Sign = () => {
       const approval = await notificationController.getApproval();
       setMessage(approval.params.data.text);
     })();
-  }, []);
+  }, [notificationController]);
 
   return (
     <Layout

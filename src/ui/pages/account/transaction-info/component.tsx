@@ -22,6 +22,13 @@ const TransactionInfo = () => {
   } = useLocation();
   const tx = transaction as ITransaction;
 
+  const onOpenExplorer = async () => {
+    await browserTabsCreate({
+      url: `https://explorer.tidecoin.org/tx/${transaction.txid}`,
+      active: true,
+    });
+  };
+
   return (
     <div className={s.transactionInfoDiv}>
       {transaction ? (
@@ -63,15 +70,7 @@ const TransactionInfo = () => {
               </div>
             </Modal>
           </div>
-          <button
-            className={s.explorerBtn}
-            onClick={async () => {
-              await browserTabsCreate({
-                url: `https://explorer.tidecoin.org/tx/${transaction.txid}`,
-                active: true,
-              });
-            }}
-          >
+          <button className={s.explorerBtn} onClick={onOpenExplorer}>
             Open in explorer
           </button>
         </>

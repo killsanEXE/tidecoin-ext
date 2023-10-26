@@ -18,9 +18,9 @@ const SignTransaction = () => {
       const approval = await notificationController.getApproval();
       setPsbt(Psbt.fromHex(approval.params.data.hex as SignTransactionProps));
     })();
-  }, []);
+  }, [notificationController]);
 
-  if (!psbt) return <></>
+  if (!psbt) return <></>;
 
   const fields = [
     {
@@ -33,8 +33,7 @@ const SignTransaction = () => {
     },
     {
       label: "Fee",
-      // value: `${psbt.getFee() / 10 ** 8} TDC`,
-      value: `${1} TDC`,
+      value: `${psbt.getFee() / 10 ** 8} TDC`,
     },
   ];
 

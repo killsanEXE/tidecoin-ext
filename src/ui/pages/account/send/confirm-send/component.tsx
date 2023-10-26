@@ -37,8 +37,9 @@ const ConfirmSend = () => {
     },
     {
       label: "Fee",
-      value: `${location.state.feeAmount / 10 ** 8} TDC (${location.state.includeFeeInAmount ? "included" : "not included"
-        })`,
+      value: `${location.state.feeAmount / 10 ** 8} TDC (${
+        location.state.includeFeeInAmount ? "included" : "not included"
+      })`,
     },
   ];
 
@@ -66,7 +67,3 @@ const ConfirmSend = () => {
 };
 
 export default ConfirmSend;
-
-const hexToBin = (hex) => {
-  return (hex.match(/.{1,2}/g) || []).map((byte) => parseInt(byte, 16).toString(2).padStart(8, "0")).join("");
-};

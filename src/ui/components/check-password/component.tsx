@@ -20,8 +20,8 @@ const CheckPassword: FC<Props> = ({ handler }) => {
   const { register, handleSubmit } = useForm<FormType>();
 
   const checkPassword = ({ password }: FormType) => {
-    if (password === appPassword) return handler(password);
-    toast.error("Incorrect password");
+    if (password !== appPassword) return toast.error("Incorrect password");
+    handler(password);
   };
 
   return (

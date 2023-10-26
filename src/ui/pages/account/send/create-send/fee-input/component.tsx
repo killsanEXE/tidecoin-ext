@@ -40,14 +40,13 @@ const FeeInput: FC<Props> = ({ onChange, onIncludeChange, includeFeeValue, inclu
     <div className={s.container}>
       <div className={s.cardWrapper}>
         {cards.map((i) => (
-          <div
-            className={cn(s.card, { [s.cardSelected]: i.value === selected })}
+          <FeeCard
             key={i.value}
-            onClick={() => setSelected(i.value as typeof selected)}
-          >
-            <div className={s.title}>{i.title}</div>
-            {i.description ? <div className={s.description}>{i.description}</div> : ""}
-          </div>
+            description={i.description}
+            title={i.title}
+            onSelect={() => setSelected(i.value as typeof selected)}
+            selected={i.value === selected}
+          />
         ))}
       </div>
       <input
@@ -61,6 +60,22 @@ const FeeInput: FC<Props> = ({ onChange, onIncludeChange, includeFeeValue, inclu
         value={includeFeeValue}
         locked={includeFeeLocked}
       />
+    </div>
+  );
+};
+
+interface FeeCardProps {
+  selected: boolean;
+  onSelect: () => void;
+  title: string;
+  description: string;
+}
+
+const FeeCard: FC<FeeCardProps> = ({ selected, onSelect, title, description }) => {
+  return (
+    <div className={cn(s.card, { [s.cardSelected]: selected })} onClick={onSelect}>
+      <div className={s.title}>{title}</div>
+      {description ? <div className={s.description}>{description}</div> : ""}
     </div>
   );
 };

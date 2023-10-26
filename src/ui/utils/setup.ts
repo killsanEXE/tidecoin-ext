@@ -95,5 +95,5 @@ export function useSyncStorages() {
       appState,
       walletState,
     };
-  }, [stateController]);
+  }, [stateController, updateAppState, updateWalletState]);
 }

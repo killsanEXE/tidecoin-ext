@@ -1,11 +1,27 @@
-.send {
-  @apply items-start w-full h-full justify-between p-4;
+.container {
+  @apply text-sm flex-col h-full flex justify-between items-center px-6;
 }
 
-.sendBtn {
-  @apply w-full;
+.btn {
+  @apply bg-text text-bg rounded-xl w-full py-2 border-none font-medium text-sm text-center;
+
+  &Container {
+    @apply flex items-center gap-3;
+  }
 }
 
-.inputs {
-  @apply w-full flex flex-col justify-center items-center gap-8;
+.result {
+  @apply text-center font-medium text-base;
+
+  &Container {
+    @apply flex flex-col gap-4 justify-center mb-16;
+  }
+
+  &Icon {
+    &Container {
+      @apply rounded-full bg-gradient-to-tr from-green-500 to-emerald-400;
+    }
+
+    @apply w-28 h-28 text-bg p-3;
+  }
 }

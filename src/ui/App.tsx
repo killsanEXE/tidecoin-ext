@@ -69,7 +69,7 @@ export default function App() {
     if (!isReady) setupApp();
     else if (isReady && isUnlocked) setRouter(authenticatedRouter);
     else setRouter(guestRouter);
-  }, [isReady, isUnlocked, updateWalletState, updateAppState, router, setRouter]);
+  }, [isReady, isUnlocked, updateWalletState, updateAppState, router, setRouter, setupApp]);
 
   return (
     <div>

@@ -24,14 +24,12 @@ const NewAccount = () => {
   };
 
   const createNewAcc = async ({ name }: FormType) => {
-    if (name.length <= 10 && !nameAlreadyExists(name)) {
-      await createNewAccount(name);
-      toast.success("Created new account");
-      navigate("/home");
-    } else {
-      if (nameAlreadyExists(name)) toast.error("Name for this account is already taken");
-      else toast.error("Maximum name length is 8");
-    }
+    if (name.length > 16) return toast.error("Maximum name length is 16");
+    if (nameAlreadyExists(name)) return toast.error("Name for this account is already taken");
+
+    await createNewAccount(name);
+    toast.success("Created new account");
+    navigate("/home");
   };
 
   return (
