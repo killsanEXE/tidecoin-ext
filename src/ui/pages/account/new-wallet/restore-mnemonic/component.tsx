@@ -44,7 +44,6 @@ const RestoreMnemonic = () => {
   const onRestore = async () => {
     try {
       await createNewWallet(mnemonicPhrase.join(" "), "root", addressType);
-      await walletController.saveWallets();
       await updateWalletState({ vaultIsEmpty: false });
       navigate("/home");
     } catch (e) {

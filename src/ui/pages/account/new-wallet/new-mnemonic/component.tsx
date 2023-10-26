@@ -41,7 +41,7 @@ const NewMnemonic = () => {
       pendingWallet: phrase,
     });
     setMnemonicPhrase(phrase);
-  }, [setMnemonicPhrase, updateAppState, walletController, location.state.pending]);
+  }, [setMnemonicPhrase, updateAppState, walletController, location.state?.pending]);
 
   useEffect(() => {
     if (mnemonicPhrase) return;
@@ -58,7 +58,6 @@ const NewMnemonic = () => {
     setLoading(true);
     await createNewWallet(mnemonicPhrase, "root", addressType);
     await updateWalletState({ vaultIsEmpty: false });
-    await walletController.saveWallets();
     await stateController.clearPendingWallet();
     setLoading(false);
     navigate("/home");

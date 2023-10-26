@@ -1,11 +1,13 @@
 import { context, build, BuildOptions, Plugin } from "esbuild";
 import { wasmLoader } from "esbuild-plugin-wasm";
 import { copy } from "esbuild-plugin-copy";
-import stylePlugin from "esbuild-style-plugin";
+// import stylePlugin from "esbuild-style-plugin";
+import { sassPlugin, postcssModules } from "esbuild-sass-plugin";
 import { nodeModulesPolyfillPlugin } from "esbuild-plugins-node-modules-polyfill";
 import svgPlugin from "esbuild-svg";
 const autoprefixer = require("autoprefixer");
 const tailwindcss = require("tailwindcss");
+import postcss from "postcss";
 
 async function readJsonFile(path: string) {
   const file = Bun.file(path);
@@ -20,6 +22,8 @@ const firefoxManifestPath = "./configs/manifests/firefox.json";
 
 const baseManifest = await readJsonFile(baseManifestPath);
 const extraManifest = await readJsonFile(chrome ? chromeManifestPath : firefoxManifestPath);
+
+const isDev = Bun.argv.includes("--watch") || Bun.argv.includes("-w");
 
 function mergeManifests(): Plugin {
   return {
@@ -44,9 +48,10 @@ function mergeManifests(): Plugin {
 }
 
 console.log(
-  `🔨 Building extension... \n` +
-    `💻 Current browser: ${chrome ? "Chrome" : "Firefox"}\n` +
-    `💡 Current version: ${process.env.npm_package_version}`
+  `\n🔨 Building extension... \n` +
+    `💻 Browser: ${chrome ? "Chrome" : "Firefox"}\n` +
+    `💡 Version: ${process.env.npm_package_version}\n` +
+    `♻️  Environment: ${isDev ? "Development" : "Production"}`
 );
 
 const buildOptions: BuildOptions = {
@@ -57,7 +62,7 @@ const buildOptions: BuildOptions = {
     ui: "src/ui/index.tsx",
   },
   outdir: chrome ? "dist/chrome" : "dist/firefox",
-  minify: true,
+  minify: !isDev,
   bundle: true,
   logLevel: "info",
   plugins: [
@@ -65,9 +70,20 @@ const buildOptions: BuildOptions = {
       typescript: true,
       svgo: true,
     }),
-    stylePlugin({
-      postcss: {
-        plugins: [autoprefixer(), tailwindcss()],
+    // stylePlugin({
+    //   postcss: {
+    //     plugins: [autoprefixer(), tailwindcss()],
+    //   },
+    // }),
+    sassPlugin({
+      filter: /\.module\.scss$/,
+      transform: postcssModules({}, [autoprefixer, tailwindcss]),
+    }),
+    sassPlugin({
+      filter: /\.scss$/,
+      async transform(source) {
+        const { css } = await postcss([autoprefixer, tailwindcss]).process(source, { from: undefined });
+        return css;
       },
     }),
     wasmLoader(),
@@ -89,7 +105,8 @@ const buildOptions: BuildOptions = {
   ],
 };
 
-if (Bun.argv.includes("--watch") || Bun.argv.includes("-w")) {
+if (isDev) {
+  console.log("\n");
   const ctx = await context(buildOptions);
   await ctx.watch();
 } else {

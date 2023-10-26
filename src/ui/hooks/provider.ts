@@ -40,9 +40,9 @@ export const useApproval = () => {
     if (!isNotification()) {
       return;
     }
-    window.addEventListener("beforeunload", rejectApproval);
+    window.addEventListener("beforeunload", rejectApproval as any);
 
-    return () => window.removeEventListener("beforeunload", rejectApproval);
+    return () => window.removeEventListener("beforeunload", rejectApproval as any);
   }, [rejectApproval]);
 
   return [notificationController, resolveApproval, rejectApproval] as const;

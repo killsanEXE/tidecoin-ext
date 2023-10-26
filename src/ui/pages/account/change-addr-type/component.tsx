@@ -7,7 +7,7 @@ import { useUpdateCurrentAccountBalance, useUpdateCurrentWallet } from "@/ui/hoo
 import { useCallback } from "react";
 
 const ChangeAddrType = () => {
-  const { keyringController, walletController, notificationController } = useControllersState((v) => ({
+  const { keyringController, notificationController } = useControllersState((v) => ({
     keyringController: v.keyringController,
     walletController: v.walletController,
     notificationController: v.notificationController,
@@ -33,7 +33,6 @@ const ChangeAddrType = () => {
       });
       await updateCurrentAccountBalance(addresses[currentAccount?.id as any as number]);
       await notificationController.changedAccount();
-      await walletController.saveWallets();
     },
     [
       udpateCurrentWallet,
@@ -43,7 +42,6 @@ const ChangeAddrType = () => {
       currentAccount?.id,
       currentWallet,
       selectedWallet,
-      walletController,
     ]
   );
 

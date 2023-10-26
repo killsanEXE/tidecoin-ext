@@ -7,7 +7,7 @@
       "@/*": ["./*"]
     },
     "noImplicitAny": false,
-    "types": ["chrome", "react", "react-dom", "esbuild-style-plugin"],
+    "types": ["chrome", "react", "react-dom"],
     "allowJs": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

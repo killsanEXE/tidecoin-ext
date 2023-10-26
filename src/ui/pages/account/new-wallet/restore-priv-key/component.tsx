@@ -1,6 +1,5 @@
 import PasswordInput from "@/ui/components/password-input";
 import { useCreateNewWallet } from "@/ui/hooks/wallet";
-import { useControllersState } from "@/ui/states/controllerState";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -17,13 +16,9 @@ const RestorePrivKey = () => {
 
   const createNewWallet = useCreateNewWallet();
   const navigate = useNavigate();
-  const { walletController } = useControllersState((v) => ({
-    walletController: v.walletController,
-  }));
 
   const recoverWallet = async ({ privKey }: FormType) => {
     await createNewWallet(privKey, "simple");
-    await walletController.saveWallets();
     navigate("/home");
   };
 

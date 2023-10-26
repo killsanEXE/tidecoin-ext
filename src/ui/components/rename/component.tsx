@@ -27,7 +27,9 @@ const Rename: FC<Props> = ({ handler, title }) => {
   };
 
   useEffect(() => {
-    toast.error(errors.name.message);
+    if (errors.name) {
+      toast.error(errors.name.message);
+    }
   }, [errors]);
 
   return (
@@ -41,9 +43,15 @@ const Rename: FC<Props> = ({ handler, title }) => {
           id={renameId}
           className="input"
           {...register("name", {
-            minLength: 2,
-            maxLength: 16,
-            required: true,
+            minLength: {
+              value: 1,
+              message: "Minimum length is 1",
+            },
+            maxLength: {
+              value: 16,
+              message: "Maximum length is 16",
+            },
+            required: "Name is required",
           })}
         />
       </div>

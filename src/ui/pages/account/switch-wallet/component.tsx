@@ -22,9 +22,10 @@ const SwitchWallet = () => {
   const [deleteWalletId, setDeleteWalletId] = useState<number>();
 
   const onDelete = async () => {
-    await deleteWallet(wallets[deleteWalletId].id);
     setSelected(undefined);
     setDeleteWalletId(undefined);
+
+    await deleteWallet(wallets[deleteWalletId].id);
   };
 
   return (
