@@ -27,7 +27,7 @@ export const useCreateNewWallet = () => {
       const keyring = await keyringController.serializeKeyringById(wallet.id);
       await walletController.saveWallets([{ id: wallet.id, phrase: phrase, data: keyring }]);
     },
-    [wallets, updateWalletState, walletController]
+    [wallets, updateWalletState, walletController, keyringController]
   );
 };
 
@@ -69,7 +69,7 @@ export const useUpdateCurrentAccount = () => {
         wallets: [...wallets],
       });
     },
-    [updateWalletState, wallets[selectedWallet!]?.accounts[selectedAccount!], selectedAccount, selectedWallet]
+    [updateWalletState, selectedAccount, selectedWallet, wallets]
   );
 };
 
@@ -98,7 +98,7 @@ export const useCreateNewAccount = () => {
         selectedAccount: createdAccount.id,
       });
     },
-    [currentWallet, updateCurrentWallet, walletController]
+    [currentWallet, updateCurrentWallet, walletController, updateWalletState]
   );
 };
 
@@ -109,7 +109,7 @@ export const useSwitchWallet = () => {
   }));
   const { walletController, notificationController } = useControllersState((v) => ({
     walletController: v.walletController,
-    notificationController: v.notificationController
+    notificationController: v.notificationController,
   }));
 
   return useCallback(
@@ -127,7 +127,7 @@ export const useSwitchWallet = () => {
       });
       await notificationController.changedAccount();
     },
-    [wallets, updateWalletState, walletController]
+    [wallets, updateWalletState, walletController, notificationController]
   );
 };
 
@@ -137,18 +137,21 @@ export const useSwitchAccount = () => {
   }));
   const navigate = useNavigate();
   const { notificationController } = useControllersState((v) => ({
-    notificationController: v.notificationController
-  }))
+    notificationController: v.notificationController,
+  }));
 
-  return useCallback(async (id: number) => {
-    updateWalletState({
-      selectedAccount: id,
-    });
+  return useCallback(
+    async (id: number) => {
+      updateWalletState({
+        selectedAccount: id,
+      });
 
-    navigate("/home");
-    await notificationController.changedAccount();
-  }, [updateWalletState, navigate])
-}
+      navigate("/home");
+      await notificationController.changedAccount();
+    },
+    [updateWalletState, navigate, notificationController]
+  );
+};
 
 export const useUpdateCurrentAccountBalance = () => {
   const { apiController } = useControllersState((v) => ({
@@ -170,7 +173,7 @@ export const useUpdateCurrentAccountBalance = () => {
 };
 
 export const useUpdateCurrentAccountTransactions = () => {
-  const { apiController, keyringController } = useControllersState((v) => ({
+  const { apiController } = useControllersState((v) => ({
     apiController: v.apiController,
     keyringController: v.keyringController,
   }));
@@ -179,7 +182,7 @@ export const useUpdateCurrentAccountTransactions = () => {
   return useCallback(async () => {
     if (!currentAccount?.address) return;
     return await apiController.getTransactions(currentAccount.address);
-  }, [currentAccount, apiController, keyringController]);
+  }, [currentAccount, apiController]);
 };
 
 export const useDeleteWallet = () => {
@@ -207,6 +210,6 @@ export const useDeleteWallet = () => {
         wallets: await walletController.deleteWallet(id),
       });
     },
-    [currentWallet, walletController, updateWalletState]
+    [currentWallet, walletController, updateWalletState, currentAccount?.id, wallets.length]
   );
 };

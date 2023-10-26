@@ -6,122 +6,72 @@ import { useMemo } from "react";
 import { useWalletState } from "@/ui/states/walletState";
 import { useControllersState } from "@/ui/states/controllerState";
 
+interface IRouteTitle {
+  route: string;
+  title: string;
+  action?: {
+    icon: React.ReactNode;
+    link: string;
+  };
+  backAction?: () => void;
+  disableBack?: boolean;
+}
+
 export default function PagesLayout() {
   const { stateController } = useControllersState((v) => ({
     stateController: v.stateController,
   }));
-  const routeTitles = [
-    {
-      route: "/pages/switch-account",
-      title: "Switch Account",
-      action: {
-        icon: <PlusCircleIcon className="w-8 h-8" />,
-        link: "/pages/create-new-account",
-      },
-    },
-    {
-      route: "/pages/change-addr-type",
-      title: "Change Address Type",
-    },
-    {
-      route: "/pages/create-new-account",
-      title: "Create New Account",
-    },
-    {
-      route: "/pages/change-password",
-      title: "Change Password",
-    },
-    {
-      route: "/pages/receive",
-      title: "Receive TDC",
-    },
-    {
-      route: "/pages/switch-wallet",
-      title: "Switch Wallet",
-      action: {
-        icon: <PlusCircleIcon className="w-8 h-8" />,
-        link: "/pages/create-new-wallet",
-      },
-    },
-    {
-      route: "/pages/create-new-wallet",
-      title: "Create New Wallet",
-      disableBack: (): boolean => wallets.length <= 0,
-    },
-    {
-      route: "/pages/new-mnemonic",
-      title: "Create New Wallet",
-      backAction: async () => {
-        if (await stateController.getPendingWallet()) {
-          await stateController.clearPendingWallet();
-        }
-        navigate(-1);
-      },
-    },
-    {
-      route: "/pages/restore-mnemonic",
-      title: "Create New Wallet",
-    },
-    {
-      route: "/pages/restore-priv-key",
-      title: "Create New Wallet",
-    },
-    {
-      route: "/pages/send",
-      title: "Send",
-    },
-    {
-      route: "/pages/transaction-info/@",
-      title: "Transaction info",
-    },
-    {
-      route: "/pages/rename-account/@",
-      title: "Renaming account",
-    },
-    {
-      route: "/pages/rename-wallet/@",
-      title: "Renaming wallet",
-    },
-    {
-      backAction: () => {
-        navigate("/home");
-      },
-      route: "/pages/finalle-send/@",
-      title: "Send",
-    },
-    {
-      route: "/pages/create-send",
-      title: "Send",
-      backAction: () => {
-        navigate("/home");
-      },
-    },
-    {
-      backAction: () => {
-        navigate("/pages/create-send", {
-          state: currentRoute.state,
-        });
-      },
-      route: "/pages/confirm-send",
-      title: "Send",
-    },
-    {
-      route: "/pages/settings",
-      title: "Settings",
-    },
-    {
-      route: "/pages/show-mnemonic/@",
-      title: "Recovering mnemonic",
-    },
-    {
-      route: "/pages/show-pk/@",
-      title: "Recovering private key",
-    },
-  ];
 
   const currentRoute = useLocation();
   const navigate = useNavigate();
   const { wallets } = useWalletState((v) => ({ wallets: v.wallets }));
+
+  const routeTitles = useMemo(
+    () =>
+      [
+        ...defaultTitles,
+        {
+          route: "/pages/create-new-wallet",
+          title: "Create New Wallet",
+          disableBack: wallets.length <= 0,
+        },
+        {
+          route: "/pages/new-mnemonic",
+          title: "Create New Wallet",
+          backAction: async () => {
+            if (await stateController.getPendingWallet()) {
+              await stateController.clearPendingWallet();
+            }
+            navigate(-1);
+          },
+        },
+
+        {
+          backAction: () => {
+            navigate("/home");
+          },
+          route: "/pages/finalle-send/@",
+          title: "Send",
+        },
+        {
+          route: "/pages/create-send",
+          title: "Send",
+          backAction: () => {
+            navigate("/home");
+          },
+        },
+        {
+          backAction: () => {
+            navigate("/pages/create-send", {
+              state: currentRoute.state,
+            });
+          },
+          route: "/pages/confirm-send",
+          title: "Send",
+        },
+      ] as IRouteTitle[],
+    [navigate, stateController, currentRoute.state, wallets.length]
+  );
 
   const currentRouteTitle = useMemo(
     () =>
@@ -131,14 +81,14 @@ export default function PagesLayout() {
         }
         return currentRoute.pathname === i.route;
       }),
-    [currentRoute]
+    [currentRoute, routeTitles]
   );
 
   return (
     <div className={s.layout}>
       {
         <div className={s.header}>
-          {(!currentRouteTitle?.disableBack || !currentRouteTitle.disableBack()) && (
+          {!currentRouteTitle?.disableBack && (
             <div
               className={cn(s.controlElem, s.back)}
               onClick={() => {
@@ -165,3 +115,74 @@ export default function PagesLayout() {
     </div>
   );
 }
+
+const defaultTitles: IRouteTitle[] = [
+  {
+    route: "/pages/switch-account",
+    title: "Switch Account",
+    action: {
+      icon: <PlusCircleIcon className="w-8 h-8" />,
+      link: "/pages/create-new-account",
+    },
+  },
+  {
+    route: "/pages/change-addr-type",
+    title: "Change Address Type",
+  },
+  {
+    route: "/pages/create-new-account",
+    title: "Create New Account",
+  },
+  {
+    route: "/pages/change-password",
+    title: "Change Password",
+  },
+  {
+    route: "/pages/receive",
+    title: "Receive TDC",
+  },
+  {
+    route: "/pages/switch-wallet",
+    title: "Switch Wallet",
+    action: {
+      icon: <PlusCircleIcon className="w-8 h-8" />,
+      link: "/pages/create-new-wallet",
+    },
+  },
+  {
+    route: "/pages/restore-mnemonic",
+    title: "Create New Wallet",
+  },
+  {
+    route: "/pages/restore-priv-key",
+    title: "Create New Wallet",
+  },
+  {
+    route: "/pages/send",
+    title: "Send",
+  },
+  {
+    route: "/pages/transaction-info/@",
+    title: "Transaction info",
+  },
+  {
+    route: "/pages/rename-account/@",
+    title: "Renaming account",
+  },
+  {
+    route: "/pages/rename-wallet/@",
+    title: "Renaming wallet",
+  },
+  {
+    route: "/pages/settings",
+    title: "Settings",
+  },
+  {
+    route: "/pages/show-mnemonic/@",
+    title: "Recovering mnemonic",
+  },
+  {
+    route: "/pages/show-pk/@",
+    title: "Recovering private key",
+  },
+];

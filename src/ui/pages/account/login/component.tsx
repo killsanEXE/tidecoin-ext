@@ -37,7 +37,7 @@ const Login = () => {
 
   useEffect(() => {
     if (vaultIsEmpty) navigate("/account/create-password");
-  }, [vaultIsEmpty]);
+  }, [vaultIsEmpty, navigate]);
 
   const login = async ({ password }: FormType) => {
     try {

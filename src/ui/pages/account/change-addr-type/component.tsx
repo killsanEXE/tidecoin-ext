@@ -4,12 +4,13 @@ import s from "./styles.module.scss";
 import { useControllersState } from "@/ui/states/controllerState";
 import { useGetCurrentAccount, useGetCurrentWallet, useWalletState } from "@/ui/states/walletState";
 import { useUpdateCurrentAccountBalance, useUpdateCurrentWallet } from "@/ui/hooks/wallet";
+import { useCallback } from "react";
 
 const ChangeAddrType = () => {
   const { keyringController, walletController, notificationController } = useControllersState((v) => ({
     keyringController: v.keyringController,
     walletController: v.walletController,
-    notificationController: v.notificationController
+    notificationController: v.notificationController,
   }));
   const currentWallet = useGetCurrentWallet();
   const { selectedWallet } = useWalletState((v) => ({
@@ -19,20 +20,32 @@ const ChangeAddrType = () => {
   const updateCurrentAccountBalance = useUpdateCurrentAccountBalance();
   const currentAccount = useGetCurrentAccount();
 
-  const onSwitchAddress = async (type: AddressType) => {
-    const addresses = await keyringController.changeAddressType(selectedWallet!, type);
-    await udpateCurrentWallet({
-      ...currentWallet,
-      addressType: type,
-      accounts: currentWallet?.accounts.map((f) => ({
-        ...f,
-        address: addresses[f.id],
-      })),
-    });
-    await updateCurrentAccountBalance(addresses[currentAccount?.id as any as number]);
-    await notificationController.changedAccount();
-    await walletController.saveWallets();
-  };
+  const onSwitchAddress = useCallback(
+    async (type: AddressType) => {
+      const addresses = await keyringController.changeAddressType(selectedWallet!, type);
+      await udpateCurrentWallet({
+        ...currentWallet,
+        addressType: type,
+        accounts: currentWallet?.accounts.map((f) => ({
+          ...f,
+          address: addresses[f.id],
+        })),
+      });
+      await updateCurrentAccountBalance(addresses[currentAccount?.id as any as number]);
+      await notificationController.changedAccount();
+      await walletController.saveWallets();
+    },
+    [
+      udpateCurrentWallet,
+      keyringController,
+      updateCurrentAccountBalance,
+      notificationController,
+      currentAccount?.id,
+      currentWallet,
+      selectedWallet,
+      walletController,
+    ]
+  );
 
   return (
     <div className={s.changeAddrType}>

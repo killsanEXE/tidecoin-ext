@@ -10,11 +10,13 @@ import SwitchAddressType from "@/ui/components/switch-address-type";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 import { useAppState } from "@/ui/states/appState";
 import CopyBtn from "@/ui/components/copy-btn";
+import toast from "react-hot-toast";
 
 const NewMnemonic = () => {
   const location = useLocation();
 
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [savedPhrase, setSavedPhrase] = useState(false);
   const { updateWalletState } = useWalletState((v) => ({
     updateWalletState: v.updateWalletState,
@@ -39,7 +41,7 @@ const NewMnemonic = () => {
       pendingWallet: phrase,
     });
     setMnemonicPhrase(phrase);
-  }, [walletController.generateMnemonicPhrase, setMnemonicPhrase, stateController.getPendingWallet, updateAppState]);
+  }, [setMnemonicPhrase, updateAppState, walletController, location.state.pending]);
 
   useEffect(() => {
     if (mnemonicPhrase) return;
@@ -49,12 +51,26 @@ const NewMnemonic = () => {
   const navigate = useNavigate();
 
   const onCreate = async () => {
-    await createNewWallet(mnemonicPhrase!, "root", addressType);
+    if (!mnemonicPhrase) {
+      toast.error("Mnemonic phrase blank");
+      return;
+    }
+    setLoading(true);
+    await createNewWallet(mnemonicPhrase, "root", addressType);
     await updateWalletState({ vaultIsEmpty: false });
     await walletController.saveWallets();
     await stateController.clearPendingWallet();
+    setLoading(false);
     navigate("/home");
   };
+
+  const onSwitch = () => {
+    setSavedPhrase((p) => !p);
+  };
+
+  if (!mnemonicPhrase || loading) {
+    return <ReactLoading type="spin" color="#ffbc42" />;
+  }
 
   return (
     <div className={s.newMnemonic}>
@@ -64,54 +80,37 @@ const NewMnemonic = () => {
       </div>
       {step === 1 ? (
         <div className={cn(s.stepOneWrapper, s.step)}>
-          {mnemonicPhrase === undefined ? (
-            <ReactLoading type="spin" color="#ffbc42" />
-          ) : (
-            <div className={cn(s.stepOne, s.step)}>
-              <div>
-                <p className={s.warning}>
-                  If you lose these words, you will never be able to recover your lost account
-                </p>
-                <div className={s.phrase}>
-                  {mnemonicPhrase.split(" ").map((word, index) => (
-                    <div key={index} className={s.word}>
-                      <span className={s.wordIndex}>{index + 1}.</span>
-                      <p className={s.wordWord}>{word}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className={s.savePhraseWrapper}>
-                <CopyBtn label="Copy" value={mnemonicPhrase} className="mx-auto flex items-center gap-1" />
-                <div className={s.savePhrase}>
-                  <label className="cursor-pointer" htmlFor="save-phrases">
-                    I saved this phrase
-                  </label>
-                  <input
-                    id="save-phrases"
-                    type="checkbox"
-                    onChange={() => {
-                      setSavedPhrase((prev) => !prev);
-                    }}
-                  />
-                </div>
-              </div>
-              <div className={s.continueWrapper}>
-                <button className="btn primary" onClick={() => setStep(2)} disabled={!savedPhrase}>
-                  Continue
-                </button>
+          <div className={cn(s.stepOne, s.step)}>
+            <div>
+              <p className={s.warning}>If you lose these words, you will never be able to recover your lost account</p>
+              <div className={s.phrase}>
+                {mnemonicPhrase.split(" ").map((word, index) => (
+                  <div key={index} className={s.word}>
+                    <span className={s.wordIndex}>{index + 1}.</span>
+                    <p className={s.wordWord}>{word}</p>
+                  </div>
+                ))}
               </div>
             </div>
-          )}
+            <div className={s.savePhraseWrapper}>
+              <CopyBtn label="Copy" value={mnemonicPhrase} className="mx-auto flex items-center gap-1" />
+              <div className={s.savePhrase}>
+                <label className="cursor-pointer" htmlFor="save-phrases">
+                  I saved this phrase
+                </label>
+                <input id="save-phrases" type="checkbox" onChange={onSwitch} />
+              </div>
+            </div>
+            <div className={s.continueWrapper}>
+              <button className="btn primary" onClick={() => setStep(2)} disabled={!savedPhrase}>
+                Continue
+              </button>
+            </div>
+          </div>
         </div>
       ) : (
         <div className={cn(s.stepTwo, s.step)}>
-          <SwitchAddressType
-            handler={(selectedAddressType) => {
-              setAddressType(selectedAddressType);
-            }}
-            selectedType={addressType}
-          />
+          <SwitchAddressType handler={setAddressType} selectedType={addressType} />
           <div className={s.continueWrapper}>
             <button onClick={onCreate} className={cn(s.continue, "btn", "primary")}>
               Continue

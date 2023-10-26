@@ -18,6 +18,7 @@ module.exports = {
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
       ],
       files: ["src/**/*.{ts,tsx}"],
       parser: "@typescript-eslint/parser",
@@ -31,8 +32,7 @@ module.exports = {
           "error",
           {
             selector: "ExportDefaultDeclaration > ObjectExpression",
-            message:
-              "Assign instance to a variable before exporting as module default.",
+            message: "Assign instance to a variable before exporting as module default.",
           },
         ],
         "@typescript-eslint/no-explicit-any": "off",

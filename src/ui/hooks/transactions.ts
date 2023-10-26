@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useGetCurrentAccount, useGetCurrentWallet, useWalletState } from "../states/walletState";
+import { useGetCurrentAccount, useWalletState } from "../states/walletState";
 import { useControllersState } from "../states/controllerState";
 import { tidoshisToAmount } from "@/shared/utils/transactions";
 import { Psbt } from "tidecoinjs-lib";
@@ -7,7 +7,6 @@ import { Hex } from "@/background/services/keyring/types";
 
 export function useCreateTidecoinTxCallback() {
   const currentAccount = useGetCurrentAccount();
-  const currentWallet = useGetCurrentWallet();
   const { selectedAccount, selectedWallet } = useWalletState((v) => ({
     selectedAccount: v.selectedAccount,
     selectedWallet: v.selectedWallet,
@@ -46,7 +45,7 @@ export function useCreateTidecoinTxCallback() {
         fee: psbt.getFee(),
       };
     },
-    [currentWallet, apiController, currentAccount, selectedAccount, selectedWallet, keyringController]
+    [apiController, currentAccount, selectedAccount, selectedWallet, keyringController]
   );
 }
 
@@ -76,5 +75,5 @@ export function useUpdateCurrentAccountTransactions() {
 
   return useCallback(async () => {
     return await apiController.getTransactions(currentAccount!.address ?? "");
-  }, [currentAccount]);
+  }, [currentAccount, apiController]);
 }

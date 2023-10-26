@@ -1,5 +1,5 @@
 import { Combobox, Transition } from "@headlessui/react";
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, memo, useEffect, useState } from "react";
 import { englishWords } from "test-test-test-hd-wallet";
 import cn from "classnames";
 
@@ -71,4 +71,4 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
   );
 };
 
-export default SelectWithHint;
+export default memo(SelectWithHint);

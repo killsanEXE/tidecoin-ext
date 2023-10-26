@@ -1,5 +1,3 @@
-// import s from "./styles.module.scss";
-
 import PasswordInput from "@/ui/components/password-input";
 import { useCreateNewWallet } from "@/ui/hooks/wallet";
 import { useControllersState } from "@/ui/states/controllerState";
