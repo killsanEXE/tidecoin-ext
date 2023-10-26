@@ -19,8 +19,6 @@ import ShowPk from "@/ui/pages/account/switch-account/show-pk";
 import ShowMnemonic from "./account/switch-wallet/show-mnemonic";
 import ChangeAddrType from "@/ui/pages/account/change-addr-type";
 import TransactionInfo from "./account/transaction-info";
-import RenameAccount from "@/ui/pages/account/switch-account/rename-account";
-import RenameWallet from "./account/switch-wallet/rename-wallet";
 import FinalleSend from "./account/send/finalle-send";
 import CreateSend from "./account/send/create-send";
 import ConfirmSend from "./account/send/confirm-send";
@@ -60,8 +58,6 @@ export const authenticatedRouter = createHashRouter([
       { path: "show-mnemonic/:walletId", element: <ShowMnemonic /> },
       { path: "change-addr-type", element: <ChangeAddrType /> },
       { path: "transaction-info/:txId", element: <TransactionInfo /> },
-      { path: "rename-account/:accId", element: <RenameAccount /> },
-      { path: "rename-wallet/:walletId", element: <RenameWallet /> },
       { path: "finalle-send/:txId", element: <FinalleSend /> },
       { path: "create-send", element: <CreateSend /> },
       { path: "confirm-send", element: <ConfirmSend /> },

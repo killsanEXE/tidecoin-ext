@@ -7,7 +7,7 @@
 }
 
 .mainAcc {
-  @apply relative overflow-hidden rounded-xl border border-text p-2;
+  @apply relative overflow-hidden rounded-xl border border-text p-2 pl-4 cursor-pointer;
 }
 
 .account {
@@ -39,5 +39,9 @@
 }
 
 .address {
-  @apply text-sm text-gray-400;
+  @apply text-xs text-gray-400;
+}
+
+.selected {
+  @apply border-green-300;
 }

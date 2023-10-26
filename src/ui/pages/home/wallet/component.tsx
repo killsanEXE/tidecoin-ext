@@ -88,7 +88,7 @@ const Wallet = () => {
 
   return (
     <div className={s.walletDiv}>
-      <div className="flex justify-between mx-6 mt-2 items-center">
+      <div className="flex justify-between mt-2 items-center">
         <Link className="flex gap-3 items-center select-none cursor-pointer" to={"/pages/switch-wallet"}>
           <div className="bg-gradient-to-r from-indigo-500 to-indigo-950 rounded-full w-6 h-6 flex items-center justify-center">
             {currentWallet.name ? currentWallet.name.split(/.*?/u)[0].toUpperCase() : "W"}
@@ -124,7 +124,7 @@ const Wallet = () => {
             <div className="text-gray-500 text-sm">~{(currentAccount?.balance * currentPrice).toFixed(3)}$</div>
           )}
         </div>
-        <div className="flex gap-3 items-center px-6">
+        <div className="flex gap-3 items-center">
           {currentWallet?.type === "root" && (
             <Link to={"/pages/switch-account"}>
               <ListBulletIcon title="Switch account" className={s.accountsIcon} />
@@ -141,11 +141,11 @@ const Wallet = () => {
           </div>
         </div>
 
-        <div className={cn(s.receiveSendBtns, s.center)}>
-          <Link to={"/pages/receive"} className={cn(s.btn, s.center, "w-36")}>
+        <div className={cn(s.receiveSendBtns)}>
+          <Link to={"/pages/receive"} className={s.btn}>
             Receive
           </Link>
-          <Link to={"/pages/create-send"} className={cn(s.btn, s.center, "w-36")}>
+          <Link to={"/pages/create-send"} className={s.btn}>
             Send
           </Link>
         </div>

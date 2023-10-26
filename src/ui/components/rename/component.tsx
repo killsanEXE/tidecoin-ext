@@ -1,16 +1,17 @@
-import { FC, useEffect, useId } from "react";
+import { FC, useId } from "react";
 import s from "./styles.module.scss";
 import cn from "classnames";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import Modal from "../modal";
 
 interface Props {
   handler: (name: string) => void;
-  title?: string;
-  oldName?: string;
+  active: boolean;
+  onClose: () => void;
 }
 
-const Rename: FC<Props> = ({ handler, title }) => {
+const Rename: FC<Props> = ({ handler, active, onClose }) => {
   const {
     register,
     handleSubmit,
@@ -26,37 +27,40 @@ const Rename: FC<Props> = ({ handler, title }) => {
     handler(name.trim());
   };
 
-  useEffect(() => {
+  const onSubmit = () => {
     if (errors.name) {
       toast.error(errors.name.message);
     }
-  }, [errors]);
+  };
 
   return (
-    <form className={cn(s.form, "form")} onSubmit={handleSubmit(onRename)}>
-      <p className={cn(s.formTitle, "form-title")}>{title !== undefined ? title : "Enter new name"}</p>
-      <div className="form-field">
-        <label htmlFor={renameId} className="input-span">
-          {title}
-        </label>
-        <input
-          id={renameId}
-          className="input"
-          {...register("name", {
-            minLength: {
-              value: 1,
-              message: "Minimum length is 1",
-            },
-            maxLength: {
-              value: 16,
-              message: "Maximum length is 16",
-            },
-            required: "Name is required",
-          })}
-        />
-      </div>
-      <button className="btn primary">Enter</button>
-    </form>
+    <Modal open={active} onClose={onClose} title="Renaming">
+      <form className={s.form} onSubmit={handleSubmit(onRename)}>
+        <div>
+          <label htmlFor={renameId} className={s.label}>
+            Enter new name
+          </label>
+          <input
+            id={renameId}
+            className="input w-full"
+            {...register("name", {
+              minLength: {
+                value: 1,
+                message: "Minimum length is 1",
+              },
+              maxLength: {
+                value: 16,
+                message: "Maximum length is 16",
+              },
+              required: "Name is required",
+            })}
+          />
+        </div>
+        <button className="btn primary mx-auto w-2/3" onClick={onSubmit}>
+          Save
+        </button>
+      </form>
+    </Modal>
   );
 };
 

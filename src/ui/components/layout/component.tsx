@@ -166,14 +166,6 @@ const defaultTitles: IRouteTitle[] = [
     title: "Transaction info",
   },
   {
-    route: "/pages/rename-account/@",
-    title: "Renaming account",
-  },
-  {
-    route: "/pages/rename-wallet/@",
-    title: "Renaming wallet",
-  },
-  {
     route: "/pages/settings",
     title: "Settings",
   },

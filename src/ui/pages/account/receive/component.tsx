@@ -52,7 +52,7 @@ const Receive = () => {
         <div className={s.accTitle}>{currentAccount?.name ?? "Account"}</div>
       </div>
       <CopyBtn label="Copy address" value={currentAccount?.address} className={s.copyButton} />
-      <p className="text-center mb-2 opacity-80 text-xs">{currentAccount?.address}</p>
+      <p className="text-center opacity-80 text-xs">{currentAccount?.address}</p>
     </div>
   );
 };

@@ -17,7 +17,7 @@ const Menu: FC<Props> = ({ items, active }) => {
   const prefix = useId();
 
   return (
-    <div className={cn(s.menu, { [s.active]: active })}>
+    <div className={cn(s.menu, { [s.active]: active })} onClick={(e) => e.stopPropagation()}>
       {items.map((i, index) => {
         if (!i.custom) {
           return (

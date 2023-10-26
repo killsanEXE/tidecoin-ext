@@ -7,7 +7,7 @@
 }
 
 .mainWallet {
-  @apply relative overflow-hidden border border-text rounded-xl;
+  @apply relative overflow-hidden border border-text rounded-xl cursor-pointer;
 }
 
 .manageWalletButton {
@@ -19,5 +19,9 @@
 }
 
 .wallet {
-  @apply flex p-2 justify-between;
+  @apply flex p-2 pl-4 justify-between;
+}
+
+.selected {
+  @apply border-green-300;
 }

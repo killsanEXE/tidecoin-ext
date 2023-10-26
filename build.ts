@@ -1,7 +1,6 @@
 import { context, build, BuildOptions, Plugin } from "esbuild";
 import { wasmLoader } from "esbuild-plugin-wasm";
 import { copy } from "esbuild-plugin-copy";
-// import stylePlugin from "esbuild-style-plugin";
 import { sassPlugin, postcssModules } from "esbuild-sass-plugin";
 import { nodeModulesPolyfillPlugin } from "esbuild-plugins-node-modules-polyfill";
 import svgPlugin from "esbuild-svg";
@@ -70,11 +69,6 @@ const buildOptions: BuildOptions = {
       typescript: true,
       svgo: true,
     }),
-    // stylePlugin({
-    //   postcss: {
-    //     plugins: [autoprefixer(), tailwindcss()],
-    //   },
-    // }),
     sassPlugin({
       filter: /\.module\.scss$/,
       transform: postcssModules({}, [autoprefixer, tailwindcss]),
