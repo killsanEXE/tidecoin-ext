@@ -54,9 +54,13 @@ const CreateSend = () => {
     if (Number(amount) > (currentAccount?.balance ?? 0)) {
       return toast.error("There's not enough money in your account");
     }
-    if (feeAmount <= 1 / 10 ** 8) {
+    if (feeAmount <= 1) {
       return toast.error("Increase the fee");
     }
+    if (feeAmount % 1 !== 0) {
+      return toast.error("Fee should be integer");
+    }
+
     try {
       const { fee, rawtx } = await createTx(address, Number(amount) * 10 ** 8, feeAmount, includeFeeInAmount);
 

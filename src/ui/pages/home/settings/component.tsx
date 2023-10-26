@@ -4,6 +4,11 @@ import { useAppState } from "@/ui/states/appState";
 import { Link } from "react-router-dom";
 import cn from "classnames";
 
+import { UserIcon, KeyIcon, ArrowsPointingOutIcon, ArrowLeftOnRectangleIcon } from "@heroicons/react/24/solid";
+
+const ICON_SIZE = 8;
+const ICON_CN = `w-${ICON_SIZE} h-${ICON_SIZE}`;
+
 const Settings = () => {
   const { logout } = useAppState((v) => ({
     logout: v.logout,
@@ -18,16 +23,20 @@ const Settings = () => {
   return (
     <div className={s.settings}>
       <Link className={s.card} to={"/pages/change-addr-type"}>
-        <div className={s.cardText}>Address Type</div>
+        <UserIcon className={ICON_CN} />
+        <div>Address Type</div>
       </Link>
       <Link className={s.card} to={"/pages/change-password"}>
-        <div className={s.cardText}>Change Password</div>
+        <KeyIcon className={ICON_CN} />
+        <div>Change Password</div>
       </Link>
       <div className={cn(s.card, "md:hidden")} onClick={expandView}>
-        <div className={s.cardText}>Expand view</div>
+        <ArrowsPointingOutIcon className={ICON_CN} />
+        <div>Expand view</div>
       </div>
       <div className={s.card} onClick={logout}>
-        <div className={s.cardText}>Logout</div>
+        <ArrowLeftOnRectangleIcon className={ICON_CN} />
+        <div>Logout</div>
       </div>
     </div>
   );

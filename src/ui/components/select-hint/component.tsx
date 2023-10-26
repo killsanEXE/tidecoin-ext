@@ -29,6 +29,7 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
       <div className="relative w-full">
         <div className={s.inputBox}>
           <Combobox.Input
+            autoComplete="off"
             className={s.input}
             displayValue={(word: string) => word}
             onChange={(event) => {

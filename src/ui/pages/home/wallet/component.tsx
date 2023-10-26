@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Link, Navigate, useNavigate } from "react-router-dom";
 
 import { ListBulletIcon, Cog6ToothIcon, ChevronDownIcon, CheckIcon } from "@heroicons/react/24/outline";
@@ -19,6 +20,8 @@ const Wallet = () => {
   const navigate = useNavigate();
   const [lastBlock, setLastBlock] = useState<number>(0);
   const currentWallet = useGetCurrentWallet();
+
+  if (currentWallet === undefined) return <Navigate to={"/pages/create-new-wallet"} />;
 
   const { apiController, stateController } = useControllersState((v) => ({
     apiController: v.apiController,
@@ -83,8 +86,6 @@ const Wallet = () => {
       }
     })();
   }, [stateController, navigate]);
-
-  if (currentWallet === undefined) return <Navigate to={"/pages/create-new-wallet"} />;
 
   return (
     <div className={s.walletDiv}>

@@ -6,7 +6,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useControllersState } from "@/ui/states/controllerState";
 import { useCreateNewWallet } from "@/ui/hooks/wallet";
 import cn from "classnames";
-import SwitchAddressType from "@/ui/components/switch-address-type";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 import { useAppState } from "@/ui/states/appState";
 import CopyBtn from "@/ui/components/copy-btn";
