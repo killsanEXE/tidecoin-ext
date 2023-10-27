@@ -82,9 +82,11 @@ export default function App() {
             className: "toast",
             success: {
               duration: 900,
+              className: "toast success",
             },
             error: {
               duration: 4000,
+              className: "toast error",
             },
           }}
         />

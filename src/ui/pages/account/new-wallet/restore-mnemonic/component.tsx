@@ -1,6 +1,5 @@
 import s from "./styles.module.scss";
 import { useCreateNewWallet } from "@/ui/hooks/wallet";
-import { useControllersState } from "@/ui/states/controllerState";
 import { useWalletState } from "@/ui/states/walletState";
 import { useCallback, useState } from "react";
 import cn from "classnames";
@@ -16,9 +15,6 @@ const RestoreMnemonic = () => {
     updateWalletState: v.updateWalletState,
   }));
   const [addressType, setAddressType] = useState(AddressType.P2WPKH);
-  const { walletController } = useControllersState((v) => ({
-    walletController: v.walletController,
-  }));
   const [mnemonicPhrase, setMnemonicPhrase] = useState<(string | undefined)[]>(new Array(12).fill(""));
   const createNewWallet = useCreateNewWallet();
   const navigate = useNavigate();
@@ -26,7 +22,6 @@ const RestoreMnemonic = () => {
   const setMnemonic = useCallback(
     (v: string, index: number) => {
       if (!v) {
-        setMnemonicPhrase(mnemonicPhrase.with(index, v));
         return;
       }
       const phrase = v.split(" ");
@@ -63,10 +58,10 @@ const RestoreMnemonic = () => {
           <div className={cn(s.stepOne, s.step)}>
             <div>
               <div className={s.phrase}>
-                {mnemonicPhrase.map((value, index) => (
+                {new Array(12).fill("").map((_, index) => (
                   <div key={index} className={s.word}>
                     <p className="w-6">{index + 1}.</p>
-                    <SelectWithHint selected={value} setSelected={(v) => setMnemonic(v, index)} />
+                    <SelectWithHint selected={mnemonicPhrase[index]} setSelected={(v) => setMnemonic(v, index)} />
                   </div>
                 ))}
               </div>

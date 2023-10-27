@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { useSyncStorages } from "@/ui/utils/setup";
 import { isNotification } from "@/ui/utils";
 import cn from "classnames";
+import PasswordInput from "@/ui/components/password-input";
 
 interface FormType {
   password: string;
@@ -65,8 +66,7 @@ const Login = () => {
 
   return (
     <form className={cn(s.form, "mt-5")} onSubmit={handleSubmit(login)}>
-      <p className={s.formTitle}>Password</p>
-      <input type="password" className="input" {...register("password")} />
+      <PasswordInput register={register} label="Password" name="password" />
       <button className="btn primary md:mx-auto" type="submit">
         Login
       </button>

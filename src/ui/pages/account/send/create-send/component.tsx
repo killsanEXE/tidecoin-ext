@@ -1,25 +1,21 @@
 import { useCreateTidecoinTxCallback } from "@/ui/hooks/transactions";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
-import { Fragment, useCallback, useEffect, useState, ChangeEventHandler, MouseEventHandler, useId } from "react";
+import { useCallback, useEffect, useState, ChangeEventHandler, MouseEventHandler, useId } from "react";
 import s from "./styles.module.scss";
 import cn from "classnames";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAppState } from "@/ui/states/appState";
-import { Combobox, Transition } from "@headlessui/react";
 import FeeInput from "./fee-input";
-import { BookOpenIcon } from "@heroicons/react/24/solid";
 import Switch from "@/ui/components/switch";
-import { shortAddress } from "@/shared/utils/transactions";
-import { useUpdateAddressBook } from "@/ui/hooks/app";
-import AddressBookModal from "./address-book/component";
+import AddressBookModal from "./address-book-modal";
+import AddressInput from "./address-input";
+import { normalizeAmount } from "@/ui/utils";
 
 export interface FormType {
   address: string;
   amount: string;
   feeAmount: number;
   includeFeeInAmount: boolean;
-  inputedFee?: number;
 }
 
 const CreateSend = () => {
@@ -38,11 +34,6 @@ const CreateSend = () => {
   const createTx = useCreateTidecoinTxCallback();
   const navigate = useNavigate();
   const location = useLocation();
-  const updateAddressBook = useUpdateAddressBook();
-
-  const { addressBook } = useAppState((v) => ({
-    addressBook: v.addressBook,
-  }));
 
   const send = async ({ address, amount, feeAmount, includeFeeInAmount }: FormType) => {
     if (Number(amount) < 0.01) {
@@ -54,7 +45,7 @@ const CreateSend = () => {
     if (Number(amount) > (currentAccount?.balance ?? 0)) {
       return toast.error("There's not enough money in your account");
     }
-    if (feeAmount <= 1) {
+    if (feeAmount < 1) {
       return toast.error("Increase the fee");
     }
     if (feeAmount % 1 !== 0) {
@@ -64,9 +55,6 @@ const CreateSend = () => {
     try {
       const { fee, rawtx } = await createTx(address, Number(amount) * 10 ** 8, feeAmount, includeFeeInAmount);
 
-      if (isSaveAddress) {
-        await updateAddressBook(address);
-      }
       navigate("/pages/confirm-send", {
         state: {
           toAddress: address,
@@ -74,7 +62,9 @@ const CreateSend = () => {
           includeFeeInAmount,
           fromAddress: currentAccount?.address ?? "",
           feeAmount: fee,
+          inputedFee: feeAmount,
           hex: rawtx,
+          save: isSaveAddress,
         },
       });
     } catch (e) {
@@ -91,27 +81,17 @@ const CreateSend = () => {
         feeAmount: location.state.inputedFee,
         includeFeeInAmount: location.state.includeFeeInAmount,
       });
+      if (location.state.save) {
+        setIsSaveAddress(true);
+      }
       if (currentAccount.balance <= location.state.amount) setIncludeFeeLocked(true);
     }
   }, [location.state, setFormData, currentAccount.balance]);
 
-  const [query, setQuery] = useState("");
-  const filteredAddresses =
-    query === ""
-      ? addressBook
-      : addressBook.filter((address) => {
-          return address.toLowerCase().startsWith(query.toLowerCase());
-        });
-
-  const onOpenAddressBook: MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
-    setOpenModal(true);
-  };
-
   const onAmountChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setFormData((prev) => ({
       ...prev,
-      amount: extractAmount(e.target.value),
+      amount: normalizeAmount(e.target.value),
     }));
     if (currentAccount.balance > Number(e.target.value)) {
       setIncludeFeeLocked(false);
@@ -147,49 +127,11 @@ const CreateSend = () => {
         <div className={s.inputs}>
           <div className="form-field">
             <span className="input-span">Address</span>
-            <div className="flex gap-2">
-              <Combobox
-                value={formData.address}
-                onChange={(e) => {
-                  setFormData((prev) => ({ ...prev, address: e }));
-                }}
-              >
-                <div className="relative w-full">
-                  <Combobox.Input
-                    displayValue={(address: string) => address}
-                    autoComplete="off"
-                    className="input w-full"
-                    value={formData.address}
-                    onChange={(v) => {
-                      setFormData((prev) => ({ ...prev, address: v.target.value }));
-                      setQuery(v.target.value);
-                    }}
-                  />
-                  {filteredAddresses.length <= 0 ? (
-                    ""
-                  ) : (
-                    <Transition
-                      as={Fragment}
-                      leave="transition ease-in duration-100"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                      afterLeave={() => {}}
-                    >
-                      <Combobox.Options className={s.addressbookoptions}>
-                        {filteredAddresses.map((address) => (
-                          <Combobox.Option className={s.addressbookoption} key={address} value={address}>
-                            {shortAddress(address, 14)}
-                          </Combobox.Option>
-                        ))}
-                      </Combobox.Options>
-                    </Transition>
-                  )}
-                </div>
-              </Combobox>
-              <button className="bg-input-bg px-2 rounded-xl" title="Address book" onClick={onOpenAddressBook}>
-                <BookOpenIcon className="w-5 h-5" />
-              </button>
-            </div>
+            <AddressInput
+              address={formData.address}
+              onChange={(v) => setFormData((p) => ({ ...p, address: v }))}
+              onOpenModal={() => setOpenModal(true)}
+            />
           </div>
           <div className="form-field">
             <span className="input-span">Amount</span>
@@ -212,18 +154,17 @@ const CreateSend = () => {
           <div className={cn("form-field", s.amountInput)}>
             <span className="input-span">Fee:</span>
             <FeeInput
-              onChange={useCallback(
-                (v) => setFormData((prev) => ({ ...prev, feeAmount: v, inputedFee: v })),
-                [setFormData]
-              )}
-              onIncludeChange={useCallback(
-                (v) => setFormData((prev) => ({ ...prev, includeFeeInAmount: v })),
-                [setFormData]
-              )}
-              includeFeeValue={formData.includeFeeInAmount}
-              includeFeeLocked={includeFeeLocked}
+              onChange={useCallback((v) => setFormData((prev) => ({ ...prev, feeAmount: v })), [setFormData])}
+              value={formData.feeAmount}
             />
           </div>
+
+          <Switch
+            label="Include fee in the amount"
+            onChange={(v) => setFormData((prev) => ({ ...prev, includeFeeInAmount: v }))}
+            value={formData.includeFeeInAmount}
+            locked={includeFeeLocked}
+          />
 
           <Switch
             label="Save address for the next payments"
@@ -234,23 +175,13 @@ const CreateSend = () => {
         </div>
       </form>
 
-      <AddressBookModal isOpen={isOpenModal} onClose={() => setOpenModal(false)} setFormData={setFormData} />
-
-      <button type="submit" className={"btn primary m-6 md:mb-3"} form={formId}>
+      <button type="submit" className={"btn primary mx-4 mb-4 md:m-6 md:mb-3"} form={formId}>
         Continue
       </button>
+
+      <AddressBookModal isOpen={isOpenModal} onClose={() => setOpenModal(false)} setFormData={setFormData} />
     </div>
   );
-};
-
-const extractAmount = (value: string) => {
-  if (!value.length) return "";
-  if (value.includes(".")) {
-    if (value.split(".")[1].length > 8) {
-      return value.split(".")[0] + `.${value.split(".")[1].slice(0, 8)}`;
-    }
-  }
-  return value;
 };
 
 export default CreateSend;

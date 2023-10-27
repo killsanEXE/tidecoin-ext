@@ -5,17 +5,23 @@ import { useState } from "react";
 import ReactLoading from "react-loading";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useUpdateAddressBook } from "@/ui/hooks/app";
 
 const ConfirmSend = () => {
   const location = useLocation();
   const pushTx = usePushTidecoinTxCallback();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const updateAddressBook = useUpdateAddressBook();
 
   const confirmSend = async () => {
     setLoading(true);
     try {
       navigate(`/pages/finalle-send/${(await pushTx(location.state.hex))?.txid ?? ""}`);
+
+      if (location.state.save) {
+        await updateAddressBook(location.state.toAddress);
+      }
     } catch (e) {
       toast.error(e);
       console.error(e);
@@ -49,7 +55,7 @@ const ConfirmSend = () => {
         <div className={s.container}>
           <div className={s.container}>
             {fields.map((i) => (
-              <div key={i.value} className={s.item}>
+              <div key={i.label} className={s.item}>
                 <div className={s.label}>{i.label}:</div>
                 <div className={s.input}>{i.value}</div>
               </div>

@@ -29,17 +29,17 @@ input[type="number"] {
 
 .form {
   @apply w-full flex flex-col gap-6 px-6;
+}
 
-  .form-title {
-    @apply p-0 mx-auto text-[1.3rem] md:pt-5;
-  }
+.form-title {
+  @apply p-0 mx-auto text-xl md:pt-5;
+}
 
-  .form-field {
-    @apply w-full flex flex-col gap-1;
+.form-field {
+  @apply w-full flex flex-col gap-1;
 
-    .input {
-      @apply text-sm;
-    }
+  .input {
+    @apply text-sm;
   }
 }
 
@@ -75,7 +75,14 @@ input[type="number"] {
   }
 
   .toast {
-    @apply bg-black text-text text-sm border border-bg;
+    @apply bg-black text-text text-sm border border-green-600 rounded-2xl;
+
+    &.success {
+      @apply border-green-600;
+    }
+    &.error {
+      @apply border-red-600;
+    }
   }
 }
 

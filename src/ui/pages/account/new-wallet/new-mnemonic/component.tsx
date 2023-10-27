@@ -10,6 +10,7 @@ import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 import { useAppState } from "@/ui/states/appState";
 import CopyBtn from "@/ui/components/copy-btn";
 import toast from "react-hot-toast";
+import SwitchAddressType from "@/ui/components/switch-address-type";
 
 const NewMnemonic = () => {
   const location = useLocation();

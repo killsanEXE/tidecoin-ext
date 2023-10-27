@@ -19,11 +19,11 @@
 }
 
 .explorerBtn {
-  @apply px-5 py-2 rounded-xl font-medium bg-text text-bg text-sm mb-6;
+  @apply px-5 py-2 rounded-xl font-medium bg-text text-bg text-sm mb-6 max-md:w-full;
 }
 
 .summary {
-  @apply list-none cursor-pointer text-sm flex gap-2;
+  @apply list-none cursor-pointer text-sm flex gap-2 mt-1;
 }
 
 .details {

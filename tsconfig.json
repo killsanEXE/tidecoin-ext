@@ -5,7 +5,9 @@
     "esModuleInterop": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "noUnusedLocals": false,
+    "noImplicitAny": true
   },
   "exclude": ["./src/**/*", "./node_modules/**/*"]
 }

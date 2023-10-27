@@ -100,7 +100,7 @@ const buildOptions: BuildOptions = {
 };
 
 if (isDev) {
-  console.log("\n");
+  console.log("");
   const ctx = await context(buildOptions);
   await ctx.watch();
 } else {

@@ -1,17 +1,14 @@
 import cn from "classnames";
 import { FC, useEffect, useState } from "react";
 import s from "./styles.module.scss";
-import Switch from "@/ui/components/switch";
 
 interface Props {
   onChange: (value: number) => void;
-  onIncludeChange: (value: boolean) => void;
-  includeFeeValue: boolean;
-  includeFeeLocked: boolean;
+  value: number;
 }
 
-const FeeInput: FC<Props> = ({ onChange, onIncludeChange, includeFeeValue, includeFeeLocked }) => {
-  const [selected, setSelected] = useState<1 | 2 | 3>(1);
+const FeeInput: FC<Props> = ({ onChange, value }) => {
+  const [selected, setSelected] = useState<1 | 2 | 3>(value === 1 || value === 2 ? value : 3);
 
   const cards = [
     {
@@ -52,13 +49,8 @@ const FeeInput: FC<Props> = ({ onChange, onIncludeChange, includeFeeValue, inclu
       <input
         className={cn("input", { hidden: selected !== 3 })}
         placeholder="tid/Vb"
+        value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-      />
-      <Switch
-        label="Include fee in the amount"
-        onChange={onIncludeChange}
-        value={includeFeeValue}
-        locked={includeFeeLocked}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import { Combobox, Transition } from "@headlessui/react";
-import { FC, Fragment, memo, useEffect, useState } from "react";
+import { FC, Fragment, useCallback, useEffect, useState } from "react";
 import { englishWords } from "test-test-test-hd-wallet";
 import cn from "classnames";
 
@@ -12,11 +12,37 @@ export interface Props {
 
 const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
   const [query, setQuery] = useState("");
+  const [filtered, setFiltered] = useState([]);
+  const [unblured, setUnblured] = useState(false);
 
-  const filteredWords =
-    query === ""
-      ? []
-      : englishWords.filter((word) => word.startsWith(query.toLowerCase().replace(/\s+/g, ""))).slice(0, 4);
+  const getFiltered = useCallback((word: string) => {
+    return englishWords.filter((w) => w.startsWith(word.trim())).slice(0, 4);
+  }, []);
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const phrase = (event.target.value as string).trim();
+    if (phrase.split(" ").length === 12) {
+      setSelected(phrase.trim());
+    } else {
+      const filtered = getFiltered(phrase);
+      if (filtered.length === 1 && filtered.includes(phrase)) {
+        setSelected(phrase);
+      }
+      setQuery(phrase);
+      if (filtered.length === 1 && filtered[0] === phrase) {
+        setFiltered([]);
+      } else {
+        setFiltered(filtered);
+      }
+    }
+  };
+
+  const unBlurred = () => {
+    setUnblured(true);
+    if (filtered.includes(query.trim())) {
+      setSelected(query);
+    }
+  };
 
   useEffect(() => {
     if (selected?.length) {
@@ -30,28 +56,19 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
         <div className={s.inputBox}>
           <Combobox.Input
             autoComplete="off"
-            className={s.input}
+            className={cn(s.input, { [s.error]: unblured && selected !== query })}
             displayValue={(word: string) => word}
-            onChange={(event) => {
-              const phrase = event.target.value as string;
-              if (phrase.trim().split(" ").length === 12) {
-                setSelected(phrase.trim());
-              } else {
-                setQuery(phrase);
-                if (filteredWords[0] === phrase) {
-                  setSelected(phrase);
-                }
-              }
-            }}
+            onChange={onChange}
+            onBlur={unBlurred}
             value={query}
           />
         </div>
         <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
           <Combobox.Options className={s.optionsBox}>
-            {filteredWords.length === 0 && query !== "" ? (
-              <div className={s.optionsNotFound}>Nothing found.</div>
+            {filtered.length === 0 && query !== "" ? (
+              <></>
             ) : (
-              filteredWords.map((word) => (
+              filtered.map((word) => (
                 <Combobox.Option
                   key={word}
                   className={({ active }) => cn(s.options, { [s.optionsActive]: active })}
@@ -72,4 +89,4 @@ const SelectWithHint: FC<Props> = ({ selected, setSelected }) => {
   );
 };
 
-export default memo(SelectWithHint);
+export default SelectWithHint;

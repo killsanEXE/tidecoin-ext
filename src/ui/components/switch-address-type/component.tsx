@@ -20,9 +20,9 @@ const SwitchAddressType: FC<Props> = ({ handler, selectedType }) => {
           })}
           onClick={() => handler(i.value)}
         >
-          <div className={s.infoDiv}>
-            <p className={s.typeTitle}>{i.name}</p>
-            <p className={s.example}></p>
+          <div className={s.wrapper}>
+            <p className={s.title}>{i.name.replace(/ \(.*\)$/, "")}</p>
+            <p className={s.value}>{i.label}</p>
           </div>
         </div>
       ))}

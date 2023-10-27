@@ -7,7 +7,7 @@
 }
 
 .copyButton {
-  @apply flex items-center justify-center mx-auto py-1.5 px-3 bg-text text-base text-bg rounded-xl;
+  @apply flex gap-2 items-center text-sm font-medium mx-auto p-2 rounded-xl hover:bg-text hover:text-bg transition-colors mb-2;
 
   svg {
     @apply hidden;

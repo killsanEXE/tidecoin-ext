@@ -45,7 +45,11 @@ const ChangeAddrType = () => {
     ]
   );
 
-  return <SwitchAddressType selectedType={currentWallet?.addressType ?? AddressType.P2PKH} handler={onSwitchAddress} />;
+  return (
+    <div className="px-6 h-full w-full">
+      <SwitchAddressType selectedType={currentWallet?.addressType ?? AddressType.P2PKH} handler={onSwitchAddress} />
+    </div>
+  );
 };
 
 export default ChangeAddrType;
