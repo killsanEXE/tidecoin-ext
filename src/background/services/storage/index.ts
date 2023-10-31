@@ -33,7 +33,7 @@ class StorageService {
   get currentAccount(): IAccount | undefined {
     if (this._walletState.selectedWallet === undefined || this._walletState.selectedAccount === undefined)
       return undefined;
-    return this._walletState.wallets[this._walletState.selectedWallet].accounts[this._walletState.selectedAccount!];
+    return this._walletState.wallets[this._walletState.selectedWallet].accounts[this._walletState.selectedAccount];
   }
 
   async updateWalletState(state: Partial<IWalletStateBase>) {
@@ -134,7 +134,7 @@ class StorageService {
   private async getSecrets(encrypted: StorageInterface, password: string) {
     if (!encrypted.enc) return undefined;
     const loaded = (await encryptorUtils.decrypt(password, JSON.stringify(encrypted.enc))) as string | undefined;
-    return JSON.parse(loaded!) as DecryptedSecrets | undefined;
+    return JSON.parse(loaded) as DecryptedSecrets | undefined;
   }
 
   async getWalletPhrase(index: number, password: string) {
@@ -143,7 +143,7 @@ class StorageService {
     if (current?.length === undefined || current.length < index) {
       throw new Error(`Failed to found wallet with id ${index}`);
     }
-    return current[index].phrase!;
+    return current[index].phrase;
   }
 
   async getLocalValues() {

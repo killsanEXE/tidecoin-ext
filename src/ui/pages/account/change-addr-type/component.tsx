@@ -22,7 +22,7 @@ const ChangeAddrType = () => {
 
   const onSwitchAddress = useCallback(
     async (type: AddressType) => {
-      const addresses = await keyringController.changeAddressType(selectedWallet!, type);
+      const addresses = await keyringController.changeAddressType(selectedWallet, type);
       await udpateCurrentWallet({
         ...currentWallet,
         addressType: type,

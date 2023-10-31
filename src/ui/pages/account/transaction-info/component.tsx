@@ -6,7 +6,7 @@ import { ITransaction } from "@/shared/interfaces/api";
 import { getTransactionValue } from "@/shared/utils/transactions";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
 import { LinkIcon } from "@heroicons/react/24/outline";
-import { FC, useId, useState } from "react";
+import { FC, useId, useMemo, useState } from "react";
 import Modal from "@/ui/components/modal";
 import cn from "classnames";
 import { shortAddress } from "@/shared/utils/transactions";
@@ -28,6 +28,20 @@ const TransactionInfo = () => {
       active: true,
     });
   };
+
+  const filteredInput = useMemo(() => {
+    const txValues: Record<string, number> = {};
+
+    tx.vin.forEach((i) => {
+      if (txValues[i.prevout.scriptpubkey_address]) {
+        txValues[i.prevout.scriptpubkey_address] += i.prevout.value;
+      } else {
+        txValues[i.prevout.scriptpubkey_address] = i.prevout.value;
+      }
+    });
+
+    return Object.entries(txValues).map((i) => ({ scriptpubkey_address: i[0], value: i[1] }));
+  }, [tx]);
 
   return (
     <div className={s.transactionInfoDiv}>
@@ -58,14 +72,7 @@ const TransactionInfo = () => {
 
             <Modal onClose={() => setOpenModal(false)} open={openModal} title="Details">
               <div className={s.tableContainer}>
-                <TableItem
-                  label="Inputs"
-                  currentAddress={currentAccount.address}
-                  items={tx.vin.map((i) => ({
-                    scriptpubkey_address: i.prevout.scriptpubkey_address,
-                    value: i.prevout.value,
-                  }))}
-                />
+                <TableItem label="Inputs" currentAddress={currentAccount.address} items={filteredInput} />
                 <TableItem label="Outputs" currentAddress={currentAccount.address} items={tx.vout} />
               </div>
             </Modal>

@@ -23,7 +23,7 @@ abstract class Message extends EventEmitter {
     if (!this._requestIdPool.length) {
       throw ethErrors.rpc.limitExceeded();
     }
-    const ident = this._requestIdPool.shift()!;
+    const ident = this._requestIdPool.shift();
 
     return new Promise((resolve, reject) => {
       this._waitingMap.set(ident, {
@@ -42,7 +42,7 @@ abstract class Message extends EventEmitter {
       return;
     }
 
-    const { resolve, reject } = this._waitingMap.get(ident)!;
+    const { resolve, reject } = this._waitingMap.get(ident);
 
     this._requestIdPool.push(ident);
     this._waitingMap.delete(ident);

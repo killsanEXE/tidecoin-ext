@@ -26,26 +26,26 @@ class KeyringService {
 
   async init(password: string) {
     const wallets = await storageService.importWallets(password);
-    wallets.forEach((i) => {
+    for (const i of wallets) {
       let wallet: HDPrivateKey | SimpleKey;
       if (i.data.seed) {
-        wallet = HDPrivateKey.deserialize(i.data);
+        wallet = await HDPrivateKey.deserialize(i.data);
         if (i.accounts.length > 1) {
-          wallet.addAccounts(i.accounts.length - 1);
+          await wallet.addAccounts(i.accounts.length - 1);
         }
       } else {
         wallet = HDSimpleKey.deserialize(i.data) as any as HDSimpleKey;
       }
       this.keyrings[i.id] = wallet;
-    });
+    }
 
     return wallets;
   }
 
-  newKeyring(type: "simple" | "root", payload: string, addressType: AddressType = AddressType.P2WPKH) {
+  async newKeyring(type: "simple" | "root", payload: string, addressType: AddressType = AddressType.P2WPKH) {
     let keyring: HDPrivateKey | HDSimpleKey;
     if (type === "root") {
-      keyring = HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(payload));
+      keyring = await HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(payload));
     } else {
       keyring = HDSimpleKey.deserialize({
         privateKey: payload,
@@ -57,13 +57,13 @@ class KeyringService {
     return keyring.getAddress(keyring.publicKey);
   }
 
-  exportAccount(address: Hex): string {
+  async exportAccount(address: Hex) {
     const keyring = this.getKeyringForAccount(address);
     if (!keyring.exportAccount) {
       throw new Error(KeyringServiceError.UnsupportedExportAccount);
     }
 
-    return keyring.exportAccount(address);
+    return await keyring.exportAccount(address);
   }
 
   getAccounts(address: Hex) {
@@ -83,6 +83,13 @@ class KeyringService {
     }
 
     throw new Error("Keyring not found");
+  }
+
+  getKeyringByIndex(index: number) {
+    if (index + 1 > this.keyrings.length) {
+      throw new Error("Invalid keyring index");
+    }
+    return this.keyrings[index];
   }
 
   serializeById(index: number): any {
@@ -154,7 +161,7 @@ class KeyringService {
       }),
       toAddress: data.to,
       toAmount: data.amount,
-      signTransaction: async (tx) => this.signTransaction(tx, account.address!),
+      signTransaction: async (tx) => this.signTransaction(tx, account.address),
       network: networks.TIDECOIN,
       changeAddress: account.address,
       receiverToPayFee: data.receiverToPayFee,
@@ -179,7 +186,7 @@ class KeyringService {
     let wallets = [...storageService.walletState.wallets];
     wallets.splice(id, 1);
     wallets = wallets.map((f, i) => ({ ...f, id: i }));
-    await storageService.saveWallets(storageService.appState.password!, wallets);
+    await storageService.saveWallets(storageService.appState.password, wallets);
     return wallets;
   }
 

@@ -24,7 +24,7 @@ class ReadyPromise {
     }
 
     while (this._tasks.length) {
-      const { resolve, fn } = this._tasks.shift()!;
+      const { resolve, fn } = this._tasks.shift();
       resolve(fn());
     }
   };

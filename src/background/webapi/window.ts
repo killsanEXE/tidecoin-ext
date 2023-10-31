@@ -36,8 +36,8 @@ const create = async ({ url, ...rest }: CreateNotificationProps): Promise<number
     windowTypes: ["normal"],
   })) as any;
 
-  const top = cTop! + BROWSER_HEADER;
-  const left = cLeft! + width! - WINDOW_SIZE.width;
+  const top = cTop + BROWSER_HEADER;
+  const left = cLeft + width - WINDOW_SIZE.width;
 
   const win = await browserWindowsCreate({
     focused: true,
@@ -51,7 +51,7 @@ const create = async ({ url, ...rest }: CreateNotificationProps): Promise<number
 
   // shim firefox
   if (win.left !== left) {
-    await browserWindowsUpdate(win.id!, { left, top });
+    await browserWindowsUpdate(win.id, { left, top });
   }
 
   return win.id;

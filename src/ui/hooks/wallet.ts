@@ -40,7 +40,7 @@ export const useUpdateCurrentWallet = () => {
 
   return useCallback(
     async (wallet: Partial<IWallet>) => {
-      wallets[selectedWallet!] = { ...wallets[selectedWallet!], ...wallet };
+      wallets[selectedWallet] = { ...wallets[selectedWallet], ...wallet };
       await updateWalletState({
         wallets: [...wallets],
       });
@@ -59,9 +59,9 @@ export const useUpdateCurrentAccount = () => {
 
   return useCallback(
     async (account: Partial<IAccount>) => {
-      if (!wallets[selectedWallet!]) return;
-      wallets[selectedWallet!].accounts[selectedAccount!] = {
-        ...wallets[selectedWallet!].accounts[selectedAccount!],
+      if (!wallets[selectedWallet]) return;
+      wallets[selectedWallet].accounts[selectedAccount] = {
+        ...wallets[selectedWallet].accounts[selectedAccount],
         ...account,
       };
 
@@ -88,8 +88,8 @@ export const useCreateNewAccount = () => {
       if (!currentWallet) return;
       const createdAccount = await walletController.createNewAccount(name);
       const updatedWallet: IWallet = {
-        ...currentWallet!,
-        accounts: [...currentWallet!.accounts, createdAccount],
+        ...currentWallet,
+        accounts: [...currentWallet.accounts, createdAccount],
       };
 
       await updateCurrentWallet(updatedWallet);

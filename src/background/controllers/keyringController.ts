@@ -34,7 +34,7 @@ class KeyringController implements IKeyringController {
    * @returns {Promise<string | undefined>} P2PWKH address of created wallet
    */
   async newKeyring(type: "simple" | "root", payload: string): Promise<string | undefined> {
-    return keyringService.newKeyring(type, payload);
+    return await keyringService.newKeyring(type, payload);
   }
 
   /**
@@ -43,7 +43,7 @@ class KeyringController implements IKeyringController {
    * @returns {Promise<string>} WIF representation of private key
    */
   async exportAccount(address: Hex): Promise<string> {
-    return keyringService.exportAccount(address);
+    return await keyringService.exportAccount(address);
   }
 
   /**
@@ -57,11 +57,11 @@ class KeyringController implements IKeyringController {
   }
 
   async signMessage(msgParams: { from: string; data: string }) {
-    return keyringService.signMessage(msgParams);
+    return await keyringService.signMessage(msgParams);
   }
 
   async signPersonalMessage(msgParams: { from: string; data: string }) {
-    return keyringService.signPersonalMessage(msgParams);
+    return await keyringService.signPersonalMessage(msgParams);
   }
 
   /**

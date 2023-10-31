@@ -20,7 +20,7 @@ class WalletController implements IWalletController {
     name?: string
   ): Promise<IWallet> {
     const exportedWallets = storageService.walletState.wallets;
-    const address = keyringService.newKeyring(walletType, phrase, addressType);
+    const address = await keyringService.newKeyring(walletType, phrase, addressType);
     const account: IAccount = {
       id: 0,
       name: "Account 1",
@@ -39,7 +39,7 @@ class WalletController implements IWalletController {
 
   async saveWallets(data?: DecryptedSecrets, newPassword?: string) {
     await storageService.saveWallets(
-      storageService.appState.password!,
+      storageService.appState.password,
       storageService.walletState.wallets,
       data,
       newPassword
@@ -64,11 +64,11 @@ class WalletController implements IWalletController {
 
   async createNewAccount(name?: string): Promise<IAccount> {
     const wallet = storageService.currentWallet;
-    if (!wallet) return {} as any;
+    if (!wallet) {
+      throw new Error("No one selected wallet");
+    }
     const accName = !name?.length ? storageService.getUniqueName("Account") : name;
-    const addresses = keyringService.getKeyringForAccount(
-      wallet.accounts[-1] ? wallet.accounts[-1].address! : wallet.accounts[0].address!
-    ).addAccounts!(1);
+    const addresses = keyringService.getKeyringByIndex(wallet.id).addAccounts(1);
 
     return {
       id: wallet.accounts[wallet.accounts.length - 1].id + 1,

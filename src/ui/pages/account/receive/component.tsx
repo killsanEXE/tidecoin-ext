@@ -42,7 +42,7 @@ const Receive = () => {
   const ref = useRef(null);
 
   useEffect(() => {
-    qrCode.append(ref.current!);
+    qrCode.append(ref.current);
   }, []);
 
   useEffect(() => {

@@ -18,7 +18,7 @@ const ShowMnemonic = () => {
 
   const onLogin = useCallback(
     async (password: string) => {
-      setPhrase((await stateController.getWalletPhrase(Number(walletId), password!)) ?? "");
+      setPhrase((await stateController.getWalletPhrase(Number(walletId), password)) ?? "");
       setWalletType(wallets[Number(walletId)].type);
       setUnlocked(true);
     },

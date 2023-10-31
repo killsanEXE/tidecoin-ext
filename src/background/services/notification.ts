@@ -103,7 +103,7 @@ class NotificationService extends Events {
       this.notifiWindowId = 0;
     }
     const winId = await openNotification(winProps);
-    this.notifiWindowId = winId!;
+    this.notifiWindowId = winId;
   };
 }
 
