@@ -112,11 +112,14 @@ class StorageService {
         })),
       };
     });
-    const keyringsToSave = wallets.map((i) => ({
-      id: i.id,
-      data: keyringService.serializeById(i.id),
-      phrase: payload?.find((d) => d.id === i.id)?.phrase,
-    }));
+
+    const keyringsToSave = await Promise.all(
+      wallets.map(async (i) => ({
+        id: i.id,
+        data: await keyringService.serializeById(i.id),
+        phrase: payload?.find((d) => d.id === i.id)?.phrase,
+      }))
+    );
     const encrypted = await encryptorUtils.encrypt(newPassword ?? password, JSON.stringify(keyringsToSave));
 
     const data: StorageInterface = {

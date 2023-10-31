@@ -15,11 +15,14 @@ import CopyBtn from "@/ui/components/copy-btn";
 import { useControllersState } from "@/ui/states/controllerState";
 import { getTransactionValue, isIncomeTx } from "@/shared/utils/transactions";
 import { Circle } from "rc-progress";
+import { useDebounceCall } from "@/ui/hooks/debounce";
 
 const Wallet = () => {
   const navigate = useNavigate();
   const [lastBlock, setLastBlock] = useState<number>(0);
   const currentWallet = useGetCurrentWallet();
+
+  const [, setPrevAcc] = useState<string>();
 
   if (currentWallet === undefined) return <Navigate to={"/pages/create-new-wallet"} />;
 
@@ -39,18 +42,26 @@ const Wallet = () => {
   const udpateTransactions = useCallback(async () => {
     const receivedTransactions = await updateAccountTransactions();
     if (receivedTransactions !== undefined) setTransactions(receivedTransactions);
-  }, [updateAccountTransactions, setTransactions]);
+  }, [updateAccountTransactions]);
 
   const updateLastBlock = useCallback(async () => {
     setLastBlock(await apiController.getLastBlockTDC());
-  }, [apiController, setLastBlock]);
+  }, [apiController]);
 
   useEffect(() => {
     (async () => {
       const data = await apiController.getTDCPrice();
       setCurrentPrice(Number(data.data.last));
+      await updateLastBlock();
     })();
-  }, [apiController, setCurrentPrice]);
+  }, [updateLastBlock, apiController]);
+
+  const updateAll = useCallback(async () => {
+    updateAccountBalance();
+    udpateTransactions();
+  }, [updateAccountBalance, udpateTransactions]);
+
+  const trottledUpdate = useDebounceCall(updateAll, 300);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -58,21 +69,20 @@ const Wallet = () => {
       udpateTransactions();
       updateLastBlock();
     }, 5000);
-
     return () => {
       clearInterval(interval);
     };
   }, [updateAccountBalance, udpateTransactions, updateLastBlock]);
 
   useEffect(() => {
-    if (currentAccount && currentAccount.balance === undefined) {
-      updateAccountBalance();
-    }
-    if (lastBlock !== undefined) {
-      udpateTransactions();
-      updateLastBlock();
-    }
-  }, [updateAccountBalance, udpateTransactions, updateLastBlock, currentAccount, lastBlock]);
+    setPrevAcc((prev) => {
+      if (typeof prev === "undefined" || prev !== currentAccount.address) {
+        trottledUpdate();
+        return currentAccount.address;
+      }
+      return prev;
+    });
+  }, [trottledUpdate, currentAccount]);
 
   useEffect(() => {
     (async () => {

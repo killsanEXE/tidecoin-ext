@@ -82,7 +82,7 @@ class KeyringController implements IKeyringController {
   }
 
   async serializeKeyringById(index: number) {
-    return keyringService.serializeById(index);
+    return await keyringService.serializeById(index);
   }
 }
 

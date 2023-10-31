@@ -60,6 +60,7 @@ const Login = () => {
       if (!isNotification()) navigate("/home");
       else await notificationController.resolveApproval();
     } catch (e) {
+      console.error(e);
       toast.error(e.message);
     }
   };

@@ -92,8 +92,8 @@ class KeyringService {
     return this.keyrings[index];
   }
 
-  serializeById(index: number): any {
-    return this.keyrings[index].serialize();
+  async serializeById(index: number): Promise<any> {
+    return await this.keyrings[index].serialize();
   }
 
   signTransaction(tideTx: Psbt, address: string) {

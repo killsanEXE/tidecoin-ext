@@ -64,6 +64,9 @@ const buildOptions: BuildOptions = {
   minify: !isDev,
   bundle: true,
   logLevel: "info",
+  define: {
+    "import.meta.url": '""',
+  },
   plugins: [
     svgPlugin({
       typescript: true,
@@ -84,6 +87,12 @@ const buildOptions: BuildOptions = {
     copy({
       assets: {
         from: ["./configs/_raw/**/*"],
+        to: ["."],
+      },
+    }),
+    copy({
+      assets: {
+        from: ["./node_modules/rust-falcon/dist/falcon.wasm"],
         to: ["."],
       },
     }),
