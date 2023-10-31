@@ -17,7 +17,10 @@ const PasswordInput = <T extends FieldValues>({
       <input
         id={name}
         {...register(name, {
-          minLength: 1,
+          minLength: {
+            value: 1,
+            message: "Should be more than 1 symbol",
+          },
           required: true,
         })}
         type="password"

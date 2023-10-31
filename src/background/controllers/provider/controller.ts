@@ -6,21 +6,6 @@ import { fetchTDCMainnet } from "@/shared/utils";
 import permission from "@/background/services/permission";
 import { SendTDC } from "@/background/services/keyring/types";
 
-function formatPsbtHex(psbtHex: string) {
-  let formatData = "";
-  try {
-    if (!/^[0-9a-fA-F]+$/.test(psbtHex)) {
-      formatData = Psbt.fromBase64(psbtHex).toHex();
-    } else {
-      Psbt.fromHex(psbtHex);
-      formatData = psbtHex;
-    }
-  } catch (e) {
-    throw new Error("invalid psbt");
-  }
-  return formatData;
-}
-
 class ProviderController {
   connect = async () => {
     // if (!permissionService.hasPermission(origin)) {
@@ -143,12 +128,13 @@ class ProviderController {
     if (!permission.siteIsConnected(origin)) return undefined;
     const _account = storageService.currentWallet.accounts[0];
     if (!_account) return undefined;
-    return keyringService.exportPublicKey(_account.address);
+    return await keyringService.exportPublicKey(_account.address);
   };
 
   @Reflect.metadata("APPROVAL", [
     "SignText",
-    (req) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (req: any) => {
       // console.log(req);
     },
   ])
@@ -159,13 +145,14 @@ class ProviderController {
   }) => {
     const account = storageService.currentAccount;
     if (!account || !account.address) return;
-    const message = keyringService.signMessage({ from: account.address, data: text });
+    const message = await keyringService.signMessage({ from: account.address, data: text });
     return message;
   };
 
   @Reflect.metadata("APPROVAL", [
     "CreateTx",
-    (req) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (req: any) => {
       // console.log(req);
     },
   ])
@@ -184,7 +171,8 @@ class ProviderController {
 
   @Reflect.metadata("APPROVAL", [
     "SignTx",
-    (req) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (req: any) => {
       // console.log(req);
     },
   ])
@@ -196,7 +184,7 @@ class ProviderController {
     const account = storageService.currentAccount;
     if (!account) return;
     const psbt = Psbt.fromHex(hex);
-    keyringService.signTransaction(psbt, account.address);
+    await keyringService.signTransaction(psbt, account.address);
     return psbt.toHex();
   };
 

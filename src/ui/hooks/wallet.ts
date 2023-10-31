@@ -119,10 +119,9 @@ export const useSwitchWallet = () => {
       if (!wallet.accounts[0].address) {
         wallet.accounts = await walletController.loadAccountsData(wallet.id, wallet.accounts);
       }
-      wallets[key] = wallet;
       await updateWalletState({
         selectedWallet: wallet.id,
-        wallets: wallets,
+        wallets: wallets.with(key, wallet),
         selectedAccount: 0,
       });
       await notificationController.changedAccount();

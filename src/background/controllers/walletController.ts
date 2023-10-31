@@ -52,9 +52,11 @@ class WalletController implements IWalletController {
   }
 
   async loadAccountsData(walletId: number, accounts: IAccount[]): Promise<IAccount[]> {
+    console.log(walletId);
+    console.log(keyringService.keyrings);
     const wallet = keyringService.keyrings[walletId] as HDPrivateKey | SimpleKey;
 
-    const addresses = wallet.getAccounts();
+    const addresses = await wallet.getAccounts();
 
     return accounts.map((i) => ({
       ...i,

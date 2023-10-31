@@ -2,6 +2,7 @@ import PasswordInput from "@/ui/components/password-input";
 import { useCreateNewWallet } from "@/ui/hooks/wallet";
 import { useWalletState } from "@/ui/states/walletState";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 interface FormType {
@@ -22,9 +23,13 @@ const RestorePrivKey = () => {
   }));
 
   const recoverWallet = async ({ privKey }: FormType) => {
-    await createNewWallet(privKey, "simple");
-    await updateWalletState({ vaultIsEmpty: false });
-    navigate("/home");
+    try {
+      await createNewWallet(privKey, "simple");
+      await updateWalletState({ vaultIsEmpty: false });
+      navigate("/home");
+    } catch (e) {
+      toast.error("Invalid private key");
+    }
   };
 
   return (

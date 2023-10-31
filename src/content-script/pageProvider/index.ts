@@ -9,6 +9,7 @@ import ReadyPromise from "./readyPromise";
 import { $, domReadyCall } from "./utils";
 import { SendTDC } from "@/background/services/keyring/types";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const log = (event, ...args) => {
   // if (process.env.NODE_ENV !== "production") {
   //   console.log(
@@ -110,15 +111,14 @@ export class TidecoinProvider extends EventEmitter {
   /**
    * Sending a message to the extension to receive will keep the service worker alive.
    */
-  private keepAlive = () => {
-    this._request({
+  private keepAlive = async () => {
+    await this._request({
       method: "keepAlive",
       params: {},
-    }).then(() => {
-      setTimeout(() => {
-        this.keepAlive();
-      }, 1000);
     });
+    return setTimeout(() => {
+      this.keepAlive();
+    }, 1000);
   };
 
   private _requestPromiseCheckVisibility = () => {
@@ -175,31 +175,31 @@ export class TidecoinProvider extends EventEmitter {
     return this._request({
       method: "getBalance",
     });
-  }
+  };
 
   getAccountName = async () => {
     return this._request({
       method: "getAccountName",
     });
-  }
+  };
 
   isConnected = async () => {
     return this._request({
       method: "isConnected",
     });
-  }
+  };
 
   getAccount = async () => {
     return this._request({
       method: "getAccount",
     });
-  }
+  };
 
   getPublicKey = async () => {
     return this._request({
       method: "getPublicKey",
     });
-  }
+  };
 
   createTx = async (data: SendTDC) => {
     return this._request({
@@ -208,7 +208,7 @@ export class TidecoinProvider extends EventEmitter {
         ...data,
       },
     });
-  }
+  };
 
   // getNetwork = async () => {
   //   return this._request({
@@ -269,7 +269,7 @@ export class TidecoinProvider extends EventEmitter {
         hex,
       },
     });
-  }
+  };
 
   // sendBitcoin = async (toAddress: string, satoshis: number, options?: { feeRate: number }) => {
   //   return this._request({

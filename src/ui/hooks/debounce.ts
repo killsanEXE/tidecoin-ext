@@ -4,9 +4,10 @@ export function useDebounceCall(value: () => Promise<void>, delay?: number): () 
   const [triggered, setTriggered] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const timer = setTimeout(async () => {
       if (triggered) {
-        value().then(() => setTriggered(false));
+        await value();
+        return setTriggered(false);
       }
     }, delay || 500);
 
@@ -16,5 +17,5 @@ export function useDebounceCall(value: () => Promise<void>, delay?: number): () 
   }, [value, delay, triggered]);
   return useCallback(() => {
     setTriggered(true);
-  }, [setTriggered, value]);
+  }, [setTriggered]);
 }

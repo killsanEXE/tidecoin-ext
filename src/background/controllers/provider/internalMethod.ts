@@ -1,6 +1,6 @@
 import { storageService } from "@/background/services";
 
-const tabCheckin = ({
+export const tabCheckin = ({
   data: {
     params: { origin, name, icon },
   },
@@ -11,8 +11,9 @@ const tabCheckin = ({
   session.name = name;
 };
 
-const getProviderState = async (req) => {
+export const getProviderState = async (req) => {
   const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     session: { origin },
   } = req;
 
@@ -31,12 +32,6 @@ const getProviderState = async (req) => {
   };
 };
 
-const keepAlive = () => {
+export const keepAlive = () => {
   return "ACK_KEEP_ALIVE_MESSAGE";
-};
-
-export default {
-  tabCheckin,
-  getProviderState,
-  keepAlive,
 };

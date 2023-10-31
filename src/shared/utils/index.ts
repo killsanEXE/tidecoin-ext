@@ -50,5 +50,5 @@ export const excludeKeysFromObj = <T extends Record<string, any>, K extends keyo
   obj: T,
   keysToExtract: K[]
 ): Omit<T, K> => {
-  return Object.fromEntries(Object.entries(obj).filter(([k, _v]) => !keysToExtract.includes(k as K))) as Omit<T, K>;
+  return Object.fromEntries(Object.entries(obj).filter(([k]) => !keysToExtract.includes(k as K))) as Omit<T, K>;
 };

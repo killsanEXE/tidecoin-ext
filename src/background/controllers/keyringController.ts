@@ -74,7 +74,7 @@ class KeyringController implements IKeyringController {
   }
 
   async exportPublicKey(address: string): Promise<string> {
-    return keyringService.exportPublicKey(address);
+    return await keyringService.exportPublicKey(address);
   }
 
   async changeAddressType(walletIndex: number, addressType: AddressType): Promise<string[]> {

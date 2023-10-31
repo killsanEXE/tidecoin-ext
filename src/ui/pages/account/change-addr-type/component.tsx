@@ -1,6 +1,5 @@
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 import SwitchAddressType from "@/ui/components/switch-address-type";
-import s from "./styles.module.scss";
 import { useControllersState } from "@/ui/states/controllerState";
 import { useGetCurrentAccount, useGetCurrentWallet, useWalletState } from "@/ui/states/walletState";
 import { useUpdateCurrentAccountBalance, useUpdateCurrentWallet } from "@/ui/hooks/wallet";

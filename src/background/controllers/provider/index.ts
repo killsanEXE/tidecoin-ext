@@ -1,5 +1,5 @@
 import { ethErrors } from "eth-rpc-errors";
-import internalMethod from "./internalMethod";
+import * as internalMethod from "./internalMethod";
 import rpcFlow from "./rpcFlow";
 import { sessionService, storageService } from "@/background/services";
 import { tabEvent } from "@/background/webapi";

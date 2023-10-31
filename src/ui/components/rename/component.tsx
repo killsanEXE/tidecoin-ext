@@ -1,6 +1,5 @@
 import { FC, useId } from "react";
 import s from "./styles.module.scss";
-import cn from "classnames";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import Modal from "../modal";
