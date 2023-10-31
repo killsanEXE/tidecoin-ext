@@ -4,7 +4,7 @@ import { IAccount, IPrivateWallet, IWallet } from "@/shared/interfaces";
 import { DecryptedSecrets, StorageInterface } from "./types";
 import { IAppStateBase, IWalletStateBase } from "@/shared/interfaces";
 import { emptyAppState, emptyWalletState } from "./utils";
-import { keyringService, storageService } from "..";
+import { keyringService } from "..";
 import { excludeKeysFromObj } from "@/shared/utils";
 
 class StorageService {
@@ -168,11 +168,11 @@ class StorageService {
     const encrypted = await this.getLocalValues();
     if (!encrypted) return [];
 
-    await storageService.updateAppState({
+    await this.updateAppState({
       addressBook: encrypted.cache.addressBook,
     });
 
-    await storageService.updateWalletState({
+    await this.updateWalletState({
       selectedAccount: encrypted.cache.selectedAccount,
       selectedWallet: encrypted.cache.selectedWallet,
     });
