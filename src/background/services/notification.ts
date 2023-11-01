@@ -38,14 +38,17 @@ class NotificationService extends Events {
   };
 
   resolveApproval = (data?: any, forceReject = false) => {
+    let connectedSite = false;
     if (forceReject) {
       this.approval?.reject(new EthereumProviderError(4001, "User Cancel"));
     } else {
       this.approval?.resolve(data);
+      if (this.approval.data.params.method === "connect") connectedSite = true;
     }
     this.approval = null;
     this.emit("resolve", data);
     this.clear();
+    return connectedSite;
   };
 
   rejectApproval = async (err?: string, stay = false, isInternal = false) => {

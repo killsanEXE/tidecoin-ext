@@ -2,7 +2,7 @@ import { browserTabsCreate } from "@/shared/utils/browser";
 import s from "./styles.module.scss";
 import { useAppState } from "@/ui/states/appState";
 
-import { UserIcon, KeyIcon, ArrowsPointingOutIcon, ArrowLeftOnRectangleIcon } from "@heroicons/react/24/solid";
+import { UserIcon, KeyIcon, ArrowsPointingOutIcon, ArrowLeftOnRectangleIcon, PuzzlePieceIcon } from "@heroicons/react/24/solid";
 import Tile from "@/ui/components/tile";
 import { TileProps } from "@/ui/components/tile/component";
 
@@ -42,6 +42,11 @@ const Settings = () => {
       icon: <ArrowLeftOnRectangleIcon className={ICON_CN} />,
       label: "Logout",
       onClick: logout,
+    },
+    {
+      icon: <PuzzlePieceIcon className={ICON_CN} />,
+      label: "Connected sites",
+      link: "/pages/connected-sites"
     },
   ];
 

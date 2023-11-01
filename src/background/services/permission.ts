@@ -44,6 +44,17 @@ class PermissionService {
             site.isConnected = false;
         }
     }
+
+    setConnectedSites(sites: ConnectedSite[]) {
+        this._sites = sites.map(f => ({ ...f, isConnected: false }));
+    }
+
+    removeSite(origin: string) {
+        const site = this._sites.find(f => f.origin === origin);
+        if (site) {
+            this._sites.splice(this._sites.indexOf(site), 1);
+        }
+    }
 }
 
 export default new PermissionService();

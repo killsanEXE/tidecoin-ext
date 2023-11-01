@@ -1,4 +1,5 @@
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
+import { ConnectedSite } from "../permission";
 
 interface StorageAccountItem {
   id: number;
@@ -22,5 +23,6 @@ export interface StorageInterface {
     selectedWallet?: number;
     selectedAccount?: number;
     pendingWallet?: string;
+    connectedSites: ConnectedSite[];
   };
 }

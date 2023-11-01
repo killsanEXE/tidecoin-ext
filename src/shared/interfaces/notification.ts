@@ -1,3 +1,4 @@
+import { ConnectedSite } from "@/background/services/permission";
 import { EthereumProviderError } from "eth-rpc-errors";
 
 export interface INotificationController {
@@ -5,6 +6,8 @@ export interface INotificationController {
   rejectApproval(err?: string, stay?: boolean, isInternal?: boolean): Promise<void>;
   resolveApproval(data?: any, forceReject?: boolean): Promise<void>;
   changedAccount(): Promise<void>;
+  getConnectedSites(): Promise<ConnectedSite[]>;
+  removeSite(origin: string): Promise<void>;
 }
 
 export interface Approval {

@@ -4,7 +4,7 @@ import { IAccount, IPrivateWallet, IWallet } from "@/shared/interfaces";
 import { DecryptedSecrets, StorageInterface } from "./types";
 import { IAppStateBase, IWalletStateBase } from "@/shared/interfaces";
 import { emptyAppState, emptyWalletState } from "./utils";
-import { keyringService } from "..";
+import { keyringService, permissionService } from "..";
 import { excludeKeysFromObj } from "@/shared/utils";
 
 class StorageService {
@@ -128,6 +128,7 @@ class StorageService {
         ...local.cache,
         wallets: walletsToSave,
         addressBook: this.appState.addressBook,
+        connectedSites: permissionService.allSites
       },
     };
 
@@ -158,6 +159,7 @@ class StorageService {
           selectedWallet: 0,
           selectedAccount: 0,
           wallets: data.cache,
+          connectedSites: data.cache.connectedSites
         },
         enc: data.enc,
       };
@@ -174,6 +176,8 @@ class StorageService {
     await this.updateAppState({
       addressBook: encrypted.cache.addressBook,
     });
+
+    permissionService.setConnectedSites(encrypted.cache.connectedSites)
 
     await this.updateWalletState({
       selectedAccount: encrypted.cache.selectedAccount,

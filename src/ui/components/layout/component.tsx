@@ -69,6 +69,10 @@ export default function PagesLayout() {
           route: "/pages/confirm-send",
           title: "Send",
         },
+        {
+          route: "/pages/connected-sites",
+          title: "Connected Sites",
+        },
       ] as IRouteTitle[],
     [navigate, stateController, currentRoute.state, wallets.length]
   );
