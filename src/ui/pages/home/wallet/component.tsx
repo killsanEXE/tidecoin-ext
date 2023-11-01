@@ -16,6 +16,7 @@ import { useControllersState } from "@/ui/states/controllerState";
 import { getTransactionValue, isIncomeTx } from "@/shared/utils/transactions";
 import { Circle } from "rc-progress";
 import { useDebounceCall } from "@/ui/hooks/debounce";
+import { t } from "i18next";
 
 const Wallet = () => {
   const navigate = useNavigate();
@@ -138,7 +139,7 @@ const Wallet = () => {
         <div className="flex gap-3 items-center">
           {currentWallet?.type === "root" && (
             <Link to={"/pages/switch-account"}>
-              <ListBulletIcon title="Switch account" className={s.accountsIcon} />
+              <ListBulletIcon title={"Switch account"} className={s.accountsIcon} />
             </Link>
           )}
           <div>
@@ -154,15 +155,15 @@ const Wallet = () => {
 
         <div className={cn(s.receiveSendBtns)}>
           <Link to={"/pages/receive"} className={s.btn}>
-            Receive
+            {t("wallet_page.receive")}
           </Link>
           <Link to={"/pages/create-send"} className={s.btn}>
-            Send
+            {t("wallet_page.send")}
           </Link>
         </div>
       </div>
 
-      <p className={s.transactions}>Transactions</p>
+      <p className={s.transactions}>{t("wallet_page.transactions")}</p>
       {transactions.length > 0 ? (
         <div className={s.transactionsDiv}>
           {transactions.map((t, index) => (
@@ -209,7 +210,7 @@ const Wallet = () => {
           ))}
         </div>
       ) : (
-        <p className={s.noTransactions}>No transactions</p>
+        <p className={s.noTransactions}>{t("wallet_page.no_transactions")}</p>
       )}
     </div>
   );

@@ -1,0 +1,11 @@
+{
+  "wallet_page": {
+    "transactions": "Транзакции",
+    "no_transactions": "Нет транзакций",
+    "receive": "Получить",
+    "send": "Отправить"
+  },
+  "settings": {
+    "language": "Язык"
+  }
+}

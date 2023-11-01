@@ -27,6 +27,7 @@ import Sign from "./provider/sign";
 import SignTx from "./provider/sign-tx";
 import CreateTx from "./provider/create-tx/component";
 import ConnectedSites from "./account/connected-sites";
+import Language from "./account/language";
 
 export const guestRouter = createHashRouter([
   {
@@ -62,7 +63,8 @@ export const authenticatedRouter = createHashRouter([
       { path: "finalle-send/:txId", element: <FinalleSend /> },
       { path: "create-send", element: <CreateSend /> },
       { path: "confirm-send", element: <ConfirmSend /> },
-      { path: "connected-sites", element: <ConnectedSites /> }
+      { path: "connected-sites", element: <ConnectedSites /> },
+      { path: "language", element: <Language /> }
     ],
   },
   {

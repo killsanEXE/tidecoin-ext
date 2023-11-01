@@ -73,6 +73,10 @@ export default function PagesLayout() {
           route: "/pages/connected-sites",
           title: "Connected Sites",
         },
+        {
+          route: "/pages/language",
+          title: "Change language",
+        },
       ] as IRouteTitle[],
     [navigate, stateController, currentRoute.state, wallets.length]
   );

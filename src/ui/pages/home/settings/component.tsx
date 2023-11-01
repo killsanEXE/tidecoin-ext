@@ -2,11 +2,12 @@ import { browserTabsCreate } from "@/shared/utils/browser";
 import s from "./styles.module.scss";
 import { useAppState } from "@/ui/states/appState";
 
-import { UserIcon, KeyIcon, ArrowsPointingOutIcon, ArrowLeftOnRectangleIcon, PuzzlePieceIcon } from "@heroicons/react/24/solid";
+import { UserIcon, KeyIcon, ArrowsPointingOutIcon, ArrowLeftOnRectangleIcon, PuzzlePieceIcon, LanguageIcon } from "@heroicons/react/24/solid";
 import Tile from "@/ui/components/tile";
 import { TileProps } from "@/ui/components/tile/component";
 
 import config from "../../../../../package.json";
+import { t } from "i18next";
 
 const ICON_SIZE = 8;
 const ICON_CN = `w-${ICON_SIZE} h-${ICON_SIZE}`;
@@ -39,14 +40,19 @@ const Settings = () => {
       onClick: expandView,
     },
     {
-      icon: <ArrowLeftOnRectangleIcon className={ICON_CN} />,
-      label: "Logout",
-      onClick: logout,
-    },
-    {
       icon: <PuzzlePieceIcon className={ICON_CN} />,
       label: "Connected sites",
       link: "/pages/connected-sites"
+    },
+    {
+      icon: <LanguageIcon className={ICON_CN} />,
+      label: t("settings.language"),
+      link: "/pages/language"
+    },
+    {
+      icon: <ArrowLeftOnRectangleIcon className={ICON_CN} />,
+      label: "Logout",
+      onClick: logout,
     },
   ];
 

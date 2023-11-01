@@ -1,0 +1,11 @@
+{
+  "wallet_page": {
+    "transactions": "Transactions",
+    "no_transactions": "No transactions",
+    "receive": "Receive",
+    "send": "Send"
+  },
+  "settings": {
+    "language": "Language"
+  }
+}
