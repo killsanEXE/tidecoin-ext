@@ -27,13 +27,13 @@ class NotificationController implements INotificationController {
         return permissionService.allSites;
     }
 
-    async removeSite(origin: string): Promise<void> {
+    async removeSite(origin: string): Promise<ConnectedSite[]> {
         const password = storageService.appState.password;
         if (password) {
             permissionService.removeSite(origin);
             await storageService.saveWallets(password, storageService.walletState.wallets);
-
         }
+        return permissionService.allSites;
     }
 }
 

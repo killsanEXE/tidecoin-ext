@@ -11,13 +11,13 @@ const ConnectedSites = () => {
     notificationController: v.notificationController
   }));
 
-  const getSites = useCallback(async () => {
+  const updateConnectedSites = useCallback(async () => {
     setConnectedSites(await notificationController.getConnectedSites());
   }, [notificationController, setConnectedSites])
 
   useEffect(() => {
-    getSites();
-  }, [getSites])
+    updateConnectedSites();
+  }, [updateConnectedSites])
 
   const niceUrl = (url: string) => {
     if (url.includes("http://")) return url.replace("http://", "");
@@ -25,10 +25,7 @@ const ConnectedSites = () => {
   }
 
   const removeSite = async (origin: string) => {
-    console.log('YES')
-    await notificationController.removeSite(origin)
-    const toDelete = connectedSites.find(f => f.origin === origin);
-    setConnectedSites(connectedSites.splice(connectedSites.indexOf(toDelete), 1))
+    setConnectedSites(await notificationController.removeSite(origin));
   }
 
   return (

@@ -7,7 +7,7 @@ export interface INotificationController {
   resolveApproval(data?: any, forceReject?: boolean): Promise<void>;
   changedAccount(): Promise<void>;
   getConnectedSites(): Promise<ConnectedSite[]>;
-  removeSite(origin: string): Promise<void>;
+  removeSite(origin: string): Promise<ConnectedSite[]>;
 }
 
 export interface Approval {
