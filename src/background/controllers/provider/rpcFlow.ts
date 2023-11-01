@@ -77,12 +77,14 @@ const flowContext = flow
       },
       mapMethod,
     } = ctx;
+    // ! Disabled eslint and typescript becouse idk what options is, but if u see it please think about this 'options = {}'
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [approvalType, condition, options = {}] =
       Reflect.getMetadata("APPROVAL", providerController, mapMethod) || [];
 
     if (approvalType && (!condition || !condition(ctx.request))) {
       ctx.request.requestedApproval = true;
+      // eslint-disable-next-line
       ctx.approvalRes = await notificationService.requestApproval(
         {
           approvalComponent: approvalType,

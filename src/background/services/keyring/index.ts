@@ -29,12 +29,12 @@ class KeyringService {
     for (const i of wallets) {
       let wallet: HDPrivateKey | SimpleKey;
       if (i.data.seed) {
-        wallet = await HDPrivateKey.deserialize(i.data);
+        wallet = HDPrivateKey.deserialize(i.data);
         if (i.accounts.length > 1) {
-          await wallet.addAccounts(i.accounts.length - 1);
+          wallet.addAccounts(i.accounts.length - 1);
         }
       } else {
-        wallet = (await HDSimpleKey.deserialize(i.data)) as any as HDSimpleKey;
+        wallet = HDSimpleKey.deserialize(i.data) as any as HDSimpleKey;
       }
       this.keyrings[i.id] = wallet;
     }
@@ -42,12 +42,12 @@ class KeyringService {
     return wallets;
   }
 
-  async newKeyring(type: "simple" | "root", payload: string, addressType: AddressType = AddressType.P2WPKH) {
+  newKeyring(type: "simple" | "root", payload: string, addressType: AddressType = AddressType.P2WPKH) {
     let keyring: HDPrivateKey | HDSimpleKey;
     if (type === "root") {
-      keyring = await HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(payload));
+      keyring = HDPrivateKey.fromMnemonic(Mnemonic.fromPhrase(payload));
     } else {
-      keyring = await HDSimpleKey.deserialize({
+      keyring = HDSimpleKey.deserialize({
         privateKey: payload,
         addressType: addressType,
       });
@@ -57,18 +57,18 @@ class KeyringService {
     return keyring.getAddress(keyring.publicKey);
   }
 
-  async exportAccount(address: Hex) {
-    const keyring = await this.getKeyringForAccount(address);
+  exportAccount(address: Hex) {
+    const keyring = this.getKeyringForAccount(address);
     if (!keyring.exportAccount) {
       throw new Error(KeyringServiceError.UnsupportedExportAccount);
     }
 
-    return await keyring.exportAccount(address);
+    return keyring.exportAccount(address);
   }
 
-  async getAccounts(address: Hex) {
+  getAccounts(address: Hex) {
     for (const i of this.keyrings) {
-      const accounts = await i.getAccounts();
+      const accounts = i.getAccounts();
       if (accounts.includes(address)) {
         return accounts;
       }
@@ -76,9 +76,9 @@ class KeyringService {
     throw new Error("Account not found");
   }
 
-  async getKeyringForAccount(address: Hex) {
+  getKeyringForAccount(address: Hex) {
     for (const i of this.keyrings) {
-      const accounts = await i.getAccounts();
+      const accounts = i.getAccounts();
       if (accounts.includes(address)) return i;
     }
 
@@ -92,12 +92,12 @@ class KeyringService {
     return this.keyrings[index];
   }
 
-  async serializeById(index: number): Promise<any> {
-    return await this.keyrings[index].serialize();
+  serializeById(index: number): any {
+    return this.keyrings[index].serialize();
   }
 
-  async signTransaction(tideTx: Psbt, address: string) {
-    const keyring = await this.getKeyringForAccount(address);
+  signTransaction(tideTx: Psbt, address: string) {
+    const keyring = this.getKeyringForAccount(address);
     keyring.signTransaction(
       tideTx,
       tideTx.data.inputs.map((_i, index) => ({
@@ -107,14 +107,14 @@ class KeyringService {
     );
   }
 
-  async signMessage(msgParams: { from: string; data: string }) {
-    const keyring = await this.getKeyringForAccount(msgParams.from);
+  signMessage(msgParams: { from: string; data: string }) {
+    const keyring = this.getKeyringForAccount(msgParams.from);
     const randomSeed = crypto.getRandomValues(new Uint8Array(48));
     return keyring.signMessage(msgParams.from, msgParams.data, randomSeed);
   }
 
-  async signPersonalMessage(msgParams: { from: string; data: string }) {
-    const keyring = await this.getKeyringForAccount(msgParams.from);
+  signPersonalMessage(msgParams: { from: string; data: string }) {
+    const keyring = this.getKeyringForAccount(msgParams.from);
     if (!keyring.signPersonalMessage) {
       throw new Error(KeyringServiceError.UnsupportedSignPersonalMessage);
     }
@@ -135,9 +135,9 @@ class KeyringService {
     //   .reduce((prev, cur) => prev?.concat(...(cur ?? [])), []) as ApiUTXO[];
   }
 
-  async exportPublicKey(address: Hex) {
-    const keyring = await this.getKeyringForAccount(address);
-    return await keyring.exportPublicKey(address);
+  exportPublicKey(address: Hex) {
+    const keyring = this.getKeyringForAccount(address);
+    return keyring.exportPublicKey(address);
   }
 
   async sendTDC(data: SendTDC) {
@@ -145,7 +145,7 @@ class KeyringService {
     const wallet = storageService.currentWallet;
     if (!account || !account.address) throw new Error("Error when trying to get the current account");
 
-    const publicKey = await this.exportPublicKey(account.address);
+    const publicKey = this.exportPublicKey(account.address);
 
     const psbt = await createSendTidecoin({
       utxos: data.utxos.map((v) => {
@@ -165,7 +165,7 @@ class KeyringService {
       network: networks.TIDECOIN,
       changeAddress: account.address,
       receiverToPayFee: data.receiverToPayFee,
-      pubkey: await this.exportPublicKey(account.address),
+      pubkey: this.exportPublicKey(account.address),
       feeRate: data.feeRate,
       enableRBF: false,
     });
@@ -176,9 +176,9 @@ class KeyringService {
     return psbt.toHex();
   }
 
-  async changeAddressType(index: number, addressType: AddressType): Promise<string[]> {
+  changeAddressType(index: number, addressType: AddressType): string[] {
     this.keyrings[index].addressType = addressType;
-    return await this.keyrings[index].getAccounts();
+    return this.keyrings[index].getAccounts();
   }
 
   async deleteWallet(id: number) {

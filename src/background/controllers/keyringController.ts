@@ -34,7 +34,7 @@ class KeyringController implements IKeyringController {
    * @returns {Promise<string | undefined>} P2PWKH address of created wallet
    */
   async newKeyring(type: "simple" | "root", payload: string): Promise<string | undefined> {
-    return await keyringService.newKeyring(type, payload);
+    return keyringService.newKeyring(type, payload);
   }
 
   /**
@@ -43,7 +43,7 @@ class KeyringController implements IKeyringController {
    * @returns {Promise<string>} WIF representation of private key
    */
   async exportAccount(address: Hex): Promise<string> {
-    return await keyringService.exportAccount(address);
+    return keyringService.exportAccount(address);
   }
 
   /**
@@ -57,11 +57,11 @@ class KeyringController implements IKeyringController {
   }
 
   async signMessage(msgParams: { from: string; data: string }) {
-    return await keyringService.signMessage(msgParams);
+    return keyringService.signMessage(msgParams);
   }
 
   async signPersonalMessage(msgParams: { from: string; data: string }) {
-    return await keyringService.signPersonalMessage(msgParams);
+    return keyringService.signPersonalMessage(msgParams);
   }
 
   /**
@@ -74,15 +74,15 @@ class KeyringController implements IKeyringController {
   }
 
   async exportPublicKey(address: string): Promise<string> {
-    return await keyringService.exportPublicKey(address);
+    return keyringService.exportPublicKey(address);
   }
 
   async changeAddressType(walletIndex: number, addressType: AddressType): Promise<string[]> {
-    return await keyringService.changeAddressType(walletIndex, addressType);
+    return keyringService.changeAddressType(walletIndex, addressType);
   }
 
   async serializeKeyringById(index: number) {
-    return await keyringService.serializeById(index);
+    return keyringService.serializeById(index);
   }
 }
 

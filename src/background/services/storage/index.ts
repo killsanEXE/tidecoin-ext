@@ -113,13 +113,11 @@ class StorageService {
       };
     });
 
-    const keyringsToSave = await Promise.all(
-      wallets.map(async (i) => ({
-        id: i.id,
-        data: await keyringService.serializeById(i.id),
-        phrase: payload?.find((d) => d.id === i.id)?.phrase,
-      }))
-    );
+    const keyringsToSave = wallets.map((i) => ({
+      id: i.id,
+      data: keyringService.serializeById(i.id),
+      phrase: payload?.find((d) => d.id === i.id)?.phrase,
+    }));
     const encrypted = await encryptorUtils.encrypt(newPassword ?? password, JSON.stringify(keyringsToSave));
 
     const data: StorageInterface = {
@@ -128,7 +126,7 @@ class StorageService {
         ...local.cache,
         wallets: walletsToSave,
         addressBook: this.appState.addressBook,
-        connectedSites: permissionService.allSites
+        connectedSites: permissionService.allSites,
       },
     };
 
@@ -159,7 +157,7 @@ class StorageService {
           selectedWallet: 0,
           selectedAccount: 0,
           wallets: data.cache,
-          connectedSites: data.cache.connectedSites
+          connectedSites: data.cache.connectedSites,
         },
         enc: data.enc,
       };
@@ -177,7 +175,7 @@ class StorageService {
       addressBook: encrypted.cache.addressBook,
     });
 
-    permissionService.setConnectedSites(encrypted.cache.connectedSites)
+    permissionService.setConnectedSites(encrypted.cache.connectedSites);
 
     await this.updateWalletState({
       selectedAccount: encrypted.cache.selectedAccount,

@@ -45,9 +45,10 @@
     "react-loading": "^2.0.3",
     "react-router-dom": "^6.15.0",
     "reflect-metadata": "^0.1.13",
-    "test-test-test-hd-wallet": "^0.4.0",
-    "tidecoin-utils": "^0.0.9",
-    "tidecoinjs-lib": "^6.2.4",
+    "rust-falcon": "^0.2.0",
+    "test-test-test-hd-wallet": "^0.4.3",
+    "tidecoin-utils": "^0.1.0",
+    "tidecoinjs-lib": "^6.2.5",
     "tidepair": "^0.1.0",
     "zustand": "^4.4.1"
   },

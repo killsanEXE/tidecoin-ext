@@ -20,7 +20,7 @@ class WalletController implements IWalletController {
     name?: string
   ): Promise<IWallet> {
     const exportedWallets = storageService.walletState.wallets;
-    const address = await keyringService.newKeyring(walletType, phrase, addressType);
+    const address = keyringService.newKeyring(walletType, phrase, addressType);
     const account: IAccount = {
       id: 0,
       name: "Account 1",
@@ -83,7 +83,7 @@ class WalletController implements IWalletController {
   }
 
   async deleteWallet(id: number): Promise<IWallet[]> {
-    return await keyringService.deleteWallet(id);
+    return keyringService.deleteWallet(id);
   }
 }
 

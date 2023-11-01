@@ -128,7 +128,7 @@ class ProviderController {
     if (!permission.siteIsConnected(origin)) return undefined;
     const _account = storageService.currentWallet.accounts[0];
     if (!_account) return undefined;
-    return await keyringService.exportPublicKey(_account.address);
+    return keyringService.exportPublicKey(_account.address);
   };
 
   @Reflect.metadata("APPROVAL", [
@@ -145,7 +145,7 @@ class ProviderController {
   }) => {
     const account = storageService.currentAccount;
     if (!account || !account.address) return;
-    const message = await keyringService.signMessage({ from: account.address, data: text });
+    const message = keyringService.signMessage({ from: account.address, data: text });
     return message;
   };
 
@@ -184,7 +184,7 @@ class ProviderController {
     const account = storageService.currentAccount;
     if (!account) return;
     const psbt = Psbt.fromHex(hex);
-    await keyringService.signTransaction(psbt, account.address);
+    keyringService.signTransaction(psbt, account.address);
     return psbt.toHex();
   };
 
