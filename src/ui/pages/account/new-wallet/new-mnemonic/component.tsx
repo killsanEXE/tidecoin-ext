@@ -11,6 +11,7 @@ import { useAppState } from "@/ui/states/appState";
 import CopyBtn from "@/ui/components/copy-btn";
 import toast from "react-hot-toast";
 import SwitchAddressType from "@/ui/components/switch-address-type";
+import { t } from "i18next";
 
 const NewMnemonic = () => {
   const location = useLocation();
@@ -52,7 +53,7 @@ const NewMnemonic = () => {
 
   const onCreate = async () => {
     if (!mnemonicPhrase) {
-      toast.error("Mnemonic phrase blank");
+      toast.error(t("new_wallet.new_mnemonic.error_phrase_blank"));
       return;
     }
     setLoading(true);
@@ -74,14 +75,14 @@ const NewMnemonic = () => {
   return (
     <div className={s.newMnemonic}>
       <div className={s.stepTitle}>
-        <p className={cn({ [s.active]: step === 1 })}>Step 1</p>
-        <p className={cn({ [s.active]: step === 2 })}>Step 2</p>
+        <p className={cn({ [s.active]: step === 1 })}>{t("new_wallet.new_mnemonic.step_1")}</p>
+        <p className={cn({ [s.active]: step === 2 })}>{t("new_wallet.new_mnemonic.step_2")}</p>
       </div>
       {step === 1 ? (
         <div className={cn(s.stepOneWrapper, s.step)}>
           <div className={cn(s.stepOne, s.step)}>
             <div>
-              <p className={s.warning}>If you lose these words, you will never be able to recover your lost account</p>
+              <p className={s.warning}>{t("new_wallet.new_mnemonic.warning")}</p>
               <div className={s.phrase}>
                 {mnemonicPhrase.split(" ").map((word, index) => (
                   <div key={index} className={s.word}>
@@ -95,14 +96,14 @@ const NewMnemonic = () => {
               <CopyBtn label="Copy" value={mnemonicPhrase} className="mx-auto flex items-center gap-1" />
               <div className={s.savePhrase}>
                 <label className="cursor-pointer" htmlFor="save-phrases">
-                  I saved this phrase
+                  {t("new_wallet.new_mnemonic.i_saved_this_phrase")}
                 </label>
                 <input id="save-phrases" type="checkbox" onChange={onSwitch} />
               </div>
             </div>
             <div className={s.continueWrapper}>
               <button className="btn primary" onClick={() => setStep(2)} disabled={!savedPhrase}>
-                Continue
+                {t("new_wallet.new_mnemonic.continue")}
               </button>
             </div>
           </div>
@@ -112,7 +113,7 @@ const NewMnemonic = () => {
           <SwitchAddressType handler={setAddressType} selectedType={addressType} />
           <div className={s.continueWrapper}>
             <button onClick={onCreate} className={cn(s.continue, "btn", "primary")}>
-              Continue
+              {t("new_wallet.new_mnemonic.continue")}
             </button>
           </div>
         </div>

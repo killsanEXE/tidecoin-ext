@@ -3,6 +3,7 @@ import { useAppState } from "@/ui/states/appState";
 import { useControllersState } from "@/ui/states/controllerState";
 import { useForm } from "react-hook-form";
 import PasswordInput from "@/ui/components/password-input";
+import { t } from "i18next";
 
 interface FormType {
   oldPassword: string;
@@ -13,15 +14,15 @@ interface FormType {
 const formFields: { name: keyof FormType; label: string }[] = [
   {
     name: "oldPassword",
-    label: "Old password",
+    label: t("change_password.old_password"),
   },
   {
     name: "password",
-    label: "New password",
+    label: t("change_password.new_password"),
   },
   {
     name: "confirmPassword",
-    label: "Confirm password",
+    label: t("change_password.confirm_password"),
   },
 ];
 
@@ -64,7 +65,7 @@ const ChangePassword = () => {
       ))}
 
       <button className="btn primary" type="submit">
-        Change password
+        {t("change_password.change_password")}
       </button>
     </form>
   );

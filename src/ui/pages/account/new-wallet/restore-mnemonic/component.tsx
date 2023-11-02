@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import SwitchAddressType from "@/ui/components/switch-address-type";
 import { AddressType } from "test-test-test-hd-wallet/src/hd/types";
 import SelectWithHint from "@/ui/components/select-hint/component";
+import { t } from "i18next";
 
 const RestoreMnemonic = () => {
   const [step, setStep] = useState(1);
@@ -32,7 +33,7 @@ const RestoreMnemonic = () => {
   );
 
   const onNextStep = () => {
-    if (mnemonicPhrase.findIndex((f) => f === undefined) !== -1) toast.error("Please insert all the words");
+    if (mnemonicPhrase.findIndex((f) => f === undefined) !== -1) toast.error(t("new_wallet.restore_mnemonic.incomplete_phrase_error"));
     else setStep(2);
   };
 
@@ -42,7 +43,7 @@ const RestoreMnemonic = () => {
       await updateWalletState({ vaultIsEmpty: false });
       navigate("/home");
     } catch (e) {
-      toast.error("Words are invalid");
+      toast.error(t("new_wallet.restore_mnemonic.invalid_words_error"));
       setStep(1);
     }
   };
@@ -50,8 +51,8 @@ const RestoreMnemonic = () => {
   return (
     <div className={s.restoreMnemonic}>
       <div className={s.stepTitle}>
-        <p className={step === 1 ? s.active : ""}>Step 1</p>
-        <p className={step === 2 ? s.active : ""}>Step 2</p>
+        <p className={step === 1 ? s.active : ""}>{t("new_wallet.new_mnemonic.step_1")}</p>
+        <p className={step === 2 ? s.active : ""}>{t("new_wallet.new_mnemonic.step_2")}</p>
       </div>
       {step === 1 ? (
         <div className={cn(s.stepOneWrapper, s.step)}>
@@ -68,7 +69,7 @@ const RestoreMnemonic = () => {
             </div>
             <div className={s.continueWrapper}>
               <button className={cn(s.continue, "btn", "primary")} onClick={onNextStep}>
-                Continue
+                {t("new_wallet.new_mnemonic.continue")}
               </button>
             </div>
           </div>
@@ -78,7 +79,7 @@ const RestoreMnemonic = () => {
           <div className={s.continueWrapper}>
             <SwitchAddressType handler={setAddressType} selectedType={addressType} />
             <button onClick={onRestore} className={cn(s.continue, "btn", "primary")}>
-              Continue
+              {t("new_wallet.new_mnemonic.continue")}
             </button>
           </div>
         </div>

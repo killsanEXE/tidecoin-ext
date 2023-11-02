@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { useCreateNewAccount } from "@/ui/hooks/wallet";
 import { useGetCurrentWallet } from "@/ui/states/walletState";
 import { useForm } from "react-hook-form";
+import { t } from "i18next";
 
 interface FormType {
   name: string;
@@ -24,17 +25,17 @@ const NewAccount = () => {
   };
 
   const createNewAcc = async ({ name }: FormType) => {
-    if (name.length > 16) return toast.error("Maximum name length is 16");
-    if (nameAlreadyExists(name)) return toast.error("Name for this account is already taken");
+    if (name.length > 16) return toast.error(t("new_account.max_length_error"));
+    if (nameAlreadyExists(name)) return toast.error(t("new_account.name_taken_error"));
 
     await createNewAccount(name);
-    toast.success("Created new account");
+    toast.success(t("new_account.account_created_message"));
     navigate("/home");
   };
 
   return (
     <form className="form" onSubmit={handleSubmit(createNewAcc)}>
-      <p className="form-title">Enter the name:</p>
+      <p className="form-title">{t("new_account.enter_name_label")}</p>
       <input
         type="text"
         className="input"
@@ -43,7 +44,7 @@ const NewAccount = () => {
         })}
       />
       <button className="btn primary" type="submit">
-        Create an account
+        {t("new_account.create_new_account")}
       </button>
     </form>
   );

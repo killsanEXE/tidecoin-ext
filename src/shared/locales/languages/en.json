@@ -6,7 +6,12 @@
     "send": "Send"
   },
   "settings": {
-    "language": "Language"
+    "language": "Language",
+    "logout": "Logout",
+    "connected_sites": "Connected Sites",
+    "expand_view": "Expand View",
+    "change_password": "Change Password",
+    "address_type": "Address Type"
   },
   "components": {
     "layout": {
@@ -25,5 +30,48 @@
       "show_mnemonic": "Show Mnemonic",
       "show_private_key": "Show Private Key"
     }
+  },
+  "change_password": {
+    "old_password": "Old password",
+    "new_password": "New password",
+    "confirm_password": "Confirm password",
+    "change_password": "Change password"
+  },
+  "connected_sites": {
+    "no_sites_message": "You didn't connect any sites yet"
+  },
+  "create_password": {
+    "password": "Password",
+    "confirm_password": "Confirm password",
+    "create_password": "Create password"
+  },
+  "login": {
+    "password": "Password",
+    "login": "Login"
+  },
+  "new_account": {
+    "max_length_error": "Maximum name length is 16",
+    "name_taken_error": "Name for this account is already taken",
+    "account_created_message": "Created new account",
+    "enter_name_label": "Enter the name:",
+    "create_new_account": "Create an account"
+  },
+  "new_wallet": {
+    "new_mnemonic_label": "New mnemonic",
+    "restore_mnemonic_label": "Restore mnemonic",
+    "restore_from_private_key_label": "Restore from private key",
+    "new_mnemonic": {
+      "error_phrase_blank": "Mnemonic phrase blank",
+      "step_1": "Step 1",
+      "Step_2": "Step 2",
+      "warning": "If you lose these words, you will never be able to recover your lost account",
+      "i_saved_this_phrase": "I saved this phrase",
+      "continue": "Continue"
+    },
+    "restore_mnemonic": {
+      "incomplete_phrase_error": "Please insert all the words",
+      "invalid_words_error": "Words are invalid"
+    },
+    "restore_private": {}
   }
 }

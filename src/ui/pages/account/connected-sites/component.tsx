@@ -3,6 +3,7 @@ import { useControllersState } from "@/ui/states/controllerState";
 import { useCallback, useEffect, useState } from "react";
 import s from "./styles.module.scss";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import { t } from "i18next";
 
 const ConnectedSites = () => {
   const [connectedSites, setConnectedSites] = useState<ConnectedSite[]>([]);
@@ -44,7 +45,7 @@ const ConnectedSites = () => {
           ))}
         </div>
       ) : (
-        <p>You didn{"'"}t connect any sites to your wallet yet</p>
+        <p>{t("connected_sites.no_sites_message")}</p>
       )}
     </>
   );

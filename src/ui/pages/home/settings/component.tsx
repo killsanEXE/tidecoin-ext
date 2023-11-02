@@ -26,22 +26,22 @@ const Settings = () => {
   const items: TileProps[] = [
     {
       icon: <UserIcon className={ICON_CN} />,
-      label: "Address type",
+      label: t("settings.address_type"),
       link: "/pages/change-addr-type",
     },
     {
       icon: <KeyIcon className={ICON_CN} />,
-      label: "Change password",
+      label: t("settings.change_password"),
       link: "/pages/change-password",
     },
     {
       icon: <ArrowsPointingOutIcon className={ICON_CN} />,
-      label: "Expand view",
+      label: t("settings.expand_view"),
       onClick: expandView,
     },
     {
       icon: <PuzzlePieceIcon className={ICON_CN} />,
-      label: "Connected sites",
+      label: t("settings.connected_sites"),
       link: "/pages/connected-sites"
     },
     {
@@ -51,7 +51,7 @@ const Settings = () => {
     },
     {
       icon: <ArrowLeftOnRectangleIcon className={ICON_CN} />,
-      label: "Logout",
+      label: t("settings.logout"),
       onClick: logout,
     },
   ];

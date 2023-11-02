@@ -10,6 +10,7 @@ import { useSyncStorages } from "@/ui/utils/setup";
 import { isNotification } from "@/ui/utils";
 import cn from "classnames";
 import PasswordInput from "@/ui/components/password-input";
+import { t } from "i18next";
 
 interface FormType {
   password: string;
@@ -67,9 +68,9 @@ const Login = () => {
 
   return (
     <form className={cn(s.form, "mt-5")} onSubmit={handleSubmit(login)}>
-      <PasswordInput register={register} label="Password" name="password" />
+      <PasswordInput register={register} label={t("login.password")} name="password" />
       <button className="btn primary md:mx-auto" type="submit">
-        Login
+        {t("login.login")}
       </button>
     </form>
   );
