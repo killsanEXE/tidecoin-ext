@@ -11,22 +11,21 @@ interface FormType {
   confirmPassword: string;
 }
 
-const formFields: { name: keyof FormType; label: string }[] = [
-  {
-    name: "oldPassword",
-    label: t("change_password.old_password"),
-  },
-  {
-    name: "password",
-    label: t("change_password.new_password"),
-  },
-  {
-    name: "confirmPassword",
-    label: t("change_password.confirm_password"),
-  },
-];
-
 const ChangePassword = () => {
+  const formFields: { name: keyof FormType; label: string }[] = [
+    {
+      name: "oldPassword",
+      label: t("change_password.old_password"),
+    },
+    {
+      name: "password",
+      label: t("change_password.new_password"),
+    },
+    {
+      name: "confirmPassword",
+      label: t("change_password.confirm_password"),
+    },
+  ];
   const { register, handleSubmit, reset } = useForm<FormType>({
     defaultValues: {
       oldPassword: "",

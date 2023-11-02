@@ -29,6 +29,21 @@
       "settings": "Settings",
       "show_mnemonic": "Show Mnemonic",
       "show_private_key": "Show Private Key"
+    },
+    "check_password": {
+      "incorrect_password_error": "Incorrect password",
+      "password": "Password",
+      "continue": "Continue"
+    },
+    "password_input": {
+      "should_be_more_than_1_symbol": "Should be more than 1 symbol"
+    },
+    "rename": {
+      "enter_new_name": "Enter new name",
+      "minimum_length": "Miniumum length is 1",
+      "maximum_length": "Maximum length is 16",
+      "name_is_required": "Name is required",
+      "save": "Save"
     }
   },
   "change_password": {
@@ -124,6 +139,46 @@
       "success": "Success",
       "explorer": "Explorer",
       "back": "Back"
+    }
+  },
+  "switch_account": {
+    "name_already_taken_error": "This name is already taken",
+    "copy_address": "Copy address",
+    "rename_account": "Rename account",
+    "export_private_key": "Export private key",
+    "show_pk": {
+      "copy": "Copy"
+    }
+  },
+  "switch_wallet": {
+    "rename_wallet": "Rename wallet",
+    "show_mnemonic_private_key": "Show mnemonic private key",
+    "last_wallet_error": "You cannot delete your last wallet",
+    "remove_wallet": "Remove wallet",
+    "are_you_sure": "Are you sure you want to delete?",
+    "yes": "Yes",
+    "no": "No",
+    "copy": "Copy"
+  },
+  "transaction_info": {
+    "txid": "TxId",
+    "confirmations_label": "Confirmations:",
+    "fee_label": "Fee:",
+    "value_label": "Value:",
+    "open_in_explorer": "Open in explorer",
+    "copied": "Copied",
+    "inputs": "Inputs",
+    "outputs": "Outputs",
+    "details": "Details"
+  },
+  "hooks": {
+    "transaction": {
+      "insufficient_balance_0": "Insufficient balance. Non-Inscription balance",
+      "insufficient_balance_1": "TDC) is lower than",
+      "insufficient_balance_2": "TDC"
+    },
+    "wallet": {
+      "last_wallet_error": "You cannot delete your last wallet"
     }
   }
 }

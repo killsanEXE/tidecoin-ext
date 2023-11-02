@@ -3,6 +3,7 @@ import s from "./styles.module.scss";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import Modal from "../modal";
+import { t } from "i18next";
 
 interface Props {
   handler: (name: string) => void;
@@ -37,7 +38,7 @@ const Rename: FC<Props> = ({ handler, active, onClose }) => {
       <form className={s.form} onSubmit={handleSubmit(onRename)}>
         <div>
           <label htmlFor={renameId} className={s.label}>
-            Enter new name
+            {t("components.rename.enter_new_name")}
           </label>
           <input
             id={renameId}
@@ -45,18 +46,18 @@ const Rename: FC<Props> = ({ handler, active, onClose }) => {
             {...register("name", {
               minLength: {
                 value: 1,
-                message: "Minimum length is 1",
+                message: t("components.rename.enter_new_name"),
               },
               maxLength: {
                 value: 16,
-                message: "Maximum length is 16",
+                message: t("components.rename.maximum_length"),
               },
-              required: "Name is required",
+              required: t("components.rename.name_is_required"),
             })}
           />
         </div>
         <button className="btn primary mx-auto w-2/3" onClick={onSubmit}>
-          Save
+          {t("components.rename.save")}
         </button>
       </form>
     </Modal>

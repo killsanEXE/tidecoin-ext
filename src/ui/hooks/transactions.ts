@@ -4,6 +4,7 @@ import { useControllersState } from "../states/controllerState";
 import { tidoshisToAmount } from "@/shared/utils/transactions";
 import { Psbt } from "tidecoinjs-lib";
 import { Hex } from "@/background/services/keyring/types";
+import { t } from "i18next";
 
 export function useCreateTidecoinTxCallback() {
   const currentAccount = useGetCurrentAccount();
@@ -25,9 +26,9 @@ export function useCreateTidecoinTxCallback() {
       const safeBalance = (utxos ?? []).reduce((pre, cur) => pre + cur.value, 0);
       if (safeBalance < toAmount) {
         throw new Error(
-          `Insufficient balance. Non-Inscription balance (${tidoshisToAmount(
+          `${t("hooks.transaction.insufficient_balance_0")} (${tidoshisToAmount(
             safeBalance
-          )} TDC) is lower than ${tidoshisToAmount(toAmount)} TDC `
+          )} ${t("hooks.transaction.insufficient_balance_1")} ${tidoshisToAmount(toAmount)} ${t("hooks.transaction.insufficient_balance_2")}`
         );
       }
 

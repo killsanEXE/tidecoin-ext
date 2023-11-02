@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useGetCurrentAccount } from "@/ui/states/walletState";
 import { useControllersState } from "@/ui/states/controllerState";
 import CopyBtn from "@/ui/components/copy-btn";
+import { t } from "i18next";
 
 const ShowPk = () => {
   const [unlocked, setUnlocked] = useState(false);
@@ -28,7 +29,7 @@ const ShowPk = () => {
           <div className={s.secretContainer}>
             <div className={s.secret}>{secret}</div>
           </div>
-          <CopyBtn label="Copy" value={secret} />
+          <CopyBtn label={t("switch_account.show_pk.copy")} value={secret} />
         </div>
       ) : (
         <CheckPassword

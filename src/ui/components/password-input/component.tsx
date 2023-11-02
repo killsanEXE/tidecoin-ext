@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import { FieldValues, Path, UseFormRegister } from "react-hook-form";
 
 const PasswordInput = <T extends FieldValues>({
@@ -19,7 +20,7 @@ const PasswordInput = <T extends FieldValues>({
         {...register(name, {
           minLength: {
             value: 1,
-            message: "Should be more than 1 symbol",
+            message: t("components.password_input.should_be_more_than_1_symbol"),
           },
           required: true,
         })}

@@ -5,6 +5,7 @@ import s from "./styles.module.scss";
 import { useControllersState } from "@/ui/states/controllerState";
 import { useWalletState } from "@/ui/states/walletState";
 import CopyBtn from "@/ui/components/copy-btn";
+import { t } from "i18next";
 
 const ShowMnemonic = () => {
   const [unlocked, setUnlocked] = useState(false);
@@ -50,7 +51,7 @@ const ShowMnemonic = () => {
           </div>
         )}
         <div className={s.copyWrapper}>
-          <CopyBtn label="Copy" value={phrase} />
+          <CopyBtn label={t("switch_wallet.copy")} value={phrase} />
         </div>
       </div>
     </div>

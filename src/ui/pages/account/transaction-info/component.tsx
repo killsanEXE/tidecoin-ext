@@ -11,6 +11,7 @@ import Modal from "@/ui/components/modal";
 import cn from "classnames";
 import { shortAddress } from "@/shared/utils/transactions";
 import toast from "react-hot-toast";
+import { t } from "i18next";
 
 const TransactionInfo = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -49,36 +50,36 @@ const TransactionInfo = () => {
         <>
           <div className={s.transaction}>
             <div className={s.group}>
-              <p className={s.transactionP}>TxId:</p>
+              <p className={s.transactionP}>{t("transaction_info.txid")}</p>
 
               <span>{tx.txid}</span>
             </div>
             <div className={s.group}>
-              <p className={s.transactionP}>Confirmations:</p>
+              <p className={s.transactionP}>{t("transaction_info.confirmations_label")}</p>
               <span>{tx.status.confirmed ? lastBlock - tx.status.block_height : 0}</span>
             </div>
             <div className={s.group}>
-              <p className={s.transactionP}>Fee:</p>
+              <p className={s.transactionP}>{t("transaction_info.fee_label")}</p>
               <span>{tx.fee / 10 ** 8} TDC</span>
             </div>
             <div className={s.group}>
-              <p className={s.transactionP}>Value:</p>
+              <p className={s.transactionP}>{t("transaction_info.value_label")}</p>
               <span>{getTransactionValue(tx, currentAccount?.address, false)} TDC</span>
             </div>
 
             <div className={s.summary} onClick={() => setOpenModal(true)}>
-              <LinkIcon className="w-4 h-4" /> Details
+              <LinkIcon className="w-4 h-4" /> {t("transaction_info.details")}
             </div>
 
             <Modal onClose={() => setOpenModal(false)} open={openModal} title="Details">
               <div className={s.tableContainer}>
-                <TableItem label="Inputs" currentAddress={currentAccount.address} items={filteredInput} />
-                <TableItem label="Outputs" currentAddress={currentAccount.address} items={tx.vout} />
+                <TableItem label={t("transaction_info.inputs")} currentAddress={currentAccount.address} items={filteredInput} />
+                <TableItem label={t("transaction_info.outputs")} currentAddress={currentAccount.address} items={tx.vout} />
               </div>
             </Modal>
           </div>
           <button className={s.explorerBtn} onClick={onOpenExplorer}>
-            Open in explorer
+            {t("transaction_info.open_in_explorer")}
           </button>
         </>
       ) : (
@@ -123,7 +124,7 @@ const TableItem: FC<ITableItem> = ({ items, currentAddress, label }) => {
               )}
               onClick={() => {
                 navigator.clipboard.writeText(i.scriptpubkey_address);
-                toast.success("Copied");
+                toast.success(t("transaction_info.copied"));
               }}
               title={i.scriptpubkey_address}
             >

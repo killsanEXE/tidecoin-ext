@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import Modal from "@/ui/components/modal";
 import Card from "@/ui/components/card";
 import Rename from "@/ui/components/rename";
+import { t } from "i18next";
 
 const SwitchWallet = () => {
   const [renameId, setRenameId] = useState<number | undefined>(undefined);
@@ -30,7 +31,7 @@ const SwitchWallet = () => {
   };
 
   const onRename = async (name: string) => {
-    if (wallets.map((i) => i.name).includes(name)) return toast.error("This name is already taken");
+    if (wallets.map((i) => i.name).includes(name)) return toast.error(t("switch_account.name_already_taken_error"));
 
     setRenameId(undefined);
 
@@ -51,20 +52,20 @@ const SwitchWallet = () => {
                 action: () => {
                   setRenameId(wallet.id);
                 },
-                icon: <TagIcon title="Rename wallet" className="w-8 h-8 cursor-pointer text-bg" />,
+                icon: <TagIcon title={t("switch_wallet.rename_wallet")} className="w-8 h-8 cursor-pointer text-bg" />,
               },
               {
                 action: () => {
                   navigate(`/pages/show-mnemonic/${i}`);
                 },
-                icon: <KeyIcon title="Show mnemonic \ private key" className="w-8 h-8 cursor-pointer text-bg" />,
+                icon: <KeyIcon title={t("switch_wallet.show_mnemonic_private_key")} className="w-8 h-8 cursor-pointer text-bg" />,
               },
               {
                 action: () => {
-                  if (wallets.length <= 1) toast.error("You cannot delete your last wallet");
+                  if (wallets.length <= 1) toast.error(t("switch_wallet.last_wallet_error"));
                   else setDeleteWalletId(i);
                 },
-                icon: <TrashIcon title="Remove wallet" className="w-8 h-8 cursor-pointer text-bg" />,
+                icon: <TrashIcon title={t("switch_wallet.remove_wallet")} className="w-8 h-8 cursor-pointer text-bg" />,
               },
             ]}
             name={wallet.name}
@@ -78,17 +79,17 @@ const SwitchWallet = () => {
       </div>
       <Modal onClose={() => setDeleteWalletId(undefined)} open={deleteWalletId !== undefined} title={"Confirmation"}>
         <div className="text-base text-text py-5 px-4 flex flex-col items-center">
-          <div className="text-sm">Are you sure you want to delete?</div>
+          <div className="text-sm">{t("switch_wallet.are_you_sure")}</div>
           <span className="text-teal-200 block mt-5">
             {deleteWalletId !== undefined ? wallets[deleteWalletId].name : ""}
           </span>
         </div>
         <div className="flex justify-center gap-4">
           <button className="btn w-full hover:bg-red-500" onClick={onDelete}>
-            Yes
+            {t("switch_wallet.yes")}
           </button>
           <button className="btn w-full hover:bg-text hover:text-bg" onClick={() => setDeleteWalletId(undefined)}>
-            No
+            {t("switch_wallet.no")}
           </button>
         </div>
       </Modal>
