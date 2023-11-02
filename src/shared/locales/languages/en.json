@@ -7,5 +7,23 @@
   },
   "settings": {
     "language": "Language"
+  },
+  "components": {
+    "layout": {
+      "create_new_wallet": "Create New Wallet",
+      "send": "Send",
+      "connected_sites": "Connected Sites",
+      "change_language": "Change Language",
+      "switch_account": "Switch Account",
+      "change_address_type": "Change Address Type",
+      "create_new_account": "Create New Account",
+      "change_password": "Change Password",
+      "receive_tdc": "Receive TDC",
+      "switch_wallet": "Switch Wallet",
+      "transaction_info": "Transaction Info",
+      "settings": "Settings",
+      "show_mnemonic": "Show Mnemonic",
+      "show_private_key": "Show Private Key"
+    }
   }
 }

@@ -5,6 +5,7 @@ import { ChevronLeftIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { useMemo } from "react";
 import { useWalletState } from "@/ui/states/walletState";
 import { useControllersState } from "@/ui/states/controllerState";
+import { t } from "i18next";
 
 interface IRouteTitle {
   route: string;
@@ -26,13 +27,76 @@ export default function PagesLayout() {
   const navigate = useNavigate();
   const { wallets } = useWalletState((v) => ({ wallets: v.wallets }));
 
+  const defaultTitles: IRouteTitle[] = useMemo(() => [
+    {
+      route: "/pages/switch-account",
+      title: t("components.layout.switch_account"),
+      action: {
+        icon: <PlusCircleIcon className="w-8 h-8" />,
+        link: "/pages/create-new-account",
+      },
+    },
+    {
+      route: "/pages/change-addr-type",
+      title: t("components.layout.change_address_type"),
+    },
+    {
+      route: "/pages/create-new-account",
+      title: t("components.layout.create_new_account"),
+    },
+    {
+      route: "/pages/change-password",
+      title: t("components.layout.change_password"),
+    },
+    {
+      route: "/pages/receive",
+      title: t("components.layout.receive_tdc"),
+    },
+    {
+      route: "/pages/switch-wallet",
+      title: t("components.layout.switch_wallet"),
+      action: {
+        icon: <PlusCircleIcon className="w-8 h-8" />,
+        link: "/pages/create-new-wallet",
+      },
+    },
+    {
+      route: "/pages/restore-mnemonic",
+      title: t("components.layout.create_new_wallet"),
+    },
+    {
+      route: "/pages/restore-priv-key",
+      title: t("components.layout.create_new_wallet"),
+    },
+    {
+      route: "/pages/send",
+      title: t("components.layout.send"),
+    },
+    {
+      route: "/pages/transaction-info/@",
+      title: t("components.layout.transaction_info"),
+    },
+    {
+      route: "/pages/settings",
+      title: t("components.layout.settings"),
+    },
+    {
+      route: "/pages/show-mnemonic/@",
+      title: t("components.layout.show_mnemonic"),
+    },
+    {
+      route: "/pages/show-pk/@",
+      title: t("components.layout.show_private_key"),
+    },
+  ], []);
+
   const routeTitles = useMemo(
     () =>
       [
         ...defaultTitles,
         {
           route: "/pages/create-new-wallet",
-          title: "Create New Wallet",
+          title: t("components.layout.create_new_wallet"),
           disableBack: wallets.length <= 0,
         },
         {
@@ -51,11 +115,11 @@ export default function PagesLayout() {
             navigate("/home");
           },
           route: "/pages/finalle-send/@",
-          title: "Send",
+          title: t("components.layout.send"),
         },
         {
           route: "/pages/create-send",
-          title: "Send",
+          title: t("components.layout.send"),
           backAction: () => {
             navigate("/home");
           },
@@ -67,18 +131,18 @@ export default function PagesLayout() {
             });
           },
           route: "/pages/confirm-send",
-          title: "Send",
+          title: t("components.layout.send"),
         },
         {
           route: "/pages/connected-sites",
-          title: "Connected Sites",
+          title: t("components.layout.connected_sites"),
         },
         {
           route: "/pages/language",
-          title: "Change language",
+          title: t("components.layout.change_language"),
         },
       ] as IRouteTitle[],
-    [navigate, stateController, currentRoute.state, wallets.length]
+    [navigate, stateController, currentRoute.state, wallets.length, defaultTitles]
   );
 
   const currentRouteTitle = useMemo(
@@ -91,6 +155,7 @@ export default function PagesLayout() {
       }),
     [currentRoute, routeTitles]
   );
+
 
   return (
     <div className={s.layout}>
@@ -123,66 +188,3 @@ export default function PagesLayout() {
     </div>
   );
 }
-
-const defaultTitles: IRouteTitle[] = [
-  {
-    route: "/pages/switch-account",
-    title: "Switch Account",
-    action: {
-      icon: <PlusCircleIcon className="w-8 h-8" />,
-      link: "/pages/create-new-account",
-    },
-  },
-  {
-    route: "/pages/change-addr-type",
-    title: "Change Address Type",
-  },
-  {
-    route: "/pages/create-new-account",
-    title: "Create New Account",
-  },
-  {
-    route: "/pages/change-password",
-    title: "Change Password",
-  },
-  {
-    route: "/pages/receive",
-    title: "Receive TDC",
-  },
-  {
-    route: "/pages/switch-wallet",
-    title: "Switch Wallet",
-    action: {
-      icon: <PlusCircleIcon className="w-8 h-8" />,
-      link: "/pages/create-new-wallet",
-    },
-  },
-  {
-    route: "/pages/restore-mnemonic",
-    title: "Create New Wallet",
-  },
-  {
-    route: "/pages/restore-priv-key",
-    title: "Create New Wallet",
-  },
-  {
-    route: "/pages/send",
-    title: "Send",
-  },
-  {
-    route: "/pages/transaction-info/@",
-    title: "Transaction info",
-  },
-  {
-    route: "/pages/settings",
-    title: "Settings",
-  },
-  {
-    route: "/pages/show-mnemonic/@",
-    title: "Recovering mnemonic",
-  },
-  {
-    route: "/pages/show-pk/@",
-    title: "Recovering private key",
-  },
-];
