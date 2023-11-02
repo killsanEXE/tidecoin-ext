@@ -15,6 +15,7 @@ import { useWalletState } from "./states/walletState";
 import { guestRouter, authenticatedRouter } from "@/ui/pages/router";
 import { useControllersState } from "./states/controllerState";
 import { excludeKeysFromObj } from "@/shared/utils";
+import i18n from "../shared/locales/i18n";
 
 export default function App() {
   const [router, setRouter] = useState<Router>(authenticatedRouter);
@@ -49,6 +50,7 @@ export default function App() {
 
     const appState = await stateController.getAppState();
     const walletState = await stateController.getWalletState();
+    i18n.changeLanguage(appState.language ?? "en");
 
     if (appState.isReady && appState.isUnlocked && walletState.selectedWallet !== undefined) {
       await updateWalletState(walletState);

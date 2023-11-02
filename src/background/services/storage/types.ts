@@ -24,5 +24,6 @@ export interface StorageInterface {
     selectedAccount?: number;
     pendingWallet?: string;
     connectedSites: ConnectedSite[];
+    language?: string;
   };
 }

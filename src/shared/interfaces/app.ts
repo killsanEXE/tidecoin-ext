@@ -5,6 +5,7 @@ export interface IAppStateBase {
   password?: string;
   addressBook: string[];
   pendingWallet?: string;
+  language: string;
 }
 
 export interface IAppState extends IAppStateBase {

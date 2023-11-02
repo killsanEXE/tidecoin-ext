@@ -4,7 +4,7 @@ import { IAccount, IPrivateWallet, IWallet } from "@/shared/interfaces";
 import { DecryptedSecrets, StorageInterface } from "./types";
 import { IAppStateBase, IWalletStateBase } from "@/shared/interfaces";
 import { emptyAppState, emptyWalletState } from "./utils";
-import { keyringService, permissionService } from "..";
+import { keyringService, permissionService, storageService } from "..";
 import { excludeKeysFromObj } from "@/shared/utils";
 
 class StorageService {
@@ -14,6 +14,7 @@ class StorageService {
   constructor() {
     this._walletState = emptyWalletState();
     this._appState = emptyAppState();
+    this.loadLanguage();
   }
 
   get walletState() {
@@ -34,6 +35,11 @@ class StorageService {
     if (this._walletState.selectedWallet === undefined || this._walletState.selectedAccount === undefined)
       return undefined;
     return this._walletState.wallets[this._walletState.selectedWallet].accounts[this._walletState.selectedAccount];
+  }
+
+  async loadLanguage() {
+    const data = await this.getLocalValues();
+    if (data.cache.language) await this.updateAppState({ language: data.cache.language });
   }
 
   async updateWalletState(state: Partial<IWalletStateBase>) {
@@ -127,6 +133,7 @@ class StorageService {
         wallets: walletsToSave,
         addressBook: this.appState.addressBook,
         connectedSites: permissionService.allSites,
+        language: storageService.appState.language ?? "en"
       },
     };
 

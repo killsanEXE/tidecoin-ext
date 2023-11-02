@@ -7,7 +7,7 @@ export const useAppState = create<IAppState>()((set) => ({
   isUnlocked: false,
   vault: [],
   addressBook: [],
-
+  language: "en",
   updateAppState: async (app: Partial<IAppState>) => {
     const proxy = setupStateProxy();
     await proxy.updateAppState(app);

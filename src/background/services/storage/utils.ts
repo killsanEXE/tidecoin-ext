@@ -13,5 +13,6 @@ export function emptyAppState(): IAppStateBase {
     isUnlocked: false,
     vault: [],
     addressBook: [],
+    language: "en",
   };
 }
