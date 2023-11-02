@@ -6,6 +6,7 @@ import { FC } from "react";
 import { FormType } from "../component";
 
 import s from "./styles.module.scss";
+import { t } from "i18next";
 
 interface Props {
   isOpen: boolean;
@@ -31,8 +32,8 @@ const AddressBookModal: FC<Props> = ({ isOpen, onClose, setFormData }) => {
   };
 
   return (
-    <Modal onClose={onClose} open={isOpen} title="Address book">
-      {!addressBook.length && <div className={s.empty}>No any addresses here</div>}
+    <Modal onClose={onClose} open={isOpen} title={t("send.create_send.address_book.address_book")}>
+      {!addressBook.length && <div className={s.empty}>{t("send.create_send.address_book.no_addresses")}</div>}
       <div className={s.items}>
         {addressBook.map((i, idx) => (
           <div key={`ab-${idx}`} className={s.item} onClick={() => onSelect(i)}>

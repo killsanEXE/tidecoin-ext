@@ -10,6 +10,7 @@ import Switch from "@/ui/components/switch";
 import AddressBookModal from "./address-book-modal";
 import AddressInput from "./address-input";
 import { normalizeAmount } from "@/ui/utils";
+import { t } from "i18next";
 
 export interface FormType {
   address: string;
@@ -37,19 +38,19 @@ const CreateSend = () => {
 
   const send = async ({ address, amount, feeAmount, includeFeeInAmount }: FormType) => {
     if (Number(amount) < 0.01) {
-      return toast.error("Minimum amount is 0.01 TDC");
+      return toast.error(t("send.create_send.minimum_amount_error"));
     }
     if (address.trim().length <= 0) {
-      return toast.error("Insert the addresss of receiver");
+      return toast.error(t("send.create_send.address_error"));
     }
     if (Number(amount) > (currentAccount?.balance ?? 0)) {
-      return toast.error("There's not enough money in your account");
+      return toast.error(t("send.create_send.not_enough_money_error"));
     }
     if (feeAmount < 1) {
-      return toast.error("Increase the fee");
+      return toast.error(t("send.create_send.not_enough_fee_error"));
     }
     if (feeAmount % 1 !== 0) {
-      return toast.error("Fee should be integer");
+      return toast.error(t("send.create_send.fee_is_text_error"));
     }
 
     try {
@@ -69,7 +70,7 @@ const CreateSend = () => {
       });
     } catch (e) {
       console.error(e);
-      toast.error("Error has occurred");
+      toast.error(t("send.create_send.default_error"));
     }
   };
 
@@ -126,7 +127,7 @@ const CreateSend = () => {
       >
         <div className={s.inputs}>
           <div className="form-field">
-            <span className="input-span">Address</span>
+            <span className="input-span">{t("send.create_send.address")}</span>
             <AddressInput
               address={formData.address}
               onChange={(v) => setFormData((p) => ({ ...p, address: v }))}
@@ -134,17 +135,17 @@ const CreateSend = () => {
             />
           </div>
           <div className="form-field">
-            <span className="input-span">Amount</span>
+            <span className="input-span">{t("send.create_send.amount")}</span>
             <div className="flex gap-2 w-full">
               <input
                 type="number"
-                placeholder="Amount to send"
+                placeholder={t("send.create_send.amount_to_send")}
                 className="input w-full"
                 value={formData.amount}
                 onChange={onAmountChange}
               />
               <button className={s.maxAmount} onClick={onMaxClick}>
-                MAX
+                {t("send.create_send.max_amount")}
               </button>
             </div>
           </div>
@@ -152,7 +153,7 @@ const CreateSend = () => {
 
         <div className={s.feeDiv}>
           <div className={cn("form-field", s.amountInput)}>
-            <span className="input-span">Fee:</span>
+            <span className="input-span">{t("send.create_send.fee_label")}</span>
             <FeeInput
               onChange={useCallback((v) => setFormData((prev) => ({ ...prev, feeAmount: v })), [setFormData])}
               value={formData.feeAmount}
@@ -160,14 +161,14 @@ const CreateSend = () => {
           </div>
 
           <Switch
-            label="Include fee in the amount"
+            label={t("send.create_send.include_fee_in_the_amount_label")}
             onChange={(v) => setFormData((prev) => ({ ...prev, includeFeeInAmount: v }))}
             value={formData.includeFeeInAmount}
             locked={includeFeeLocked}
           />
 
           <Switch
-            label="Save address for the next payments"
+            label={t("send.create_send.save_address_for_the_next_payments_label")}
             value={isSaveAddress}
             onChange={setIsSaveAddress}
             locked={false}
@@ -176,7 +177,7 @@ const CreateSend = () => {
       </form>
 
       <button type="submit" className={"btn primary mx-4 mb-4 md:m-6 md:mb-3"} form={formId}>
-        Continue
+        {t("send.create_send.continue")}
       </button>
 
       <AddressBookModal isOpen={isOpenModal} onClose={() => setOpenModal(false)} setFormData={setFormData} />

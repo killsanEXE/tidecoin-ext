@@ -4,6 +4,7 @@ import QRCode from "qr-code-styling";
 import s from "./styles.module.scss";
 import CopyBtn from "@/ui/components/copy-btn";
 import toast from "react-hot-toast";
+import { t } from "i18next";
 
 const qrCode = new QRCode({
   width: 250,
@@ -71,12 +72,12 @@ const Receive = () => {
     <div className={s.receive}>
       <div>
         <div className="flex items-center flex-col p-3">
-          <div title="Click to copy" onClick={onCopy} ref={ref} />
+          <div title={t("receive.click_to_copy")} onClick={onCopy} ref={ref} />
         </div>
         <div className={s.accTitle}>{currentAccount?.name ?? "Account"}</div>
       </div>
       <div>
-        <CopyBtn value={currentAccount?.address} className={s.copyButton} label="Copy address" />
+        <CopyBtn value={currentAccount?.address} className={s.copyButton} label={t("receive.copy_address")} />
         <p className="text-center opacity-80 text-xs">{currentAccount?.address}</p>
       </div>
     </div>

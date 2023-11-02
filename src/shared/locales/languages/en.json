@@ -60,18 +60,70 @@
     "new_mnemonic_label": "New mnemonic",
     "restore_mnemonic_label": "Restore mnemonic",
     "restore_from_private_key_label": "Restore from private key",
+    "step_1": "Step 1",
+    "step_2": "Step 2",
+    "continue": "Continue",
     "new_mnemonic": {
       "error_phrase_blank": "Mnemonic phrase blank",
-      "step_1": "Step 1",
-      "Step_2": "Step 2",
       "warning": "If you lose these words, you will never be able to recover your lost account",
-      "i_saved_this_phrase": "I saved this phrase",
-      "continue": "Continue"
+      "i_saved_this_phrase": "I saved this phrase"
     },
     "restore_mnemonic": {
       "incomplete_phrase_error": "Please insert all the words",
       "invalid_words_error": "Words are invalid"
     },
-    "restore_private": {}
+    "restore_private": {
+      "private_key": "Private key",
+      "recover": "Recover",
+      "invalid_private_key_error": "Invalid private key"
+    }
+  },
+  "receive": {
+    "click_to_copy": "Click to copy",
+    "copy_address": "Copy address"
+  },
+  "send": {
+    "confirm_send": {
+      "to_addrses": "To address",
+      "from_address": "From address",
+      "amount": "Amount",
+      "fee": "Fee",
+      "included": "included",
+      "not_included": "not included",
+      "confirm": "Confirm"
+    },
+    "create_send": {
+      "minimum_amount_error": "Minimum amount is 0.01 TDC",
+      "address_error": "Insert the addresss of receiver",
+      "not_enough_money_error": "There's not enough money in your account",
+      "not_enough_fee_error": "Increase the fee",
+      "fee_is_text_error": "Fee should be integer",
+      "default_error": "Error has occurred",
+      "address": "Address",
+      "amount": "Amount",
+      "amount_to_send": "Amount to send",
+      "max_amount": "MAX",
+      "fee_label": "Fee:",
+      "include_fee_in_the_amount_label": "Include fee in the amount",
+      "save_address_for_the_next_payments_label": "Save address for the next payments",
+      "continue": "Continue",
+      "fee_input": {
+        "fast": "Fast",
+        "slow": "Slow",
+        "custom": "Custom"
+      },
+      "address_input": {
+        "address_book": "Address book"
+      },
+      "address_book": {
+        "address_book": "Address book",
+        "no_addresses": "No any addresses here"
+      }
+    },
+    "finalle_send": {
+      "success": "Success",
+      "explorer": "Explorer",
+      "back": "Back"
+    }
   }
 }

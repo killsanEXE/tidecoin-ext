@@ -1,6 +1,7 @@
 import cn from "classnames";
 import { FC, useEffect, useState } from "react";
 import s from "./styles.module.scss";
+import { t } from "i18next";
 
 interface Props {
   onChange: (value: number) => void;
@@ -12,17 +13,17 @@ const FeeInput: FC<Props> = ({ onChange, value }) => {
 
   const cards = [
     {
-      title: "Slow",
+      title: t("send.create_send.fee_input.slow"),
       description: "1 tid/Vb",
       value: 1,
     },
     {
-      title: "Fast",
+      title: t("send.create_send.fee_input.fast"),
       description: "2 tid/Vb",
       value: 2,
     },
     {
-      title: "Custom",
+      title: t("send.create_send.fee_input.custom"),
       value: 3,
     },
   ];

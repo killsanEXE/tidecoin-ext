@@ -51,8 +51,8 @@ const RestoreMnemonic = () => {
   return (
     <div className={s.restoreMnemonic}>
       <div className={s.stepTitle}>
-        <p className={step === 1 ? s.active : ""}>{t("new_wallet.new_mnemonic.step_1")}</p>
-        <p className={step === 2 ? s.active : ""}>{t("new_wallet.new_mnemonic.step_2")}</p>
+        <p className={step === 1 ? s.active : ""}>{t("new_wallet.step_1")}</p>
+        <p className={step === 2 ? s.active : ""}>{t("new_wallet.step_2")}</p>
       </div>
       {step === 1 ? (
         <div className={cn(s.stepOneWrapper, s.step)}>
@@ -69,7 +69,7 @@ const RestoreMnemonic = () => {
             </div>
             <div className={s.continueWrapper}>
               <button className={cn(s.continue, "btn", "primary")} onClick={onNextStep}>
-                {t("new_wallet.new_mnemonic.continue")}
+                {t("new_wallet.continue")}
               </button>
             </div>
           </div>
@@ -79,7 +79,7 @@ const RestoreMnemonic = () => {
           <div className={s.continueWrapper}>
             <SwitchAddressType handler={setAddressType} selectedType={addressType} />
             <button onClick={onRestore} className={cn(s.continue, "btn", "primary")}>
-              {t("new_wallet.new_mnemonic.continue")}
+              {t("new_wallet.continue")}
             </button>
           </div>
         </div>

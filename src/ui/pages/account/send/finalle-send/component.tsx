@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { CheckIcon } from "@heroicons/react/24/solid";
 
 import s from "./styles.module.scss";
+import { t } from "i18next";
 
 const FinalleSend = () => {
   const { txId } = useParams();
@@ -20,15 +21,15 @@ const FinalleSend = () => {
         <div className={s.resultIconContainer}>
           <CheckIcon className={s.resultIcon} />
         </div>
-        <h3 className={s.result}>Success</h3>
+        <h3 className={s.result}>{t("send.finalle_send.success")}</h3>
       </div>
 
       <div className={s.btnContainer}>
         <Link to={"/home"} className="btn primary w-full">
-          Back
+          {t("send.finalle_send.back")}
         </Link>
         <button className={s.btn} onClick={onClick}>
-          Explorer
+          {t("send.finalle_send.explorer")}
         </button>
       </div>
     </div>

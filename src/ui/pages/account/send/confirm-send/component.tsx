@@ -6,6 +6,7 @@ import ReactLoading from "react-loading";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useUpdateAddressBook } from "@/ui/hooks/app";
+import { t } from "i18next";
 
 const ConfirmSend = () => {
   const location = useLocation();
@@ -30,22 +31,22 @@ const ConfirmSend = () => {
 
   const fields = [
     {
-      label: "To",
+      label: t("send.confirm_send.to_addrses"),
       value: location.state.toAddress,
     },
     {
-      label: "From",
+      label: t("send.confirm_send.from_address"),
       value: location.state.fromAddress,
     },
     {
-      label: "Amount",
+      label: t("send.confirm_send.amount"),
       value: location.state.amount + " TDC",
     },
     {
-      label: "Fee",
-      value: `${location.state.feeAmount / 10 ** 8} TDC (${
-        location.state.includeFeeInAmount ? "included" : "not included"
-      })`,
+      label: t("send.confirm_send.fee"),
+      value: `${location.state.feeAmount / 10 ** 8} TDC (${location.state.includeFeeInAmount ?
+        t("send.confirm_send.included") : t("send.confirm_send.not_included")
+        })`,
     },
   ];
 
@@ -62,7 +63,7 @@ const ConfirmSend = () => {
             ))}
           </div>
           <button className={cn("btn primary", s.confirmBtn)} onClick={confirmSend}>
-            Confirm
+            {t("send.confirm_send.confirm")}
           </button>
         </div>
       ) : (

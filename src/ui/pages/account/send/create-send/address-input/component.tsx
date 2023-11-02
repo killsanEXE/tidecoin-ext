@@ -4,6 +4,7 @@ import { BookOpenIcon } from "@heroicons/react/24/outline";
 import s from "./styles.module.scss";
 import { FC, Fragment, useState } from "react";
 import { useAppState } from "@/ui/states/appState";
+import { t } from "i18next";
 
 interface Props {
   address: string;
@@ -59,7 +60,7 @@ const AddressInput: FC<Props> = ({ address, onChange, onOpenModal }) => {
       </Combobox>
       <button
         className="bg-input-bg px-2 rounded-xl"
-        title="Address book"
+        title={t("send.create_send.address_input.address_book")}
         onClick={(e) => {
           e.preventDefault();
           onOpenModal();

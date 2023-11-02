@@ -75,8 +75,8 @@ const NewMnemonic = () => {
   return (
     <div className={s.newMnemonic}>
       <div className={s.stepTitle}>
-        <p className={cn({ [s.active]: step === 1 })}>{t("new_wallet.new_mnemonic.step_1")}</p>
-        <p className={cn({ [s.active]: step === 2 })}>{t("new_wallet.new_mnemonic.step_2")}</p>
+        <p className={cn({ [s.active]: step === 1 })}>{t("new_wallet.step_1")}</p>
+        <p className={cn({ [s.active]: step === 2 })}>{t("new_wallet.step_2")}</p>
       </div>
       {step === 1 ? (
         <div className={cn(s.stepOneWrapper, s.step)}>
@@ -103,7 +103,7 @@ const NewMnemonic = () => {
             </div>
             <div className={s.continueWrapper}>
               <button className="btn primary" onClick={() => setStep(2)} disabled={!savedPhrase}>
-                {t("new_wallet.new_mnemonic.continue")}
+                {t("new_wallet.continue")}
               </button>
             </div>
           </div>
@@ -113,7 +113,7 @@ const NewMnemonic = () => {
           <SwitchAddressType handler={setAddressType} selectedType={addressType} />
           <div className={s.continueWrapper}>
             <button onClick={onCreate} className={cn(s.continue, "btn", "primary")}>
-              {t("new_wallet.new_mnemonic.continue")}
+              {t("new_wallet.continue")}
             </button>
           </div>
         </div>
