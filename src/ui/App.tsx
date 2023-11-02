@@ -61,11 +61,14 @@ export default function App() {
         ...excludeKeysFromObj(walletState, ["vaultIsEmpty", "wallets"]),
       });
       await updateAppState({
+
         isReady: true,
         ...excludeKeysFromObj(appState, ["isReady", "isUnlocked", "password", "vault"]),
       });
     }
   }, [updateWalletState, updateAppState, updateControllers]);
+
+  // const [, forceUpdate] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
     if (!isReady) setupApp();

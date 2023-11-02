@@ -16,7 +16,8 @@ const Language = () => {
   const changeLanguage = async (lng: string) => {
     i18n.changeLanguage(lng);
     await updateAppState({ language: lng });
-    await walletController.saveWallets()
+    await walletController.saveWallets();
+    window.location.reload();
   }
 
   return (
