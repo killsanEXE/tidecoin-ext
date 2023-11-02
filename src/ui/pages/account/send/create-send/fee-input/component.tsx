@@ -2,6 +2,7 @@ import cn from "classnames";
 import { FC, useEffect, useState } from "react";
 import s from "./styles.module.scss";
 import { t } from "i18next";
+import { useAppState } from "../../../../../states/appState";
 
 interface Props {
   onChange: (value: number) => void;
@@ -65,9 +66,14 @@ interface FeeCardProps {
 }
 
 const FeeCard: FC<FeeCardProps> = ({ selected, onSelect, title, description }) => {
+
+  const { language } = useAppState((v) => ({
+    language: v.language
+  }));
+
   return (
     <div className={cn(s.card, { [s.cardSelected]: selected })} onClick={onSelect}>
-      <div className={s.title}>{title}</div>
+      <div className={cn(s.title, language !== "en" && s.russian)}>{title}</div>
       {description ? <div className={s.description}>{description}</div> : ""}
     </div>
   );
