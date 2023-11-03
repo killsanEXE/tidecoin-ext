@@ -33,11 +33,10 @@ const SwitchWallet = () => {
   const onRename = async (name: string) => {
     if (wallets.map((i) => i.name).includes(name)) return toast.error(t("switch_account.name_already_taken_error"));
 
-    setRenameId(undefined);
-
     await updateWalletState({
-      wallets: wallets.with(renameId, { ...currentWallet, name }),
+      wallets: wallets.with(renameId, { ...(wallets[renameId]), name }),
     });
+    setRenameId(undefined);
   };
 
   return (
@@ -93,7 +92,10 @@ const SwitchWallet = () => {
           </button>
         </div>
       </Modal>
-      <Rename active={renameId !== undefined} handler={onRename} onClose={() => setRenameId(undefined)} />
+      <Rename active={renameId !== undefined} currentName={(() => {
+        if (renameId === undefined) return "";
+        return wallets[renameId].name
+      })()} handler={onRename} onClose={() => setRenameId(undefined)} />
     </div>
   );
 };

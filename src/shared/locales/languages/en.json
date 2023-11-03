@@ -44,6 +44,9 @@
       "maximum_length": "Maximum length is 16",
       "name_is_required": "Name is required",
       "save": "Save"
+    },
+    "card": {
+      "close": "Close"
     }
   },
   "change_password": {

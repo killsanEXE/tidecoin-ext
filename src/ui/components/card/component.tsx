@@ -5,6 +5,7 @@ import { XMarkIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import Menu from "@/ui/components/menu";
 import cn from "classnames";
 import { MenuItem } from "../menu/components";
+import { t } from "i18next";
 
 interface Props {
   menuItems: MenuItem[];
@@ -48,7 +49,7 @@ const Card: FC<Props> = ({ menuItems, selected, onClick, name, address }) => {
             action: () => {
               setActive(false);
             },
-            icon: <XMarkIcon title="Close menu" className="w-8 h-8 cursor-pointer text-bg" />,
+            icon: <XMarkIcon title={t("components.card.close")} className="w-8 h-8 cursor-pointer text-bg" />,
           },
         ]}
       />

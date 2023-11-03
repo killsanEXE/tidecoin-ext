@@ -75,7 +75,10 @@ const SwitchAccount = () => {
         ))}
       </div>
 
-      <Rename active={renameId !== undefined} handler={onRename} onClose={() => setRenameId(undefined)} />
+      <Rename active={renameId !== undefined} currentName={(() => {
+        if (renameId === undefined) return "";
+        return currentWallet.accounts[renameId].name
+      })()} handler={onRename} onClose={() => setRenameId(undefined)} />
     </div>
   );
 };

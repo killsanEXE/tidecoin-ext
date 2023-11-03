@@ -1,4 +1,4 @@
-import { FC, useId } from "react";
+import { FC, useEffect, useId } from "react";
 import s from "./styles.module.scss";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
@@ -9,11 +9,13 @@ interface Props {
   handler: (name: string) => void;
   active: boolean;
   onClose: () => void;
+  currentName?: string;
 }
 
-const Rename: FC<Props> = ({ handler, active, onClose }) => {
+const Rename: FC<Props> = ({ handler, active, onClose, currentName }) => {
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<{ name: string }>({
@@ -32,6 +34,8 @@ const Rename: FC<Props> = ({ handler, active, onClose }) => {
       toast.error(errors.name.message);
     }
   };
+
+  useEffect(() => { setValue("name", currentName) }, [currentName, setValue])
 
   return (
     <Modal open={active} onClose={onClose} title="Renaming">

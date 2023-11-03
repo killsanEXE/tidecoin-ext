@@ -44,6 +44,9 @@
       "maximum_length": "Максимальная длина - 16",
       "name_is_required": "Требуется имя",
       "save": "Сохранить"
+    },
+    "card": {
+      "close": "Закрыть"
     }
   },
   "change_password": {
