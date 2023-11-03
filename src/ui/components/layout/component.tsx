@@ -101,7 +101,7 @@ export default function PagesLayout() {
         },
         {
           route: "/pages/new-mnemonic",
-          title: "Create New Wallet",
+          title: t("components.layout.create_new_wallet"),
           backAction: async () => {
             if (await stateController.getPendingWallet()) {
               await stateController.clearPendingWallet();

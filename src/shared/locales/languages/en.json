@@ -43,7 +43,8 @@
       "minimum_length": "Miniumum length is 1",
       "maximum_length": "Maximum length is 16",
       "name_is_required": "Name is required",
-      "save": "Save"
+      "save": "Save",
+      "rename": "Rename"
     },
     "card": {
       "close": "Close"
@@ -84,7 +85,8 @@
     "new_mnemonic": {
       "error_phrase_blank": "Mnemonic phrase blank",
       "warning": "If you lose these words, you will never be able to recover your lost account",
-      "i_saved_this_phrase": "I saved this phrase"
+      "i_saved_this_phrase": "I saved this phrase",
+      "copy": "Copy"
     },
     "restore_mnemonic": {
       "incomplete_phrase_error": "Please insert all the words",

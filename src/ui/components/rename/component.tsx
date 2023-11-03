@@ -38,7 +38,7 @@ const Rename: FC<Props> = ({ handler, active, onClose, currentName }) => {
   useEffect(() => { setValue("name", currentName) }, [currentName, setValue])
 
   return (
-    <Modal open={active} onClose={onClose} title="Renaming">
+    <Modal open={active} onClose={onClose} title={t("components.rename.rename")}>
       <form className={s.form} onSubmit={handleSubmit(onRename)}>
         <div>
           <label htmlFor={renameId} className={s.label}>

@@ -93,7 +93,7 @@ const NewMnemonic = () => {
               </div>
             </div>
             <div className={s.savePhraseWrapper}>
-              <CopyBtn label="Copy" value={mnemonicPhrase} className="mx-auto flex items-center gap-1" />
+              <CopyBtn label={t("new_wallet.new_mnemonic.copy")} value={mnemonicPhrase} className="mx-auto flex items-center gap-1" />
               <div className={s.savePhrase}>
                 <label className="cursor-pointer" htmlFor="save-phrases">
                   {t("new_wallet.new_mnemonic.i_saved_this_phrase")}

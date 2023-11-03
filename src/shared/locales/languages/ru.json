@@ -43,7 +43,8 @@
       "minimum_length": "Минимальная длина - 1",
       "maximum_length": "Максимальная длина - 16",
       "name_is_required": "Требуется имя",
-      "save": "Сохранить"
+      "save": "Сохранить",
+      "rename": "Переименовать"
     },
     "card": {
       "close": "Закрыть"
@@ -84,7 +85,8 @@
     "new_mnemonic": {
       "error_phrase_blank": "Мнемоника пуста",
       "warning": "Если вы потеряете эти слова, вы никогда не сможете восстановить свой аккаунт",
-      "i_saved_this_phrase": "Я сохранил эту фразу"
+      "i_saved_this_phrase": "Я сохранил эту фразу",
+      "copy": "Копировать"
     },
     "restore_mnemonic": {
       "incomplete_phrase_error": "Пожалуйста, вставьте все слова",
