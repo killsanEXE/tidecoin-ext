@@ -2,6 +2,7 @@ import i18n from "../../../../shared/locales/i18n";
 import { useAppState } from "../../../states/appState";
 import { useControllersState } from "../../../states/controllerState";
 import s from "./styles.module.scss";
+import cn from "classnames";
 
 const Language = () => {
 
@@ -22,8 +23,14 @@ const Language = () => {
 
   return (
     <div className={s.languages}>
-      <button className="btn primary" onClick={() => { changeLanguage("en") }}>English</button>
-      <button className="btn primary" onClick={() => { changeLanguage("ru") }}>Русский</button>
+      <div className="flex w-11/12 justify-evenly gap-4">
+        <button className={cn(s.langBtn, "btn primary")} onClick={() => { changeLanguage("en") }}>English</button>
+        <button className={cn(s.langBtn, "btn primary")} onClick={() => { changeLanguage("ru") }}>Русский</button>
+      </div>
+      <div className="flex w-11/12 justify-evenly gap-4">
+        <button className={cn(s.langBtn, "btn primary")} onClick={() => { changeLanguage("ch") }}>中國人</button>
+        <button className={cn(s.langBtn, "btn primary")} onClick={() => { changeLanguage("kr") }}>중국인</button>
+      </div>
     </div>
   );
 };

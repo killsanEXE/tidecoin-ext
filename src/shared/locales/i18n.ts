@@ -1,25 +1,9 @@
 import en from './languages/en.json';
 import ru from './languages/ru.json';
+import ch from './languages/ch.json';
+import kr from './languages/kr.json';
 import i18n from 'i18next';
 // import { reactI18nextModule } from 'react-i18next';
-
-export const supportedTranslations = {
-  // de,
-  // el,
-  en,
-  // es,
-  // fr,
-  // hi,
-  // id,
-  // ja,
-  // ko,
-  // pt,
-  // ru,
-  // tl,
-  // tr,
-  // vi,
-  // zh,
-};
 
 export const defaultNS = "  ";
 
@@ -29,6 +13,12 @@ export const resources = {
   },
   ru: {
     translation: ru
+  },
+  ch: {
+    translation: ch
+  },
+  kr: {
+    translation: kr
   }
 }
 
