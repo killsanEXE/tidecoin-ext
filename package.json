@@ -46,7 +46,7 @@
     "react-loading": "^2.0.3",
     "react-router-dom": "^6.15.0",
     "reflect-metadata": "^0.1.13",
-    "rust-falcon": "^0.2.0",
+    "rust-falcon": "^0.2.6",
     "test-test-test-hd-wallet": "^0.4.3",
     "tidecoin-utils": "^0.1.0",
     "tidecoinjs-lib": "^6.2.5",

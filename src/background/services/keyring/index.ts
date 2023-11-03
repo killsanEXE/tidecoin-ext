@@ -58,7 +58,7 @@ class KeyringService {
   }
 
   exportAccount(address: Hex) {
-    const keyring = this.getKeyringForAccount(address);
+    const keyring = this.getKeyringByIndex(storageService.currentWallet.id);
     if (!keyring.exportAccount) {
       throw new Error(KeyringServiceError.UnsupportedExportAccount);
     }
@@ -76,15 +76,6 @@ class KeyringService {
     throw new Error("Account not found");
   }
 
-  getKeyringForAccount(address: Hex) {
-    for (const i of this.keyrings) {
-      const accounts = i.getAccounts();
-      if (accounts.includes(address)) return i;
-    }
-
-    throw new Error("Keyring not found");
-  }
-
   getKeyringByIndex(index: number) {
     if (index + 1 > this.keyrings.length) {
       throw new Error("Invalid keyring index");
@@ -97,7 +88,7 @@ class KeyringService {
   }
 
   signTransaction(tideTx: Psbt, address: string) {
-    const keyring = this.getKeyringForAccount(address);
+    const keyring = this.getKeyringByIndex(storageService.currentWallet.id);
     keyring.signTransaction(
       tideTx,
       tideTx.data.inputs.map((_i, index) => ({
@@ -108,13 +99,13 @@ class KeyringService {
   }
 
   signMessage(msgParams: { from: string; data: string }) {
-    const keyring = this.getKeyringForAccount(msgParams.from);
+    const keyring = this.getKeyringByIndex(storageService.currentWallet.id);
     const randomSeed = crypto.getRandomValues(new Uint8Array(48));
     return keyring.signMessage(msgParams.from, msgParams.data, randomSeed);
   }
 
   signPersonalMessage(msgParams: { from: string; data: string }) {
-    const keyring = this.getKeyringForAccount(msgParams.from);
+    const keyring = this.getKeyringByIndex(storageService.currentWallet.id);
     if (!keyring.signPersonalMessage) {
       throw new Error(KeyringServiceError.UnsupportedSignPersonalMessage);
     }
@@ -128,7 +119,7 @@ class KeyringService {
     throw new Error("Unimplemented");
 
     // TODO It's a base to develop multisign wallets
-    // const keyring = await this.getKeyringForAccount("");
+    // const keyring = await this.getKeyringByIndex("");
     // const addresses = await keyring.getAccounts();
     // const utxos = (await Promise.all(addresses.map(apiController.getUtxos)))
     //   .filter((i) => i !== undefined)
@@ -136,7 +127,7 @@ class KeyringService {
   }
 
   exportPublicKey(address: Hex) {
-    const keyring = this.getKeyringForAccount(address);
+    const keyring = this.getKeyringByIndex(storageService.currentWallet.id);
     return keyring.exportPublicKey(address);
   }
 

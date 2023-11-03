@@ -39,7 +39,7 @@ class StorageService {
 
   async loadLanguage() {
     const data = await this.getLocalValues();
-    if (data.cache.language) await this.updateAppState({ language: data.cache.language });
+    if (data && data.cache && data.cache.language) await this.updateAppState({ language: data.cache.language });
   }
 
   async updateWalletState(state: Partial<IWalletStateBase>) {
