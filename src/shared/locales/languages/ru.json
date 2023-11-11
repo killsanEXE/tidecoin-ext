@@ -30,7 +30,7 @@
       "show_mnemonic": "Показать мнемонику",
       "show_private_key": "Показать приватный ключ",
       "restore_from_mnemonic": "Восстановить из мнемоника",
-      "restore_from_private_key": "Восстановить из приватного ключа"
+      "restore_from_private_key": "Восстановить кошелек"
     },
     "check_password": {
       "incorrect_password_error": "Неверный пароль",
