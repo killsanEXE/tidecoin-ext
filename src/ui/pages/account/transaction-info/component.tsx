@@ -71,7 +71,7 @@ const TransactionInfo = () => {
               <LinkIcon className="w-4 h-4" /> {t("transaction_info.details")}
             </div>
 
-            <Modal onClose={() => setOpenModal(false)} open={openModal} title="Details">
+            <Modal onClose={() => setOpenModal(false)} open={openModal} title={t("transaction_info.details")}>
               <div className={s.tableContainer}>
                 <TableItem label={t("transaction_info.inputs")} currentAddress={currentAccount.address} items={filteredInput} />
                 <TableItem label={t("transaction_info.outputs")} currentAddress={currentAccount.address} items={tx.vout} />

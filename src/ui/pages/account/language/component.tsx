@@ -23,11 +23,11 @@ const Language = () => {
 
   return (
     <div className={s.languages}>
-      <div className="flex w-11/12 justify-evenly gap-4">
+      <div className="flex w-10/12 justify-evenly gap-4">
         <button className={cn(s.langBtn, "btn primary")} onClick={() => { changeLanguage("en") }}>English</button>
         <button className={cn(s.langBtn, "btn primary")} onClick={() => { changeLanguage("ru") }}>Русский</button>
       </div>
-      <div className="flex w-11/12 justify-evenly gap-4">
+      <div className="flex w-10/12 justify-evenly gap-4">
         <button className={cn(s.langBtn, "btn primary")} onClick={() => { changeLanguage("ch") }}>中國人</button>
         <button className={cn(s.langBtn, "btn primary")} onClick={() => { changeLanguage("kr") }}>중국인</button>
       </div>
