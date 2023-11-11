@@ -28,7 +28,9 @@
       "transaction_info": "Информация о транзакции",
       "settings": "Настройки",
       "show_mnemonic": "Показать мнемонику",
-      "show_private_key": "Показать приватный ключ"
+      "show_private_key": "Показать приватный ключ",
+      "restore_from_mnemonic": "Восстановить из мнемоника",
+      "restore_from_private_key": "Восстановить из приватного ключа"
     },
     "check_password": {
       "incorrect_password_error": "Неверный пароль",

@@ -62,11 +62,11 @@ export default function PagesLayout() {
     },
     {
       route: "/pages/restore-mnemonic",
-      title: t("components.layout.create_new_wallet"),
+      title: t("components.layout.restore_from_mnemonic"),
     },
     {
       route: "/pages/restore-priv-key",
-      title: t("components.layout.create_new_wallet"),
+      title: t("components.layout.restore_from_private_key"),
     },
     {
       route: "/pages/send",

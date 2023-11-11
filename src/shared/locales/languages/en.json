@@ -28,7 +28,9 @@
       "transaction_info": "Transaction Info",
       "settings": "Settings",
       "show_mnemonic": "Show Mnemonic",
-      "show_private_key": "Show Private Key"
+      "show_private_key": "Show Private Key",
+      "restore_from_mnemonic": "Restore from mnemonic",
+      "restore_from_private_key": "Restore from private key"
     },
     "check_password": {
       "incorrect_password_error": "Incorrect password",

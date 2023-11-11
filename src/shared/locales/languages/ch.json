@@ -28,7 +28,9 @@
             "transaction_info": "交易信息",
             "settings": "设置",
             "show_mnemonic": "显示助记词",
-            "show_private_key": "显示私钥"
+            "show_private_key": "显示私钥",
+            "restore_from_mnemonic": "从助记词恢复",
+            "restore_from_private_key": "从私钥恢复"
         },
         "check_password": {
             "incorrect_password_error": "密码错误",
