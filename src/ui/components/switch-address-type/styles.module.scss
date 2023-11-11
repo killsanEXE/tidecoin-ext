@@ -3,11 +3,15 @@
 }
 
 .addressType {
-  @apply py-4 pl-4 flex items-center gap-2 cursor-pointer relative text-base rounded-xl border border-text;
+  @apply py-4 pl-4 flex items-center gap-2 relative text-base rounded-xl border border-text;
+
+  &:hover {
+    @apply bg-text text-bg cursor-pointer;
+  }
 }
 
 .selected {
-  @apply bg-text text-bg;
+  @apply border-green-300;
 }
 
 .title {
