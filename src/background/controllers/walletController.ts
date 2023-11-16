@@ -54,7 +54,7 @@ class WalletController implements IWalletController {
   async loadAccountsData(walletId: number, accounts: IAccount[]): Promise<IAccount[]> {
     const wallet = keyringService.keyrings[walletId] as HDPrivateKey | SimpleKey;
 
-    const addresses = await wallet.getAccounts();
+    const addresses = wallet.getAccounts();
 
     return accounts.map((i) => ({
       ...i,
