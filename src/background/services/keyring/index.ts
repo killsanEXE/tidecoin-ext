@@ -173,12 +173,13 @@ class KeyringService {
   }
 
   async deleteWallet(id: number) {
-    const wallets = storageService.walletState.wallets.filter((i) => i.id !== id);
+    let wallets = storageService.walletState.wallets.filter((i) => i.id !== id);
     await storageService.saveWallets({
       password: storageService.appState.password,
       wallets,
     });
     this.keyrings.splice(id, 1);
+    wallets = wallets.map((f, i) => ({ ...f, id: i }))
     return wallets;
   }
 
