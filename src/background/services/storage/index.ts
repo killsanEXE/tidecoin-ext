@@ -7,6 +7,14 @@ import { emptyAppState, emptyWalletState } from "./utils";
 import { keyringService, permissionService, storageService } from "..";
 import { excludeKeysFromObj } from "@/shared/utils";
 
+interface SaveWallets {
+  password: string;
+  wallets: IWallet[];
+  payload?: DecryptedSecrets;
+  newPassword?: string;
+  toDelete?: boolean;
+}
+
 class StorageService {
   private _walletState: IWalletStateBase;
   private _appState: IAppStateBase;
@@ -97,7 +105,7 @@ class StorageService {
     return localState.cache.pendingWallet;
   }
 
-  async saveWallets(password: string, wallets: IWallet[], payload?: DecryptedSecrets, newPassword?: string) {
+  async saveWallets({password, wallets, newPassword, payload, toDelete}: SaveWallets) {
     const local = await this.getLocalValues();
     const current = await this.getSecrets(local, password);
 
@@ -119,9 +127,9 @@ class StorageService {
       };
     });
 
-    const keyringsToSave = wallets.map((i) => ({
-      id: i.id,
-      data: keyringService.serializeById(i.id),
+    const keyringsToSave = wallets.map((i, idx) => ({
+      id: toDelete ? idx : i.id,
+      data: keyringService.serializeById(toDelete ? idx : i.id),
       phrase: payload?.find((d) => d.id === i.id)?.phrase,
     }));
     const encrypted = await encryptorUtils.encrypt(newPassword ?? password, JSON.stringify(keyringsToSave));

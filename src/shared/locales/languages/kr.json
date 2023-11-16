@@ -2,8 +2,8 @@
     "wallet_page": {
         "transactions": "거래",
         "no_transactions": "거래 없음",
-        "receive": "받다",
-        "send": "보내다"
+        "receive": "받기",
+        "send": "보내기"
     },
     "settings": {
         "language": "언어",
@@ -16,7 +16,7 @@
     "components": {
         "layout": {
             "create_new_wallet": "새 지갑 만들기",
-            "send": "보내다",
+            "send": "보내기",
             "connected_sites": "연결된 사이트",
             "change_language": "언어 변경",
             "switch_account": "계정 전환",
@@ -42,7 +42,7 @@
         },
         "rename": {
             "enter_new_name": "새 이름 입력",
-            "minimum_length": "최소 길이는 1이어야 합니다",
+            "minimum_length": "최소 길이는 1입니다",
             "maximum_length": "최대 길이는 16입니다",
             "name_is_required": "이름이 필요합니다",
             "save": "저장",
@@ -81,12 +81,12 @@
         "new_mnemonic_label": "새로운 니모닉",
         "restore_mnemonic_label": "니모닉 복원",
         "restore_from_private_key_label": "비밀 키로 복원",
-        "step_1": "단계 1",
-        "step_2": "단계 2",
+        "step_1": "1단계",
+        "step_2": "2단계",
         "continue": "계속",
         "new_mnemonic": {
             "error_phrase_blank": "니모닉 구절이 비어있습니다",
-            "warning": "이 단어를 잃어버리면 회복할 수 없습니다",
+            "warning": "이 단어를 잃어버리면 계정을 복구할 수 없습니다",
             "i_saved_this_phrase": "이 구절을 저장했습니다",
             "copy": "복사"
         },
@@ -96,7 +96,7 @@
         },
         "restore_private": {
             "private_key": "비밀 키",
-            "recover": "회복",
+            "recover": "복구",
             "invalid_private_key_error": "유효하지 않은 비밀 키"
         }
     },
@@ -130,8 +130,8 @@
             "save_address_for_the_next_payments_label": "다음 결제를 위해 주소 저장",
             "continue": "계속",
             "fee_input": {
-                "fast": "빠른",
-                "slow": "느린",
+                "fast": "빠르게",
+                "slow": "느리게",
                 "custom": "사용자 지정"
             },
             "address_input": {
@@ -149,7 +149,7 @@
         }
     },
     "switch_account": {
-        "name_already_taken_error": "이 이름은 이미 사용되었습니다",
+        "name_already_taken_error": "이 이름은 이미 사용중입니다",
         "copy_address": "주소 복사",
         "rename_account": "계정 이름 변경",
         "export_private_key": "비밀 키 내보내기",

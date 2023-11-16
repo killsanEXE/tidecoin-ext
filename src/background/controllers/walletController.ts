@@ -38,12 +38,12 @@ class WalletController implements IWalletController {
   }
 
   async saveWallets(data?: DecryptedSecrets, newPassword?: string) {
-    await storageService.saveWallets(
-      storageService.appState.password,
-      storageService.walletState.wallets,
-      data,
-      newPassword
-    );
+    await storageService.saveWallets({
+      password: storageService.appState.password,
+      wallets: storageService.walletState.wallets,
+      payload: data,
+      newPassword,
+    });
   }
 
   async importWallets(password: string) {
