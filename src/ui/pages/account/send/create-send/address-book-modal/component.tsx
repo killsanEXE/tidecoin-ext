@@ -36,8 +36,8 @@ const AddressBookModal: FC<Props> = ({ isOpen, onClose, setFormData }) => {
       {!addressBook.length && <div className={s.empty}>{t("send.create_send.address_book.no_addresses")}</div>}
       <div className={s.items}>
         {addressBook.map((i, idx) => (
-          <div key={`ab-${idx}`} className={s.item} onClick={() => onSelect(i)}>
-            <div className={s.address}>{shortAddress(i, 17)}</div>
+          <div key={`ab-${idx}`} className={s.item}>
+            <div onClick={() => onSelect(i)} className={s.address}>{shortAddress(i, 17)}</div>
             <div className={s.remove} onClick={() => onRemove(i)}>
               <MinusCircleIcon className="w-5 h-5" />
             </div>
