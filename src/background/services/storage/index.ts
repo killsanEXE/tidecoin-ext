@@ -52,13 +52,22 @@ class StorageService {
   async updateWalletState(state: Partial<IWalletStateBase>) {
     this._walletState = { ...this._walletState, ...state };
 
-    if (state.selectedAccount !== undefined || state.selectedWallet !== undefined) {
+    if (state.selectedAccount !== undefined || state.selectedWallet !== undefined || state.wallets !== undefined) {
       const localState = await this.getLocalValues();
       const cache: StorageInterface["cache"] = {
         ...localState.cache,
       };
       if (state.selectedAccount !== undefined) cache.selectedAccount = state.selectedAccount;
       if (state.selectedWallet !== undefined) cache.selectedWallet = state.selectedWallet;
+      if (state.wallets !== undefined) cache.wallets = state.wallets.map((f) => ({
+        addressType: f.addressType,
+        name: f.name,
+        type: f.type,
+        accounts: f.accounts.map((j) => ({
+          id: j.id,
+          name: j.name
+        }))
+      }))
 
       const payload: StorageInterface = {
         cache,

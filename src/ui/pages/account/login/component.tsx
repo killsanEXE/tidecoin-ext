@@ -67,7 +67,7 @@ const Login = () => {
 
   return (
     <form className={cn(s.form, "mt-5")} onSubmit={handleSubmit(login)}>
-      <PasswordInput register={register} label={t("login.password")} name="password" />
+      <PasswordInput showSeparateLabel={false} register={register} label={t("login.password")} name="password" />
       <button className="btn primary md:mx-auto" type="submit">
         {t("login.login")}
       </button>

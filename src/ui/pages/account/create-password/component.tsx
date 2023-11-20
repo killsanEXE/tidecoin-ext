@@ -44,7 +44,7 @@ const CreatePassword = () => {
     <form className="form" onSubmit={handleSubmit(createPassword)}>
       <p className="form-title">{t("create_password.create_password")}</p>
       {formFields.map((i) => (
-        <PasswordInput key={i.name} register={register} {...i} />
+        <PasswordInput showSeparateLabel={false} key={i.name} register={register} {...i} />
       ))}
 
       <button className="btn primary" type="submit">

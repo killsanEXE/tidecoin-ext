@@ -5,16 +5,20 @@ const PasswordInput = <T extends FieldValues>({
   label,
   name,
   register,
+  showSeparateLabel = true
 }: {
   register: UseFormRegister<T>;
   name: Path<T>;
   label: string;
+  showSeparateLabel?: boolean
 }) => {
   return (
     <div className="form-field">
-      <label className="input-span" htmlFor={name}>
-        {label}
-      </label>
+      {showSeparateLabel &&
+        <label className="input-span" htmlFor={name}>
+          {label}
+        </label>
+      }
       <input
         id={name}
         {...register(name, {
@@ -26,6 +30,7 @@ const PasswordInput = <T extends FieldValues>({
         })}
         type="password"
         className="input"
+        placeholder={showSeparateLabel ? "" : label}
       />
     </div>
   );
