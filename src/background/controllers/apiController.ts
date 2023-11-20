@@ -6,6 +6,7 @@ export interface IApiController {
   getUtxos(address: string): Promise<ApiUTXO[] | undefined>;
   pushTx(rawTx: string): Promise<{ txid: string } | undefined>;
   getTransactions(address: string): Promise<ITransaction[] | undefined>;
+  getPaginatedTransactions(address: string, txid: string): Promise<ITransaction[] | undefined>;
   getTDCPrice(): Promise<{ data: { last: string } }>;
   getLastBlockTDC(): Promise<number>;
 }
@@ -51,7 +52,19 @@ class ApiController implements IApiController {
   async getTransactions(address: string): Promise<ITransaction[] | undefined> {
     return await fetchTDCMainnet<ITransaction[]>({
       path: `/address/${address}/txs`,
+      // path: `/address/TSofqS7nm8Vnk1fk8jU7YgqQcGuWA7wtnK/txs`,
     });
+  }
+
+  async getPaginatedTransactions(address: string, txid: string): Promise<ITransaction[] | undefined> {
+    try {
+      return await fetchTDCMainnet<ITransaction[]>({
+        path: `/adress/${address}/txs/chain/${txid}`
+        // path: `/address/TSofqS7nm8Vnk1fk8jU7YgqQcGuWA7wtnK/txs/chain/${txid}`
+      })
+    } catch (e) {
+      return undefined
+    }
   }
 
   async getLastBlockTDC(): Promise<number> {

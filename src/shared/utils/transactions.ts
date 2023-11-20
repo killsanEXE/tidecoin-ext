@@ -9,7 +9,7 @@ export enum TxDirection {
 }
 
 export const getTxDirection = (transaction: ITransaction, targetAddress: string): TxDirection => {
-  const includesIn = transaction.vin.map((i) => i.prevout.scriptpubkey_address).includes(targetAddress);
+  const includesIn = transaction.vin.map((i) => i.prevout?.scriptpubkey_address).includes(targetAddress);
   const includesOut = transaction.vout.map((i) => i.scriptpubkey_address).includes(targetAddress);
   if (includesIn && includesOut) {
     return TxDirection.out;
@@ -31,7 +31,7 @@ export const getTransactionValue = (transaction: ITransaction, targetAddress: st
     case TxDirection.out:
       value =
         (transaction.vin.reduce(
-          (acc, cur) => (cur.prevout.scriptpubkey_address === targetAddress ? acc + cur.prevout.value : acc),
+          (acc, cur) => (cur.prevout?.scriptpubkey_address === targetAddress ? acc + cur.prevout?.value : acc),
           0
         ) -
           transaction.fee -

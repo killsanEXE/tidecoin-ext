@@ -6,17 +6,18 @@ import s from "./styles.module.scss";
 import { shortAddress } from "@/shared/utils/transactions";
 import { useGetCurrentAccount, useGetCurrentWallet } from "@/ui/states/walletState";
 import cn from "classnames";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useUpdateCurrentAccountBalance } from "@/ui/hooks/wallet";
 import ReactLoading from "react-loading";
 import { ITransaction } from "@/shared/interfaces/api";
-import { useUpdateCurrentAccountTransactions } from "@/ui/hooks/transactions";
+import { useGetPaginatedTransactions, useUpdateCurrentAccountTransactions } from "@/ui/hooks/transactions";
 import CopyBtn from "@/ui/components/copy-btn";
 import { useControllersState } from "@/ui/states/controllerState";
 import { getTransactionValue, isIncomeTx } from "@/shared/utils/transactions";
 import { Circle } from "rc-progress";
 import { useDebounceCall } from "@/ui/hooks/debounce";
 import { t } from "i18next";
+import { useInView } from "react-intersection-observer";
 
 const Wallet = () => {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const Wallet = () => {
   }));
 
   const currentAccount = useGetCurrentAccount();
+  const getPaginatedTransactions = useGetPaginatedTransactions();
 
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
   const [currentPrice, setCurrentPrice] = useState<number | undefined>();
@@ -97,6 +99,19 @@ const Wallet = () => {
       }
     })();
   }, [stateController, navigate]);
+
+
+  const { ref, inView } = useInView();
+  const loadMore = useCallback(async () => {
+    if (!transactions.length) return;
+    const additionalTransactions = await getPaginatedTransactions(transactions[transactions.length - 1].txid ?? "");
+    if (!additionalTransactions) return;
+    if (additionalTransactions.length > 0) setTransactions(prev => [...prev, ...additionalTransactions]);
+  }, [getPaginatedTransactions, transactions])
+
+  useEffect(() => {
+    loadMore();
+  }, [inView, loadMore])
 
   return (
     <div className={s.walletDiv}>
@@ -208,6 +223,7 @@ const Wallet = () => {
               </div>
             </Link>
           ))}
+          <div ref={ref}></div>
         </div>
       ) : (
         <p className={s.noTransactions}>{t("wallet_page.no_transactions")}</p>

@@ -78,3 +78,14 @@ export function useUpdateCurrentAccountTransactions() {
     return await apiController.getTransactions(currentAccount.address ?? "");
   }, [currentAccount, apiController]);
 }
+
+export function useGetPaginatedTransactions() {
+  const { apiController } = useControllersState((v) => ({
+    apiController: v.apiController,
+  }));
+  const currentAccount = useGetCurrentAccount();
+
+  return useCallback(async (txid: string) => {
+    return await apiController.getPaginatedTransactions(currentAccount.address, txid)
+  }, [apiController, currentAccount])
+}

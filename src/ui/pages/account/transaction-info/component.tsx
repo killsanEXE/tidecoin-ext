@@ -34,10 +34,10 @@ const TransactionInfo = () => {
     const txValues: Record<string, number> = {};
 
     tx.vin.forEach((i) => {
-      if (txValues[i.prevout.scriptpubkey_address]) {
-        txValues[i.prevout.scriptpubkey_address] += i.prevout.value;
+      if (txValues[i.prevout?.scriptpubkey_address]) {
+        txValues[i.prevout?.scriptpubkey_address] += i.prevout?.value;
       } else {
-        txValues[i.prevout.scriptpubkey_address] = i.prevout.value;
+        txValues[i.prevout?.scriptpubkey_address] = i.prevout?.value;
       }
     });
 

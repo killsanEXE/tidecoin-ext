@@ -50,7 +50,7 @@ export interface ITransaction {
 export interface Vin {
   txid: string;
   vout: number;
-  prevout: Prevout;
+  prevout?: Prevout;
   scriptsig: string;
   scriptsig_asm: string;
   witness?: string[];
