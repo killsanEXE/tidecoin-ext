@@ -6,7 +6,7 @@ import s from "./styles.module.scss";
 import { shortAddress } from "@/shared/utils/transactions";
 import { useGetCurrentAccount, useGetCurrentWallet } from "@/ui/states/walletState";
 import cn from "classnames";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useUpdateCurrentAccountBalance } from "@/ui/hooks/wallet";
 import ReactLoading from "react-loading";
 import { ITransaction } from "@/shared/interfaces/api";
@@ -44,8 +44,13 @@ const Wallet = () => {
 
   const udpateTransactions = useCallback(async () => {
     const receivedTransactions = await updateAccountTransactions();
-    if (receivedTransactions !== undefined) setTransactions(receivedTransactions);
-  }, [updateAccountTransactions]);
+    if (receivedTransactions !== undefined) {
+      if (transactions.length > 0 && transactions[0].txid !== receivedTransactions[0].txid) {
+        const oldTxidIndex = receivedTransactions.findIndex(f => f.txid === transactions[0].txid);
+        setTransactions([...receivedTransactions.slice(0, oldTxidIndex), ...transactions])
+      } else setTransactions(receivedTransactions);
+    }
+  }, [updateAccountTransactions, transactions]);
 
   const updateLastBlock = useCallback(async () => {
     setLastBlock(await apiController.getLastBlockTDC());
@@ -110,7 +115,7 @@ const Wallet = () => {
   }, [getPaginatedTransactions, transactions])
 
   useEffect(() => {
-    loadMore();
+    if (inView) loadMore();
   }, [inView, loadMore])
 
   return (
