@@ -202,6 +202,18 @@ class StorageService {
       await browserStorageLocalSet(newData);
       return newData;
     }
+    if (data.cache === undefined) {
+      return {
+        cache: {
+          addressBook: [],
+          selectedWallet: 0,
+          selectedAccount: 0,
+          wallets: [],
+          connectedSites: [],
+        },
+        enc: undefined,
+      };
+    }
     return data;
   }
 
