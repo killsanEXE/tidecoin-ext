@@ -3,6 +3,10 @@ import { IStateController } from "@/shared/interfaces/stateController";
 import { storageService } from "../services";
 
 class StateController implements IStateController {
+  async init(): Promise<void> {
+    await storageService.init();
+  }
+
   async updateAppState(state: Partial<IAppStateBase>): Promise<void> {
     await storageService.updateAppState(state);
   }

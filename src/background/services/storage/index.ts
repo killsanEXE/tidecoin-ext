@@ -5,7 +5,7 @@ import { DecryptedSecrets, StorageInterface } from "./types";
 import { IAppStateBase, IWalletStateBase } from "@/shared/interfaces";
 import { emptyAppState, emptyWalletState } from "./utils";
 import { keyringService, permissionService, storageService } from "..";
-import { excludeKeysFromObj } from "@/shared/utils";
+import { excludeKeysFromObj, pickKeysFromObj } from "@/shared/utils";
 
 interface SaveWallets {
   password: string;
@@ -21,7 +21,6 @@ class StorageService {
   constructor() {
     this._walletState = emptyWalletState();
     this._appState = emptyAppState();
-    this.loadLanguage();
   }
 
   get walletState() {
@@ -44,9 +43,24 @@ class StorageService {
     return this._walletState.wallets[this._walletState.selectedWallet].accounts[this._walletState.selectedAccount];
   }
 
-  async loadLanguage() {
+  async init() {
     const data = await this.getLocalValues();
-    if (data && data.cache && data.cache.language) await this.updateAppState({ language: data.cache.language });
+
+    this._walletState = {
+      ...this._walletState,
+      ...pickKeysFromObj(data.cache, ["selectedAccount", "selectedWallet"]),
+    };
+    this._appState = {
+      ...this._appState,
+      ...pickKeysFromObj(data.cache, ["addressBook", "pendingWallet"]),
+    };
+
+    if (data?.cache?.language) {
+      this._appState = {
+        ...this._appState,
+        language: data.cache.language,
+      };
+    }
   }
 
   async updateWalletState(state: Partial<IWalletStateBase>) {
@@ -59,15 +73,16 @@ class StorageService {
       };
       if (state.selectedAccount !== undefined) cache.selectedAccount = state.selectedAccount;
       if (state.selectedWallet !== undefined) cache.selectedWallet = state.selectedWallet;
-      if (state.wallets !== undefined) cache.wallets = state.wallets.map((f) => ({
-        addressType: f.addressType,
-        name: f.name,
-        type: f.type,
-        accounts: f.accounts.map((j) => ({
-          id: j.id,
-          name: j.name
-        }))
-      }))
+      if (state.wallets !== undefined)
+        cache.wallets = state.wallets.map((f) => ({
+          addressType: f.addressType,
+          name: f.name,
+          type: f.type,
+          accounts: f.accounts.map((j) => ({
+            id: j.id,
+            name: j.name,
+          })),
+        }));
 
       const payload: StorageInterface = {
         cache,

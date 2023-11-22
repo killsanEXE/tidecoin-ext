@@ -52,3 +52,10 @@ export const excludeKeysFromObj = <T extends Record<string, any>, K extends keyo
 ): Omit<T, K> => {
   return Object.fromEntries(Object.entries(obj).filter(([k]) => !keysToExtract.includes(k as K))) as Omit<T, K>;
 };
+
+export const pickKeysFromObj = <T extends Record<string, any>, K extends keyof T>(
+  obj: T,
+  keysToPick: K[]
+): Pick<T, K> => {
+  return Object.fromEntries(Object.entries(obj).filter(([k]) => keysToPick.includes(k as K))) as Pick<T, K>;
+};

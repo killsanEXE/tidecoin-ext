@@ -48,6 +48,7 @@ export default function App() {
       notificationController,
     });
 
+    await stateController.init();
     const appState = await stateController.getAppState();
     const walletState = await stateController.getWalletState();
     i18n.changeLanguage(appState.language ?? "en");
@@ -61,7 +62,6 @@ export default function App() {
         ...excludeKeysFromObj(walletState, ["vaultIsEmpty", "wallets"]),
       });
       await updateAppState({
-
         isReady: true,
         ...excludeKeysFromObj(appState, ["isReady", "isUnlocked", "password", "vault"]),
       });
