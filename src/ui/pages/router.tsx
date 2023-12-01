@@ -1,33 +1,33 @@
 import { createHashRouter, Navigate } from "react-router-dom";
 
-import Wallet from "@/ui/pages/home/wallet";
+import Wallet from "@/ui/pages/main/wallet";
 
-import Login from "@/ui/pages/account/login";
-import CreatePassword from "@/ui/pages/account/create-password";
-import CreateNewAccount from "@/ui/pages/account/new-account";
-import SwitchAccount from "@/ui/pages/account/switch-account";
+import Login from "@/ui/pages/main/login";
+import CreatePassword from "@/ui/pages/main/create-password";
+import CreateNewAccount from "@/ui/pages/main/new-account";
+import SwitchAccount from "@/ui/pages/main/switch-account";
 import PagesLayout from "@/ui/components/layout";
-import ChangePassword from "./account/change-password";
-import Receive from "./account/receive";
-import SwitchWallet from "./account/switch-wallet";
-import NewWallet from "./account/new-wallet";
-import NewMnemonic from "./account/new-wallet/new-mnemonic";
-import RestoreMnemonic from "./account/new-wallet/restore-mnemonic";
-import RestorePrivKey from "./account/new-wallet/restore-priv-key";
-import Settings from "./home/settings";
-import ShowPk from "@/ui/pages/account/switch-account/show-pk";
-import ShowMnemonic from "./account/switch-wallet/show-mnemonic";
-import ChangeAddrType from "@/ui/pages/account/change-addr-type";
-import TransactionInfo from "./account/transaction-info";
-import FinalleSend from "./account/send/finalle-send";
-import CreateSend from "./account/send/create-send";
-import ConfirmSend from "./account/send/confirm-send";
+import ChangePassword from "./main/change-password";
+import Receive from "./main/receive";
+import SwitchWallet from "./main/switch-wallet";
+import NewWallet from "./main/new-wallet";
+import NewMnemonic from "./main/new-wallet/new-mnemonic";
+import RestoreMnemonic from "./main/new-wallet/restore-mnemonic";
+import RestorePrivKey from "./main/new-wallet/restore-priv-key";
+import Settings from "./main/settings";
+import ShowPk from "@/ui/pages/main/switch-account/show-pk";
+import ShowMnemonic from "./main/switch-wallet/show-mnemonic";
+import ChangeAddrType from "@/ui/pages/main/change-addr-type";
+import TransactionInfo from "./main/transaction-info";
+import FinalleSend from "./main/send/finalle-send";
+import CreateSend from "./main/send/create-send";
+import ConfirmSend from "./main/send/confirm-send";
 import Connect from "./provider/connect";
 import Sign from "./provider/sign";
 import SignTx from "./provider/sign-tx";
 import CreateTx from "./provider/create-tx/component";
-import ConnectedSites from "./account/connected-sites";
-import Language from "./account/language";
+import ConnectedSites from "./main/connected-sites";
+import Language from "./main/language";
 
 export const guestRouter = createHashRouter([
   {
