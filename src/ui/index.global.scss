@@ -60,7 +60,7 @@ input[type="number"] {
 }
 
 .input {
-  @apply p-2 text-base text-text bg-input-bg rounded-xl md:bg-bg;
+  @apply py-2 pl-5 pr-10 text-base text-text bg-input-bg rounded-xl md:bg-bg;
 }
 
 .react-loading {
