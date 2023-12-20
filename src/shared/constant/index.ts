@@ -107,62 +107,62 @@ export const ADDRESS_TYPES: {
   name: string;
   hdPath: string;
 }[] = [
-  {
-    value: AddressType.P2WPKH,
-    label: "P2WPKH",
-    name: "Native Segwit (P2WPKH)",
-    hdPath: "m/84'/0'/0'/0",
-  },
-  {
-    value: AddressType.P2SH,
-    label: "P2SH-P2WPKH",
-    name: "Nested Segwit (P2SH-P2WPKH)",
-    hdPath: "m/49'/0'/0'/0",
-  },
-  {
-    value: AddressType.P2PKH,
-    label: "P2PKH",
-    name: "Legacy (P2PKH)",
-    hdPath: "m/44'/0'/0'/0",
-  },
-];
+    {
+      value: AddressType.P2WPKH,
+      label: "P2WPKH",
+      name: "Native Segwit (P2WPKH)",
+      hdPath: "m/84'/0'/0'/0",
+    },
+    {
+      value: AddressType.P2SH,
+      label: "P2SH-P2WPKH",
+      name: "Nested Segwit (P2SH-P2WPKH)",
+      hdPath: "m/49'/0'/0'/0",
+    },
+    {
+      value: AddressType.P2PKH,
+      label: "P2PKH",
+      name: "Legacy (P2PKH)",
+      hdPath: "m/44'/0'/0'/0",
+    },
+  ];
 
 export const RESTORE_WALLETS: {
   value: RestoreWalletType;
   name: string;
   addressTypes: UTXOAddressType[];
 }[] = [
-  {
-    value: RestoreWalletType.TIDECOIN,
-    name: "TideCoin Wallet",
-    addressTypes: [
-      UTXOAddressType.P2WPKH,
-      UTXOAddressType.P2SH_P2WPKH,
-      UTXOAddressType.P2PKH,
-      UTXOAddressType.M44_P2WPKH,
-    ],
-  },
-  {
-    value: RestoreWalletType.SPARROW,
-    name: "Sparrow Wallet",
-    addressTypes: [UTXOAddressType.P2PKH, UTXOAddressType.P2WPKH, UTXOAddressType.P2SH_P2WPKH],
-  },
-  {
-    value: RestoreWalletType.XVERSE,
-    name: "Xverse Wallet",
-    addressTypes: [UTXOAddressType.P2SH_P2WPKH],
-  },
-  {
-    value: RestoreWalletType.OTHERS,
-    name: "Other Wallet",
-    addressTypes: [
-      UTXOAddressType.P2PKH,
-      UTXOAddressType.P2WPKH,
-      UTXOAddressType.P2SH_P2WPKH,
-      UTXOAddressType.M44_P2WPKH,
-    ],
-  },
-];
+    {
+      value: RestoreWalletType.TIDECOIN,
+      name: "TideCoin Wallet",
+      addressTypes: [
+        UTXOAddressType.P2WPKH,
+        UTXOAddressType.P2SH_P2WPKH,
+        UTXOAddressType.P2PKH,
+        UTXOAddressType.M44_P2WPKH,
+      ],
+    },
+    {
+      value: RestoreWalletType.SPARROW,
+      name: "Sparrow Wallet",
+      addressTypes: [UTXOAddressType.P2PKH, UTXOAddressType.P2WPKH, UTXOAddressType.P2SH_P2WPKH],
+    },
+    {
+      value: RestoreWalletType.XVERSE,
+      name: "Xverse Wallet",
+      addressTypes: [UTXOAddressType.P2SH_P2WPKH],
+    },
+    {
+      value: RestoreWalletType.OTHERS,
+      name: "Other Wallet",
+      addressTypes: [
+        UTXOAddressType.P2PKH,
+        UTXOAddressType.P2WPKH,
+        UTXOAddressType.P2SH_P2WPKH,
+        UTXOAddressType.M44_P2WPKH,
+      ],
+    },
+  ];
 
 export const NETWORK_TYPES = [
   {
@@ -195,12 +195,6 @@ export const WALLETCONNECT_STATUS_MAP = {
 };
 
 export const INTERNAL_REQUEST_ORIGIN = "https://tdc.cash";
-
-export const INTERNAL_REQUEST_SESSION = {
-  name: "TideCoin Wallet",
-  origin: INTERNAL_REQUEST_ORIGIN,
-  icon: "./images/logo/logo@128x.png",
-};
 
 export const OPENAPI_URL_MAINNET = "https://tdc.cash";
 export const OPENAPI_URL_TESTNET = "https://tdc.cash";
