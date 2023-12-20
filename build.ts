@@ -1,5 +1,4 @@
 import { context, build, BuildOptions, Plugin } from "esbuild";
-import { wasmLoader } from "esbuild-plugin-wasm";
 import { copy } from "esbuild-plugin-copy";
 import { sassPlugin, postcssModules } from "esbuild-sass-plugin";
 import { nodeModulesPolyfillPlugin } from "esbuild-plugins-node-modules-polyfill";
@@ -48,9 +47,9 @@ function mergeManifests(): Plugin {
 
 console.log(
   `\n🔨 Building extension... \n` +
-    `💻 Browser: ${chrome ? "Chrome" : "Firefox"}\n` +
-    `💡 Version: ${process.env.npm_package_version}\n` +
-    `♻️  Environment: ${isDev ? "Development" : "Production"}`
+  `💻 Browser: ${chrome ? "Chrome" : "Firefox"}\n` +
+  `💡 Version: ${process.env.npm_package_version}\n` +
+  `♻️  Environment: ${isDev ? "Development" : "Production"}`
 );
 
 const buildOptions: BuildOptions = {
@@ -64,9 +63,6 @@ const buildOptions: BuildOptions = {
   minify: !isDev,
   bundle: true,
   logLevel: "info",
-  define: {
-    "import.meta.url": '""',
-  },
   plugins: [
     svgPlugin({
       typescript: true,
@@ -83,16 +79,9 @@ const buildOptions: BuildOptions = {
         return css;
       },
     }),
-    wasmLoader(),
     copy({
       assets: {
         from: ["./configs/_raw/**/*"],
-        to: ["."],
-      },
-    }),
-    copy({
-      assets: {
-        from: ["./node_modules/rust-falcon/dist/falcon.wasm"],
         to: ["."],
       },
     }),

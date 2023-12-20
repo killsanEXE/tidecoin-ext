@@ -1,13 +1,7 @@
 import { CHAINS, TDC_API_URL, TDC_MAINNET_PATH } from "@/shared/constant";
 import browser from "./browser";
-import BroadcastChannelMessage from "./message/broadcastChannelMessage";
-import PortMessage from "./message/portMessage";
-import { keyBy } from "lodash";
 
-const Message = {
-  BroadcastChannelMessage,
-  PortMessage,
-};
+const keyBy = (array: Record<string, any>, key: string) => (array || []).reduce((r, x) => ({ ...r, [key ? x[key] : x]: x }), {});
 
 const t = (name: string) => browser.i18n.getMessage(name);
 
@@ -15,7 +9,7 @@ const format = (str: string, ...args: any[]) => {
   return args.reduce((m, n) => m.replace("_s_", n), str);
 };
 
-export { Message, t, format };
+export { t, format };
 
 const chainsDict = keyBy(CHAINS, "serverId");
 export const getChain = (chainId?: string) => {
