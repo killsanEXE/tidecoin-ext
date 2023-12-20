@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useUpdateAddressBook } from "@/ui/hooks/app";
 import { t } from "i18next";
+import { COIN_SYMBOL } from "@/shared/constant";
 
 const ConfirmSend = () => {
   const location = useLocation();
@@ -40,11 +41,11 @@ const ConfirmSend = () => {
     },
     {
       label: t("send.confirm_send.amount"),
-      value: location.state.amount + " TDC",
+      value: location.state.amount + " " + COIN_SYMBOL,
     },
     {
       label: t("send.confirm_send.fee"),
-      value: `${location.state.feeAmount / 10 ** 8} TDC (${location.state.includeFeeInAmount ?
+      value: `${location.state.feeAmount / 10 ** 8} ${COIN_SYMBOL} (${location.state.includeFeeInAmount ?
         t("send.confirm_send.included") : t("send.confirm_send.not_included")
         })`,
     },

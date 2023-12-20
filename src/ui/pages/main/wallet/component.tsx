@@ -18,6 +18,7 @@ import { Circle } from "rc-progress";
 import { useDebounceCall } from "@/ui/hooks/debounce";
 import { t } from "i18next";
 import { useInView } from "react-intersection-observer";
+import { COIN_SYMBOL } from "@/shared/constant";
 
 const Wallet = () => {
   const navigate = useNavigate();
@@ -150,7 +151,7 @@ const Wallet = () => {
             ) : (
               currentAccount?.balance
             )}
-            <span className="text-xl pb-0.5 text-slate-300">TDC</span>
+            <span className="text-xl pb-0.5 text-slate-300">{COIN_SYMBOL}</span>
           </div>
           {currentAccount.balance !== undefined && currentPrice !== undefined && (
             <div className="text-gray-500 text-sm">~{(currentAccount?.balance * currentPrice).toFixed(3)}$</div>
@@ -224,7 +225,7 @@ const Wallet = () => {
                 })}
               >
                 {isIncomeTx(t, currentAccount.address) ? "+ " : "- "}
-                {getTransactionValue(t, currentAccount.address)} TDC
+                {getTransactionValue(t, currentAccount.address)} ${COIN_SYMBOL}
               </div>
             </Link>
           ))}

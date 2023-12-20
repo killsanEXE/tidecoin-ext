@@ -5,6 +5,7 @@ import { KeyIcon } from "@heroicons/react/24/solid";
 import Layout from "../layout";
 import { SignTransactionProps } from "@/shared/interfaces/notification";
 import { Psbt } from "tidecoinjs-lib";
+import { COIN_SYMBOL } from "@/shared/constant";
 
 const SignTransaction = () => {
   const [psbt, setPsbt] = useState<Psbt>();
@@ -29,11 +30,11 @@ const SignTransaction = () => {
     },
     {
       label: "Amount",
-      value: `${psbt.txOutputs[0].value / 10 ** 8} TDC`,
+      value: `${psbt.txOutputs[0].value / 10 ** 8} ${COIN_SYMBOL}`,
     },
     {
       label: "Fee",
-      value: `${psbt.getFee() / 10 ** 8} TDC`,
+      value: `${psbt.getFee() / 10 ** 8} ${COIN_SYMBOL}`,
     },
   ];
 

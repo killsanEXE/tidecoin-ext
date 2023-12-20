@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { KeyIcon } from "@heroicons/react/24/solid";
 import Layout from "../layout";
 import { CreateTxProps } from "@/shared/interfaces/notification";
+import { COIN_SYMBOL, SAT_SYMBOL } from "@/shared/constant";
 
 const CreateTx = () => {
   const [psbt, setPsbt] = useState<CreateTxProps>();
@@ -28,11 +29,11 @@ const CreateTx = () => {
     },
     {
       label: "Amount",
-      value: `${psbt.amount} TDC`,
+      value: `${psbt.amount} ${COIN_SYMBOL}`,
     },
     {
       label: "Fee Rate",
-      value: `${psbt.feeRate} tid/Vb`,
+      value: `${psbt.feeRate} ${SAT_SYMBOL}`,
     },
   ];
 

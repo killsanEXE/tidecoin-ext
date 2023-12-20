@@ -1,22 +1,10 @@
-import { CHAINS, TDC_API_URL, TDC_MAINNET_PATH } from "@/shared/constant";
+import { TDC_API_URL, TDC_MAINNET_PATH } from "@/shared/constant";
 import browser from "./browser";
 
-const keyBy = (array: Record<string, any>, key: string) => (array || []).reduce((r, x) => ({ ...r, [key ? x[key] : x]: x }), {});
+export const t = (name: string) => browser.i18n.getMessage(name);
 
-const t = (name: string) => browser.i18n.getMessage(name);
-
-const format = (str: string, ...args: any[]) => {
+export const format = (str: string, ...args: any[]) => {
   return args.reduce((m, n) => m.replace("_s_", n), str);
-};
-
-export { t, format };
-
-const chainsDict = keyBy(CHAINS, "serverId");
-export const getChain = (chainId?: string) => {
-  if (!chainId) {
-    return null;
-  }
-  return chainsDict[chainId];
 };
 
 interface fetchProps extends RequestInit {

@@ -12,6 +12,7 @@ import cn from "classnames";
 import { shortAddress } from "@/shared/utils/transactions";
 import toast from "react-hot-toast";
 import { t } from "i18next";
+import { COIN_SYMBOL } from "@/shared/constant";
 
 const TransactionInfo = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -60,11 +61,11 @@ const TransactionInfo = () => {
             </div>
             <div className={s.group}>
               <p className={s.transactionP}>{t("transaction_info.fee_label")}</p>
-              <span>{tx.fee / 10 ** 8} TDC</span>
+              <span>{tx.fee / 10 ** 8} {COIN_SYMBOL}</span>
             </div>
             <div className={s.group}>
               <p className={s.transactionP}>{t("transaction_info.value_label")}</p>
-              <span>{getTransactionValue(tx, currentAccount?.address, false)} TDC</span>
+              <span>{getTransactionValue(tx, currentAccount?.address, false)} {COIN_SYMBOL}</span>
             </div>
 
             <div className={s.summary} onClick={() => setOpenModal(true)}>

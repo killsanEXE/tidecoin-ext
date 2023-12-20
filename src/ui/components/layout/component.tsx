@@ -6,6 +6,7 @@ import { useMemo } from "react";
 import { useWalletState } from "@/ui/states/walletState";
 import { useControllersState } from "@/ui/states/controllerState";
 import { t } from "i18next";
+import { COIN_SYMBOL } from '@/shared/constant'
 
 interface IRouteTitle {
   route: string;
@@ -50,7 +51,7 @@ export default function PagesLayout() {
     },
     {
       route: "/pages/receive",
-      title: t("components.layout.receive_tdc"),
+      title: t("components.layout.receive_tdc") + ` ${COIN_SYMBOL}`,
     },
     {
       route: "/pages/switch-wallet",

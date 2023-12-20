@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from "react";
 import s from "./styles.module.scss";
 import { t } from "i18next";
 import { useAppState } from "../../../../../states/appState";
+import { SAT_SYMBOL } from "@/shared/constant";
 
 interface Props {
   onChange: (value: number) => void;
@@ -15,12 +16,12 @@ const FeeInput: FC<Props> = ({ onChange, value }) => {
   const cards = [
     {
       title: t("send.create_send.fee_input.slow"),
-      description: "1 tid/Vb",
+      description: "1 " + SAT_SYMBOL,
       value: 1,
     },
     {
       title: t("send.create_send.fee_input.fast"),
-      description: "2 tid/Vb",
+      description: "2 " + SAT_SYMBOL,
       value: 2,
     },
     {
@@ -50,7 +51,7 @@ const FeeInput: FC<Props> = ({ onChange, value }) => {
       </div>
       <input
         className={cn("input", { hidden: selected !== 3 })}
-        placeholder="tid/Vb"
+        placeholder={SAT_SYMBOL}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
       />
