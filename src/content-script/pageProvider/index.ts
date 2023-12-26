@@ -20,7 +20,7 @@ const log = (event, ...args) => {
   // }
 };
 const script = document.currentScript;
-const channelName = script?.getAttribute("channel") || "TIDEWALLET";
+const channelName = script?.getAttribute("channel") || "tidecoin";
 
 export interface Interceptor {
   onRequest?: (data: any) => any;
@@ -63,7 +63,10 @@ export class TidecoinProvider extends EventEmitter {
   }
 
   initialize = async () => {
-    document.addEventListener("visibilitychange", this._requestPromiseCheckVisibility);
+    document.addEventListener(
+      "visibilitychange",
+      this._requestPromiseCheckVisibility
+    );
 
     this._bcm.connect().on("message", this._handleBackgroundMessage);
     domReadyCall(() => {
@@ -72,7 +75,10 @@ export class TidecoinProvider extends EventEmitter {
         ($('head > link[rel~="icon"]') as HTMLLinkElement)?.href ||
         ($('head > meta[itemprop="image"]') as HTMLMetaElement)?.content;
 
-      const name = document.title || ($('head > meta[name="title"]') as HTMLMetaElement)?.content || origin;
+      const name =
+        document.title ||
+        ($('head > meta[name="title"]') as HTMLMetaElement)?.content ||
+        origin;
 
       this._bcm.request({
         method: "tabCheckin",
